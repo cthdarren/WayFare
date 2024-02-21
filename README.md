@@ -1,1 +1,1 @@
-# WayFarer
+# WayFare
