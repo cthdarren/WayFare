@@ -1,4 +1,4 @@
-package com.example.testgroovy
+package com.example.wayfarer
 
 import org.junit.Test
 

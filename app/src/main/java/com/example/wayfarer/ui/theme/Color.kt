@@ -1,4 +1,4 @@
-package com.example.testgroovy.ui.theme
+package com.example.wayfarer.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

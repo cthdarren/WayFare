@@ -1,4 +1,4 @@
-package com.example.testgroovy.ui.theme
+package com.example.wayfarer.ui.theme
 
 import android.app.Activity
 import android.os.Build

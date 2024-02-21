@@ -1,3 +1,5 @@
+package com.example.wayfarer;
+
 import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.Document;
@@ -11,7 +13,7 @@ public class QuickStart {
     public static void main( String[] args ) {
 
         // Replace the placeholder with your MongoDB deployment's connection string
-        String uri = "<connection string uri>";
+        String uri = "mongodb+srv://cthdarren:GNGI3g6gT4bWKXKo@infosys.kv8pse1.mongodb.net/?retryWrites=true&w=majority";
 
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("sample_mflix");
@@ -19,7 +21,7 @@ public class QuickStart {
 
             Document doc = collection.find(eq("title", "Back to the Future")).first();
             if (doc != null) {
-                System.out.println(doc.toJson());
+                System.out.println(doc.toJson());import com.mongodb.client.MongoDatabase;
             } else {
                 System.out.println("No matching documents found.");
             }
