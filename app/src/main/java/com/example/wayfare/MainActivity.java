@@ -1,6 +1,10 @@
 package com.example.wayfare;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -29,9 +33,14 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        NavController navController = Navigation.findNavController(this, R.id.source);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
+    public void handleText(View v){
+        TextView t = findViewById(R.id.editTextText);
+        String input = t.getText().toString();
+        Log.d("info", input);
+    }
 }
