@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -33,14 +35,16 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.source);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
-
-    public void handleText(View v){
-        TextView t = findViewById(R.id.editTextText);
-        String input = t.getText().toString();
-        Log.d("info", input);
-    }
+//
+//    public void handleText(View v){
+//        EditText t = findViewById(R.id.editTextText);
+//        String input = t.getText().toString();
+//        Log.d("info", input);
+//        TextView output = findViewById(R.id.output);
+//        output.setText(input);
+        // Toast.makeText(this, "Alert", Toast.LENGTH_SHORT).show();
 }
