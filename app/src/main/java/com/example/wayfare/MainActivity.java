@@ -21,15 +21,16 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(new ExploreFragment());
         binding.bottomNavigationView.setBackground(null);
 
-        binding.bottomNavigationView.setOnItemReselectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.explore -> replaceFragment(new ExploreFragment());
-                case R.id.bookmarks -> replaceFragment(new BookmarksFragment());
-                case R.id.tours -> replaceFragment(new ToursFragment());
-                case R.id.inbox -> replaceFragment(new InboxFragment());
-                case R.id.account -> replaceFragment(new AccountFragment());
-            }
-        });
+//        binding.bottomNavigationView.setOnItemReselectedListener(item -> {
+//            switch (item.getItemId()) {
+//                case R.id.explore -> replaceFragment(new ExploreFragment());
+//                case R.id.bookmarks -> replaceFragment(new BookmarksFragment());
+//                case R.id.tours -> replaceFragment(new ToursFragment());
+//                case R.id.inbox -> replaceFragment(new InboxFragment());
+//                case R.id.account -> replaceFragment(new AccountFragment());
+//            }
+//            return true;
+//        });
     }
 
     private void replaceFragment(Fragment fragment){
