@@ -5,30 +5,30 @@
         android:id="@+id/explore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/baseline_explore_24"
+        android:icon="@drawable/icon_selection_explore"
         android:title="Explore" />
     <item
         android:id="@+id/bookmarks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/baseline_bookmark_24"
+        android:icon="@drawable/icon_selection_bookmarks"
         android:title="Bookmarks" />
     <item
         android:id="@+id/tours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/baseline_add_location_alt_24"
+        android:icon="@drawable/icon_selection_tours"
         android:title="Tours" />
     <item
         android:id="@+id/inbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/baseline_chat_24"
+        android:icon="@drawable/icon_selection_inbox"
         android:title="Inbox" />
     <item
         android:id="@+id/account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/baseline_person_24"
+        android:icon="@drawable/icon_selection_account"
         android:title="Account" />
 </menu>
