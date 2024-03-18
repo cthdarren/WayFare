@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 public class AccountFragment extends Fragment {
 
+    public AccountFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

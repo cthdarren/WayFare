@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 
 public class InboxFragment extends Fragment {
+    public InboxFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

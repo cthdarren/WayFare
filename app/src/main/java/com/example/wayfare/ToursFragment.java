@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class ToursFragment extends Fragment {
-
+    public ToursFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
