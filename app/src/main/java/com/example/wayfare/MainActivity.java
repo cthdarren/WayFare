@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
         setContentView(view);
-        
+
         replaceFragment(new ExploreFragment());
         //binding.bottomNavigationView.setBackground(null);
 
