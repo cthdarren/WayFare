@@ -19,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
-        setContentView(view); // saves time, no need to write findbyidelement each time
-
+        setContentView(view);
+        
         replaceFragment(new ExploreFragment());
         //binding.bottomNavigationView.setBackground(null);
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/explore"
     android:layout_width="match_parent"
@@ -7,9 +8,13 @@
     tools:context=".ExploreFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        app:layout_constraintBaseline_toBottomOf="parent"
+        app:layout_constraintBaseline_toTopOf="parent"
+        tools:layout_editor_absoluteY="30dp" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
