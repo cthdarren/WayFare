@@ -1,20 +1,12 @@
 package com.example.wayfare;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import android.os.Bundle;
+import android.view.View;
 
 import com.example.wayfare.databinding.ActivityMainBinding;
 
@@ -23,28 +15,37 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        View view = (View) binding.getRoot();
+        setContentView(view);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        replaceFragment(new ExploreFragment());
+        //binding.bottomNavigationView.setBackground(null);
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.explore){
+                replaceFragment(new ExploreFragment());
+            } else if (item.getItemId() == R.id.bookmarks) {
+                replaceFragment(new BookmarksFragment());
+            } else if (item.getItemId() == R.id.tours) {
+                replaceFragment(new ToursFragment());
+            } else if (item.getItemId() == R.id.inbox) {
+                replaceFragment(new InboxFragment());
+            } else if (item.getItemId() == R.id.account) {
+                replaceFragment(new AccountFragment());
+            }
+            return true;
+        });
     }
-//
-//    public void handleText(View v){
-//        EditText t = findViewById(R.id.editTextText);
-//        String input = t.getText().toString();
-//        Log.d("info", input);
-//        TextView output = findViewById(R.id.output);
-//        output.setText(input);
-        // Toast.makeText(this, "Alert", Toast.LENGTH_SHORT).show();
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.flFragment, fragment)
+                .setReorderingAllowed(true)
+                .addToBackStack("name") // Name can be null
+                .commit();
+    }
 }
