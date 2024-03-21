@@ -16,7 +16,9 @@
         <androidx.core.widget.NestedScrollView
             android:contentDescription="Scoll here"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -36,5 +38,13 @@
             <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
         </com.google.android.material.search.SearchView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/myRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="Recycler View for Listing Cards">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

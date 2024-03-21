@@ -94,4 +94,19 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="tours_fragment_list_titles">
+        <item>Tour title 1</item>
+        <item>Tour title 2</item>
+        <item>Tour title 3</item>
+        <item>Tour title 4</item>
+        <item>Tour title 5</item>
+        <item>Tour title 6</item>
+        <item>Tour title 7</item>
+        <item>Tour title 8</item>
+        <item>Tour title 9</item>
+        <item>Tour title 10</item>
+        <item>Tour title 11</item>
+        <item>Tour title 12</item>
+        <item>Tour title 13</item>
+    </string-array>
 </resources>
