@@ -37,14 +37,17 @@
             app:layout_anchor="@id/search_bar">
             <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
         </com.google.android.material.search.SearchView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/myRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="Recycler View for Listing Cards"
+            app:layout_anchorGravity="center">
+
+        </androidx.recyclerview.widget.RecyclerView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/myRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="Recycler View for Listing Cards">
 
-    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>
