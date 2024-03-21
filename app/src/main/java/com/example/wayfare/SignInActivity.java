@@ -1,9 +1,11 @@
 package com.example.wayfare;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -66,6 +69,17 @@ public class SignInActivity extends AppCompatActivity {
                     String firstName = (String) jsonObject.get("firstName");
                     String lastName = (String) jsonObject.get("lastName");
                     String email = (String) jsonObject.get("email");
+
+                    Intent goToProfile = new Intent(SignInActivity.this, ProfileActivity.class);
+                    goToProfile.putExtra("firstName", firstName);
+                    goToProfile.putExtra("lastName", lastName);
+                    goToProfile.putExtra("email", email);
+
+
+
+                    startActivity(goToProfile);
+                    finish();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     System.out.println(e.getMessage());
@@ -74,9 +88,11 @@ public class SignInActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
+                Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
             }
         });
+
+        queue.add(jsonObjectRequest);
 
     }
 

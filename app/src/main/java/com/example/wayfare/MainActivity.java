@@ -14,8 +14,6 @@ import com.example.wayfare.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button sign_in, sign_up;
-
     private ActivityMainBinding binding;
 
     @Override
@@ -53,14 +51,4 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void goToSignUp(View view) {
-        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-        startActivity(intent);
-        finish();
-    }
-    public void goToSignIn(View view) {
-        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }
