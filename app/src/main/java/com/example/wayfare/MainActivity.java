@@ -5,12 +5,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.wayfare.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button sign_in, sign_up;
 
     private ActivityMainBinding binding;
 
@@ -47,5 +51,16 @@ public class MainActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .addToBackStack("name") // Name can be null
                 .commit();
+    }
+
+    public void goToSignUp(View view) {
+        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    public void goToSignIn(View view) {
+        Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
