@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SearchView;
 
 import com.example.wayfare.databinding.ActivityMainBinding;
 
