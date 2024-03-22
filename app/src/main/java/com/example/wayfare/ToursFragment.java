@@ -27,6 +27,8 @@ public class ToursFragment extends Fragment {
 
         //ArrayList<TourListModel> tourListModels = new ArrayList<TourListModel>();
         setUpTourListModels();
+
+        // use this to test custom models
 //        items.add(new TourListModel("Chinatown tour", R.drawable.guide1));
 //        items.add(new TourListModel("Little India tour", R.drawable.guide2));
 //        items.add(new TourListModel("Kampong Glam tour", R.drawable.guide3));
@@ -36,11 +38,14 @@ public class ToursFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(view.getContext(), tourListModels));
+
+
+        // search bar
+
         return view;
     }
 
     private void setUpTourListModels(){
-        // not using for first implementation of feature
         String[] tourListingTitles = getResources().getStringArray(R.array.tours_fragment_list_titles);
         for (int i = 0; i < tourListingTitles.length; i++){
             // note that in this implementation, the length of the array must be the same as the number of images

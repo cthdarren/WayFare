@@ -8,33 +8,27 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.google.android.material.search.SearchBar
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search destinations or activities" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <!-- NestedScrollingChild goes here (NestedScrollView, RecyclerView, etc.). -->
-        <androidx.core.widget.NestedScrollView
-            android:contentDescription="Scoll here"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-        </androidx.core.widget.NestedScrollView>
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Search destinations or activities" />
-        </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.search.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:hint="search_bar_hint"
-            app:layout_anchor="@id/search_bar">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
             <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
         </com.google.android.material.search.SearchView>
 
@@ -43,10 +37,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:contentDescription="Recycler View for Listing Cards"
-            app:layout_anchorGravity="center">
+            app:layout_anchorGravity="center"
+            app:layout_constraintBottom_toBottomOf="@+id/searchView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         </androidx.recyclerview.widget.RecyclerView>
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
