@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +66,9 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public void playVideo(int position) {
         shortsViewHolderList.get(position).playVideo();
     }
+    public void stopVideo(int position) {
+        shortsViewHolderList.get(position).stopVideo();
+    }
 
     public void onViewAttachedToWindow(ShortsViewHolder holder) {
         holder.playVideo();
@@ -74,9 +78,12 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 
     @Override
     public void onViewDetachedFromWindow(ShortsViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        Log.d("ShortsAdapter", "onViewDetachedFromWindow called for position: " );
         holder.pauseVideo();
         isPlaying = false;
     }
+
     public int getCurrentPosition() {
         return currentPosition;
     }
@@ -100,10 +107,12 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             shortsTitle = itemView.findViewById(R.id.shortsTitle);
             videoProgressBar = itemView.findViewById(R.id.progressBar);
             imvVolume = itemView.findViewById(R.id.imvVolume);
+            imvAppear = itemView.findViewById(R.id.imv_appear);
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
         }
         public void playVideo() {
+            disappearImage();
             if (!exoPlayer.isPlaying()) {
                 exoPlayer.play();
             }
@@ -118,6 +127,15 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 exoPlayer.setPlayWhenReady(false);
             }
         }
+        public void stopVideo() {
+            isPaused = true;
+            if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                exoPlayer.setPlayWhenReady(false);
+                exoPlayer.stop();
+                exoPlayer.seekTo(0);
+                exoPlayer.release();
+            }
+        }
         public void appearImage(int src) {
             imvAppear.setImageResource(src);
             imvAppear.setVisibility(View.VISIBLE);
@@ -126,7 +144,10 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 public void run() {
                     imvAppear.setVisibility(View.GONE);
                 }
-            },  1000);
+            },  5000);
+        }
+        public void disappearImage(){
+            imvAppear.setVisibility(View.GONE);
         }
         @SuppressLint("ClickableViewAccessibility")
         void setShortsData(ShortsObject shortsData){
@@ -159,7 +180,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 
         public void onClick(View view) {
             if (view.getId() == videoView.getId()) {
-                numberOfClick++;
+                numberOfClick = numberOfClick + 1;
                 float currentVolume = exoPlayer.getVolume();
                 boolean isMuted = (currentVolume == 0);
                 Handler handler = new Handler();
@@ -185,7 +206,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 //                        }
                         numberOfClick = 0;
                     }
-                }, 500);
+                }, 250);
             }
             if (view.getId() == imvVolume.getId()) {
                 float currentVolume = exoPlayer.getVolume();

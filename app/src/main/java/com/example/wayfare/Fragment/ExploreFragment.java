@@ -39,12 +39,6 @@ public class ExploreFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -132,7 +126,7 @@ public class ExploreFragment extends Fragment {
         shortsViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {
-
+                //shortsAdapter.playVideo(shortsAdapter.getCurrentPosition());
             }
 
             @Override
@@ -147,8 +141,20 @@ public class ExploreFragment extends Fragment {
     @Override public void onStart() {
         super.onStart();
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        pauseVideo();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        continueVideo();
+    }
+
     public void pauseVideo() {
-        SharedPreferences currentPosPref = context.getSharedPreferences("position", Context.MODE_PRIVATE);
+        SharedPreferences currentPosPref = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
         SharedPreferences.Editor positionEditor = currentPosPref.edit();
         int currentPosition = shortsAdapter.getCurrentPosition();
         positionEditor.putInt("position", currentPosition);
@@ -157,7 +163,7 @@ public class ExploreFragment extends Fragment {
     }
 
     public void continueVideo() {
-        SharedPreferences currentPosPref = context.getSharedPreferences("position", Context.MODE_PRIVATE);
+        SharedPreferences currentPosPref = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
         int currentPosition = currentPosPref.getInt("position", -1);
         if (currentPosition != -1) {
             shortsAdapter.playVideo(currentPosition);
