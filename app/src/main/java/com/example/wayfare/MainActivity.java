@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.inbox) {
                 replaceFragment(new InboxFragment());
             } else if (item.getItemId() == R.id.account) {
-                replaceFragment(new AccountFragment());
+                replaceFragment(new SettingsFragment());
             }
             return true;
         });

@@ -28,7 +28,7 @@ public class UserLanding extends AppCompatActivity {
         finish();
     }
     public void goToSignIn(View view) {
-        Intent intent = new Intent(UserLanding.this, SignInActivity.class);
+        Intent intent = new Intent(UserLanding.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
