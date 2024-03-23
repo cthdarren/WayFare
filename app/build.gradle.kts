@@ -27,6 +27,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
+            signingConfig = signingConfigs.getByName("debug")
+        }
+        debug {
+            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
         }
     }
     compileOptions {
@@ -35,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
