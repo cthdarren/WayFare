@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="30dp">
 
     <LinearLayout
@@ -9,12 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <ImageView
-            android:id="@+id/settings_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,6 +20,7 @@
             android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -32,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="20dp">
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="25dp">
 
                 <ImageView
                     android:id="@+id/user_profile_picture"
@@ -49,10 +46,11 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/user_greeting_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/username_greeting"
-                        android:textSize="20sp" />
+                        android:text="Hi, Username"
+                        android:textSize="24sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -66,48 +64,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
             android:text="Settings"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="14dp">
+            android:layout_marginTop="10dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/settings_list_recview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:onClick="goToSignIn"
-                    android:paddingTop="14dp">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/settings_icon" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="12dp"
-                        android:gravity="center_vertical"
-                        android:text="App Settings" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@color/material_dynamic_neutral80" />
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/settings_list_item" />
 
             </LinearLayout>
 
