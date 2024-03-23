@@ -25,10 +25,10 @@ public class SettingsRecViewAdapter extends RecyclerView.Adapter<SettingsRecView
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_list_item, parent,false);
         ViewHolder holder = new ViewHolder(view);
 
-        settingItems.add(new SettingItem("Privacy", parent.getContext().getDrawable(R.drawable.settings_icon)));
+        settingItems.add(new SettingItem("Privacy", parent.getContext().getDrawable(R.drawable.privacy)));
         settingItems.add(new SettingItem("General", parent.getContext().getDrawable(R.drawable.settings_icon)));
-        settingItems.add(new SettingItem("Accessibility", parent.getContext().getDrawable(R.drawable.settings_icon)));
-        settingItems.add(new SettingItem("Notifications", parent.getContext().getDrawable(R.drawable.settings_icon)));
+        settingItems.add(new SettingItem("Accessibility", parent.getContext().getDrawable(R.drawable.accessibility)));
+        settingItems.add(new SettingItem("Notifications", parent.getContext().getDrawable(R.drawable.notifications)));
         return holder;
     }
 
