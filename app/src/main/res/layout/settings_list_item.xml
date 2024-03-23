@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="14dp">
+        android:paddingTop="18dp">
 
         <ImageView
             android:id="@+id/settings_item_icon"
@@ -28,7 +28,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="18dp"
         android:background="@color/material_dynamic_neutral80" />
 
 </LinearLayout>
