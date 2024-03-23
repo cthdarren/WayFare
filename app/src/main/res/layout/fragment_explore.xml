@@ -5,12 +5,14 @@
     android:id="@+id/explore"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExploreFragment">
+    tools:context=".Fragment.ExploreFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="This is explore fragment"/>
-
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/shortsViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        tools:layout_editor_absoluteY="30dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
