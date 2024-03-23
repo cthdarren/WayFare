@@ -144,7 +144,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 public void run() {
                     imvAppear.setVisibility(View.GONE);
                 }
-            },  5000);
+            },  1000);
         }
         public void disappearImage(){
             imvAppear.setVisibility(View.GONE);
