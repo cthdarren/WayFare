@@ -1,5 +1,6 @@
 package com.example.wayfare;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,20 +16,21 @@ import java.util.ArrayList;
 
 public class SettingsRecViewAdapter extends RecyclerView.Adapter<SettingsRecViewAdapter.ViewHolder>{
 
-    private ArrayList<SettingItem> settingItems = new ArrayList<>();
+    private final ArrayList<SettingItem> settingItems;
+    private final Context context;
 
+    private final RecyclerViewInterface recyclerViewInterface;
 
-    public SettingsRecViewAdapter(){}
+    public SettingsRecViewAdapter(Context context, ArrayList<SettingItem> settingItems, RecyclerViewInterface recyclerViewInterface){
+        this.context = context;
+        this.settingItems = settingItems;
+        this.recyclerViewInterface = recyclerViewInterface;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_list_item, parent,false);
-        ViewHolder holder = new ViewHolder(view);
-
-        settingItems.add(new SettingItem("Privacy", parent.getContext().getDrawable(R.drawable.privacy)));
-        settingItems.add(new SettingItem("General", parent.getContext().getDrawable(R.drawable.settings_icon)));
-        settingItems.add(new SettingItem("Accessibility", parent.getContext().getDrawable(R.drawable.accessibility)));
-        settingItems.add(new SettingItem("Notifications", parent.getContext().getDrawable(R.drawable.notifications)));
+        ViewHolder holder = new ViewHolder(view, recyclerViewInterface);
         return holder;
     }
 
@@ -36,23 +38,35 @@ public class SettingsRecViewAdapter extends RecyclerView.Adapter<SettingsRecView
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.settingName.setText(settingItems.get(position).name);
         holder.settingIcon.setImageDrawable(settingItems.get(position).icon);
+
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return settingItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         private TextView settingName;
         private ImageView settingIcon;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             settingName = itemView.findViewById(R.id.settings_item_name);
             settingIcon = itemView.findViewById(R.id.settings_item_icon);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recyclerViewInterface != null) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 
