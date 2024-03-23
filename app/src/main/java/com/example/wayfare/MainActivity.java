@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.wayfare.databinding.ActivityMainBinding;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+
     }
 
     private void replaceFragment(Fragment fragment){
