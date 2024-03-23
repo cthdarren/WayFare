@@ -2,6 +2,7 @@ package com.example.wayfare;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,14 +60,19 @@ public class SignInActivity extends AppCompatActivity {
 
         // Set Parameters:
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("usernamelog", et_usernamelog.getText().toString());
-        params.put("passwordlog", et_passwordlog.getText().toString());
+        params.put("username", et_usernamelog.getText().toString());
+        params.put("password", et_passwordlog.getText().toString());
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), jsonObject -> {
-            try {
-                String firstName = (String) jsonObject.get("firstName");
-                String lastName = (String) jsonObject.get("lastName");
-                String email = (String) jsonObject.get("email");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    String firstName = (String) jsonObject.get("firstName");
+                    String lastName = (String) jsonObject.get("lastName");
+                    String email = (String) jsonObject.get("email");
+
 
                 Intent goToProfile = new Intent(SignInActivity.this, ProfileActivity.class);
                 goToProfile.putExtra("firstName", firstName);
@@ -85,8 +91,10 @@ public class SignInActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                System.out.println(volleyError);
-                Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+
+                Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                Log.i("TAG", "Error: " + volleyError.getMessage());
+
             }
         });
 
