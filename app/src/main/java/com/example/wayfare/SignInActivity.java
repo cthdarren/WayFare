@@ -63,6 +63,7 @@ public class SignInActivity extends AppCompatActivity {
         params.put("username", et_usernamelog.getText().toString());
         params.put("password", et_passwordlog.getText().toString());
 
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(params), new Response.Listener<JSONObject>() {
 
             @Override
@@ -72,26 +73,28 @@ public class SignInActivity extends AppCompatActivity {
                     String lastName = (String) jsonObject.get("lastName");
                     String email = (String) jsonObject.get("email");
 
-                    Intent goToProfile = new Intent(SignInActivity.this, ProfileActivity.class);
-                    goToProfile.putExtra("firstName", firstName);
-                    goToProfile.putExtra("lastName", lastName);
-                    goToProfile.putExtra("email", email);
+
+                Intent goToProfile = new Intent(SignInActivity.this, ProfileActivity.class);
+                goToProfile.putExtra("firstName", firstName);
+                goToProfile.putExtra("lastName", lastName);
+                goToProfile.putExtra("email", email);
 
 
 
-                    startActivity(goToProfile);
-                    finish();
+                startActivity(goToProfile);
+                finish();
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    System.out.println(e.getMessage());
-                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+
                 Toast.makeText(SignInActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 Log.i("TAG", "Error: " + volleyError.getMessage());
+
             }
         });
 
