@@ -72,12 +72,7 @@
 
 
         </LinearLayout>
-        <Button
-            android:layout_marginTop="40dp"
-            android:layout_width="match_parent"
-            android:text="Logout"
-            android:textSize="@dimen/font_sm"
-            android:layout_height="wrap_content"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
