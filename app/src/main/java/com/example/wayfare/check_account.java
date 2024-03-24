@@ -3,6 +3,7 @@ package com.example.wayfare;
 import static org.bson.assertions.Assertions.fail;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class check_account extends AppCompatActivity {
+
+    // asynchronous get to check if username exists in database
 
     Button continue_button;
     EditText usercheck;
@@ -48,18 +51,23 @@ public class check_account extends AppCompatActivity {
 
     public void authenticate(){
 
-            Request request = new Request.Builder().url("http://143.198.223.202/api/v1/user/test").build();
+            Request request = new Request.Builder().url("http://143.198.223.202/api/v1/user" + String.format("/%s",usercheck)).build();
 
             Call call = client.newCall(request);
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    Log.i("TAG", "It didnt work");
+                    // on error redirect to sign up
+                    Intent goToSignUp = new Intent(check_account.this, SignUpFragment.class);
+                    e.printStackTrace();
+                    Log.i("TAG", "It didn't work");
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    Log.i("TAG","it worked");
+                    // on response redirect to sign in
+                    Intent goToSignIn = new Intent(check_account.this, SignInFragment.class);
+                    Log.i("TAG",response.body().string());
                 }
             });
         }

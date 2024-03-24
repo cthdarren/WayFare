@@ -14,15 +14,12 @@ import okhttp3.Response;
 
 public class OkHTTP {
 
-    // asynchronous get to check if username exists in database
-    // call in check account
-    // on response redirect to sign in
-    // on error redirect to sign up
+
 
     private final OkHttpClient client = new OkHttpClient();
 
     public void getRequest() {
-        Request request = new Request.Builder().url("http://143.198.223.202/api/v1/user/{username}").build();
+        Request request = new Request.Builder().url("http://143.198.223.202/api/v1/user").build();
 
         Call call = client.newCall(request);
         call.enqueue(new Callback() {
