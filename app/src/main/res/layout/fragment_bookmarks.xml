@@ -1,15 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bookmarks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BookmarksFragment">
+
+    android:orientation="vertical"
+    tools:context=".Fragment.BookmarksFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/outer_padding">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Tours"
+            android:textSize="@dimen/font_xl"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="@dimen/font_2xl"
+            android:layout_height="@dimen/font_2xl"
+            android:src="@drawable/outline_bookmark_border_24" />
+
+    </LinearLayout>
+
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This is bookmarks page fragment" />
+        android:id="@+id/toursinnerframe"
+        android:padding="@dimen/outer_padding">
 
-</FrameLayout>
+    </FrameLayout>
+
+
+</LinearLayout>
