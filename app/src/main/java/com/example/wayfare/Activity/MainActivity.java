@@ -1,10 +1,12 @@
 package com.example.wayfare.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
@@ -17,6 +19,7 @@ import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.R;
 import com.example.wayfare.Fragment.ToursFragment;
 import com.example.wayfare.databinding.ActivityMainBinding;
+import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_Wayfare);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
         setContentView(view);
@@ -56,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack("name") // Name can be null
                 .commit();
     }
+
+
 
 
 }
