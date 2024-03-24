@@ -1,6 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
+    <dimen name="font_2xs">8sp</dimen>
+    <dimen name="font_xs">12sp</dimen>
+    <dimen name="font_sm">16sp</dimen>
+    <dimen name="font_md">20sp</dimen>
+    <dimen name="font_lg">24sp</dimen>
+    <dimen name="font_xl">28sp</dimen>
+    <dimen name="font_2xl">32sp</dimen>
+    <dimen name="outer_padding">30dp</dimen>
 </resources>
