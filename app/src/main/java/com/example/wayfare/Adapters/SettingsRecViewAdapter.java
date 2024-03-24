@@ -12,20 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
-import com.example.wayfare.Models.SettingItem;
+import com.example.wayfare.Models.SettingItemModel;
 
 import java.util.ArrayList;
 
 public class SettingsRecViewAdapter extends RecyclerView.Adapter<SettingsRecViewAdapter.ViewHolder>{
 
-    private final ArrayList<SettingItem> settingItems;
+    private final ArrayList<SettingItemModel> settingItemModels;
     private final Context context;
 
     private final RecyclerViewInterface recyclerViewInterface;
 
-    public SettingsRecViewAdapter(Context context, ArrayList<SettingItem> settingItems, RecyclerViewInterface recyclerViewInterface){
+    public SettingsRecViewAdapter(Context context, ArrayList<SettingItemModel> settingItemModels, RecyclerViewInterface recyclerViewInterface){
         this.context = context;
-        this.settingItems = settingItems;
+        this.settingItemModels = settingItemModels;
         this.recyclerViewInterface = recyclerViewInterface;
     }
     @NonNull
@@ -38,14 +38,14 @@ public class SettingsRecViewAdapter extends RecyclerView.Adapter<SettingsRecView
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.settingName.setText(settingItems.get(position).name);
-        holder.settingIcon.setImageDrawable(settingItems.get(position).icon);
+        holder.settingName.setText(settingItemModels.get(position).name);
+        holder.settingIcon.setImageDrawable(settingItemModels.get(position).icon);
 
     }
 
     @Override
     public int getItemCount() {
-        return settingItems.size();
+        return settingItemModels.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
