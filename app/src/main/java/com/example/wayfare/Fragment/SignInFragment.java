@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.media3.ui.BuildConfig;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,10 +61,12 @@ public class SignInFragment extends Fragment {
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 
-        Request request = new Request.Builder().url("http://143.198.223.202/api/v1/auth/login").post(body).build();
+        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login").post(body).build();
 
         Call call = client.newCall(request);
         Response response = call.execute();
+
+        System.out.println(body);
     }
 
 }
