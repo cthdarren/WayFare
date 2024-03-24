@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.wayfare.Fragment.SignUpFragment;
 import com.example.wayfare.R;
 
 public class UserLanding extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class UserLanding extends AppCompatActivity {
     }
 
     public void goToSignUp(View view) {
-        Intent intent = new Intent(UserLanding.this, SignUpActivity.class);
+        Intent intent = new Intent(UserLanding.this, SignUpFragment.class);
         startActivity(intent);
         finish();
     }
