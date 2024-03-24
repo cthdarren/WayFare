@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
 
     android:orientation="vertical"
-    tools:context=".Fragment.BookmarksFragment">
+    tools:context=".Fragment.UpcomingFragment">
 
 
     <LinearLayout
@@ -28,6 +28,7 @@
         <ImageView
             android:layout_width="@dimen/font_2xl"
             android:layout_height="@dimen/font_2xl"
+            android:id="@+id/savedbookmarks"
             android:src="@drawable/outline_bookmark_border_24" />
 
     </LinearLayout>
