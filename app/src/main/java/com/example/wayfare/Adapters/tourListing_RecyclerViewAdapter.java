@@ -1,4 +1,4 @@
-package com.example.wayfare;
+package com.example.wayfare.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.wayfare.Models.TourListModel;
+import com.example.wayfare.R;
 
 import java.util.ArrayList;
 

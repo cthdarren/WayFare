@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
+import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 
 

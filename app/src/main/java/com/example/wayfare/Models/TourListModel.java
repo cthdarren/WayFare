@@ -1,4 +1,4 @@
-package com.example.wayfare;
+package com.example.wayfare.Models;
 // we are creating variables thats gonna hold all the data that represents one of our items
 public class TourListModel {
     public TourListModel(String tourListingTitle,  int tourListingImage) {

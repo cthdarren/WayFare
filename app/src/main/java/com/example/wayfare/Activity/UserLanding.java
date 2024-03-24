@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.wayfare.MainActivity;
 import com.example.wayfare.R;
 
 public class UserLanding extends AppCompatActivity {
