@@ -1,11 +1,11 @@
-package com.example.wayfare;
+package com.example.wayfare.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.media3.ui.BuildConfig;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,9 +14,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.wayfare.BuildConfig;
+import com.example.wayfare.R;
+
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -27,10 +32,9 @@ import okhttp3.Response;
 public class SignInFragment extends Fragment {
 
     Button sign_in_button;
-    EditText username,password;
-    final OkHttpClient client = new OkHttpClient();
-
-    public SignInFragment() {}
+    EditText username, password;
+    public SignInFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,16 +61,47 @@ public class SignInFragment extends Fragment {
 
     public void login() throws IOException {
 
-        String json = String.format("{\"username\":%s, \"password\": %s}", username.toString(), password.toString());
+//        String json = String.format("{\"username\":%s, \"password\":%s}", username.toString(), password.toString());
+//
+//        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+//
+//        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login").post(body).build();
+//
+//        Response response = client.newCall(request).execute();
 
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                new Thread (new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestBody postBody = new FormBody.Builder().add("username", username.toString()).add("password", password.toString()).build();
 
-        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login").post(body).build();
+                        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login").post(postBody).build();
 
-        Call call = client.newCall(request);
-        Response response = call.execute();
+                        OkHttpClient client = new OkHttpClient();
+                        client.connectTimeoutMillis();
+                        client.readTimeoutMillis();
+                        client.callTimeoutMillis();
+                        Call call = client.newCall(request);
 
-        System.out.println(body);
-    }
+                        Response response = null;
+
+                        try {
+                            response = call.execute();
+                            String serverResponse = response.body().string();
+
+                            getActivity().runOnUiThread((new Runnable() {
+                                @Override
+                                public void run() {
+                                    System.out.println(serverResponse);
+                                    Log.i("Tag", "it worked>");
+                                }
+                            }));
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                }).start();
+            }
 
 }

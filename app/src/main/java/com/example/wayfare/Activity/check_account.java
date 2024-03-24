@@ -2,7 +2,6 @@ package com.example.wayfare.Activity;
 
 import static org.bson.assertions.Assertions.fail;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +11,10 @@ import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wayfare.R;
+import com.example.wayfare.Fragment.SignInFragment;
+import com.example.wayfare.Fragment.SignUpFragment;
 
 import java.io.IOException;
 

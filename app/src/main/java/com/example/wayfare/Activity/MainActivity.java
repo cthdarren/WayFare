@@ -14,6 +14,7 @@ import com.example.wayfare.Fragment.SettingsFragment;
 import com.example.wayfare.Fragment.BookmarksFragment;
 import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.InboxFragment;
+import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.R;
 import com.example.wayfare.Fragment.ToursFragment;
 import com.example.wayfare.databinding.ActivityMainBinding;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         View view = (View) binding.getRoot();
         setContentView(view);
         View decorView = getWindow().getDecorView();
-        replaceFragment(new ExploreFragment());
+        replaceFragment(new SignInFragment());
         //binding.bottomNavigationView.setBackground(null);
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
