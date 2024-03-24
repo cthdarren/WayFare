@@ -27,11 +27,39 @@
             android:textSize="@dimen/font_lg"
             android:layout_height="wrap_content"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="6"
+                android:paddingVertical="22dp"
+                android:textSize="@dimen/font_sm"
+                android:text="Currency"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingVertical="22dp"
+                android:paddingLeft="12dp"
+                android:textColor="@color/md_theme_primary"
+                android:textSize="@dimen/font_sm"
+                android:text="SGD"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_dynamic_neutral40"/>
+
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:layout_width="match_parent"
-            android:text="help me"
+            android:paddingVertical="22dp"
+            android:text="Translation"
             android:textSize="@dimen/font_sm"
             android:layout_height="wrap_content"/>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/material_dynamic_neutral40"/>
     </LinearLayout>
 </ScrollView>
