@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +35,7 @@ public class SignInFragment extends Fragment {
 
     Button sign_in_button;
     EditText username, password;
+
     public SignInFragment() {
     }
 
@@ -61,47 +64,56 @@ public class SignInFragment extends Fragment {
 
     public void login() throws IOException {
 
-//        String json = String.format("{\"username\":%s, \"password\":%s}", username.toString(), password.toString());
 //
-//        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
 //
 //        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login").post(body).build();
 //
 //        Response response = client.newCall(request).execute();
 
-                new Thread (new Runnable() {
-                    @Override
-                    public void run() {
-                        RequestBody postBody = new FormBody.Builder().add("username", username.toString()).add("password", password.toString()).build();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-                        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login").post(postBody).build();
+                String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), password.getText());
+                RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login")
+                        .post(body)
+                        .addHeader("Connection","keep-alive")
+                        .build();
 
-                        OkHttpClient client = new OkHttpClient();
-                        client.connectTimeoutMillis();
-                        client.readTimeoutMillis();
-                        client.callTimeoutMillis();
-                        Call call = client.newCall(request);
+                OkHttpClient client = new OkHttpClient();
+                client.connectTimeoutMillis();
+                client.readTimeoutMillis();
+                client.callTimeoutMillis();
+                Call call = client.newCall(request);
 
-                        Response response = null;
+                Response response = null;
 
-                        try {
-                            response = call.execute();
-                            String serverResponse = response.body().string();
+                try {
+                    response = call.execute();
+                    String serverResponse = response.body().string();
 
-                            getActivity().runOnUiThread((new Runnable() {
-                                @Override
-                                public void run() {
-                                    System.out.println(serverResponse);
-                                    Log.i("Tag", "it worked>");
-                                }
-                            }));
+                    getActivity().runOnUiThread((new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println(serverResponse);
+                            Log.i("Tag", "it worked>");
 
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
                         }
+                    }));
 
-                    }
-                }).start();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
             }
+        }).start();
+       /* FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+        ft
+                .replace(, new ExploreFragment())
+                .setReorderingAllowed(true)
+                .addToBackStack("name") // Name can be null
+                .commit();*/
+    }
 
 }
