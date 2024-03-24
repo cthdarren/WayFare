@@ -15,11 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.R;
 
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
@@ -102,8 +105,18 @@ public class SignInFragment extends Fragment {
                         }
                     }));
 
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                }
+                catch(SocketTimeoutException e){
+//                    Toast.makeText(getContext(), "Request Timed Out", Toast.LENGTH_SHORT);
+                    e.printStackTrace();
+                }
+                catch (SocketException e){
+//                    Toast.makeText(getContext(), "Server Error", Toast.LENGTH_SHORT);
+                    e.printStackTrace();
+                    Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
                 }
 
             }
