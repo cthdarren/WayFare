@@ -1,4 +1,4 @@
-package com.example.wayfare;
+package com.example.wayfare.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
