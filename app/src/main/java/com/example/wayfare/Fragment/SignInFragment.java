@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.R;
 
@@ -57,76 +59,65 @@ public class SignInFragment extends Fragment {
                 try {
                     login();
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
         });
-
         return view;
     }
 
     public void login() throws IOException {
-
-//
-//
-//        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login").post(body).build();
-//
-//        Response response = client.newCall(request).execute();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), password.getText());
-                RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-                Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login")
-                        .post(body)
-                        .addHeader("Connection","keep-alive")
-                        .build();
-
-                OkHttpClient client = new OkHttpClient();
-                client.connectTimeoutMillis();
-                client.readTimeoutMillis();
-                client.callTimeoutMillis();
-                Call call = client.newCall(request);
-
-                Response response = null;
-
-                try {
-                    response = call.execute();
-                    String serverResponse = response.body().string();
-
-                    getActivity().runOnUiThread((new Runnable() {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final OkHttpClient client = new OkHttpClient();
+                    makeToast("bruh");
+                    String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), password.getText());
+                    RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login")
+                            .post(body)
+                            .build();
+                    client.newCall(request).enqueue(new Callback() {
                         @Override
-                        public void run() {
+                        public void onFailure(Call call, IOException e) {
+                            if (e instanceof SocketTimeoutException) {
+                                makeToast("Request Timed Out");
+                                e.printStackTrace();
+                            } else if (e instanceof SocketException) {
+                                makeToast("Server Error");
+                                Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
+                                e.printStackTrace();
+                            }
+                        }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String serverResponse = response.body().string();
                             System.out.println(serverResponse);
                             Log.i("Tag", "it worked>");
-
                         }
-                    }));
-
+                    });
                 }
-                catch(SocketTimeoutException e){
-//                    Toast.makeText(getContext(), "Request Timed Out", Toast.LENGTH_SHORT);
-                    e.printStackTrace();
-                }
-                catch (SocketException e){
-//                    Toast.makeText(getContext(), "Server Error", Toast.LENGTH_SHORT);
-                    e.printStackTrace();
-                    Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }).start();
        /* FragmentTransaction ft = getParentFragmentManager().beginTransaction();
         ft
                 .replace(, new ExploreFragment())
                 .setReorderingAllowed(true)
                 .addToBackStack("name") // Name can be null
                 .commit();*/
+            });
+        }
     }
+    public void makeToast(String msg) {
 
+        if (getActivity() == null) {
+            Log.d("ERROR", "ACTIVITY CONTEXT IS NULL, UNABLE TO MAKE TOAST");
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }
