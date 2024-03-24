@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
 
     android:orientation="vertical"
-    tools:context=".Fragment.BookmarksFragment">
+    tools:context=".Fragment.UpcomingFragment">
 
 
     <LinearLayout
@@ -47,6 +47,7 @@
         <Button
             android:layout_width="match_parent"
             android:text="Log In"
+            android:id="@+id/toursLoginBtn"
             android:layout_marginTop="20dp"
             android:layout_height="wrap_content"/>
 

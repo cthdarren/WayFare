@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 
 import com.example.wayfare.R;
 
-public class BookmarksFragment extends Fragment {
+public class UpcomingFragment extends Fragment {
 
-    public BookmarksFragment(){}
+    public UpcomingFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bookmarks, container, false);
+        return inflater.inflate(R.layout.fragment_upcoming, container, false);
     }
 }

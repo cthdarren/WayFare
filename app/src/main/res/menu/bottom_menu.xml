@@ -8,11 +8,11 @@
         android:icon="@drawable/icon_selection_explore"
         android:title="Explore" />
     <item
-        android:id="@+id/bookmarks"
+        android:id="@+id/upcoming"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/icon_selection_bookmarks"
-        android:title="Bookmarks" />
+        android:icon="@drawable/upcoming"
+        android:title="Upcoming" />
     <item
         android:id="@+id/tours"
         android:layout_width="wrap_content"
