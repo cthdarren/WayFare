@@ -14,7 +14,7 @@
         tools:ignore="MissingConstraints">
 
         <ImageView
-            android:id="@+id/privacy_back"
+            android:id="@+id/accessibility_back"
             android:paddingTop="20dp"
             android:paddingEnd="15dp"
             android:layout_width="wrap_content"

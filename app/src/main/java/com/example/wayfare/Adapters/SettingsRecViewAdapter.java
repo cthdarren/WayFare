@@ -15,15 +15,16 @@ import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Models.SettingItemModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsRecViewAdapter extends RecyclerView.Adapter<SettingsRecViewAdapter.ViewHolder>{
 
-    private final ArrayList<SettingItemModel> settingItemModels;
+    private final List<SettingItemModel> settingItemModels;
     private final Context context;
 
     private final RecyclerViewInterface recyclerViewInterface;
 
-    public SettingsRecViewAdapter(Context context, ArrayList<SettingItemModel> settingItemModels, RecyclerViewInterface recyclerViewInterface){
+    public SettingsRecViewAdapter(Context context, List<SettingItemModel> settingItemModels, RecyclerViewInterface recyclerViewInterface){
         this.context = context;
         this.settingItemModels = settingItemModels;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -62,7 +63,7 @@ public class SettingsRecViewAdapter extends RecyclerView.Adapter<SettingsRecView
                 @Override
                 public void onClick(View v) {
                     if (recyclerViewInterface != null) {
-                        int pos = getAdapterPosition();
+                        int pos = getBindingAdapterPosition();
                         if (pos != RecyclerView.NO_POSITION) {
                             recyclerViewInterface.onItemClick(pos);
                         }

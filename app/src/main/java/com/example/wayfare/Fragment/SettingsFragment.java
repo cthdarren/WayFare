@@ -25,28 +25,35 @@ import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Models.SettingItemModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SettingsFragment extends Fragment implements RecyclerViewInterface {
 
     private RecyclerView settingsRecyclerView;
 
-    private ArrayList<SettingItemModel> settingItemModels = new ArrayList<>();
-
-
+    private List<SettingItemModel> settingItemModels = new ArrayList<>();
 
     private void setupSettingItems(Context context){
-        settingItemModels.add(new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class));
-        settingItemModels.add(new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class));
-        settingItemModels.add(new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class));
-        settingItemModels.add(new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class));
-        settingItemModels.add(new SettingItemModel("Payments", context.getDrawable(R.drawable.payment), PaymentSettingsActivity.class));
-        settingItemModels.add(new SettingItemModel("Report a Problem", context.getDrawable(R.drawable.report), ReportSettingsActivity.class));
+        settingItemModels = Arrays.asList(
+        new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
+        new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
+        new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
+        new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
+        new SettingItemModel("Payments", context.getDrawable(R.drawable.payment), PaymentSettingsActivity.class),
+        new SettingItemModel("Report a Problem", context.getDrawable(R.drawable.report), ReportSettingsActivity.class)
+        );
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        setupSettingItems(context);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupSettingItems(view.getContext());
 
         settingsRecyclerView = view.findViewById(R.id.settings_list_recview);
         SettingsRecViewAdapter adapter = new SettingsRecViewAdapter(view.getContext(), settingItemModels, this);

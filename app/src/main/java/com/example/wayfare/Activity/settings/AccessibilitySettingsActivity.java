@@ -25,7 +25,7 @@ public class AccessibilitySettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings_accessibility);
 
         theme_change_switch = findViewById(R.id.theme_change_switch);
-        privacy_back = findViewById(R.id.privacy_back);
+        privacy_back = findViewById(R.id.accessibility_back);
 
         privacy_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,7 +34,7 @@ public class AccessibilitySettingsActivity extends AppCompatActivity {
             }
         });
 
-        //TODO DARK MODE LIGHT MODE CHANGE
+        //TODO DARK MODE LIGHT MODE CHANGE just tell them that changes will be applied on app restart
 //        theme_change_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
 //            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

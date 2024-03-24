@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:scrollbarSize="0dp"
     android:padding="@dimen/outer_padding">
 
     <LinearLayout
