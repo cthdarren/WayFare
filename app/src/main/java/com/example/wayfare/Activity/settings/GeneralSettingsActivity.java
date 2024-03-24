@@ -1,7 +1,8 @@
 package com.example.wayfare.Activity.settings;
 
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,25 +11,20 @@ import com.example.wayfare.R;
 
 public class GeneralSettingsActivity extends AppCompatActivity {
 
-    TextView tv_firstName, tv_lastName, tv_email;
-
+    ImageView privacy_back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_settings_general);
 
-        tv_firstName = findViewById(R.id.firstName);
-        tv_lastName = findViewById(R.id.lastName);
-        tv_email = findViewById(R.id.email);
+        privacy_back = findViewById(R.id.privacy_back);
 
-        String firstName = getIntent().getStringExtra("firstName");
-        String lastName = getIntent().getStringExtra("lastName");
-        String email = getIntent().getStringExtra("email");
-
-        tv_firstName.setText(firstName);
-        tv_lastName.setText(lastName);
-        tv_email.setText(email);
-
+        privacy_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }

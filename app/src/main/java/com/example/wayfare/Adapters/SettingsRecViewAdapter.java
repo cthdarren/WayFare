@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
-import com.example.wayfare.models.SettingItem;
+import com.example.wayfare.Models.SettingItem;
 
 import java.util.ArrayList;
 
