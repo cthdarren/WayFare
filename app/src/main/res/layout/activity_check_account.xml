@@ -7,7 +7,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".check_account">
+    tools:context=".Activity.check_account">
 
     <TextView
         android:id="@+id/checktitle"
@@ -16,6 +16,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="696dp"
         android:text="Log In or Sign Up to Wayfare!"
+        android:textStyle="bold"
         android:textAlignment="center"
         android:textSize="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,12 +25,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/emailcheck"
+        android:id="@+id/usercheck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="595dp"
-        android:hint="E-mail"
+        android:hint="Username"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,21 +51,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.366">
 
-        <TextView
-            android:id="@+id/continuecheck"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
+        <Button
+            android:id="@+id/continue_button"
+            android:layout_width="208dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="555dp"
-            android:text="Continue"
-            android:textAlignment="center"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardcontinue" />
+            android:text="Continue" />
 
     </androidx.cardview.widget.CardView>
 

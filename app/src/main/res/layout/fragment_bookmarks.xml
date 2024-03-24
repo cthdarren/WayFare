@@ -5,12 +5,10 @@
     android:id="@+id/bookmarks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< Updated upstream
-    tools:context=".BookmarksFragment">
-=======
+
     android:orientation="vertical"
     tools:context=".Fragment.BookmarksFragment">
->>>>>>> Stashed changes
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,6 +31,7 @@
             android:src="@drawable/outline_bookmark_border_24" />
 
     </LinearLayout>
+
 
     <!-- TODO: Update blank fragment layout -->
     <FrameLayout
