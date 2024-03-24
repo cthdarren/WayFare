@@ -6,20 +6,24 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:padding="30dp">
 
+
     <LinearLayout
         android:id="@+id/details_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="30dp"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/privacy_back"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingEnd="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:src="@drawable/arrow_back"
-            android:scaleType="fitStart"/>
+            android:scaleType="fitStart"
+            app:tint="@color/md_theme_onSurface" />
+
 
         <TextView
             android:layout_width="match_parent"
@@ -32,7 +36,8 @@
             android:layout_width="match_parent"
             android:textSize="@dimen/font_sm"
             android:text="@string/reportproblemtxt"
-            android:layout_marginBottom="20dp"
+            android:lineSpacingMultiplier="1.2"
+            android:layout_marginBottom="50dp"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.card.MaterialCardView
