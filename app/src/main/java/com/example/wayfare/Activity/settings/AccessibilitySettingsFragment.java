@@ -1,4 +1,4 @@
-package com.example.wayfare.settings;
+package com.example.wayfare.Activity.settings;
 
 import androidx.fragment.app.Fragment;
 

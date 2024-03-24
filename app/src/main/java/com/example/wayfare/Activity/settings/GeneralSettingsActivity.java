@@ -1,4 +1,4 @@
-package com.example.wayfare.settings;
+package com.example.wayfare.Activity.settings;
 
 import android.os.Bundle;
 import android.widget.TextView;
