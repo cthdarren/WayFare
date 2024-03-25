@@ -51,9 +51,10 @@
         <item name="android:statusBarColor">#000000</item>
         <!-- Customize your theme here. -->
         <item name="android:windowDisablePreview">true</item>
-        <item name="android:textColor">@color/md_theme_onSurface</item>
-        <item name="tint">@color/md_theme_onSurface</item>
-        <item name="android:tint">@color/md_theme_onSurface</item>
+<!--        <item name="android:textColor">@color/md_theme_onSurface</item>-->
+<!--        <item name="tint">@color/md_theme_onSurface</item>-->
+<!--        <item name="android:tint">@color/md_theme_onSurface</item>-->
+
 
         <!---<item name="android:windowBackground">@color/white</item> -->
     </style>
