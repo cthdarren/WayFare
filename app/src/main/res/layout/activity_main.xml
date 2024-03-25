@@ -11,6 +11,8 @@
     <FrameLayout
         android:id="@+id/flFragment"
         android:layout_width="match_parent"
+        android:paddingTop="@dimen/outer_padding"
+        android:layout_marginTop="@dimen/outer_padding"
         android:layout_height="match_parent">
 
     </FrameLayout>

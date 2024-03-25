@@ -6,6 +6,7 @@ import android.view.WindowManager;
 import 	android.content.Intent;
 import java.lang.Runnable;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.wayfare.R;
@@ -14,6 +15,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         View decorView = getWindow().getDecorView();
         // Hide the status bar.

@@ -1,5 +1,6 @@
 package com.example.wayfare.Activity;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_Wayfare);
         binding = ActivityMainBinding.inflate(getLayoutInflater());

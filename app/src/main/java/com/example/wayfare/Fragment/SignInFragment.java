@@ -16,11 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -41,6 +43,9 @@ public class SignInFragment extends Fragment {
     Button sign_in_button;
     EditText username, password;
 
+    BottomNavigationView navBar;
+    ImageView login_exit;
+
     public SignInFragment() {
     }
 
@@ -49,10 +54,20 @@ public class SignInFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
+        navBar = getActivity().findViewById(R.id.bottomNavigationView);
+        navBar.setVisibility(View.INVISIBLE);
         sign_in_button = view.findViewById(R.id.sign_in_button);
         username = view.findViewById(R.id.usernamelog);
         password = view.findViewById(R.id.passwordlog);
+        login_exit = view.findViewById(R.id.login_exit);
 
+        login_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getParentFragmentManager().popBackStack();
+            }
+        });
         sign_in_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,5 +134,12 @@ public class SignInFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        navBar = getActivity().findViewById(R.id.bottomNavigationView);
+        navBar.setVisibility(View.VISIBLE);
+        super.onDestroy();
     }
 }

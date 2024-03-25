@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:padding="@dimen/outer_padding"
     tools:context=".Fragment.SignInFragment">
+
+    <ImageView
+        android:id="@+id/login_exit"
+        android:paddingTop="20dp"
+        android:paddingEnd="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cross"
+        android:scaleType="fitStart"
+        app:tint="@color/md_theme_onSurface" />
+
 
     <TextView
         android:id="@+id/textView"
@@ -49,8 +63,7 @@
         android:id="@+id/sign_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="89dp"
-        android:layout_marginBottom="301dp"
+        android:layout_marginTop="40dp"
         android:text="Sign In"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,4 +72,4 @@
         tools:ignore="MissingConstraints" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
