@@ -80,6 +80,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/hour_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -91,6 +92,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/location" />
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/materialTextView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/baseline_star_24"
@@ -99,6 +101,16 @@
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/title" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
+                android:text="Guided by Gangesh"
+                android:textSize="16dp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/hour_rate" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

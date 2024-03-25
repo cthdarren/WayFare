@@ -54,7 +54,7 @@
 <!--        <item name="android:textColor">@color/md_theme_onSurface</item>-->
 <!--        <item name="tint">@color/md_theme_onSurface</item>-->
 <!--        <item name="android:tint">@color/md_theme_onSurface</item>-->
-
+        <item name="android:windowActivityTransitions">true</item>
 
         <!---<item name="android:windowBackground">@color/white</item> -->
     </style>
