@@ -1,6 +1,7 @@
 package com.example.wayfare.Utils;
 
 import static com.example.wayfare.Utils.AuthHelper.JSON_DATA_KEY;
+import static com.example.wayfare.Utils.AuthHelper.PREFS_NAME;
 import static com.example.wayfare.Utils.AuthHelper.sharedPreferences;
 
 import android.content.Context;
@@ -25,15 +26,18 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class RunAuthRequest implements Runnable{
-        private final String token = sharedPreferences.getString(JSON_DATA_KEY, "");
+        private final String token;
         private final String apiUrl;
         private final Helper.RequestType requestType;
         private final RequestBody body;
 
-    public RunAuthRequest(String apiUrl, Helper.RequestType requestType, RequestBody body) {
+    public RunAuthRequest(Context context, String apiUrl, Helper.RequestType requestType, RequestBody body) {
         this.apiUrl = apiUrl;
         this.requestType = requestType;
         this.body = body;
+        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        token = sharedPreferences.getString(JSON_DATA_KEY, "");
+
     }
 
     @Override
