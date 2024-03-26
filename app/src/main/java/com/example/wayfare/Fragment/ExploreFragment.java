@@ -123,10 +123,11 @@ public class ExploreFragment extends Fragment {
                 shortsViewPager.setPadding(0, 0, 0, bottomNavHeight);
             }
         });
+
         shortsViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {
-                //shortsAdapter.playVideo(shortsAdapter.getCurrentPosition());
+
             }
 
             @Override

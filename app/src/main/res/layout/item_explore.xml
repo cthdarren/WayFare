@@ -44,6 +44,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:onClick="onClick"
+            app:tint="@color/white"
             />
     </LinearLayout>
     <ProgressBar
@@ -81,7 +82,7 @@
                 android:shadowDy="0"
                 android:shadowRadius="15"
                 android:text="@string/app_name"
-                android:textColor="@color/tiktok_white"
+                android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textStyle="bold" />
 
@@ -147,7 +148,8 @@
                 android:fontFamily="@font/montserrat_medium"
                 android:gravity="center_horizontal"
                 android:text="0"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:tint="@color/semi_white"/>
 
             <TextView
                 android:id="@+id/tvComment"
@@ -162,7 +164,8 @@
                 android:gravity="center_horizontal"
                 android:padding="2dp"
                 android:text="0"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                app:tint="@color/semi_white"/>
 
             <ImageView
                 android:id="@+id/imvShare"
@@ -172,7 +175,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="18dp"
                 android:padding="6dp"
-                android:src="@drawable/ic_share" />
+                android:src="@drawable/ic_share"
+                app:tint="@color/semi_white"/>
 
             <ImageView
                 android:id="@+id/imvMore"
@@ -183,7 +187,8 @@
                 android:layout_marginEnd="18dp"
                 android:clickable="true"
                 android:padding="2dp"
-                android:src="@drawable/ic_more" />
+                android:src="@drawable/ic_more"
+                app:tint="@color/semi_white"/>
         </LinearLayout>
 
 

@@ -20,11 +20,11 @@
         android:icon="@drawable/icon_selection_tours"
         android:title="Tours" />
     <item
-        android:id="@+id/inbox"
+        android:id="@+id/addShorts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/icon_selection_inbox"
-        android:title="Inbox" />
+        android:icon="@drawable/baseline_add_circle_outline_24"
+        android:title="Create" />
     <item
         android:id="@+id/account"
         android:layout_width="wrap_content"
