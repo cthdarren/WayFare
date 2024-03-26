@@ -1,6 +1,9 @@
 package com.example.wayfare.Fragment;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +26,8 @@ import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -108,8 +113,27 @@ public class SignInFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             String serverResponse = response.body().string();
+                            // debugging
                             System.out.println(serverResponse);
                             Log.i("Tag", "it worked>");
+                            // sharedpref store
+                            try {
+                                Gson gson = new Gson();
+                                String jsonString = gson.toJson(serverResponse);
+                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString("user_info", jsonString);
+                                editor.apply();
+                                makeToast("info saved!");
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                getActivity().finish();
+                            } catch (Exception e)
+                            {
+                                makeToast("error saving info");
+                                Log.e("Error", "JSON saving error");
+                            }
                         }
                     });
                 }
