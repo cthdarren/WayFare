@@ -34,7 +34,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     private int currentPosition;
     int numberOfClick = 0;
     float volume;
-    boolean isPlaying = true;
+    boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
     public ShortsAdapter(List<ShortsObject> shortsDataList,Context context) {
@@ -71,9 +71,10 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     }
 
     public void onViewAttachedToWindow(ShortsViewHolder holder) {
-        holder.playVideo();
-        //isPlaying = true;
-
+        if(isPlaying == false) {
+            holder.playVideo();
+            isPlaying = true;
+        }
     }
 
     @Override
@@ -125,6 +126,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         public void pauseVideo() {
             if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
                 exoPlayer.setPlayWhenReady(false);
+                imvAppear.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                imvAppear.setVisibility(View.VISIBLE);
             }
         }
         public void stopVideo() {
