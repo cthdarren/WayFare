@@ -5,7 +5,20 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="30dp"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
     tools:context=".Fragment.SignUpFragment">
+
+    <ImageView
+        android:id="@+id/register_exit"
+        android:paddingTop="20dp"
+        android:paddingEnd="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cross"
+        android:scaleType="fitStart"
+        app:tint="@color/md_theme_onSurface" />
 
     <TextView
         android:id="@+id/textView2"
@@ -110,8 +123,10 @@
         android:text="Complete Sign Up"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/verifyPassword"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints" />
 
 
