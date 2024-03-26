@@ -7,7 +7,6 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:transitionName="fullPageTransition"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -15,7 +14,9 @@
         android:layout_marginEnd="16dp"
         app:cardBackgroundColor="@color/cardview_light_background"
         app:cardCornerRadius="14dp"
-        app:cardElevation="3dp">
+        app:cardElevation="3dp"
+        android:transitionName="tour_listing_transition"
+        android:onClick="goToFullPage">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -81,7 +82,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/hour_rate"
+                android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -93,7 +94,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/location" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/materialTextView3"
+                android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/baseline_star_24"
@@ -103,15 +104,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/title" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat"
-                android:text="Guided by Gangesh"
-                android:textSize="16dp"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/hour_rate" />
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/montserrat"-->
+<!--                android:text="Guided by Gangesh"-->
+<!--                android:textSize="16dp"-->
+<!--                android:textStyle="italic"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/hour_rate" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

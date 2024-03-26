@@ -58,6 +58,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("androidx.activity:activity:1.8.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation ("com.google.android.gms:play-services-auth:20.3.0")
     // media3 formally exo Player
     val media3_version = "1.3.0"

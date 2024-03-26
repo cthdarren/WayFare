@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
@@ -39,7 +40,12 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
     public void onBindViewHolder(@NonNull tourListing_RecyclerViewAdapter.MyViewHolder holder, int position) {
         // assigning values to each of the views when they come back onto the screen, based on position of recycler view
         holder.tvTitle.setText(tourListModels.get(position).getTourListingTitle());
-        holder.imageView.setImageResource(tourListModels.get(position).getTourListingImage());
+        Glide.with(context)
+                .load(tourListModels.get(position).getTourListingImgUrls()[0]) // Load the first URL from the array
+                .into(holder.imageView); // Set the image to the ImageView
+        holder.tvPrice.setText((int) tourListModels.get(position).getTourListingPrice());
+        holder.tvRating.setText((int) tourListModels.get(position).getTourListingRating());
+        holder.tvLocation.setText((CharSequence) tourListModels.get(position).getTourListingLocation());
     }
 
     @Override
@@ -53,12 +59,20 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         // almost like onCreate method
         ImageView imageView;
         TextView tvTitle;
+        TextView tvLocation;
+        TextView tvPrice;
+        TextView tvRating;
         public MyViewHolder(@NonNull View itemView, tourListing_RecyclerViewInterface tourListing_recyclerViewInterface) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.imageView); // storing each of the views in XML file to variables in java code
             tvTitle = itemView.findViewById(R.id.title);
+            tvLocation = itemView.findViewById(R.id.location);
+            tvPrice = itemView.findViewById(R.id.price);
+            tvRating = itemView.findViewById(R.id.rating);
 
+
+            // for changing to fragment
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -29,7 +29,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     private RecyclerView recyclerView;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     // holding all models to send to adapter later on
-    int[] tourListingImages = {R.drawable.guide1, R.drawable.guide2, R.drawable.guide3, R.drawable.guide4, R.drawable.guide5};
+    // int[] tourListingImages = {R.drawable.guide1, R.drawable.guide2, R.drawable.guide3, R.drawable.guide4, R.drawable.guide5};
     public ToursFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,15 +38,14 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
 
-        //ArrayList<TourListModel> tourListModels = new ArrayList<TourListModel>();
-        //setUpTourListModels();
+        setUpTourListModels();
 
 //         use this to test custom models
-        tourListModels.add(new TourListModel("Chinatown tour", R.drawable.guide1));
-        tourListModels.add(new TourListModel("Little India tour", R.drawable.guide2));
-        tourListModels.add(new TourListModel("Kampong Glam tour", R.drawable.guide3));
-        tourListModels.add(new TourListModel("Lau Pa Sat tour", R.drawable.guide4));
-        tourListModels.add(new TourListModel("SUTD tour", R.drawable.guide5));
+//        tourListModels.add(new TourListModel("Chinatown tour", R.drawable.guide1));
+//        tourListModels.add(new TourListModel("Little India tour", R.drawable.guide2));
+//        tourListModels.add(new TourListModel("Kampong Glam tour", R.drawable.guide3));
+//        tourListModels.add(new TourListModel("Lau Pa Sat tour", R.drawable.guide4));
+//        tourListModels.add(new TourListModel("SUTD tour", R.drawable.guide5));
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -57,7 +56,6 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //((SearchView) view.findViewById(R.id.searchView)).setUpWithSearchBar(R.id.search_bar);
     }
 
     private void setUpTourListModels(){
