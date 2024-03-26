@@ -129,8 +129,9 @@ public class SignInFragment extends Fragment {
                                 if (res.success){
                                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("user_info", jsonString);
-                                    editor.apply();
+                                    editor.putString("user_info", res.data.getAsString())
+                                            .apply();
+
                                     makeToast("info saved!");
                                     Intent intent = new Intent(getActivity(), MainActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -3,10 +3,15 @@ package com.example.wayfare.Utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.wayfare.BuildConfig;
+
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+
 public class AuthHelper {
-    private static final String PREFS_NAME = "sharedPref";
-    private static final String JSON_DATA_KEY = "user_info";
-    private SharedPreferences sharedPreferences;
+    public static String PREFS_NAME = "sharedPref";
+    public static String JSON_DATA_KEY = "user_info";
+    public static SharedPreferences sharedPreferences;
 
     public AuthHelper(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -18,4 +23,8 @@ public class AuthHelper {
         String jsonString = sharedPreferences.getString(JSON_DATA_KEY, "");
         return !jsonString.isEmpty();
     }
+
+
+
+
 }

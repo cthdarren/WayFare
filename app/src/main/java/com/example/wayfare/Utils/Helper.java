@@ -14,4 +14,9 @@ public class Helper {
                 .setReorderingAllowed(true)
                 .commit();
     }
+
+    public enum RequestType{
+        REQ_GET,
+        REQ_POST
+    }
 }
