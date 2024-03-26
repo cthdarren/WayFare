@@ -39,13 +39,13 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
     @Override
     public void onBindViewHolder(@NonNull tourListing_RecyclerViewAdapter.MyViewHolder holder, int position) {
         // assigning values to each of the views when they come back onto the screen, based on position of recycler view
-        holder.tvTitle.setText(tourListModels.get(position).getTourListingTitle());
-        Glide.with(context)
-                .load(tourListModels.get(position).getTourListingImgUrls()[0]) // Load the first URL from the array
-                .into(holder.imageView); // Set the image to the ImageView
-        holder.tvPrice.setText((int) tourListModels.get(position).getTourListingPrice());
-        holder.tvRating.setText((int) tourListModels.get(position).getTourListingRating());
-        holder.tvLocation.setText((CharSequence) tourListModels.get(position).getTourListingLocation());
+        holder.tvTitle.setText(tourListModels.get(position).getTitle());
+//        Glide.with(context)
+//                .load(tourListModels.get(position).getThumbnailUrls()[0]) // Load the first URL from the array
+//                .into(holder.imageView); // Set the image to the ImageView
+        holder.tvPrice.setText((int) tourListModels.get(position).getPrice());
+        holder.tvRating.setText((int) tourListModels.get(position).getRating());
+        holder.tvLocation.setText((CharSequence) tourListModels.get(position).getLocation());
     }
 
     @Override

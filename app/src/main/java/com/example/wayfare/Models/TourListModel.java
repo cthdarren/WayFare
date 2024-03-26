@@ -4,48 +4,47 @@ import java.util.List;
 
 // we are creating variables thats gonna hold all the data that represents one of our items
 public class TourListModel {
-    public TourListModel(String tourListingTitle, String tourListingId, String tourListingDescription, String[] tourListingImgUrls, String tourListingCategory, Location tourListingLocation, double tourListingPrice, int minPax, int maxPax, double tourListingRating, int reviewCount, String tourListingGuideId, List<TimeRange> timeRangeList) {
-        this.tourListingTitle = tourListingTitle;
-        this.tourListingId = tourListingId;
-        this.tourListingDescription = tourListingDescription;
-        this.tourListingImgUrls = tourListingImgUrls;
-        this.tourListingCategory = tourListingCategory;
-        this.tourListingLocation = tourListingLocation;
-        this.tourListingPrice = tourListingPrice;
+    public TourListModel(String title, String id, String description, String[] thumbnailUrls, String category, Location tourListingLocation, double price, int minPax, int maxPax, double rating, int reviewCount, String userId, List<TimeRange> timeRangeList) {
+        this.title = title;
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.thumbnailUrls = thumbnailUrls;
+        this.category = category;
+        this.location = tourListingLocation;
+        this.price = price;
         this.minPax = minPax;
         this.maxPax = maxPax;
-        this.tourListingRating = tourListingRating;
+        this.rating = rating;
         this.reviewCount = reviewCount;
-        this.tourListingGuideId = tourListingGuideId;
+        this.userId = userId;
         this.timeRangeList = timeRangeList;
     }
 
-    public String getTourListingId() {
-        return tourListingId;
+    public String getId() {
+        return id;
     }
-    public String getTourListingTitle() {
-        return tourListingTitle;
-    }
-
-    public String getTourListingDescription() {
-        return tourListingDescription;
+    public String getTitle() {
+        return title;
     }
 
-    public String[] getTourListingImgUrls() {
-        return tourListingImgUrls;
+    public String getDescription() {
+        return description;
     }
 
-    public String getTourListingCategory() {
-        return tourListingCategory;
+    public String[] getThumbnailUrls() {
+        return thumbnailUrls;
     }
-    public Location getTourListingLocation() {
-        return tourListingLocation;
+
+    public String getCategory() {
+        return category;
     }
-    public List<TimeRange> getTimeRangeList() {
-        return timeRangeList;
+    public Location getLocation() {
+        return location;
     }
-    public double getTourListingPrice() {
-        return tourListingPrice;
+
+    public double getPrice() {
+        return price;
     }
 
     public int getMinPax() {
@@ -56,36 +55,34 @@ public class TourListModel {
         return maxPax;
     }
 
-    public double getTourListingRating() {
-        return tourListingRating;
+    public double getRating() {
+        return rating;
     }
 
     public int getReviewCount() {
         return reviewCount;
     }
 
-    public String getTourListingGuideId() {
-        return tourListingGuideId;
+    public String getUserId() {
+        return userId;
     }
 
 
 
-    private String tourListingTitle;
-    private String tourListingId;
-    private String tourListingDescription;
-    private String[] tourListingImgUrls;
-    private String tourListingCategory;
-    private Location tourListingLocation;
-    private double tourListingPrice;
+    private String title;
+    private String id;
+    private String description;
+    private String[] thumbnailUrls;
+    private String category;
+    private Location location;
+    private double price;
     private int minPax;
     private int maxPax;
-    private double tourListingRating;
+    private double rating;
     private int reviewCount;
-    private String tourListingGuideId;
+    private String userId;
     private List<TimeRange> timeRangeList;
 
-    // Constructor, getters, and setters
-    // You can generate these using your IDE or write them manually
 
     public static class TimeRange {
         public int getStartTime() {
@@ -115,7 +112,10 @@ public class TourListModel {
         private double x;
         private double y;
 
-        // Constructor, getters, and setters
-        // You can generate these using your IDE or write them manually
+
+        public Location(double x, double y){
+            this.x = x;
+            this.y = y;
+        }
     }
 }

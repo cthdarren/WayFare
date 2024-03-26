@@ -18,19 +18,43 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
+import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
+import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
+    tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
     // int[] tourListingImages = {R.drawable.guide1, R.drawable.guide2, R.drawable.guide3, R.drawable.guide4, R.drawable.guide5};
     public ToursFragment(){}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,18 +62,33 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
 
-        setUpTourListModels();
+        final CountDownLatch latch = new CountDownLatch(1);
+        try {
+            setUpTourListModels(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-//         use this to test custom models
-//        tourListModels.add(new TourListModel("Chinatown tour", R.drawable.guide1));
-//        tourListModels.add(new TourListModel("Little India tour", R.drawable.guide2));
-//        tourListModels.add(new TourListModel("Kampong Glam tour", R.drawable.guide3));
-//        tourListModels.add(new TourListModel("Lau Pa Sat tour", R.drawable.guide4));
-//        tourListModels.add(new TourListModel("SUTD tour", R.drawable.guide5));
+                }
 
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    // Notify the latch that the setup is complete
+                    latch.countDown();
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Wait for the setup to complete
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(view.getContext(), tourListModels, this));
+        recyclerView.setAdapter(adapter);
         return view;
     }
 
@@ -58,11 +97,46 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private void setUpTourListModels(){
-        String[] tourListingTitles = getResources().getStringArray(R.array.tours_fragment_list_titles);
-        for (int i = 0; i < tourListingTitles.length; i++){
-            // note that in this implementation, the length of the array must be the same as the number of images
-            tourListModels.add(new TourListModel(tourListingTitles[i], tourListingImages[i]));
+    public void setUpTourListModels(Callback callback) throws IOException {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    final OkHttpClient client = new OkHttpClient();
+                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=5&numberPax=5")
+                            .get()
+                            .build();
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            if (e instanceof SocketTimeoutException) {
+                                e.printStackTrace();
+                            } else if (e instanceof SocketException) {
+                                Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String serverResponse = response.body().string();
+                            System.out.println(serverResponse);
+                            ResponseModel test = new Gson().fromJson(serverResponse, ResponseModel.class);
+                            JsonArray peepo = test.data.getAsJsonArray();
+                            for (JsonElement testi : peepo){
+                                String eachString = testi.toString();
+                                TourListModel testing = new Gson().fromJson(eachString, TourListModel.class);
+                                tourListModels.add(testing);
+                            }
+                            Log.i("Tag", "it worked>");
+                            callback.onResponse(call,response);
+                        }
+                    });
+                }
+            });
         }
     }
 
