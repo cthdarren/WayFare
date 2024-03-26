@@ -1,11 +1,14 @@
 package com.example.wayfare.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,11 +20,12 @@ import android.view.ViewGroup;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.tourListing_RecyclerViewInterface;
 
 
 import java.util.ArrayList;
 
-public class ToursFragment extends Fragment {
+public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     // holding all models to send to adapter later on
@@ -46,7 +50,7 @@ public class ToursFragment extends Fragment {
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(view.getContext(), tourListModels));
+        recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(view.getContext(), tourListModels, this));
         return view;
     }
 
@@ -62,5 +66,14 @@ public class ToursFragment extends Fragment {
             // note that in this implementation, the length of the array must be the same as the number of images
             tourListModels.add(new TourListModel(tourListingTitles[i], tourListingImages[i]));
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayoutFragment, new TourListingFull());
+        fragmentTransaction.addToBackStack(null); // Optional: Add to back stack
+        fragmentTransaction.commit();
     }
 }

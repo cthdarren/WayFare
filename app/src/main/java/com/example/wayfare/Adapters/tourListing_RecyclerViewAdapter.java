@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.tourListing_RecyclerViewInterface;
 
 import java.util.ArrayList;
 
@@ -19,9 +20,11 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
 
     Context context;
     ArrayList<TourListModel> tourListModels;
-    public tourListing_RecyclerViewAdapter(Context context, ArrayList<TourListModel> tourListingModels){
+    private final tourListing_RecyclerViewInterface tourListing_recyclerViewInterface;
+    public tourListing_RecyclerViewAdapter(Context context, ArrayList<TourListModel> tourListingModels, tourListing_RecyclerViewInterface tourListing_recyclerViewInterface){
         this.context = context;
         this.tourListModels = tourListingModels;
+        this.tourListing_recyclerViewInterface = tourListing_recyclerViewInterface;
     }
     @NonNull
     @Override
@@ -29,7 +32,7 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         // inflating layout and giving look to each view
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_tour_row, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, tourListing_recyclerViewInterface);
     }
 
     @Override
@@ -50,11 +53,23 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         // almost like onCreate method
         ImageView imageView;
         TextView tvTitle;
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, tourListing_RecyclerViewInterface tourListing_recyclerViewInterface) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.imageView); // storing each of the views in XML file to variables in java code
             tvTitle = itemView.findViewById(R.id.title);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (tourListing_recyclerViewInterface != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            tourListing_recyclerViewInterface.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }
