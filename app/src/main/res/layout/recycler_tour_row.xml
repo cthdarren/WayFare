@@ -15,8 +15,7 @@
         app:cardBackgroundColor="@color/cardview_light_background"
         app:cardCornerRadius="14dp"
         app:cardElevation="3dp"
-        android:transitionName="tour_listing_transition"
-        android:onClick="goToFullPage">
+        android:transitionName="tour_listing_transition">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -97,12 +96,13 @@
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:drawableStart="@drawable/baseline_star_24"
                 android:fontFamily="@font/montserrat"
                 android:text="4.88"
                 android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/title" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
 <!--            <com.google.android.material.textview.MaterialTextView-->
 <!--                android:layout_width="wrap_content"-->

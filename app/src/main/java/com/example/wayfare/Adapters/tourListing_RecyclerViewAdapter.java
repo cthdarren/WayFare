@@ -43,7 +43,8 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         Glide.with(context)
                 .load(tourListModels.get(position).getThumbnailUrls()[0]) // Load the first URL from the array
                 .into(holder.imageView); // Set the image to the ImageView
-        holder.tvPrice.setText(String.valueOf(tourListModels.get(position).getPrice()));
+        String price_text = "$" + String.valueOf(tourListModels.get(position).getPrice()) + " / person";
+        holder.tvPrice.setText(price_text);
         holder.tvRating.setText(String.valueOf(tourListModels.get(position).getRating()));
         holder.tvLocation.setText(tourListModels.get(position).getLocation().getXY());
     }
