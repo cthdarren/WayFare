@@ -45,7 +45,7 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
                 .into(holder.imageView); // Set the image to the ImageView
         holder.tvPrice.setText(String.valueOf(tourListModels.get(position).getPrice()));
         holder.tvRating.setText(String.valueOf(tourListModels.get(position).getRating()));
-        //holder.tvLocation.setText((CharSequence) tourListModels.get(position).getLocation());
+        holder.tvLocation.setText(tourListModels.get(position).getLocation().getXY());
     }
 
     @Override

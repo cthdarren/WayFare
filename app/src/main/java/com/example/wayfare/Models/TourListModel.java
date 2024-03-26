@@ -1,5 +1,7 @@
 package com.example.wayfare.Models;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 // we are creating variables thats gonna hold all the data that represents one of our items
@@ -108,10 +110,10 @@ public class TourListModel {
         public double getY() {
             return y;
         }
+        public String getXY(){ return String.valueOf(x) + ", " + String.valueOf(y);}
 
         private double x;
         private double y;
-
 
         public Location(double x, double y){
             this.x = x;

@@ -50,9 +50,8 @@ import okhttp3.Response;
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
-    tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
+    //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
-    // int[] tourListingImages = {R.drawable.guide1, R.drawable.guide2, R.drawable.guide3, R.drawable.guide4, R.drawable.guide5};
     public ToursFragment(){}
 
     @Override
@@ -88,7 +87,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this));
         return view;
     }
 
