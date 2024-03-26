@@ -20,10 +20,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -51,6 +53,8 @@ public class SignInFragment extends Fragment {
     BottomNavigationView navBar;
     ImageView login_exit;
 
+    TextView errorTextBox;
+
     public SignInFragment() {
     }
 
@@ -62,6 +66,7 @@ public class SignInFragment extends Fragment {
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
         sign_in_button = view.findViewById(R.id.sign_in_button);
+        errorTextBox = view.findViewById(R.id.errorTextBox);
         username = view.findViewById(R.id.usernamelog);
         password = view.findViewById(R.id.passwordlog);
         login_exit = view.findViewById(R.id.login_exit);
@@ -120,15 +125,22 @@ public class SignInFragment extends Fragment {
                             try {
                                 Gson gson = new Gson();
                                 String jsonString = gson.toJson(serverResponse);
-                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.putString("user_info", jsonString);
-                                editor.apply();
-                                makeToast("info saved!");
-                                Intent intent = new Intent(getActivity(), MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                getActivity().finish();
+                                ResponseModel res = gson.fromJson(serverResponse, ResponseModel.class);
+                                if (res.success){
+                                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("user_info", jsonString);
+                                    editor.apply();
+                                    makeToast("info saved!");
+                                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                }
+                                else{
+                                    errorTextBox.setText(res.data.getAsString());
+                                }
+
                             } catch (Exception e)
                             {
                                 makeToast("error saving info");
