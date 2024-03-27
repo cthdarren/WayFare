@@ -37,14 +37,24 @@ public class TourListingFull extends Fragment {
             MaterialTextView tvPrice = view.findViewById(R.id.materialTextView4);
             MaterialTextView tvRating = view.findViewById(R.id.materialTextView2);
             ImageView tvImage = view.findViewById(R.id.imageView2);
+            MaterialTextView tvDescription = view.findViewById(R.id.description);
+            MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
 
             tvTitle.setText(args.getString("title"));
             tvRating.setText(args.getString("rating"));
             tvLocation.setText(args.getString("location"));
-            tvPrice.setText(args.getString("price"));
+
+            String priceFormat = "$" + args.getString("price") + " / person";
+            tvPrice.setText(priceFormat);
+
             Glide.with(requireContext())
                     .load(args.getString("thumbnail")) // Load the first URL from the array
                     .into(tvImage); // Set the image to the ImageView
+            tvDescription.setText(args.getString("description"));
+
+            String reviewCountFormat = "(" + args.getString("reviewCount") + ")" + " •";
+            tvReviewCount.setText(reviewCountFormat);
+
         }
 
 

@@ -148,7 +148,8 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         data.putString("rating", String.valueOf(tourListModels.get(position).getRating()));
         data.putString("price", String.valueOf(tourListModels.get(position).getPrice()));
         data.putString("thumbnail", tourListModels.get(position).getThumbnailUrls()[0]);
-
+        data.putString("description", tourListModels.get(position).getDescription());
+        data.putString("reviewCount", String.valueOf(tourListModels.get(position).getReviewCount()));
 
         TourListingFull tourListingFullFragment = new TourListingFull();
         tourListingFullFragment.setArguments(data);
