@@ -10,8 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.tourListing_RecyclerViewInterface;
 
 import java.util.ArrayList;
 
@@ -19,9 +21,11 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
 
     Context context;
     ArrayList<TourListModel> tourListModels;
-    public tourListing_RecyclerViewAdapter(Context context, ArrayList<TourListModel> tourListingModels){
+    private final tourListing_RecyclerViewInterface tourListing_recyclerViewInterface;
+    public tourListing_RecyclerViewAdapter(Context context, ArrayList<TourListModel> tourListingModels, tourListing_RecyclerViewInterface tourListing_recyclerViewInterface){
         this.context = context;
         this.tourListModels = tourListingModels;
+        this.tourListing_recyclerViewInterface = tourListing_recyclerViewInterface;
     }
     @NonNull
     @Override
@@ -29,14 +33,20 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         // inflating layout and giving look to each view
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.recycler_tour_row, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, tourListing_recyclerViewInterface);
     }
 
     @Override
     public void onBindViewHolder(@NonNull tourListing_RecyclerViewAdapter.MyViewHolder holder, int position) {
         // assigning values to each of the views when they come back onto the screen, based on position of recycler view
-        holder.tvTitle.setText(tourListModels.get(position).getTourListingTitle());
-        holder.imageView.setImageResource(tourListModels.get(position).getTourListingImage());
+        holder.tvTitle.setText(tourListModels.get(position).getTitle());
+        Glide.with(context)
+                .load(tourListModels.get(position).getThumbnailUrls()[0]) // Load the first URL from the array
+                .into(holder.imageView); // Set the image to the ImageView
+        String price_text = "$" + String.valueOf(tourListModels.get(position).getPrice()) + " / person";
+        holder.tvPrice.setText(price_text);
+        holder.tvRating.setText(String.valueOf(tourListModels.get(position).getRating()));
+        holder.tvLocation.setText(tourListModels.get(position).getLocation().getXY());
     }
 
     @Override
@@ -50,11 +60,31 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         // almost like onCreate method
         ImageView imageView;
         TextView tvTitle;
-        public MyViewHolder(@NonNull View itemView) {
+        TextView tvLocation;
+        TextView tvPrice;
+        TextView tvRating;
+        public MyViewHolder(@NonNull View itemView, tourListing_RecyclerViewInterface tourListing_recyclerViewInterface) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.imageView); // storing each of the views in XML file to variables in java code
             tvTitle = itemView.findViewById(R.id.title);
+            tvLocation = itemView.findViewById(R.id.location);
+            tvPrice = itemView.findViewById(R.id.price);
+            tvRating = itemView.findViewById(R.id.rating);
+
+
+            // for changing to fragment
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (tourListing_recyclerViewInterface != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION){
+                            tourListing_recyclerViewInterface.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }
