@@ -104,7 +104,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
                 public void run() {
 
                     final OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=5&numberPax=5")
+                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=50&numberPax=2")
                             .get()
                             .build();
                     client.newCall(request).enqueue(new Callback() {
@@ -141,9 +141,21 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
 
     @Override
     public void onItemClick(int position) {
+        Bundle data = new Bundle();
+
+        data.putString("title", tourListModels.get(position).getTitle());
+        data.putString("location", tourListModels.get(position).getLocation().getXY());
+        data.putString("rating", String.valueOf(tourListModels.get(position).getRating()));
+        data.putString("price", String.valueOf(tourListModels.get(position).getPrice()));
+        data.putString("thumbnail", tourListModels.get(position).getThumbnailUrls()[0]);
+
+
+        TourListingFull tourListingFullFragment = new TourListingFull();
+        tourListingFullFragment.setArguments(data);
+
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayoutFragment, new TourListingFull());
+        fragmentTransaction.replace(R.id.frameLayoutFragment, tourListingFullFragment);
         fragmentTransaction.addToBackStack(null); // Optional: Add to back stack
         fragmentTransaction.commit();
     }
