@@ -34,7 +34,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     private int currentPosition;
     int numberOfClick = 0;
     float volume;
-    boolean isPlaying = true;
+    boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
     public ShortsAdapter(List<ShortsObject> shortsDataList,Context context) {
@@ -66,14 +66,17 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public void playVideo(int position) {
         shortsViewHolderList.get(position).playVideo();
     }
-    public void stopVideo(int position) {
-        shortsViewHolderList.get(position).stopVideo();
+    public void stopAllVideo() {
+        for(ShortsAdapter.ShortsViewHolder holder:shortsViewHolderList) {
+            holder.stopVideo();
+        }
     }
 
     public void onViewAttachedToWindow(ShortsViewHolder holder) {
-        holder.playVideo();
-        //isPlaying = true;
-
+        if(isPlaying == false) {
+            holder.playVideo();
+            isPlaying = true;
+        }
     }
 
     @Override
@@ -91,7 +94,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public int getItemCount() {
         return shortsDataList.size();
     }
-
+    public int getViewsCount() {return shortsViewHolderList.size();}
     public class ShortsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private PlayerView videoView;
         private ExoPlayer exoPlayer;
@@ -120,11 +123,12 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     || exoPlayer.getPlaybackState() == Player.STATE_IDLE) {
                 exoPlayer.setPlayWhenReady(true);
             }
-            exoPlayer.play();
         }
         public void pauseVideo() {
             if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
                 exoPlayer.setPlayWhenReady(false);
+                imvAppear.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                imvAppear.setVisibility(View.VISIBLE);
             }
         }
         public void stopVideo() {

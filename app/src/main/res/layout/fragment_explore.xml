@@ -5,6 +5,7 @@
     android:id="@+id/explore"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
     tools:context=".Fragment.ExploreFragment">
 
     <androidx.viewpager2.widget.ViewPager2
@@ -14,5 +15,6 @@
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="parent"
+        android:background="@color/md_theme_background"
         tools:layout_editor_absoluteY="30dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
