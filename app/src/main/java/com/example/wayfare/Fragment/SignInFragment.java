@@ -92,86 +92,63 @@ public class SignInFragment extends Fragment {
     }
 
     public void login() throws IOException {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final OkHttpClient client = new OkHttpClient();
-                    makeToast("bruh");
-                    String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), password.getText());
-                    RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login")
-                            .post(body)
-                            .build();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            if (e instanceof SocketTimeoutException) {
-                                makeToast("Request Timed Out");
-                                e.printStackTrace();
-                            } else if (e instanceof SocketException) {
-                                makeToast("Server Error");
-                                Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
-                                e.printStackTrace();
-                            }
-                        }
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String serverResponse = response.body().string();
-                            // debugging
-                            System.out.println(serverResponse);
-                            Log.i("Tag", "it worked>");
-                            // sharedpref store
-                            try {
-                                Gson gson = new Gson();
-                                String jsonString = gson.toJson(serverResponse);
-                                ResponseModel res = gson.fromJson(serverResponse, ResponseModel.class);
-                                if (res.success){
-                                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString("user_info", res.data.getAsString())
-                                            .apply();
-
-                                    makeToast("info saved!");
-                                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
-                                else{
-                                    errorTextBox.setText(res.data.getAsString());
-                                }
-
-                            } catch (Exception e)
-                            {
-                                makeToast("error saving info");
-                                Log.e("Error", e.getMessage());
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
-       /* FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        ft
-                .replace(, new ExploreFragment())
-                .setReorderingAllowed(true)
-                .addToBackStack("name") // Name can be null
-                .commit();*/
-            });
-        }
-    }
-    public void makeToast(String msg) {
-
-        if (getActivity() == null) {
-            Log.d("ERROR", "ACTIVITY CONTEXT IS NULL, UNABLE TO MAKE TOAST");
-            return;
-        }
-        getActivity().runOnUiThread(new Runnable() {
+        final OkHttpClient client = new OkHttpClient();
+        makeToast("bruh");
+        String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), password.getText());
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login")
+                .post(body)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void run() {
-                Toast.makeText(getActivity().getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            public void onFailure(Call call, IOException e) {
+                if (e instanceof SocketTimeoutException) {
+                    makeToast("Request Timed Out");
+                    e.printStackTrace();
+                } else if (e instanceof SocketException) {
+                    makeToast("Server Error");
+                    Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String serverResponse = response.body().string();
+                // debugging
+                System.out.println(serverResponse);
+                Log.i("Tag", "it worked>");
+                // sharedpref store
+                try {
+                    Gson gson = new Gson();
+                    String jsonString = gson.toJson(serverResponse);
+                    ResponseModel res = gson.fromJson(serverResponse, ResponseModel.class);
+                    if (res.success) {
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("user_info", res.data.getAsString())
+                                .apply();
+
+                        makeToast("info saved!");
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else {
+                        errorTextBox.setText(res.data.getAsString());
+                    }
+
+                } catch (Exception e) {
+                    makeToast("error saving info");
+                    Log.e("Error", e.getMessage());
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    public void makeToast(String msg) {
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -25,7 +25,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class RunAuthRequest implements Runnable{
+public class RunAuthRequest {
         private final String token;
         private final String apiUrl;
         private final Helper.RequestType requestType;
