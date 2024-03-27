@@ -31,7 +31,8 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         debug {
-            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
+//            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
+            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
         }
     }
     compileOptions {

@@ -24,6 +24,7 @@ import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.R;
 import com.example.wayfare.Fragment.ToursFragment;
+import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
@@ -32,23 +33,35 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
+    //TODO when i log in to the app update a viewmodel with all the user details so you can share
+    // around the settings/profile fragments
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        boolean loggedIn;
         EdgeToEdge.enable(this);
+        if (new AuthHelper(getApplicationContext()).isLoggedIn()){
+            loggedIn = true;
+        } else {
+            loggedIn = false;
+        }
         super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_Wayfare);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
         setContentView(view);
         View decorView = getWindow().getDecorView();
         replaceFragment(new ExploreFragment());
         //binding.bottomNavigationView.setBackground(null);
-
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.explore){
                 replaceFragment(new ExploreFragment());
             } else if (item.getItemId() == R.id.upcoming) {
-                replaceFragment(new PublicUpcomingFragment());
+                if (loggedIn){
+                    replaceFragment(new UpcomingFragment());
+                }
+                else {
+                    replaceFragment(new PublicUpcomingFragment());
+                }
             } else if (item.getItemId() == R.id.tours) {
                 replaceFragment(new ToursFragment());
             } else if (item.getItemId() == R.id.addShorts) {
@@ -56,7 +69,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
             } else if (item.getItemId() == R.id.account) {
-                replaceFragment(new PublicSettingsFragment());
+                if (loggedIn) {
+                    replaceFragment(new SettingsFragment());
+                }
+                else {
+                    replaceFragment(new PublicSettingsFragment());
+                }
             }
             return true;
         });

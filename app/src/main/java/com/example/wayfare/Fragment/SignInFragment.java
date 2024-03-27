@@ -145,7 +145,8 @@ public class SignInFragment extends Fragment {
                             } catch (Exception e)
                             {
                                 makeToast("error saving info");
-                                Log.e("Error", "JSON saving error");
+                                Log.e("Error", e.getMessage());
+                                e.printStackTrace();
                             }
                         }
                     });
