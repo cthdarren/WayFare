@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.wayfare.Fragment.AddShortsFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
@@ -24,9 +25,12 @@ import com.example.wayfare.Fragment.SettingsFragment;
 import com.example.wayfare.Fragment.UpcomingFragment;
 import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.SignInFragment;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Fragment.ToursFragment;
 import com.example.wayfare.Utils.AuthHelper;
+import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.example.wayfare.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationBarView;
@@ -47,6 +51,22 @@ public class MainActivity extends AppCompatActivity {
         if (new AuthHelper(getApplicationContext()).isLoggedIn()){
             loggedIn = true;
             viewModel = new ViewModelProvider(this).get(UserViewModel.class);
+            new AuthService(getApplicationContext()).getResponse("/account", Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+                @Override
+                public void onError(String message) {
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onResponse(ResponseModel json) {
+                    if(json.success){
+                        Toast.makeText(MainActivity.this, "User data obtained!", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(MainActivity.this, json.data.getAsString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         } else {
             loggedIn = false;
         }
