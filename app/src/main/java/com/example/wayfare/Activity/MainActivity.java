@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.content.Context;
@@ -25,6 +27,7 @@ import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.R;
 import com.example.wayfare.Fragment.ToursFragment;
 import com.example.wayfare.Utils.AuthHelper;
+import com.example.wayfare.ViewModel.UserViewModel;
 import com.example.wayfare.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
@@ -32,6 +35,8 @@ import com.google.gson.Gson;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+
+    private UserViewModel viewModel;
 
     //TODO when i log in to the app update a viewmodel with all the user details so you can share
     // around the settings/profile fragments
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         if (new AuthHelper(getApplicationContext()).isLoggedIn()){
             loggedIn = true;
+            viewModel = new ViewModelProvider(this).get(UserViewModel.class);
         } else {
             loggedIn = false;
         }
