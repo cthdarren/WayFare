@@ -26,6 +26,7 @@ import com.example.wayfare.Fragment.UpcomingFragment;
 import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.Models.ResponseModel;
+import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Fragment.ToursFragment;
 import com.example.wayfare.Utils.AuthHelper;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         boolean loggedIn;
+
         EdgeToEdge.enable(this);
         if (new AuthHelper(getApplicationContext()).isLoggedIn()){
             loggedIn = true;
@@ -54,13 +56,23 @@ public class MainActivity extends AppCompatActivity {
             new AuthService(getApplicationContext()).getResponse("/account", Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
                 @Override
                 public void onError(String message) {
-                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
 
                 @Override
                 public void onResponse(ResponseModel json) {
                     if(json.success){
-                        Toast.makeText(MainActivity.this, "User data obtained!", Toast.LENGTH_SHORT).show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewModel.updateUserData(new Gson().fromJson(json.data, UserModel.class));
+                            }
+                        });
                     }
                     else{
                         Toast.makeText(MainActivity.this, json.data.getAsString(), Toast.LENGTH_SHORT).show();

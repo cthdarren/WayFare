@@ -7,12 +7,12 @@ import androidx.lifecycle.ViewModel;
 import com.example.wayfare.Models.UserModel;
 
 public class UserViewModel extends ViewModel {
-    private MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
-    public LiveData<UserModel> getUser(){
-        return userLiveData;
+    private final MutableLiveData<UserModel> userLiveData = new MutableLiveData<>();
+    public UserModel getUserProfileData(){
+        return userLiveData.getValue();
     }
 
-    public UserViewModel(){
-
+    public void updateUserData(UserModel user){
+        userLiveData.setValue(user);
     }
 }
