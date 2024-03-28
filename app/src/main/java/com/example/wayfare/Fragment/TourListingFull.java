@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,22 +16,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
-public class TourListingFull extends Fragment {
+public class TourListingFull extends Fragment implements tourListing_RecyclerViewInterface{
     private RecyclerView recyclerView;
-    ArrayList<TourListModel> tourListModels = new ArrayList<>();
     public TourListingFull(){};
+    String[] timingArray;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tour_listing_full, container, false);
+        recyclerView = view.findViewById(R.id.recyclerView2);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -57,17 +61,24 @@ public class TourListingFull extends Fragment {
             String reviewCountFormat = "(" + args.getString("reviewCount") + ")" + " •";
             tvReviewCount.setText(reviewCountFormat);
 
-            LinearLayout timingCardContainer = view.findViewById(R.id.timingCardContainer);
-            String[] timingArray = args.getStringArray("timingArray");
-            for (int i = 0; i < timingArray.length; i++) {
-                // Inflate the CardView layout
-                View cardView = inflater.inflate(R.layout.fragment_tour_listing_full, container, false);
-                MaterialTextView tvCardTiming = view.findViewById(R.id.timingCardText);
-                tvCardTiming.setText(timingArray[i]);
-                timingCardContainer.addView(cardView);
-            }
+//            LinearLayout timingCardContainer = view.findViewById(R.id.timingCardContainer);
+            timingArray = args.getStringArray("timingArray");
+//            for (int i = 0; i < timingArray.length; i++) {
+//                // Inflate the CardView layout
+//                View cardView = inflater.inflate(R.layout.fragment_tour_listing_full, container, false);
+//                MaterialTextView tvCardTiming = view.findViewById(R.id.timingCardText);
+//                tvCardTiming.setText(timingArray[i]);
+//                timingCardContainer.addView(cardView);
+//            }
 
         }
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(new timingAdapter(getContext(), timingArray, this));
         return view;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Log.d("Do nothing", "Do nothing");
     }
 }

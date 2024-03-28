@@ -104,7 +104,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
                 public void run() {
 
                     final OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=50&numberPax=2")
+                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=30000&numberPax=2")
                             .get()
                             .build();
                     client.newCall(request).enqueue(new Callback() {

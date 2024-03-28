@@ -56,6 +56,7 @@
 <!--        <item name="android:tint">@color/md_theme_onSurface</item>-->
 
         <!---<item name="android:windowBackground">@color/white</item> -->
+
     </style>
     <!--set theme to avoid double splash screen -->
 <!--    <style name="Theme.RemoveSplashScreenTheme" parent="Theme.Wayfare">-->
