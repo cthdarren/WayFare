@@ -7,12 +7,12 @@ public class ReviewModel {
     private final String title;
     private final Integer score;
     private final String reviewContent;
-    private final Instant dateCreated;
-    private final Instant dateModified;
+    private final String dateCreated;
+    private final String dateModified;
     private String userId;
 //    private TourListing listing;
 
-    public ReviewModel(String id, String title, Integer score, String reviewContent, Instant dateCreated, Instant dateModified, String userId) {
+    public ReviewModel(String id, String title, Integer score, String reviewContent, String dateCreated, String dateModified, String userId) {
         this.id = id;
         this.title = title;
         this.score = score;
