@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.R;
 
-public class PublicUpcomingFragment extends Fragment {
+public class PublicUpcomingFragment extends Fragment implements SignInFragment.SignInFragmentListener {
 
     Button toursLoginBtn;
     public PublicUpcomingFragment(){}
@@ -27,9 +27,18 @@ public class PublicUpcomingFragment extends Fragment {
         toursLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToLogin(getParentFragmentManager());
+                goLogin();
             }
         });
         return view;
+    }
+    public void goLogin(){
+        this.getView().setVisibility(View.INVISIBLE);
+        goToLogin(this);
+    }
+
+    @Override
+    public void onSignInFragmentDestroyed() {
+        this.getView().setVisibility(View.VISIBLE);
     }
 }

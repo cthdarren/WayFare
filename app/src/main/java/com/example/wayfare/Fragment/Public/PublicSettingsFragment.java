@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,6 +25,7 @@ import com.example.wayfare.Activity.settings.PaymentSettingsActivity;
 import com.example.wayfare.Activity.settings.PrivacySettingsActivity;
 import com.example.wayfare.Activity.settings.ReportSettingsActivity;
 import com.example.wayfare.Adapters.SettingsRecViewAdapter;
+import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.Models.SettingItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PublicSettingsFragment extends Fragment implements RecyclerViewInterface {
+public class PublicSettingsFragment extends Fragment implements RecyclerViewInterface, SignInFragment.SignInFragmentListener {
 
     private RecyclerView settingsRecyclerView;
 
@@ -42,16 +44,18 @@ public class PublicSettingsFragment extends Fragment implements RecyclerViewInte
 
     public PublicSettingsFragment() {
     }
-   private void setupSettingItems(Context context){
+
+    private void setupSettingItems(Context context) {
         settingItemModels = Arrays.asList(
-        new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
-        new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
-        new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
-        new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
-        new SettingItemModel("Payments", context.getDrawable(R.drawable.payment), PaymentSettingsActivity.class),
-        new SettingItemModel("Report a Problem", context.getDrawable(R.drawable.report), ReportSettingsActivity.class)
+                new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
+                new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
+                new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
+                new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
+                new SettingItemModel("Payments", context.getDrawable(R.drawable.payment), PaymentSettingsActivity.class),
+                new SettingItemModel("Report a Problem", context.getDrawable(R.drawable.report), ReportSettingsActivity.class)
         );
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,14 +75,14 @@ public class PublicSettingsFragment extends Fragment implements RecyclerViewInte
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToLogin(getParentFragmentManager());
+                goLogin();
             }
         });
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToLogin(getParentFragmentManager());
+                goLogin();
             }
         });
 
@@ -90,5 +94,15 @@ public class PublicSettingsFragment extends Fragment implements RecyclerViewInte
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSignInFragmentDestroyed() {
+        this.getView().setVisibility(View.VISIBLE);
+    }
+
+    public void goLogin(){
+        this.getView().setVisibility(View.INVISIBLE);
+        goToLogin(this);
     }
 }
