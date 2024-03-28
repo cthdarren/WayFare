@@ -43,12 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
     private UserViewModel viewModel;
 
+    private boolean loggedIn;
     //TODO when i log in to the app update a viewmodel with all the user details so you can share
     // around the settings/profile fragments
     @Override
     protected void onCreate(Bundle savedInstanceState){
-        boolean loggedIn;
-
+        setVisible(false);
         EdgeToEdge.enable(this);
         if (new AuthHelper(getApplicationContext()).isLoggedIn()){
             loggedIn = true;
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                            loggedIn = false;
+                            setVisible(true);
                         }
                     });
                 }
@@ -71,11 +73,14 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 viewModel.updateUserData(new Gson().fromJson(json.data, UserModel.class));
+                                setVisible(true);
                             }
                         });
                     }
                     else{
                         Toast.makeText(MainActivity.this, json.data.getAsString(), Toast.LENGTH_SHORT).show();
+                        loggedIn = false;
+                        setVisible(true);
                     }
                 }
             });

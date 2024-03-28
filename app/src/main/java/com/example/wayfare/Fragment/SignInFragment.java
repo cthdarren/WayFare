@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -45,7 +46,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SignInFragment extends Fragment {
+public class SignInFragment extends Fragment{
 
     Button sign_in_button;
     EditText username, password;
@@ -55,8 +56,6 @@ public class SignInFragment extends Fragment {
 
     TextView errorTextBox;
 
-    public SignInFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +69,7 @@ public class SignInFragment extends Fragment {
         username = view.findViewById(R.id.usernamelog);
         password = view.findViewById(R.id.passwordlog);
         login_exit = view.findViewById(R.id.login_exit);
+        view.setClickable(true);
 
         login_exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,8 +158,7 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        navBar = getActivity().findViewById(R.id.bottomNavigationView);
-        navBar.setVisibility(View.VISIBLE);
         super.onDestroy();
+        navBar.setVisibility(View.VISIBLE);
     }
 }

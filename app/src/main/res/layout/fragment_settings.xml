@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingHorizontal="20dp"
-                android:paddingVertical="40dp">
+                android:paddingVertical="36dp">
 
 
                     <androidx.cardview.widget.CardView
@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:text="Hi, First_name"
                         android:textStyle="bold"
-                        android:textSize="@dimen/font_lg" />
+                        android:textSize="@dimen/font_xl" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -118,8 +118,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
             android:paddingTop="10dp"
+            android:paddingBottom="20dp"
             android:text="@string/version_number"
             android:textSize="@dimen/font_xs" />
     </LinearLayout>
