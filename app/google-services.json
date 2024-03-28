@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "372463683558",
+    "project_id": "wayfare-shorts",
+    "storage_bucket": "wayfare-shorts.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372463683558:android:7ba724e0ca2ab21a777827",
+        "android_client_info": {
+          "package_name": "com.example.wayfare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4RkkUFITaNoATSChCN4Gg0GidR1oIaAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
