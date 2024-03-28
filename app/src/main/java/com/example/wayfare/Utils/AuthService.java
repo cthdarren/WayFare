@@ -5,11 +5,9 @@ import static com.example.wayfare.Utils.AuthHelper.PREFS_NAME;
 import static com.example.wayfare.Utils.AuthHelper.sharedPreferences;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Models.ResponseModel;
 import com.google.gson.Gson;
@@ -25,23 +23,25 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class RunAuthRequest implements Runnable{
+public class AuthService {
         private final String token;
-        private final String apiUrl;
-        private final Helper.RequestType requestType;
-        private final RequestBody body;
+        private final String baseUrl;
+        private final Context context;
 
-    public RunAuthRequest(Context context, String apiUrl, Helper.RequestType requestType, RequestBody body) {
-        this.apiUrl = apiUrl;
-        this.requestType = requestType;
-        this.body = body;
+    public AuthService(Context context) {
+        this.context = context;
+        this.baseUrl = BuildConfig.API_URL;
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         token = sharedPreferences.getString(JSON_DATA_KEY, "");
 
     }
 
-    @Override
-    public void run() {
+    public interface ResponseListener {
+        void onError(String message);
+        void onResponse(ResponseModel json);
+    }
+
+    public void getResponse(String apiUrl, Helper.RequestType requestType, RequestBody body, ResponseListener responseListener) {
         final OkHttpClient client = new OkHttpClient();
         Request request;
         if (requestType == Helper.RequestType.REQ_GET){
@@ -62,17 +62,21 @@ public class RunAuthRequest implements Runnable{
             public void onFailure(Call call, IOException e) {
                 if (e instanceof SocketTimeoutException) {
                     e.printStackTrace();
+                    responseListener.onError("Request Timed Out");
                 } else if (e instanceof SocketException) {
                     Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
                     e.printStackTrace();
+                    responseListener.onError("Server Error");
                 }
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String serverResponse = response.body().string();
-                // debugging
+
                 System.out.println(serverResponse);
+                ResponseModel parsedResponse = new Gson().fromJson(serverResponse, ResponseModel.class);
                 Log.i("Tag", "it worked>");
+                responseListener.onResponse(parsedResponse);
                 // sharedpref store
             }
         });

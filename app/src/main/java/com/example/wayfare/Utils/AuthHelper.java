@@ -1,6 +1,7 @@
 package com.example.wayfare.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.wayfare.BuildConfig;
@@ -20,8 +21,14 @@ public class AuthHelper {
     public boolean isLoggedIn() {
         // default state of jsonString in sharedPref is empty
         // use isLoggedIn true for checking if user is authed
-        String jsonString = sharedPreferences.getString(JSON_DATA_KEY, "");
-        return !jsonString.isEmpty();
+        String token = sharedPreferences.getString(JSON_DATA_KEY, "");
+        System.out.println(token);
+        return !token.isEmpty();
+    }
+
+    public void logout(){
+        sharedPreferences.edit().putString("user_info", "")
+                .apply();
     }
 
 

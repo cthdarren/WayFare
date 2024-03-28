@@ -152,4 +152,5 @@
     <color name="transparent">#00000000</color>
     <color name="red">#ff0033</color>
     <color name="light_red">#80ff0033</color>
+    <color name="grey">#828282</color>
 </resources>
