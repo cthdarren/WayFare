@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -12,7 +13,7 @@ android {
     }
     defaultConfig {
         applicationId = "com.example.wayfare"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -31,7 +32,8 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         debug {
-            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
+//            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
+            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
         }
     }
     compileOptions {
@@ -76,4 +78,5 @@ dependencies {
     implementation("androidx.camera:camera-video:$camerax_version")
     implementation("androidx.camera:camera-view:$camerax_version")
     implementation("androidx.camera:camera-extensions:$camerax_version")
+    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
 }
