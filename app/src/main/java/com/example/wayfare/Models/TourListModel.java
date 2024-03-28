@@ -69,7 +69,9 @@ public class TourListModel {
         return userId;
     }
 
-
+    public List<TimeRange> getTimeRangeList() {
+        return timeRangeList;
+    }
 
     private String title;
     private String id;
