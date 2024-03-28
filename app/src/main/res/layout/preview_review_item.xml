@@ -1,0 +1,28 @@
+<com.google.android.material.carousel.MaskableFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/carousel_item_container"
+    android:layout_width="260dp"
+    android:layout_height="160dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp"
+    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title of review"
+            android:background="@color/red"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Review content much wowzers poggis."/>
+
+    </LinearLayout>
+</com.google.android.material.carousel.MaskableFrameLayout>

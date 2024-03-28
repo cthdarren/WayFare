@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:id="@+id/route_to_profile"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="36dp">
 
@@ -102,6 +103,53 @@
                     android:nestedScrollingEnabled="false"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/settings_list_item" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:textSize="@dimen/font_md"
+                android:text="Hosting"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="18dp">
+
+                    <ImageView
+                        android:id="@+id/settings_item_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/no_avatar"
+                        app:tint="@color/md_theme_onSurface" />
+
+                    <TextView
+                        android:id="@+id/settings_item_name"
+                        android:layout_width="match_parent"
+                        android:textSize="@dimen/font_sm"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginStart="26dp"
+                        android:gravity="center_vertical"
+                        android:text="Become a WayFarer™" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:src="@drawable/chevron_right"
+                        android:layout_height="match_parent"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@color/material_dynamic_neutral80" />
 
             </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -36,7 +38,9 @@ import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Models.SettingItemModel;
 import com.example.wayfare.Utils.AuthHelper;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -59,15 +63,17 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     private Button logoutBtn;
     private ImageView user_profile_pic;
     private TextView user_greeting;
+    private BottomNavigationView navBar;
     private UserViewModel userViewModel;
     private ProgressBar progBar;
+    private LinearLayout route_to_profile;
     private List<SettingItemModel> settingItemModels = new ArrayList<>();
 
     private void setupSettingItems(Context context) {
 
         settingItemModels = Arrays.asList(
-                new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
                 new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
+                new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
                 new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
                 new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
                 new SettingItemModel("Payments", context.getDrawable(R.drawable.payment), PaymentSettingsActivity.class),
@@ -86,8 +92,17 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         logoutBtn = view.findViewById(R.id.logoutBtn);
+        route_to_profile = view.findViewById(R.id.route_to_profile);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
+        navBar = getActivity().findViewById(R.id.bottomNavigationView);
+        route_to_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFragment(getParentFragmentManager(), new ProfileFragment());
+                navBar.setVisibility(View.INVISIBLE);
+            }
+        });
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,31 +136,35 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         settingsRecyclerView.setAdapter(adapter);
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
+        if (picUrl != "" & picUrl != null) {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Looper uiLooper = Looper.getMainLooper();
+            final Handler handler = new Handler(uiLooper);
+            executor.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL(picUrl);
+                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                user_profile_pic.setImageBitmap(image);
+                                progBar.setVisibility(View.GONE);
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Looper uiLooper = Looper.getMainLooper();
-        final Handler handler = new Handler(uiLooper);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(picUrl);
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            user_profile_pic.setImageBitmap(image);
-                            progBar.setVisibility(View.GONE);
-
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    progBar.setVisibility(View.GONE);
+                            }
+                        });
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        progBar.setVisibility(View.GONE);
+                    }
                 }
-            }
-        });
-
+            });
+        }
+        else{
+            user_profile_pic.setBackgroundResource(R.drawable.account_circle);
+            progBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

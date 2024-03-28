@@ -16,6 +16,14 @@ public class Helper {
                 .commit();
     }
 
+    public static void goToFragment(FragmentManager fm, Fragment fragment){
+        fm.beginTransaction()
+                .replace(R.id.flFragment, fragment)
+                .addToBackStack(null)
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
     public enum RequestType{
         REQ_GET,
         REQ_POST
