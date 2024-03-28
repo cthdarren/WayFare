@@ -2,8 +2,12 @@ package com.example.wayfare.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,10 +37,20 @@ import com.example.wayfare.Models.SettingItemModel;
 import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.ViewModel.UserViewModel;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
 
 public class SettingsFragment extends Fragment implements RecyclerViewInterface {
 
@@ -70,20 +84,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         logoutBtn = view.findViewById(R.id.logoutBtn);
-        user_greeting = view.findViewById(R.id.user_greeting);
-        user_profile_pic = view.findViewById(R.id.user_profile_picture);
 
-        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-
-        UserModel userData = userViewModel.getUserProfileData();
-        String picUrl = userData.getPictureUrl();
-        String userFirstName = userData.getFirstName();
-
-        user_greeting.setText("Hi, " +  userFirstName);
-        if (picUrl != "" & picUrl != null) {
-//            Glide.with(view.getContext())
-//                    .load(picUrl).into(user_profile_pic);
-        }
         //TODO LOAD THE DAMN PIC
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +101,47 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        user_greeting = view.findViewById(R.id.user_greeting);
+        user_profile_pic = view.findViewById(R.id.user_profile_picture);
+
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+
+        UserModel userData = userViewModel.getUserProfileData();
+        String picUrl = userData.getPictureUrl();
+        String userFirstName = userData.getFirstName();
+
+        user_greeting.setText("Hi, " +  userFirstName);
+
+        view.setVisibility(View.INVISIBLE);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Looper uiLooper = Looper.getMainLooper();
+        final Handler handler = new Handler(uiLooper);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(picUrl);
+                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            user_profile_pic.setImageBitmap(image);
+                            view.setVisibility(View.VISIBLE);
+
+                        }
+                    });
+                }
+                catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     @Override

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/outer_padding"
+    android:paddingHorizontal="@dimen/outer_padding"
     android:scrollbarSize="0dp">
 
-    <LinearLayout
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
-        <com.google.android.material.card.MaterialCardView
+
+            <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp">
@@ -39,8 +41,7 @@
                             android:layout_width="54dp"
                             android:layout_height="54dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/no_avatar"
-                            app:tint="@color/md_theme_secondary">
+                            >
 
                         </ImageView>
                     </androidx.cardview.widget.CardView>
@@ -97,6 +98,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/settings_list_recview"
                     android:layout_width="match_parent"
+                    android:nestedScrollingEnabled="false"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/settings_list_item" />
 
@@ -123,4 +125,4 @@
     </LinearLayout>
 
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
