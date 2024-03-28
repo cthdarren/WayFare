@@ -152,9 +152,10 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                         STORAGE_PERMISSION_CODE);
             }
 
-            Intent intent = new Intent();
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("video/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
+            //startActivityForResult(intent, 5);
         }
 
         if (view.getId() == R.id.button_record) {

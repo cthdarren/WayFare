@@ -83,7 +83,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         logoutBtn = view.findViewById(R.id.logoutBtn);
         progBar = getActivity().findViewById(R.id.progressBar);

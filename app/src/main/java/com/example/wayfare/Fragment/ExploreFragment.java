@@ -1,10 +1,15 @@
 package com.example.wayfare.Fragment;
-
+import com.example.wayfare.Activity.MainActivity;
+import com.example.wayfare.Models.UserModel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
+import com.example.wayfare.Utils.AuthHelper;
+import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
+import com.example.wayfare.ViewModel.UserViewModel;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
@@ -19,12 +24,17 @@ import com.example.wayfare.Adapters.ShortsAdapter;
 import com.example.wayfare.Models.ShortsObject;
 import com.example.wayfare.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import androidx.activity.OnBackPressedCallback;
 
 public class ExploreFragment extends Fragment {
+    private boolean loggedIn;
+    private UserViewModel userViewModel;
     private Context context = null;
     private ViewPager2 shortsViewPager;
     private List<ShortsObject> shortsObjectList;
@@ -45,6 +55,7 @@ public class ExploreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_explore, container, false);
 
@@ -86,7 +97,16 @@ public class ExploreFragment extends Fragment {
         shortsObject7.setTitle("xxxx");
         shortsObject7.setDescription("xxxx");
         shortsObjectList.add(shortsObject7);
-
+        //get user stuff
+        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()){
+            loggedIn = true;
+        } else {
+            loggedIn = false;
+        }
+        if(loggedIn) {
+            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+            UserModel userData = userViewModel.getUserProfileData();
+        }
         shortsViewPager = rootView.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         shortsAdapter = new ShortsAdapter(shortsObjectList,context);
@@ -179,13 +199,14 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        continueVideo();
+        //continueVideo();
 
     }
 
     public void pauseVideo() {
-        SharedPreferences currentPosPref = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
-        SharedPreferences.Editor positionEditor = currentPosPref.edit();
+        //save pos
+        SharedPreferences currentShortsPref = requireActivity().getSharedPreferences("shortsSharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor positionEditor = currentShortsPref.edit();
         int currentPosition = shortsAdapter.getCurrentPosition();
         positionEditor.putInt("position", currentPosition);
         shortsAdapter.pauseVideo(currentPosition);
@@ -193,7 +214,7 @@ public class ExploreFragment extends Fragment {
     }
 
     public void continueVideo() {
-        SharedPreferences currentPosPref = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
+        SharedPreferences currentPosPref = requireActivity().getSharedPreferences("shortsSharedPref", Context.MODE_PRIVATE);
         int currentPosition = currentPosPref.getInt("position", -1);
         if (currentPosition != -1) {
             shortsAdapter.playVideo(currentPosition);
