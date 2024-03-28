@@ -17,25 +17,6 @@ import com.example.wayfare.RecyclerViewInterface;
 
 import java.util.List;
 
-package com.example.wayfare.Adapters;
-
-        import android.content.Context;
-        import android.view.LayoutInflater;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.ImageView;
-        import android.widget.TextView;
-
-        import androidx.annotation.NonNull;
-        import androidx.recyclerview.widget.RecyclerView;
-
-        import com.example.wayfare.R;
-        import com.example.wayfare.RecyclerViewInterface;
-        import com.example.wayfare.Models.SettingItemModel;
-
-        import java.util.ArrayList;
-        import java.util.List;
-
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder>{
 
 
@@ -59,8 +40,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.settingName.setText(reviewItemModels.get(position));
-        holder.settingIcon.setImageDrawable(reviewItemModels.get(position).icon);
+        holder.settingName.setText(reviewItemModels.get(position).firstName);
+//        holder.settingIcon.setImageDrawable(reviewItemModels.get(position).reviewContent);
 
     }
 

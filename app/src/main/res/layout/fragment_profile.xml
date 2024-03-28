@@ -51,6 +51,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <TextView
+                    android:id="@+id/full_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -81,6 +82,7 @@
                             />
 
                         <TextView
+                            android:id="@+id/rating"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -119,6 +121,7 @@
                              />
 
                         <TextView
+                            android:id="@+id/years_on_wayfare"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
@@ -144,6 +147,7 @@
             android:text="About me"/>
 
         <TextView
+            android:id="@+id/about_me"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_sm"
