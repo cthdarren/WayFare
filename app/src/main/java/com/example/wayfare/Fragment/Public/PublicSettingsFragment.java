@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PublicSettingsFragment extends Fragment implements RecyclerViewInterface, SignInFragment.SignInFragmentListener {
+public class PublicSettingsFragment extends Fragment implements RecyclerViewInterface{
 
     private RecyclerView settingsRecyclerView;
 
@@ -75,14 +75,14 @@ public class PublicSettingsFragment extends Fragment implements RecyclerViewInte
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goLogin();
+                goToLogin(getParentFragmentManager());
             }
         });
 
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goLogin();
+                goToLogin(getParentFragmentManager());
             }
         });
 
@@ -94,15 +94,5 @@ public class PublicSettingsFragment extends Fragment implements RecyclerViewInte
     public void onItemClick(int position) {
         Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
         startActivity(intent);
-    }
-
-    @Override
-    public void onSignInFragmentDestroyed() {
-        this.getView().setVisibility(View.VISIBLE);
-    }
-
-    public void goLogin(){
-        this.getView().setVisibility(View.INVISIBLE);
-        goToLogin(this);
     }
 }

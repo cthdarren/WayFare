@@ -48,12 +48,6 @@ import okhttp3.Response;
 
 public class SignInFragment extends Fragment{
 
-    public interface SignInFragmentListener{
-        void onSignInFragmentDestroyed();
-    }
-
-    private SignInFragmentListener listener;
-
     Button sign_in_button;
     EditText username, password;
 
@@ -75,6 +69,7 @@ public class SignInFragment extends Fragment{
         username = view.findViewById(R.id.usernamelog);
         password = view.findViewById(R.id.passwordlog);
         login_exit = view.findViewById(R.id.login_exit);
+        view.setClickable(true);
 
         login_exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,20 +158,7 @@ public class SignInFragment extends Fragment{
 
     @Override
     public void onDestroy() {
-        navBar = getActivity().findViewById(R.id.bottomNavigationView);
-        navBar.setVisibility(View.VISIBLE);
         super.onDestroy();
-        if (listener != null)
-            listener.onSignInFragmentDestroyed();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
-
-    public void setListener(SignInFragmentListener listener){
-        this.listener = listener;
+        navBar.setVisibility(View.VISIBLE);
     }
 }
