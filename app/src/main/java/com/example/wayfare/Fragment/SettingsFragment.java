@@ -63,21 +63,21 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     private ProgressBar progBar;
     private List<SettingItemModel> settingItemModels = new ArrayList<>();
 
-    private void setupSettingItems(Context context){
+    private void setupSettingItems(Context context) {
+
         settingItemModels = Arrays.asList(
-        new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
-        new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
-        new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
-        new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
-        new SettingItemModel("Payments", context.getDrawable(R.drawable.payment), PaymentSettingsActivity.class),
-        new SettingItemModel("Report a Problem", context.getDrawable(R.drawable.report), ReportSettingsActivity.class)
+                new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
+                new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
+                new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
+                new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
+                new SettingItemModel("Payments", context.getDrawable(R.drawable.payment), PaymentSettingsActivity.class),
+                new SettingItemModel("Report a Problem", context.getDrawable(R.drawable.report), ReportSettingsActivity.class)
         );
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        setupSettingItems(context);
     }
 
     @Nullable
@@ -97,11 +97,6 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
             }
         });
 
-        settingsRecyclerView = view.findViewById(R.id.settings_list_recview);
-        SettingsRecViewAdapter adapter = new SettingsRecViewAdapter(view.getContext(), settingItemModels, this);
-        settingsRecyclerView.setAdapter(adapter);
-        settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
         return view;
     }
 
@@ -110,14 +105,22 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         super.onViewCreated(view, savedInstanceState);
         user_greeting = view.findViewById(R.id.user_greeting);
         user_profile_pic = view.findViewById(R.id.user_profile_picture);
-
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 
         UserModel userData = userViewModel.getUserProfileData();
         String picUrl = userData.getPictureUrl();
         String userFirstName = userData.getFirstName();
 
-        user_greeting.setText("Hi, " +  userFirstName);
+        user_greeting.setText("Hi, " + userFirstName);
+
+        // Setting up of recycler view and items
+        setupSettingItems(view.getContext());
+
+        settingsRecyclerView = view.findViewById(R.id.settings_list_recview);
+        SettingsRecViewAdapter adapter = new SettingsRecViewAdapter(view.getContext(), settingItemModels, this);
+        settingsRecyclerView.setAdapter(adapter);
+        settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
@@ -136,8 +139,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
                         }
                     });
-                }
-                catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                     progBar.setVisibility(View.GONE);
                 }

@@ -51,12 +51,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
+        EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
         setContentView(view);
 
-        EdgeToEdge.enable(this);
         progBar = findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
 
@@ -96,7 +95,9 @@ public class MainActivity extends AppCompatActivity {
             });
         } else {
             loggedIn = false;
+            progBar.setVisibility(View.GONE);
         }
+
 
         View decorView = getWindow().getDecorView();
         replaceFragment(new ExploreFragment());
