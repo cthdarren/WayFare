@@ -68,11 +68,6 @@ public class TourListingFull extends Fragment {
             }
 
         }
-
-
-//        recyclerView = view.findViewById(R.id.myRecyclerView2);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-//        recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(getContext(), tourListModels));
         return view;
     }
 }
