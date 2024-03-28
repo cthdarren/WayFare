@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,6 +60,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     private ImageView user_profile_pic;
     private TextView user_greeting;
     private UserViewModel userViewModel;
+    private ProgressBar progBar;
     private List<SettingItemModel> settingItemModels = new ArrayList<>();
 
     private void setupSettingItems(Context context){
@@ -84,8 +86,8 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         logoutBtn = view.findViewById(R.id.logoutBtn);
-
-        //TODO LOAD THE DAMN PIC
+        progBar = getActivity().findViewById(R.id.progressBar);
+        progBar.setVisibility(View.VISIBLE);
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +119,6 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
         user_greeting.setText("Hi, " +  userFirstName);
 
-        view.setVisibility(View.INVISIBLE);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
         final Handler handler = new Handler(uiLooper);
@@ -131,13 +132,14 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
                         @Override
                         public void run() {
                             user_profile_pic.setImageBitmap(image);
-                            view.setVisibility(View.VISIBLE);
+                            progBar.setVisibility(View.GONE);
 
                         }
                     });
                 }
                 catch (IOException e){
                     e.printStackTrace();
+                    progBar.setVisibility(View.GONE);
                 }
             }
         });

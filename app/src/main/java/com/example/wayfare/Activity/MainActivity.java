@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.wayfare.Fragment.AddShortsFragment;
@@ -42,14 +43,23 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private UserViewModel viewModel;
+    private ProgressBar progBar;
 
     private boolean loggedIn;
     //TODO when i log in to the app update a viewmodel with all the user details so you can share
     // around the settings/profile fragments
     @Override
     protected void onCreate(Bundle savedInstanceState){
-        setVisible(false);
+        super.onCreate(savedInstanceState);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = (View) binding.getRoot();
+        setContentView(view);
+
         EdgeToEdge.enable(this);
+        progBar = findViewById(R.id.progressBar);
+        progBar.setVisibility(View.VISIBLE);
+
         if (new AuthHelper(getApplicationContext()).isLoggedIn()){
             loggedIn = true;
             viewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -61,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
                             loggedIn = false;
-                            setVisible(true);
+                            progBar.setVisibility(View.GONE);
                         }
                     });
                 }
@@ -73,25 +83,21 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 viewModel.updateUserData(new Gson().fromJson(json.data, UserModel.class));
-                                setVisible(true);
+                                progBar.setVisibility(View.GONE);
                             }
                         });
                     }
                     else{
                         Toast.makeText(MainActivity.this, json.data.getAsString(), Toast.LENGTH_SHORT).show();
                         loggedIn = false;
-                        setVisible(true);
+                        progBar.setVisibility(View.GONE);
                     }
                 }
             });
         } else {
             loggedIn = false;
         }
-        super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = (View) binding.getRoot();
-        setContentView(view);
         View decorView = getWindow().getDecorView();
         replaceFragment(new ExploreFragment());
         //binding.bottomNavigationView.setBackground(null);
