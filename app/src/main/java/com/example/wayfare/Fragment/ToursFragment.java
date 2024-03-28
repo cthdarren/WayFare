@@ -53,10 +53,11 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
     public ToursFragment(){}
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
@@ -95,6 +96,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
 
     public void setUpTourListModels(Callback callback) throws IOException {
         if (getActivity() != null) {
@@ -159,4 +161,5 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         fragmentTransaction.addToBackStack(null); // Optional: Add to back stack
         fragmentTransaction.commit();
     }
+
 }
