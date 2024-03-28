@@ -67,6 +67,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/settings_list_recview"
                     android:layout_width="match_parent"
+                    android:nestedScrollingEnabled="false"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/settings_list_item" />
 
@@ -81,7 +82,7 @@
             android:paddingTop="10dp"
             android:textSize="@dimen/font_xs"
             android:text="@string/version_number"
-            android:layout_marginBottom="100dp"
+            android:paddingBottom="20dp"
             />
     </LinearLayout>
 
