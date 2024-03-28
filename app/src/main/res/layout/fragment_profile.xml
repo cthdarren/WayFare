@@ -3,13 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/outer_padding"
-    tools:context=".Fragment.AccountFragment">
+    android:paddingHorizontal="@dimen/outer_padding"
+    tools:context=".Fragment.ProfileFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:text=""
+            android:layout_height="wrap_content"/>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp">
+
+            </ImageView>
+
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 

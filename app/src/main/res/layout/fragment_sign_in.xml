@@ -7,12 +7,11 @@
     android:background="@color/md_theme_background"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:padding="@dimen/outer_padding"
+    android:paddingHorizontal="@dimen/outer_padding"
     tools:context=".Fragment.SignInFragment">
 
     <ImageView
         android:id="@+id/login_exit"
-        android:paddingTop="20dp"
         android:paddingEnd="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,10 +24,10 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="30dp"
         android:textAlignment="center"
         android:text="Sign in to WayFare!"
-        android:textSize="45sp"
+        android:textSize="@dimen/font_2xl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
