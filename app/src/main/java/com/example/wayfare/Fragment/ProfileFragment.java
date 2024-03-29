@@ -28,6 +28,7 @@ import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.ReviewItemModel;
+import com.example.wayfare.Models.ReviewModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
@@ -48,8 +49,10 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -64,17 +67,16 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView years_on_wayfare;
     TextView about_me;
     RecyclerView reviewRecycler;
-    List<ReviewItemModel> reviewItemModels;
-    public ProfileFragment(){}
+    List<ReviewItemModel> reviewItemModels = new ArrayList<>();
 
-    public void setupReviewModels(){
-        reviewItemModels = Arrays.asList(
-                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "dafuqfuq", "1st November 2024"),
-                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "dafuqqq"),
-                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "1st November 2024"),
-                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "1st November 2024"),
-                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "1st November 2024")
-        );
+    public ProfileFragment() {
+    }
+
+    public void setupReviewModels(List<ReviewModel> reviewList) {
+        for (ReviewModel review : reviewList) {
+            ReviewItemModel toAdd = new ReviewItemModel(review.getTitle(), review.getUser().getPictureUrl(), review.getUser().getFirstName(), review.getReviewContent(), review.getDateCreated(), review.getDateModified());
+            reviewItemModels.add(toAdd);
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -91,15 +93,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         ratings = view.findViewById(R.id.rating);
         years_on_wayfare = view.findViewById(R.id.years_on_wayfare);
         about_me = view.findViewById(R.id.about_me);
-        reviewRecycler = view.findViewById(R.id.review_carousel);
 
-        setupReviewModels();
-
-
-        reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels, this));
-
-        SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(reviewRecycler);
         return view;
     }
 
@@ -116,13 +110,14 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                     @Override
                     public void run() {
                         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        progBar.setVisibility(View.GONE);
                     }
-                }); 
+                });
             }
 
             @Override
             public void onResponse(ResponseModel json) {
-                if (json.success){
+                if (json.success) {
                     ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
 
                     ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -132,8 +127,9 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                         @Override
                         public void run() {
                             try {
+                                Bitmap image;
                                 URL url = new URL(profileInfo.getPictureUrl());
-                                Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -145,19 +141,32 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                             }
                         }
                     });
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
-                            ratings.setText(profileInfo.getAvgScore().toString() + "★");
-                            years_on_wayfare.setText(String.valueOf(LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0,10)).getYear()));
-                            about_me.setText(profileInfo.getAboutMe());
-                        }
-                    });
+
+                    getActivity().
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
+                                    ratings.setText(profileInfo.getAvgScore().toString() + "★");
+
+                                    years_on_wayfare.setText(String.valueOf(LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear()));
+                                    about_me.setText(profileInfo.getAboutMe());
+                                    setupReviewModels(profileInfo.getReviews());
+
+                                    reviewRecycler = view.findViewById(R.id.review_carousel);
+
+                                    reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
+
+                                    SnapHelper snapHelper = new LinearSnapHelper();
+                                    snapHelper.attachToRecyclerView(reviewRecycler);
+
+                                    progBar.setVisibility(View.GONE);
+                                }
+                            });
                 }
             }
         });
-        progBar.setVisibility(View.GONE);
     }
 
     @Override

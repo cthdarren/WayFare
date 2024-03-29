@@ -28,7 +28,6 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            app:cardElevation="0dp"
             android:layout_height="match_parent"
             android:layout_marginTop="30dp">
 
@@ -48,6 +47,7 @@
                     <ImageView
                         android:id="@+id/profile_picture"
                         android:layout_width="100dp"
+                        android:src="@drawable/account_circle"
                         android:layout_height="100dp"
                         android:scaleType="centerCrop">
                     </ImageView>
@@ -80,6 +80,43 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
+                            android:text="Reviews"
+                            android:textSize="@dimen/font_xs"
+                            />
+
+                        <TextView
+                            android:id="@+id/num_reviews"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingBottom="10dp"
+                            android:textStyle="bold"
+                            android:paddingTop="5dp"
+                            android:text="5"
+                            android:textSize="@dimen/font_lg" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <View
+                            android:layout_height="wrap_content"
+                            android:layout_width="2dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/material_dynamic_neutral80"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:text="Rating"
                             android:textSize="@dimen/font_xs"
                             />
@@ -93,7 +130,7 @@
                             android:textStyle="bold"
                             android:paddingTop="5dp"
                             android:text="4.76★"
-                            android:textSize="@dimen/font_xl" />
+                            android:textSize="@dimen/font_lg" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -132,7 +169,7 @@
                             android:text="4"
                             android:paddingBottom="10dp"
                             android:textStyle="bold"
-                            android:textSize="@dimen/font_xl" />
+                            android:textSize="@dimen/font_lg" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -140,6 +177,30 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/no_avatar"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:textSize="@dimen/font_sm"
+            android:text="Speaks: "/>
+
+            <TextView
+                android:id="@+id/languages_spoken"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_sm"
+                android:layout_height="match_parent"
+                android:text="English"/>
+        </LinearLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -147,7 +208,7 @@
             android:paddingBottom="5dp"
             android:textStyle="bold"
             android:textSize="@dimen/font_sm"
-            android:text="About me"/>
+            android:text="Bio"/>
 
         <TextView
             android:id="@+id/about_me"
@@ -187,6 +248,15 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/preview_review_item" />
+
+        <Button
+            android:id="@+id/show_all_review_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="50dp"
+            android:textSize="@dimen/font_sm"
+            android:text="Show all reviews"/>
 
 
     </LinearLayout>

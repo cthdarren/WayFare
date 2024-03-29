@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="330dp"
     android:layout_height="200dp"
+    android:clickable="false"
+    android:focusable="false"
+    app:rippleColor="@color/transparent"
     android:layout_marginEnd="10dp">
 
     <LinearLayout
@@ -44,8 +47,9 @@
                 <ImageView
                     android:id="@+id/review_user_pic"
                     android:layout_width="48dp"
+                    android:src="@drawable/account_circle"
                     android:layout_height="48dp"
-                    android:src="@drawable/no_avatar" />
+                     />
             </androidx.cardview.widget.CardView>
 
 

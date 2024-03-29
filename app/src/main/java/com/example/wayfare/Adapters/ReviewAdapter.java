@@ -1,5 +1,7 @@
 package com.example.wayfare.Adapters;
 
+import static java.security.AccessController.getContext;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,26 +26,33 @@ import com.example.wayfare.RecyclerViewInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder>{
+public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
 
 
     private final List<ReviewItemModel> reviewItemModels;
     private final Context context;
 
-    private final RecyclerViewInterface recyclerViewInterface;
+    private RecyclerViewInterface recyclerViewInterface;
 
-    public ReviewAdapter(Context context, List<ReviewItemModel> reviewItemModels, RecyclerViewInterface recyclerViewInterface){
+    public ReviewAdapter(Context context, List<ReviewItemModel> reviewItemModels) {
+        this.context = context;
+        this.reviewItemModels = reviewItemModels;
+    }
+
+    public ReviewAdapter(Context context, List<ReviewItemModel> reviewItemModels, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.reviewItemModels = reviewItemModels;
         this.recyclerViewInterface = recyclerViewInterface;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.preview_review_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.preview_review_item, parent, false);
         ViewHolder holder = new ViewHolder(view, recyclerViewInterface);
         return holder;
     }
@@ -53,7 +62,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.reviewTitle.setText(reviewItemModels.get(position).title);
         holder.reviewContent.setText(reviewItemModels.get(position).reviewContent);
         holder.reviewUsername.setText(reviewItemModels.get(position).firstName);
-        holder.reviewDate.setText(reviewItemModels.get(position).dateModified);
+        holder.reviewDate.setText(reviewItemModels.get(position).timeSinceCreation);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
@@ -62,7 +71,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             @Override
             public void run() {
                 try {
-                    URL url = new URL(reviewItemModels.get(position).picUrl);
+                    String picUrl = reviewItemModels.get(position).picUrl;
+                    URL url = new URL(picUrl);
                     Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                     handler.post(new Runnable() {
                         @Override
@@ -70,6 +80,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                             holder.review_user_pic.setImageBitmap(image);
                         }
                     });
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -82,7 +93,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         return reviewItemModels.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView reviewTitle;
         private TextView reviewContent;
