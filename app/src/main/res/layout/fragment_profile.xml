@@ -209,7 +209,7 @@
             android:paddingTop="15dp"
             android:paddingBottom="5dp"
             android:textStyle="bold"
-            android:textSize="@dimen/font_sm"
+            android:textSize="@dimen/font_md"
             android:text="Bio"/>
 
         <TextView
@@ -233,7 +233,7 @@
             android:paddingBottom="10dp"
             android:paddingTop="20dp"
             android:text="Reviews"
-            android:textSize="@dimen/font_sm"
+            android:textSize="@dimen/font_md"
             android:textStyle="bold"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -262,7 +262,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/listings_wrapper"/>
+            android:id="@+id/listings_wrapper">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/listing_wrapper_header"
+                android:layout_height="wrap_content"
+                android:text="Listings"
+                android:textSize="@dimen/font_md"
+                android:paddingBottom="10dp"
+                android:paddingTop="20dp"
+                android:textStyle="bold"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listing_carousel"
+                android:layout_width="match_parent"
+                android:layout_marginStart="-30dp"
+                android:clipToPadding = "false"
+                android:paddingStart="30dp"
+                android:layout_marginEnd="-30dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/preview_listing_item" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

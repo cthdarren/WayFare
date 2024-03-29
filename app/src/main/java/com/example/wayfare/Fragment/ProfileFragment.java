@@ -29,10 +29,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.wayfare.Adapters.ReviewAdapter;
+import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.ReviewItemModel;
 import com.example.wayfare.Models.ReviewModel;
+import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
@@ -77,7 +79,9 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     Button show_all_reviews_button;
     LinearLayout review_segment;
     LinearLayout listings_wrapper;
+    TextView listings_wrapper_header;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
+    List<ListingItemModel> listingItemModels = new ArrayList<>();
 
     public ProfileFragment() {
     }
@@ -88,7 +92,12 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
             reviewItemModels.add(toAdd);
         }
     }
-
+    public void setUpListingModels(List<TourListModel> listingList) {
+        for (TourListModel tour : listingList) {
+            ListingItemModel toAdd = new ListingItemModel(tour.getThumbnailUrls()[1], tour.getTitle(), tour.getRating(), tour.getReviewCount());
+            listingItemModels.add(toAdd);
+        }
+    }
     @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,7 +119,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         about_me = view.findViewById(R.id.about_me);
         show_all_reviews_button = view.findViewById(R.id.show_all_review_button);
         listings_wrapper = view.findViewById(R.id.listings_wrapper);
-
+        listings_wrapper_header = view.findViewById(R.id.listing_wrapper_header);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,8 +195,23 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                             full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
                             reviewCount.setText(profileInfo.getReviewCount().toString());
                             review_title.setText(profileInfo.getFirstName() + "'s reviews");
-                            ratings.setText(profileInfo.getAvgScore().toString());
-                            years_on_wayfare.setText(String.valueOf(LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear()));
+                            listings_wrapper_header.setText(profileInfo.getFirstName() + "'s listings");
+                            int numratings = profileInfo.getReviewCount();
+                            if (numratings == 0){
+                                ratings.setText("No ratings yet");
+                                ratings.setTextSize(16);
+                            }
+                            else{
+                                ratings.setText(String.valueOf(numratings));
+                            }
+                            int years = LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear();
+                            if (years < 1){
+                                years_on_wayfare.setText("First year");
+                                years_on_wayfare.setTextSize(16);
+                            }
+                            else{
+                                years_on_wayfare.setText(String.valueOf(years));
+                            }
                             about_me.setText(profileInfo.getAboutMe());
                             show_all_reviews_button.setText(String.format("Show all %d reviews", profileInfo.getReviewCount()));
                             if (profileInfo.getReviewCount() == 0) {
@@ -196,6 +220,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                             }
 
                             setupReviewModels(profileInfo.getReviews());
+                            setUpListingModels(profileInfo.getTours());
 
                             reviewRecycler = view.findViewById(R.id.review_carousel);
 
