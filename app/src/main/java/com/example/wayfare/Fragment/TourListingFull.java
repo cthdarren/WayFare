@@ -74,6 +74,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(new timingAdapter(getContext(), timingArray, this));
+        //recyclerView.suppressLayout(true);
         return view;
     }
 
