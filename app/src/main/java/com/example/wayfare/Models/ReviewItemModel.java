@@ -11,16 +11,19 @@ public class ReviewItemModel {
     public final String reviewContent;
     public final String dateCreated;
     public final String dateModified;
-    public final Class<? extends AppCompatActivity> activity;
+    public boolean edited = false;
 
-    public ReviewItemModel(String title, String picUrl, String firstName, String reviewContent, String dateCreated, String dateModified, Class<? extends AppCompatActivity> activity) {
+    public ReviewItemModel(String title, String picUrl, String firstName, String reviewContent, String dateCreated, String dateModified) {
         this.title = title;
         this.picUrl = picUrl;
         this.firstName = firstName;
         this.reviewContent = reviewContent;
         this.dateCreated = dateCreated;
         this.dateModified = dateModified;
-        this.activity = activity;
+
+        if (dateCreated != dateModified){
+            edited = true;
+        }
     }
 
 }

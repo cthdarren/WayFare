@@ -1,6 +1,12 @@
 package com.example.wayfare.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +21,11 @@ import com.example.wayfare.Models.SettingItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder>{
 
@@ -33,16 +43,38 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_list_item, parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.preview_review_item, parent,false);
         ViewHolder holder = new ViewHolder(view, recyclerViewInterface);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.settingName.setText(reviewItemModels.get(position).firstName);
-//        holder.settingIcon.setImageDrawable(reviewItemModels.get(position).reviewContent);
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.reviewTitle.setText(reviewItemModels.get(position).title);
+        holder.reviewContent.setText(reviewItemModels.get(position).reviewContent);
+        holder.reviewUsername.setText(reviewItemModels.get(position).firstName);
+        holder.reviewDate.setText(reviewItemModels.get(position).dateModified);
 
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Looper uiLooper = Looper.getMainLooper();
+        final Handler handler = new Handler(uiLooper);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(reviewItemModels.get(position).picUrl);
+                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            holder.review_user_pic.setImageBitmap(image);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -52,13 +84,20 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView settingName;
-        private ImageView settingIcon;
+        private TextView reviewTitle;
+        private TextView reviewContent;
+        private TextView reviewUsername;
+        private TextView reviewDate;
+        private ImageView review_user_pic;
+
 
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
-            settingName = itemView.findViewById(R.id.settings_item_name);
-            settingIcon = itemView.findViewById(R.id.settings_item_icon);
+            reviewTitle = itemView.findViewById(R.id.review_title);
+            reviewContent = itemView.findViewById(R.id.review_content);
+            reviewUsername = itemView.findViewById(R.id.review_username);
+            reviewDate = itemView.findViewById(R.id.review_date);
+            review_user_pic = itemView.findViewById(R.id.review_user_pic);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

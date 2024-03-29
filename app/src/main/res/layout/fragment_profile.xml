@@ -4,12 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:paddingHorizontal="@dimen/outer_padding"
     tools:context=".Fragment.ProfileFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:orientation="vertical">
 
         <ImageView
@@ -38,7 +42,6 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
-                    app:cardBackgroundColor="@color/md_theme_onSurface"
                     app:cardCornerRadius="66dp"
                     app:cardElevation="0dp">
 
@@ -164,12 +167,26 @@
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="wrap_content"-->
 <!--            android:textSize="@dimen/font_sm"/>-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
+            android:text="Reviews"
+            android:textSize="@dimen/font_sm"
+            android:textStyle="bold"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/review_carousel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginStart="-30dp"
+            android:clipToPadding = "false"
+            android:paddingStart="30dp"
+            android:layout_marginEnd="-30dp"
+            android:layout_height="200dp"
             android:orientation="horizontal"
-            app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"/>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/preview_review_item" />
 
 
     </LinearLayout>

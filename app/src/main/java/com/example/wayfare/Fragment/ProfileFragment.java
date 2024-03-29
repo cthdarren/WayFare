@@ -1,10 +1,12 @@
 package com.example.wayfare.Fragment;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +19,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
+import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
+import com.example.wayfare.Models.ReviewItemModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
+import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.carousel.CarouselLayoutManager;
+import com.google.android.material.carousel.CarouselSnapHelper;
+import com.google.android.material.carousel.CarouselStrategy;
+import com.google.android.material.carousel.UncontainedCarouselStrategy;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -35,10 +48,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
     UserViewModel userViewModel;
     ProgressBar progBar;
@@ -48,8 +63,21 @@ public class ProfileFragment extends Fragment {
     TextView ratings;
     TextView years_on_wayfare;
     TextView about_me;
+    RecyclerView reviewRecycler;
+    List<ReviewItemModel> reviewItemModels;
     public ProfileFragment(){}
 
+    public void setupReviewModels(){
+        reviewItemModels = Arrays.asList(
+                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "dafuqfuq", "1st November 2024"),
+                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "dafuqqq"),
+                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "1st November 2024"),
+                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "1st November 2024"),
+                new ReviewItemModel("Cool tour", "", "Jason", "Cool tour, managed to see many sights", "1st November 2024", "1st November 2024")
+        );
+    }
+
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -63,7 +91,15 @@ public class ProfileFragment extends Fragment {
         ratings = view.findViewById(R.id.rating);
         years_on_wayfare = view.findViewById(R.id.years_on_wayfare);
         about_me = view.findViewById(R.id.about_me);
+        reviewRecycler = view.findViewById(R.id.review_carousel);
 
+        setupReviewModels();
+
+
+        reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels, this));
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(reviewRecycler);
         return view;
     }
 
@@ -128,5 +164,10 @@ public class ProfileFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         navBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        // TODO if you decide to make it onclickable it's here otherwise can take out
     }
 }
