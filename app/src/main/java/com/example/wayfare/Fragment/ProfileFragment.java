@@ -72,9 +72,11 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView reviewCount;
     TextView years_on_wayfare;
     TextView about_me;
+    TextView review_title;
     RecyclerView reviewRecycler;
     Button show_all_reviews_button;
     LinearLayout review_segment;
+    LinearLayout listings_wrapper;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
 
     public ProfileFragment() {
@@ -101,11 +103,13 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         profile_pic = view.findViewById(R.id.profile_picture);
         full_name = view.findViewById(R.id.full_name);
         review_segment = view.findViewById(R.id.review_segment);
+        review_title = view.findViewById(R.id.review_title);
         reviewCount = view.findViewById(R.id.num_reviews);
         ratings = view.findViewById(R.id.rating);
         years_on_wayfare = view.findViewById(R.id.years_on_wayfare);
         about_me = view.findViewById(R.id.about_me);
         show_all_reviews_button = view.findViewById(R.id.show_all_review_button);
+        listings_wrapper = view.findViewById(R.id.listings_wrapper);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +185,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
                             full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
                             reviewCount.setText(profileInfo.getReviewCount().toString());
+                            review_title.setText(profileInfo.getFirstName() + "'s reviews");
                             ratings.setText(profileInfo.getAvgScore().toString());
                             years_on_wayfare.setText(String.valueOf(LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear()));
                             about_me.setText(profileInfo.getAboutMe());
