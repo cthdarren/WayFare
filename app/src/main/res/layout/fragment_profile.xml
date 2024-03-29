@@ -94,7 +94,7 @@
                             android:paddingBottom="10dp"
                             android:textStyle="bold"
                             android:paddingTop="5dp"
-                            android:text="5"
+                            android:text="-"
                             android:textSize="@dimen/font_lg" />
                     </LinearLayout>
                     <LinearLayout
@@ -131,7 +131,7 @@
                             android:paddingBottom="10dp"
                             android:textStyle="bold"
                             android:paddingTop="5dp"
-                            android:text="4.76★"
+                            android:text="-"
                             android:textSize="@dimen/font_lg" />
                     </LinearLayout>
 
@@ -168,7 +168,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:paddingTop="5dp"
-                            android:text="4"
+                            android:text="-"
                             android:paddingBottom="10dp"
                             android:textStyle="bold"
                             android:textSize="@dimen/font_lg" />
@@ -217,7 +217,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_sm"
-            android:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis p"/>
+            />
 
         <LinearLayout
             android:id="@+id/review_segment"
