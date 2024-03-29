@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +37,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tour_listing_full, container, false);
         recyclerView = view.findViewById(R.id.recyclerView2);
+        //ListView list = view.findViewById(R.id.list);
 
         Bundle args = getArguments();
         if (args != null) {

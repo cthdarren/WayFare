@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_light_background"
-    tools:context=".Fragment.TourListingFull">
+    tools:context=".Fragment.TourListingFull"
+    android:layout_marginBottom="126dp">
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/myRecyclerView2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_marginTop="135dp"-->
-<!--        android:layout_marginBottom="80dp"-->
-<!--        android:contentDescription="Recycler View for Listing Cards">-->
-
-<!--</androidx.recyclerview.widget.RecyclerView>-->
-
-
-<ScrollView
-    android:transitionName="fullPageTransition"
+    <androidx.core.widget.NestedScrollView
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -39,11 +28,12 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/materialTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="299dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat"
+                android:inputType="textMultiLine"
                 android:text="Chinatown Tour"
                 android:textSize="24dp"
                 android:textStyle="bold"
@@ -151,16 +141,27 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView2"
-                android:layout_width="392dp"
-                android:layout_height="391dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+<!--            android:isScrollContainer="false"-->
 
-</FrameLayout>
+            <!--            <ListView-->
+<!--                android:id="@+id/list"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/date" />-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
