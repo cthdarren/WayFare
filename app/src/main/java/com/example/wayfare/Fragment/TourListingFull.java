@@ -64,15 +64,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             String reviewCountFormat = "(" + args.getString("reviewCount") + ")" + " •";
             tvReviewCount.setText(reviewCountFormat);
 
-//            LinearLayout timingCardContainer = view.findViewById(R.id.timingCardContainer);
             timingArray = args.getStringArray("timingArray");
-//            for (int i = 0; i < timingArray.length; i++) {
-//                // Inflate the CardView layout
-//                View cardView = inflater.inflate(R.layout.fragment_tour_listing_full, container, false);
-//                MaterialTextView tvCardTiming = view.findViewById(R.id.timingCardText);
-//                tvCardTiming.setText(timingArray[i]);
-//                timingCardContainer.addView(cardView);
-//            }
 
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

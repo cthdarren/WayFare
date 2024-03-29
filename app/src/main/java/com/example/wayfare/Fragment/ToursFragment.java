@@ -155,8 +155,19 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         List<TourListModel.TimeRange> timeRangeList = tourListModels.get(position).getTimeRangeList();
         String[] timingArray = new String[timeRangeList.size()];
         for (int i = 0; i < timeRangeList.size(); i++){
-            String startTime = String.valueOf(timeRangeList.get(i).getStartTime());
-            String endTime = String.valueOf(timeRangeList.get(i).getEndTime());
+            String startTime;
+            String endTime;
+            int startTimeInt = timeRangeList.get(i).getStartTime();
+            int endTimeInt = timeRangeList.get(i).getEndTime();
+            if (startTimeInt > 12) {
+                startTimeInt = startTimeInt - 12;
+                endTimeInt = endTimeInt - 12;
+                startTime = startTimeInt + "PM";
+                endTime = endTimeInt + "PM";
+            } else {
+                startTime = startTimeInt + "AM";
+                endTime = endTimeInt + "AM";
+            }
             timingArray[i] = startTime + " - " + endTime;
         }
         data.putStringArray("timingArray", timingArray);
