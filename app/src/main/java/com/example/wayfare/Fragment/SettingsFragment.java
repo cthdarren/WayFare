@@ -68,6 +68,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     private UserViewModel userViewModel;
     private ProgressBar progBar;
     private LinearLayout route_to_profile;
+    private LinearLayout become_wayfarer;
     private List<SettingItemModel> settingItemModels = new ArrayList<>();
 
     private void setupSettingItems(Context context) {
@@ -94,9 +95,17 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         logoutBtn = view.findViewById(R.id.logoutBtn);
         route_to_profile = view.findViewById(R.id.route_to_profile);
+        become_wayfarer = view.findViewById(R.id.become_wayfarer);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
+
+        become_wayfarer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new BecomeWayfarerFragment());
+            }
+        });
         route_to_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

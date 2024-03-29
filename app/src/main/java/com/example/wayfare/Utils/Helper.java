@@ -24,6 +24,15 @@ public class Helper {
                 .commit();
     }
 
+    public static void goToFullScreenFragmentFromBottom(FragmentManager fm, Fragment fragment){
+        fm.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_bottom, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_bottom)
+                .replace(R.id.container, fragment)
+                .addToBackStack(null)
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
     public enum RequestType{
         REQ_GET,
         REQ_POST
