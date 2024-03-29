@@ -181,6 +181,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
                             full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
                             reviewCount.setText(profileInfo.getReviewCount().toString());
+                            ratings.setText(profileInfo.getAvgScore().toString());
                             years_on_wayfare.setText(String.valueOf(LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear()));
                             about_me.setText(profileInfo.getAboutMe());
                             show_all_reviews_button.setText(String.format("Show all %d reviews", profileInfo.getReviewCount()));
