@@ -54,8 +54,6 @@ public class SignInFragment extends Fragment{
     BottomNavigationView navBar;
     ImageView login_exit;
 
-    TextView errorTextBox;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +63,6 @@ public class SignInFragment extends Fragment{
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
         sign_in_button = view.findViewById(R.id.sign_in_button);
-        errorTextBox = view.findViewById(R.id.errorTextBox);
         username = view.findViewById(R.id.usernamelog);
         password = view.findViewById(R.id.passwordlog);
         login_exit = view.findViewById(R.id.login_exit);
