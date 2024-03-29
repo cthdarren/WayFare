@@ -1,7 +1,10 @@
 package com.example.wayfare.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,17 +15,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.wayfare.Activity.ConfirmBooking;
 import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.timingOnItemClickedInterface;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
@@ -31,6 +38,8 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     private RecyclerView recyclerView;
     public TourListingFull(){};
     String[] timingArray;
+    MaterialButton button;
+    timingAdapter newTimingAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,6 +57,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             ImageView tvImage = view.findViewById(R.id.imageView2);
             MaterialTextView tvDescription = view.findViewById(R.id.description);
             MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
+            button = view.findViewById(R.id.bookButton);
 
             tvTitle.setText(args.getString("title"));
             tvRating.setText(args.getString("rating"));
@@ -68,13 +78,16 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
 
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(new timingAdapter(getContext(), timingArray, this));
+        newTimingAdapter = new timingAdapter(getContext(), timingArray, this);
+        recyclerView.setAdapter(newTimingAdapter);
         //recyclerView.suppressLayout(true);
         return view;
     }
 
     @Override
     public void onItemClick(int position) {
-        Log.d("Do nothing", "Do nothing");
+        Log.d("Do nothing", String.valueOf(position));
+        Intent intent = new Intent(getActivity(), ConfirmBooking.class);
+        startActivity(intent);
     }
 }

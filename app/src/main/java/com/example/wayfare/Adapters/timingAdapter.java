@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.R;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
+import com.google.android.material.button.MaterialButton;
 
 public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHolder>{
     Context context;
@@ -35,14 +36,7 @@ public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull timingAdapter.MyViewHolder holder, int position) {
-        tourTimings.get(position)
         holder.tvTiming.setText(tourTimings[position]);
-        holder.tvDecrement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.tvCounter.setText();
-            }
-        });
     }
 
     @Override
@@ -53,19 +47,14 @@ public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHold
         // grabbing views from layout file
         // almost like onCreate method
         TextView tvTiming;
-        AppCompatImageButton tvDecrement;
-        AppCompatImageButton tvIncrement;
-        TextView tvCounter;
+        MaterialButton tvBookButton;
         public MyViewHolder(@NonNull View itemView, tourListing_RecyclerViewInterface tourListing_recyclerViewInterface) {
             super(itemView);
             tvTiming = itemView.findViewById(R.id.timingCardText);
-            tvDecrement = itemView.findViewById(R.id.decrement);
-            tvIncrement = itemView.findViewById(R.id.increment);
-            tvCounter = itemView.findViewById(R.id.counter);
+            tvBookButton = itemView.findViewById(R.id.bookButton);
 
-
-            // for changing to fragment
-            itemView.setOnClickListener(new View.OnClickListener() {
+            // for changing to activity
+            tvBookButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (tourListing_recyclerViewInterface != null) {
