@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:paddingBottom="40dp"
         android:orientation="vertical">
 
         <ImageView
@@ -219,6 +220,12 @@
             android:textSize="@dimen/font_sm"
             />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/material_dynamic_neutral80" />
+
         <LinearLayout
             android:id="@+id/review_segment"
             android:layout_width="match_parent"
@@ -253,9 +260,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="50dp"
             android:textSize="@dimen/font_sm"
             android:text="Show all reviews"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/material_dynamic_neutral80" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -286,9 +299,43 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/preview_listing_item" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/material_dynamic_neutral80" />
+
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/confirmed_info_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="'s confirmed information"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_md"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingVertical="10dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/verification_truege"
+                android:layout_width="30dp"
+                android:src="@drawable/cross"
+                android:layout_height="30dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:text="Email address"
+            android:textSize="@dimen/font_sm"/>
+        </LinearLayout>
     </LinearLayout>
 
 

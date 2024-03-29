@@ -15,7 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.wayfare.Models.ReviewItemModel;
+import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
@@ -29,12 +29,12 @@ import java.util.concurrent.Executors;
 public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAdapter.ViewHolder> {
 
 
-    private final List<TourListModel> listingItemModels;
+    private final List<ListingItemModel> listingItemModels;
     private final Context context;
 
     private RecyclerViewInterface recyclerViewInterface;
 
-    public ProfileListingAdapter(Context context, List<TourListModel> listingItemModels, RecyclerViewInterface recyclerViewInterface) {
+    public ProfileListingAdapter(Context context, List<ListingItemModel> listingItemModels, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.listingItemModels = listingItemModels;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -50,8 +50,9 @@ public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.listingTitle.setText(listingItemModels.get(position).getTitle());
-        holder.listingRating.setText(String.valueOf(listingItemModels.get(position).getRating()) + "★" + "(" + listingItemModels.get(position).getReviewCount() + ")");
+        holder.listingTitle.setText(listingItemModels.get(position).title);
+        holder.listingRegion.setText(listingItemModels.get(position).region);
+        holder.listingRating.setText(String.valueOf(listingItemModels.get(position).rating) + "★" + " (" + listingItemModels.get(position).ratingCount + ")");
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
@@ -60,7 +61,7 @@ public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAd
             @Override
             public void run() {
                 try {
-                    String picUrl = listingItemModels.get(position).getThumbnailUrls()[0];
+                    String picUrl = listingItemModels.get(position).thumbnailUrl;
                     URL url = new URL(picUrl);
                     Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                     handler.post(new Runnable() {
@@ -87,6 +88,7 @@ public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAd
         private ImageView listingThumbnail;
         private TextView listingTitle;
         private TextView listingRating;
+        private TextView listingRegion;
 
 
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
@@ -94,6 +96,7 @@ public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAd
             listingRating = itemView.findViewById(R.id.listing_rating);
             listingThumbnail = itemView.findViewById(R.id.listing_thumbnail);
             listingTitle = itemView.findViewById(R.id.listing_title);
+            listingRegion = itemView.findViewById(R.id.listing_region);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

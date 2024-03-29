@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +22,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.example.wayfare.Adapters.ProfileListingAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.Models.ProfileModel;
@@ -42,21 +41,12 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.carousel.CarouselLayoutManager;
-import com.google.android.material.carousel.CarouselSnapHelper;
-import com.google.android.material.carousel.CarouselStrategy;
-import com.google.android.material.carousel.UncontainedCarouselStrategy;
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -76,12 +66,16 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView about_me;
     TextView review_title;
     RecyclerView reviewRecycler;
+    RecyclerView listingRecycler;
     Button show_all_reviews_button;
     LinearLayout review_segment;
     LinearLayout listings_wrapper;
     TextView listings_wrapper_header;
+    TextView confirmed_info_header;
+    ImageView verification_truege;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
     List<ListingItemModel> listingItemModels = new ArrayList<>();
+
 
     public ProfileFragment() {
     }
@@ -94,7 +88,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     }
     public void setUpListingModels(List<TourListModel> listingList) {
         for (TourListModel tour : listingList) {
-            ListingItemModel toAdd = new ListingItemModel(tour.getThumbnailUrls()[1], tour.getTitle(), tour.getRating(), tour.getReviewCount());
+            ListingItemModel toAdd = new ListingItemModel(tour.getThumbnailUrls()[1], tour.getTitle(), tour.getRating(), tour.getReviewCount(), tour.getRegion());
             listingItemModels.add(toAdd);
         }
     }
@@ -120,6 +114,9 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         show_all_reviews_button = view.findViewById(R.id.show_all_review_button);
         listings_wrapper = view.findViewById(R.id.listings_wrapper);
         listings_wrapper_header = view.findViewById(R.id.listing_wrapper_header);
+        confirmed_info_header = view.findViewById(R.id.confirmed_info_header);
+        verification_truege = view.findViewById(R.id.verification_truege);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,6 +133,16 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         UserModel userData = userViewModel.getUserProfileData();
 
+        if (userData.isVerified())
+            verification_truege.setImageResource(R.drawable.done);
+
+        if(Objects.equals(userData.getRole(), "ROLE_USER"))
+            listings_wrapper.setVisibility(GONE);
+
+        listingRecycler = view.findViewById(R.id.listing_carousel);
+        listingRecycler.setAdapter(new ProfileListingAdapter(getContext(), listingItemModels, this));
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(reviewRecycler);
         new AuthService(getContext()).getResponse("/api/v1/profile/" + userViewModel.getUserProfileData().getUsername(), Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
@@ -196,6 +203,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                             reviewCount.setText(profileInfo.getReviewCount().toString());
                             review_title.setText(profileInfo.getFirstName() + "'s reviews");
                             listings_wrapper_header.setText(profileInfo.getFirstName() + "'s listings");
+                            confirmed_info_header.setText(profileInfo.getFirstName() + "'s confirmed information");
                             int numratings = profileInfo.getReviewCount();
                             if (numratings == 0){
                                 ratings.setText("No ratings yet");
@@ -218,16 +226,20 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                 review_segment.setVisibility(GONE);
                                 ratings.setText("-");
                             }
+                            else{
+                                ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
+                            }
 
                             setupReviewModels(profileInfo.getReviews());
                             setUpListingModels(profileInfo.getTours());
 
                             reviewRecycler = view.findViewById(R.id.review_carousel);
-
                             reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
 
                             SnapHelper snapHelper = new LinearSnapHelper();
                             snapHelper.attachToRecyclerView(reviewRecycler);
+
+                            listingRecycler.getAdapter().notifyDataSetChanged();
                         }
                     });
                 }

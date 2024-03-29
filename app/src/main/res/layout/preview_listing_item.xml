@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="300dp"
     android:layout_height="300dp"
     android:clickable="false"
     android:focusable="false"
     app:rippleColor="@color/transparent"
-    android:layout_marginEnd="10dp">
+    android:layout_marginEnd="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="10dp"
+        android:paddingRight="20dp"
         android:paddingTop="10dp">
 
         <androidx.cardview.widget.CardView
@@ -33,9 +33,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_weight="1">
+            android:paddingTop="5dp">
         <TextView
             android:id="@+id/listing_title"
             android:layout_width="0dp"
@@ -58,5 +58,11 @@
 
 
         </LinearLayout>
+        <TextView
+            android:id="@+id/listing_region"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_xs"
+            android:text="Somewhere..."/>
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</LinearLayout>
