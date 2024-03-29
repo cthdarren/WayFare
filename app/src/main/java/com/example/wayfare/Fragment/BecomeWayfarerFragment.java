@@ -10,17 +10,22 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class BecomeWayfarerFragment extends Fragment {
 
@@ -62,7 +67,35 @@ public class BecomeWayfarerFragment extends Fragment {
         submitpassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new AuthService(getContext()).getResponse("/wayfarersignup", Helper.RequestType.REQ_POST, );
+                String json = String.format("{\"password\": \"%s\"}", passwordField.getText());
+                RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                new AuthService(getContext()).getResponse("/wayfarersignup", Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(),message, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(ResponseModel json) {
+                        if (json.success){
+                            // ROUTE TO CREATE LISTING SCREEN
+                        }
+                        else{
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(), json.data.getAsString(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                    }
+                });
             }
         });
     }

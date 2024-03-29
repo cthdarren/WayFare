@@ -148,18 +148,29 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                         public void run() {
                             try {
                                 Bitmap image;
-                                URL url = new URL(profileInfo.getPictureUrl());
-                                image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                if (profileInfo.getPictureUrl() == null | Objects.equals(profileInfo.getPictureUrl(), ""))
+                                    image = null;
+                                else {
+                                    URL url = new URL(profileInfo.getPictureUrl());
+                                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                }
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        profile_pic.setImageBitmap(image);
+                                        if (image != null)
+                                            profile_pic.setImageBitmap(image);
                                         progBar.setVisibility(GONE);
                                     }
                                 });
                             } catch (IOException e) {
                                 e.printStackTrace();
-                                progBar.setVisibility(GONE);
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), "Unexpected Error", Toast.LENGTH_SHORT).show();
+                                        progBar.setVisibility(GONE);
+                                    }
+                                });
                             }
                         }
                     });
