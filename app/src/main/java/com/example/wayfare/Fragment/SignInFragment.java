@@ -117,7 +117,6 @@ public class SignInFragment extends Fragment{
                 String serverResponse = response.body().string();
                 // debugging
                 System.out.println(serverResponse);
-                Log.i("Tag", "it worked>");
                 // sharedpref store
                 try {
                     Gson gson = new Gson();
@@ -129,17 +128,17 @@ public class SignInFragment extends Fragment{
                         editor.putString("user_info", res.data.getAsString())
                                 .apply();
 
-                        makeToast("info saved!");
+                        makeToast("Welcome back");
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         getActivity().finish();
                     } else {
-                        errorTextBox.setText(res.data.getAsString());
+                        makeToast(res.data.getAsString());
                     }
 
                 } catch (Exception e) {
-                    makeToast("error saving info");
+                    makeToast("Unexpected Error");
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 }

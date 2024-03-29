@@ -137,6 +137,9 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         String picUrl = userData.getPictureUrl();
         String userFirstName = userData.getFirstName();
 
+        if (Objects.equals(userData.getRole(), "ROLE_WAYFARER")){
+
+        }
         user_greeting.setText("Hi, " + userFirstName);
 
         // Setting up of recycler view and items

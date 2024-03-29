@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/cross"
         android:scaleType="fitStart"
-        app:tint="@color/md_theme_onSurface" />
+         />
 
 
     <TextView
@@ -25,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:textAlignment="center"
         android:text="Sign in to WayFare!"
         android:textSize="@dimen/font_2xl"
         app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="23dp"
-        android:hint="username"
+        android:hint="Username"
         app:layout_constraintBottom_toTopOf="@+id/passwordlog"
         android:layout_marginTop="55dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
-        android:hint="password"
+        android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,15 +69,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordlog"
         tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:id="@+id/errorTextBox"
-        android:textColor="@color/md_theme_error"
-        android:textSize="@dimen/font_sm"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_height="wrap_content"/>
-
 
 </LinearLayout>
