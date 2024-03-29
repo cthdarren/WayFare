@@ -61,19 +61,19 @@ public class ExploreFragment extends Fragment {
 
         List<ShortsObject> shortsObjectList = new ArrayList<>();
         ShortsObject shortsObject1 = new ShortsObject();
-        shortsObject1.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video1);
+        shortsObject1.setUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
         shortsObject1.setTitle("Singapore!");
         shortsObject1.setDescription("Singapore Tours #sg #local");
         shortsObjectList.add(shortsObject1);
 
         ShortsObject shortsObject2 = new ShortsObject();
-        shortsObject2.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video2);
+        shortsObject2.setUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
         shortsObject2.setTitle("Overrated Cities?!");
         shortsObject2.setDescription("#dontgo #cities");
         shortsObjectList.add(shortsObject2);
 
         ShortsObject shortsObject3 = new ShortsObject();
-        shortsObject3.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video3);
+        shortsObject3.setUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
         shortsObject3.setTitle("Lorem");
         shortsObject3.setDescription("GreyNibba");
         shortsObjectList.add(shortsObject3);
@@ -83,17 +83,17 @@ public class ExploreFragment extends Fragment {
         shortsObject4.setDescription("#must go");
         shortsObjectList.add(shortsObject4);
         ShortsObject shortsObject5 = new ShortsObject();
-        shortsObject5.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video2);
+        shortsObject5.setUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
         shortsObject5.setTitle("Lorem");
         shortsObject5.setDescription("GeyNibba");
         shortsObjectList.add(shortsObject5);
         ShortsObject shortsObject6 = new ShortsObject();
-        shortsObject6.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video3);
+        shortsObject6.setUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
         shortsObject6.setTitle("yyyy");
         shortsObject6.setDescription("yyyy");
         shortsObjectList.add(shortsObject6);
         ShortsObject shortsObject7 = new ShortsObject();
-        shortsObject7.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video1);
+        shortsObject7.setUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
         shortsObject7.setTitle("xxxx");
         shortsObject7.setDescription("xxxx");
         shortsObjectList.add(shortsObject7);
@@ -134,19 +134,19 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        bottomNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Remove the listener to prevent multiple calls
-                bottomNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                // Get the height of the BottomNavigationView
-                int bottomNavHeight = bottomNavigationView.getHeight();
-                Log.d("BottomNavHeight", "Height: " + bottomNavHeight);
-                // Set bottom padding for the ViewPager2
-                shortsViewPager.setPadding(0, 0, 0, bottomNavHeight);
-            }
-        });
+//        bottomNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                // Remove the listener to prevent multiple calls
+//                bottomNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//
+//                // Get the height of the BottomNavigationView
+//                int bottomNavHeight = bottomNavigationView.getHeight();
+//                Log.d("BottomNavHeight", "Height: " + bottomNavHeight);
+//                // Set bottom padding for the ViewPager2
+//                shortsViewPager.setPadding(0, 0, 0, bottomNavHeight);
+//            }
+//        });
 
         shortsViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
