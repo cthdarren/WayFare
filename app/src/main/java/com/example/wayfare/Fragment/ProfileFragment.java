@@ -1,5 +1,7 @@
 package com.example.wayfare.Fragment;
 
+import static android.view.View.GONE;
+
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,7 +12,9 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,14 +63,18 @@ import java.util.concurrent.Executors;
 public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
     UserViewModel userViewModel;
+    ImageView backButton;
     ProgressBar progBar;
     BottomNavigationView navBar;
     ImageView profile_pic;
     TextView full_name;
     TextView ratings;
+    TextView reviewCount;
     TextView years_on_wayfare;
     TextView about_me;
     RecyclerView reviewRecycler;
+    Button show_all_reviews_button;
+    LinearLayout review_segment;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
 
     public ProfileFragment() {
@@ -85,14 +93,26 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        backButton = view.findViewById(R.id.profile_back);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         profile_pic = view.findViewById(R.id.profile_picture);
         full_name = view.findViewById(R.id.full_name);
+        review_segment = view.findViewById(R.id.review_segment);
+        reviewCount = view.findViewById(R.id.num_reviews);
         ratings = view.findViewById(R.id.rating);
         years_on_wayfare = view.findViewById(R.id.years_on_wayfare);
         about_me = view.findViewById(R.id.about_me);
+        show_all_reviews_button = view.findViewById(R.id.show_all_review_button);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
 
         return view;
     }
@@ -110,7 +130,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                     @Override
                     public void run() {
                         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                        progBar.setVisibility(View.GONE);
+                        progBar.setVisibility(GONE);
                     }
                 });
             }
@@ -134,36 +154,40 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                     @Override
                                     public void run() {
                                         profile_pic.setImageBitmap(image);
+                                        progBar.setVisibility(GONE);
                                     }
                                 });
                             } catch (IOException e) {
                                 e.printStackTrace();
+                                progBar.setVisibility(GONE);
                             }
                         }
                     });
 
-                    getActivity().
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
-                                    ratings.setText(profileInfo.getAvgScore().toString() + "★");
+                            full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
+                            reviewCount.setText(profileInfo.getReviewCount().toString());
+                            years_on_wayfare.setText(String.valueOf(LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear()));
+                            about_me.setText(profileInfo.getAboutMe());
+                            show_all_reviews_button.setText(String.format("Show all %d reviews", profileInfo.getReviewCount()));
+                            if (profileInfo.getReviewCount() == 0) {
+                                review_segment.setVisibility(GONE);
+                                ratings.setText("-");
+                            }
 
-                                    years_on_wayfare.setText(String.valueOf(LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear()));
-                                    about_me.setText(profileInfo.getAboutMe());
-                                    setupReviewModels(profileInfo.getReviews());
+                            setupReviewModels(profileInfo.getReviews());
 
-                                    reviewRecycler = view.findViewById(R.id.review_carousel);
+                            reviewRecycler = view.findViewById(R.id.review_carousel);
 
-                                    reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
+                            reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
 
-                                    SnapHelper snapHelper = new LinearSnapHelper();
-                                    snapHelper.attachToRecyclerView(reviewRecycler);
-
-                                    progBar.setVisibility(View.GONE);
-                                }
-                            });
+                            SnapHelper snapHelper = new LinearSnapHelper();
+                            snapHelper.attachToRecyclerView(reviewRecycler);
+                        }
+                    });
                 }
             }
         });

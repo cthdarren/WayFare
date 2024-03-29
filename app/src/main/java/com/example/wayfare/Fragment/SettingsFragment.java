@@ -101,7 +101,8 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
             @Override
             public void onClick(View v) {
                 Helper.goToFragment(getParentFragmentManager(), new ProfileFragment());
-                navBar.setVisibility(View.INVISIBLE);
+                progBar.setVisibility(View.VISIBLE);
+                navBar.setVisibility(View.GONE);
             }
         });
 

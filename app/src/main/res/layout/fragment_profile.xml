@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:paddingHorizontal="@dimen/outer_padding"
@@ -17,7 +18,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/accessibility_back"
+            android:id="@+id/profile_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingTop="20dp"
@@ -35,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="30dp"
+                android:paddingBottom="10dp"
                 android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
@@ -216,18 +218,14 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_sm"
             android:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis p"/>
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:paddingTop="15dp"-->
-<!--            android:paddingBottom="5dp"-->
-<!--            android:textSize="@dimen/font_sm"-->
-<!--            android:textStyle="bold"-->
-<!--            android:text="Languages Spoken"/>-->
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textSize="@dimen/font_sm"/>-->
+
+        <LinearLayout
+            android:id="@+id/review_segment"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_height="wrap_content">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -244,7 +242,7 @@
             android:clipToPadding = "false"
             android:paddingStart="30dp"
             android:layout_marginEnd="-30dp"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/preview_review_item" />
@@ -257,7 +255,7 @@
             android:layout_marginBottom="50dp"
             android:textSize="@dimen/font_sm"
             android:text="Show all reviews"/>
-
+        </LinearLayout>
 
     </LinearLayout>
 
