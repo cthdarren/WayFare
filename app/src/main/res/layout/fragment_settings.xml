@@ -134,14 +134,14 @@
                     android:paddingTop="18dp">
 
                     <ImageView
-                        android:id="@+id/settings_item_icon"
+                        android:id="@+id/become_wayfarer_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:src="@drawable/no_avatar"
                         app:tint="@color/md_theme_onSurface" />
 
                     <TextView
-                        android:id="@+id/settings_item_name"
+                        android:id="@+id/become_wayfarer_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="26dp"

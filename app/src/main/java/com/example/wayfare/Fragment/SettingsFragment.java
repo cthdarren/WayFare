@@ -70,6 +70,8 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     private LinearLayout route_to_profile;
     private LinearLayout become_wayfarer;
     private List<SettingItemModel> settingItemModels = new ArrayList<>();
+    private TextView become_wayfarer_text;
+    private ImageView become_wayfarer_icon;
 
     private void setupSettingItems(Context context) {
 
@@ -96,16 +98,13 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         logoutBtn = view.findViewById(R.id.logoutBtn);
         route_to_profile = view.findViewById(R.id.route_to_profile);
         become_wayfarer = view.findViewById(R.id.become_wayfarer);
+        become_wayfarer_text = view.findViewById(R.id.become_wayfarer_text);
+        become_wayfarer_icon = view.findViewById(R.id.become_wayfarer_icon);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
 
-        become_wayfarer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new BecomeWayfarerFragment());
-            }
-        });
+
         route_to_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,7 +137,23 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         String userFirstName = userData.getFirstName();
 
         if (Objects.equals(userData.getRole(), "ROLE_WAYFARER")){
-
+            become_wayfarer_text.setText("Switch to Hosting");
+            become_wayfarer_icon.setImageResource(R.drawable.swap);
+            become_wayfarer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //TODO UPDATE THIS
+//                    Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new HostingDashBoardFragment());
+                }
+            });
+        }
+        else{
+            become_wayfarer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new BecomeWayfarerFragment());
+                }
+            });
         }
         user_greeting.setText("Hi, " + userFirstName);
 
