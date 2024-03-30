@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,13 +143,41 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         }
         public void appearImage(int src) {
             imvAppear.setImageResource(src);
+            // Get the parent view's dimensions
+            int parentWidth = ((ViewGroup)imvAppear.getParent()).getWidth();
+            int parentHeight = ((ViewGroup)imvAppear.getParent()).getHeight();
+
+            // Calculate the center coordinates
+            int centerX = (parentWidth - imvAppear.getWidth()) / 2;
+            int centerY = (parentHeight - imvAppear.getHeight()) / 2;
+
+            // Set the ImageView's position
+            imvAppear.setX(centerX);
+            imvAppear.setY(centerY);
             imvAppear.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(new Runnable() {
+            imvAppear.animate()
+                    .scaleX(1.5f)  // scale up to 150%
+                    .scaleY(1.5f)  // scale up to 150%
+                    .setDuration(200)  // duration of the animation in milliseconds
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Animation ended, scale back to original size
+                            imvAppear.animate()
+                                    .scaleX(1.0f)  // scale down to original size
+                                    .scaleY(1.0f)  // scale down to original size
+                                    .setDuration(200)  // duration of the animation in milliseconds
+                                    .start();
+                        }
+                    })
+                    .start();
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     imvAppear.setVisibility(View.GONE);
                 }
-            },  1000);
+            },  1500);
         }
         public void disappearImage(){
             imvAppear.setVisibility(View.GONE);
@@ -195,12 +224,11 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                             if (isPlaying) {
                                 pauseVideo();
                                 isPlaying = false;
-                                imvAppear.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-                                imvAppear.setVisibility(View.VISIBLE);
+                                appearImage(R.drawable.ic_baseline_play_arrow_24);
                             } else {
                                 playVideo();
                                 isPlaying = true;
-                                imvAppear.setVisibility(View.GONE);
+                                imvAppear.setVisibility(View.INVISIBLE);
                             }
                         }
 //                        else if (numberOfClick == 2) {

@@ -57,14 +57,15 @@
                             android:background="@color/transparent"
                             android:onClick="onClick"
                             android:src="@drawable/ic_baseline_flip_camera_android_24"></ImageButton>
-                        <TextView
+                        <ImageButton
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Flip"
-                            android:textColor="@color/white"
-                            android:textSize="10sp"
-                            android:id="@+id/tv_flip_camera"
-                            android:textAlignment="center"/>
+                            android:layout_height="match_parent"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="20dp"
+                            android:src="@drawable/round_flash_off_24"
+                            app:tint="#fff"
+                            android:id="@+id/toggleFlash"
+                            android:background="?attr/selectableItemBackgroundBorderless"/>
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout

@@ -26,9 +26,9 @@
                 android:id="@+id/imv_appear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/travel_icon"
-                android:layout_gravity="left"
-                android:visibility="gone" />
+                android:layout_gravity="top"
+                android:src="@drawable/common_google_signin_btn_icon_dark"
+                android:visibility="invisible" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

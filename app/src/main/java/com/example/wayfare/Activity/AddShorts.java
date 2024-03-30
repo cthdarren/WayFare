@@ -109,7 +109,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
     ImageView focusIcon;
     MediaRecorder mediaRecorder;
     Button btnStartRecord;
-    ImageButton btnFlip;
+    ImageButton btnFlip, toggleFlash;
     Button btnStopRecord;
     boolean isRecording = false;
     boolean isPaused = false;
@@ -150,6 +150,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         btnStopRecord = findViewById(R.id.button_stop);
         focusIcon = findViewById(R.id.img_focus);
         liveCountdown = findViewById(R.id.liveCountdown);
+        toggleFlash = findViewById(R.id.toggleFlash);
         btnUploadVideo.setOnClickListener(this);
         btnFlip.setOnClickListener(this);
 
@@ -324,6 +325,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                 // Perform flip animation
 
                 Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, videoCapture);
+                toggleFlash.setOnClickListener(view -> toggleFlash(camera));
                 previewView.setOnTouchListener((view, event) -> {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         float x = event.getX();
@@ -463,19 +465,19 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         btnContinue.setVisibility(View.GONE);
         btnExit.setVisibility(View.VISIBLE);
     }
-//    private void toggleFlash(Camera camera) {
-//        if (camera.getCameraInfo().hasFlashUnit()) {
-//            if (camera.getCameraInfo().getTorchState().getValue() == 0) {
-//                camera.getCameraControl().enableTorch(true);
-//                toggleFlash.setImageResource(R.drawable.round_flash_off_24);
-//            } else {
-//                camera.getCameraControl().enableTorch(false);
-//                toggleFlash.setImageResource(R.drawable.round_flash_on_24);
-//            }
-//        } else {
-//            runOnUiThread(() -> Toast.makeText(MainActivity.this, "Flash is not available currently", Toast.LENGTH_SHORT).show());
-//        }
-//    }
+    private void toggleFlash(Camera camera) {
+        if (camera.getCameraInfo().hasFlashUnit()) {
+            if (camera.getCameraInfo().getTorchState().getValue() == 0) {
+                camera.getCameraControl().enableTorch(true);
+                toggleFlash.setImageResource(R.drawable.round_flash_on_24);
+            } else {
+                camera.getCameraControl().enableTorch(false);
+                toggleFlash.setImageResource(R.drawable.round_flash_off_24);
+            }
+        } else {
+            runOnUiThread(() -> Toast.makeText(AddShorts.this, "Flash is not available currently", Toast.LENGTH_SHORT).show());
+        }
+    }
 private void updateUI(VideoRecordEvent event) {
     RecordingStats stats = event.getRecordingStats();
     //long size = stats.getNumBytesRecorded() / 1000;
