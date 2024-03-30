@@ -40,6 +40,14 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:text="Description"/>
+    <EditText
+        android:id="@+id/thumbNailUrls"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:text="Thumbnail URLs (Comma-Seperated)" />
 
     <EditText
         android:id="@+id/tourLocation"
@@ -88,6 +96,13 @@
         android:ems="10"
         android:inputType="number"
         android:text="Max Pax" />
+
+    <EditText
+        android:id="@+id/tourCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Category" />
 
     <Button
         android:id="@+id/newTourSubmitBtn"
