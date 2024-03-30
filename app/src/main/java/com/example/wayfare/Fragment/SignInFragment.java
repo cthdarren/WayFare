@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -45,7 +46,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class SignInFragment extends Fragment {
+public class SignInFragment extends Fragment{
 
     Button sign_in_button;
     EditText username, password;
@@ -53,10 +54,6 @@ public class SignInFragment extends Fragment {
     BottomNavigationView navBar;
     ImageView login_exit;
 
-    TextView errorTextBox;
-
-    public SignInFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,10 +63,10 @@ public class SignInFragment extends Fragment {
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
         sign_in_button = view.findViewById(R.id.sign_in_button);
-        errorTextBox = view.findViewById(R.id.errorTextBox);
         username = view.findViewById(R.id.usernamelog);
         password = view.findViewById(R.id.passwordlog);
         login_exit = view.findViewById(R.id.login_exit);
+        view.setClickable(true);
 
         login_exit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +90,6 @@ public class SignInFragment extends Fragment {
 
     public void login() throws IOException {
         final OkHttpClient client = new OkHttpClient();
-        makeToast("bruh");
         String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), password.getText());
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login")
@@ -117,7 +113,6 @@ public class SignInFragment extends Fragment {
                 String serverResponse = response.body().string();
                 // debugging
                 System.out.println(serverResponse);
-                Log.i("Tag", "it worked>");
                 // sharedpref store
                 try {
                     Gson gson = new Gson();
@@ -129,17 +124,17 @@ public class SignInFragment extends Fragment {
                         editor.putString("user_info", res.data.getAsString())
                                 .apply();
 
-                        makeToast("info saved!");
+                        makeToast("Welcome back");
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         getActivity().finish();
                     } else {
-                        errorTextBox.setText(res.data.getAsString());
+                        makeToast(res.data.getAsString());
                     }
 
                 } catch (Exception e) {
-                    makeToast("error saving info");
+                    makeToast("Unexpected Error");
                     Log.e("Error", e.getMessage());
                     e.printStackTrace();
                 }
@@ -158,8 +153,7 @@ public class SignInFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        navBar = getActivity().findViewById(R.id.bottomNavigationView);
-        navBar.setVisibility(View.VISIBLE);
         super.onDestroy();
+        navBar.setVisibility(View.VISIBLE);
     }
 }

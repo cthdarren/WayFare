@@ -74,9 +74,14 @@ public class AuthService {
                 String serverResponse = response.body().string();
 
                 System.out.println(serverResponse);
-                ResponseModel parsedResponse = new Gson().fromJson(serverResponse, ResponseModel.class);
-                Log.i("Tag", "it worked>");
-                responseListener.onResponse(parsedResponse);
+                if (response.networkResponse().code() == 200) {
+                    ResponseModel parsedResponse = new Gson().fromJson(serverResponse, ResponseModel.class);
+                    Log.i("Tag", "it worked>");
+                    responseListener.onResponse(parsedResponse);
+                }
+                else{
+                    responseListener.onError("Server Error");
+                }
                 // sharedpref store
             }
         });

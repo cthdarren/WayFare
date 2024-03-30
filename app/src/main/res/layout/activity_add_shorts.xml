@@ -178,6 +178,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:drawableTop="@drawable/ic_upload"
+                                    android:background="@color/transparent"
                                     android:textAllCaps="false"
                                     android:textSize="0dp" />
                             </LinearLayout>
