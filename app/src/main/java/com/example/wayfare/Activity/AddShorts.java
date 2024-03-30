@@ -1,14 +1,11 @@
 package com.example.wayfare.Activity;
 
 import android.Manifest;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.hardware.camera2.CameraManager;
-import android.os.Looper;
+
 import android.provider.MediaStore;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,25 +22,14 @@ import androidx.camera.core.Preview;
 import androidx.camera.video.*;
 import androidx.camera.core.FocusMeteringAction;
 import android.media.MediaRecorder;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.util.Size;
-import android.util.SparseIntArray;
 import android.view.MotionEvent;
-import android.view.Surface;
-import android.view.TextureView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,19 +39,14 @@ import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.example.wayfare.R;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
@@ -86,22 +67,15 @@ import java.util.concurrent.TimeUnit;
 
 public class AddShorts extends AppCompatActivity implements View.OnClickListener {
     private static final int STORAGE_PERMISSION_CODE = 1;
-    private static final int PICK_VIDEO_REQUEST_CODE = 1001;
-    private List<Video> videoList;
     private ActivityResultLauncher<Intent> videoPickerLauncher;
-    private ExecutorService backgroundExecutor = Executors.newSingleThreadExecutor();
-    private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
-    CameraManager manager;
     private final MutableLiveData<String> captureLiveStatus = new MutableLiveData<>();
     private static final String FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS";
-    private static final int DEFAULT_QUALITY_IDX = 0;
     private VideoCapture<Recorder> videoCapture;
     private Recording currentRecording;
     private VideoRecordEvent recordingState;
     private PreviewView previewView;
     private TextView liveCountdown;
     ExecutorService service;
-    ProcessCameraProvider cameraProvider;
     Button btnUploadVideo;
     Button btnExit;
     Button btnPause;
@@ -153,6 +127,9 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         toggleFlash = findViewById(R.id.toggleFlash);
         btnUploadVideo.setOnClickListener(this);
         btnFlip.setOnClickListener(this);
+        btnPause.setOnClickListener(this);
+        btnContinue.setOnClickListener(this);
+        btnStopRecord.setOnClickListener(this);
 
         // Get Camera TextureView
 
@@ -314,7 +291,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                 preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
                 Recorder recorder = new Recorder.Builder()
-                        .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
+                        .setQualitySelector(QualitySelector.from(Quality.HD))
                         .build();
                 videoCapture = VideoCapture.withOutput(recorder);
 
@@ -422,7 +399,6 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                         btnStopRecord.setVisibility(View.VISIBLE);
                         btnPause.setVisibility(View.VISIBLE);
                         btnFlip.setVisibility(View.GONE);
-                        findViewById(R.id.tv_flip_camera).setVisibility(View.GONE);
                         btnUploadVideo.setVisibility(View.GONE);
                         btnStartRecord.setVisibility(View.GONE);
                         btnExit.setVisibility(View.GONE);
@@ -457,7 +433,6 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         btnStartRecord.setVisibility(View.VISIBLE);
         isRecording = false;
         btnFlip.setVisibility(View.VISIBLE);
-        findViewById(R.id.tv_flip_camera).setVisibility(View.VISIBLE);
         btnPause.setVisibility(View.GONE);
         btnUploadVideo.setVisibility(View.VISIBLE);
         btnStopRecord.setVisibility(View.GONE);
