@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -31,8 +32,8 @@ import okhttp3.Response;
 
 public class SignUpFragment extends Fragment {
 
-    Button sign_up_button;
-    EditText username, firstName, lastName, email, phoneNumber, password, verifyPassword;
+    Button continue_button;
+    EditText username, email;
     BottomNavigationView navBar;
     ImageView register_exit;
 
@@ -50,34 +51,32 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
-        sign_up_button = view.findViewById(R.id.sign_up_button);
         username = view.findViewById(R.id.username);
-        firstName = view.findViewById(R.id.firstName);
-        lastName = view.findViewById(R.id.lastName);
-        email = view.findViewById(R.id.email);
-        phoneNumber = view.findViewById(R.id.phoneNumber);
-        password = view.findViewById(R.id.password);
-        verifyPassword = view.findViewById(R.id.verifyPassword);
+        email = view.findViewById(R.id.emailAddress );
         register_exit = view.findViewById(R.id.register_exit);
+        continue_button = view.findViewById(R.id.continue_button);
 
         register_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getParentFragmentManager().popBackStack();
             }
         });
-        sign_up_button.setOnClickListener(new View.OnClickListener() {
+        continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    register();
+                    checkUserNameAndEmail();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
         return view;
+    }
+
+    private void checkUserNameAndEmail() {
+        new AuthService(getContext()).
     }
 
 

@@ -143,7 +143,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         listingRecycler.setAdapter(new ProfileListingAdapter(getContext(), listingItemModels, this));
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(reviewRecycler);
-        new AuthService(getContext()).getResponse("/api/v1/profile/" + userViewModel.getUserProfileData().getUsername(), Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+        new AuthService(getContext()).getResponse("/api/v1/profile/" + userViewModel.getUserProfileData().getUsername(), false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 getActivity().runOnUiThread(new Runnable() {

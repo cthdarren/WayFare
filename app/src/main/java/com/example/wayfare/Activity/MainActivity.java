@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         if (new AuthHelper(getApplicationContext()).isLoggedIn()){
             loggedIn = true;
             viewModel = new ViewModelProvider(this).get(UserViewModel.class);
-            new AuthService(getApplicationContext()).getResponse("/account", Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            new AuthService(getApplicationContext()).getResponse("/account", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
                 @Override
                 public void onError(String message) {
                     runOnUiThread(new Runnable() {

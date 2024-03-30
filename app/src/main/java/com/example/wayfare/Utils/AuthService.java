@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.bumptech.glide.RequestBuilder;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Models.ResponseModel;
 import com.google.gson.Gson;
@@ -41,22 +42,23 @@ public class AuthService {
         void onResponse(ResponseModel json);
     }
 
-    public void getResponse(String apiUrl, Helper.RequestType requestType, RequestBody body, ResponseListener responseListener) {
+    public void getResponse(String apiUrl, boolean authenticated, Helper.RequestType requestType, RequestBody body, ResponseListener responseListener) {
         final OkHttpClient client = new OkHttpClient();
+        Request.Builder requestBuilder;
         Request request;
         if (requestType == Helper.RequestType.REQ_GET){
-            request = new Request.Builder().url(BuildConfig.API_URL + apiUrl)
-                    .addHeader("Authorization", "Bearer " + token)
-                    .get()
-                    .build();
+            requestBuilder = new Request.Builder().url(BuildConfig.API_URL + apiUrl)
+                    .get();
         }
         else if (requestType == Helper.RequestType.REQ_POST){
-            request = new Request.Builder().url(BuildConfig.API_URL + apiUrl)
-                    .addHeader("Authorization", "Bearer " + token)
-                    .post(body)
-                    .build();
+            requestBuilder = new Request.Builder().url(BuildConfig.API_URL + apiUrl)
+                    .post(body);
         }
         else return;
+        if (authenticated)
+            request = requestBuilder.addHeader("Authorization", "Bearer " + token).build();
+        else
+            request = requestBuilder.build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

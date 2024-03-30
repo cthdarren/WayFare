@@ -11,7 +11,7 @@
     tools:context=".Fragment.SignInFragment">
 
     <ImageView
-        android:id="@+id/register_exit"
+        android:id="@+id/login_exit"
         android:paddingEnd="15dp"
         android:paddingBottom="30dp"
         android:layout_width="wrap_content"
@@ -33,34 +33,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="30dp"
-        android:text="Start by choosing a username unique to yourself."
+        android:text="Enter a strong password to keep your account secure."
         />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:hint="Username"
+        android:hint="Password"
         android:layout_height="wrap_content">
-        <EditText
-        android:id="@+id/username"
+    <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
-        android:hint="Email address"
-        android:layout_height="wrap_content">
-    <EditText
-        android:id="@+id/emailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:inputType="textEmailAddress"
-        />
+        android:hint="Verify your password"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <Button
-        android:id="@+id/continue_button"
+        android:id="@+id/sign_in_button"
         android:layout_gravity="end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
