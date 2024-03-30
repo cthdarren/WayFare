@@ -18,7 +18,7 @@
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="match_parent"
-                android:layout_height="274dp"
+                android:layout_height="325dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/guide1"
                 app:layout_constraintEnd_toEndOf="parent"
