@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/outer_padding"
+    android:paddingHorizontal="@dimen/outer_padding"
     android:scrollbarSize="0dp">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,50 +17,55 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="40dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
             <LinearLayout
+                android:id="@+id/route_to_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
                 android:paddingHorizontal="20dp"
-                android:paddingVertical="40dp">
+                android:paddingVertical="36dp">
 
 
-                    <androidx.cardview.widget.CardView
+                <androidx.cardview.widget.CardView
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@color/md_theme_background"
+                    app:cardCornerRadius="39dp"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/user_profile_picture"
                         android:layout_width="54dp"
-                        android:layout_gravity="center"
-                        app:cardBackgroundColor="@color/md_theme_background"
-                        app:cardCornerRadius="39dp"
-                        app:cardElevation="0dp"
-                        android:layout_height="54dp">
+                        android:layout_height="54dp"
+                        android:scaleType="centerCrop">
 
-                        <ImageView
-                            android:id="@+id/user_profile_picture"
-                            android:layout_width="54dp"
-                            android:layout_height="54dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/no_avatar"
-                            app:tint="@color/md_theme_secondary">
-
-                        </ImageView>
-                    </androidx.cardview.widget.CardView>
+                    </ImageView>
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingStart="20dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingStart="20dp">
 
                     <TextView
                         android:id="@+id/user_greeting"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Hi, First_name"
-                        android:textStyle="bold"
-                        android:textSize="@dimen/font_lg" />
+                        android:textSize="@dimen/font_xl"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -67,11 +73,12 @@
                         android:text="View profile"
                         android:textSize="@dimen/font_xs" />
                 </LinearLayout>
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
 
-                    android:src="@drawable/chevron_right"/>
+                    android:src="@drawable/chevron_right" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -98,7 +105,62 @@
                     android:id="@+id/settings_list_recview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/settings_list_item" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Hosting"
+                android:textSize="@dimen/font_md" />
+
+            <LinearLayout
+                android:id="@+id/become_wayfarer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="18dp">
+
+                    <ImageView
+                        android:id="@+id/settings_item_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/no_avatar"
+                        app:tint="@color/md_theme_onSurface" />
+
+                    <TextView
+                        android:id="@+id/settings_item_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="26dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="Become a WayFarer™"
+                        android:textSize="@dimen/font_sm" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/chevron_right" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@color/material_dynamic_neutral80" />
 
             </LinearLayout>
 
@@ -116,11 +178,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
             android:paddingTop="10dp"
+            android:paddingBottom="20dp"
             android:text="@string/version_number"
             android:textSize="@dimen/font_xs" />
     </LinearLayout>
 
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

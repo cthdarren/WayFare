@@ -7,28 +7,26 @@
     android:background="@color/md_theme_background"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:padding="@dimen/outer_padding"
+    android:paddingHorizontal="@dimen/outer_padding"
     tools:context=".Fragment.SignInFragment">
 
     <ImageView
         android:id="@+id/login_exit"
-        android:paddingTop="20dp"
         android:paddingEnd="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/cross"
         android:scaleType="fitStart"
-        app:tint="@color/md_theme_onSurface" />
+         />
 
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:textAlignment="center"
+        android:layout_marginTop="30dp"
         android:text="Sign in to WayFare!"
-        android:textSize="45sp"
+        android:textSize="@dimen/font_2xl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="23dp"
-        android:hint="username"
+        android:hint="Username"
         app:layout_constraintBottom_toTopOf="@+id/passwordlog"
         android:layout_marginTop="55dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="23dp"
-        android:hint="password"
+        android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,14 +70,16 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordlog"
         tools:ignore="MissingConstraints" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/errorTextBox"
-        android:textColor="@color/md_theme_error"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
         android:textSize="@dimen/font_sm"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_height="wrap_content"/>
-
-
+        android:layout_weight="1"
+        android:text="Don't have an account? Sign up here."/>
+    </LinearLayout>
 </LinearLayout>

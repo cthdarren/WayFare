@@ -6,7 +6,7 @@ import java.util.List;
 
 // we are creating variables thats gonna hold all the data that represents one of our items
 public class TourListModel {
-    public TourListModel(String title, String id, String description, String[] thumbnailUrls, String category, Location tourListingLocation, double price, int minPax, int maxPax, double rating, int reviewCount, String userId, List<TimeRange> timeRangeList) {
+    public TourListModel(String title, String id, String description, String[] thumbnailUrls, String category, Location tourListingLocation, String region, double price, int minPax, int maxPax, double rating, int reviewCount, String userId, List<TimeRange> timeRangeList) {
         this.title = title;
         this.id = id;
         this.title = title;
@@ -14,6 +14,7 @@ public class TourListModel {
         this.thumbnailUrls = thumbnailUrls;
         this.category = category;
         this.location = tourListingLocation;
+        this.region = region;
         this.price = price;
         this.minPax = minPax;
         this.maxPax = maxPax;
@@ -44,6 +45,8 @@ public class TourListModel {
     public Location getLocation() {
         return location;
     }
+
+    public String getRegion(){ return region;}
 
     public double getPrice() {
         return price;
@@ -77,6 +80,7 @@ public class TourListModel {
     private String[] thumbnailUrls;
     private String category;
     private Location location;
+    private String region;
     private double price;
     private int minPax;
     private int maxPax;

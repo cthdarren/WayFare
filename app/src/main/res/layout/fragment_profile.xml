@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingHorizontal="@dimen/outer_padding"
+    tools:context=".Fragment.ProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="40dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/profile_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="20dp"
+            android:paddingEnd="15dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/arrow_back"
+            app:tint="@color/md_theme_onSurface" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="30dp"
+                android:paddingBottom="10dp"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    app:cardCornerRadius="66dp"
+                    app:cardElevation="0dp">
+
+                    <ImageView
+                        android:id="@+id/profile_picture"
+                        android:layout_width="100dp"
+                        android:src="@drawable/account_circle"
+                        android:layout_height="100dp"
+                        android:scaleType="centerCrop">
+                    </ImageView>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="15dp"
+                    android:text="Darren Chan"
+                    android:textSize="@dimen/font_lg" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Reviews"
+                            android:textSize="@dimen/font_xs"
+                            />
+
+                        <TextView
+                            android:id="@+id/num_reviews"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingBottom="10dp"
+                            android:textStyle="bold"
+                            android:paddingTop="5dp"
+                            android:text="-"
+                            android:textSize="@dimen/font_lg" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <View
+                            android:layout_height="wrap_content"
+                            android:layout_width="2dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/material_dynamic_neutral80"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Rating"
+                            android:textSize="@dimen/font_xs"
+                            />
+
+                        <TextView
+                            android:id="@+id/rating"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingBottom="10dp"
+                            android:textStyle="bold"
+                            android:paddingTop="5dp"
+                            android:text="-"
+                            android:textSize="@dimen/font_lg" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+                        <View
+                            android:layout_height="wrap_content"
+                            android:layout_width="2dp"
+                            android:layout_marginBottom="16dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/material_dynamic_neutral80"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Years on WayFare"
+                            android:textSize="@dimen/font_xs"
+                             />
+
+                        <TextView
+                            android:id="@+id/years_on_wayfare"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:paddingTop="5dp"
+                            android:text="-"
+                            android:paddingBottom="10dp"
+                            android:textStyle="bold"
+                            android:textSize="@dimen/font_lg" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/no_avatar"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:textSize="@dimen/font_sm"
+            android:text="Speaks: "/>
+
+            <TextView
+                android:id="@+id/languages_spoken"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_sm"
+                android:layout_height="match_parent"
+                android:text="English"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="5dp"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_md"
+            android:text="Bio"/>
+
+        <TextView
+            android:id="@+id/about_me"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_sm"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/material_dynamic_neutral80" />
+
+        <LinearLayout
+            android:id="@+id/review_segment"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/review_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
+            android:text="Reviews"
+            android:textSize="@dimen/font_md"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/review_carousel"
+            android:layout_width="match_parent"
+            android:layout_marginStart="-30dp"
+            android:clipToPadding = "false"
+            android:paddingStart="30dp"
+            android:layout_marginEnd="-30dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/preview_review_item" />
+
+        <Button
+            android:id="@+id/show_all_review_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="@dimen/font_sm"
+            android:text="Show all reviews"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/material_dynamic_neutral80" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/listings_wrapper">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/listing_wrapper_header"
+                android:layout_height="wrap_content"
+                android:text="Listings"
+                android:textSize="@dimen/font_md"
+                android:paddingBottom="10dp"
+                android:paddingTop="20dp"
+                android:textStyle="bold"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listing_carousel"
+                android:layout_width="match_parent"
+                android:layout_marginStart="-30dp"
+                android:clipToPadding = "false"
+                android:paddingStart="30dp"
+                android:layout_marginEnd="-30dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/preview_listing_item" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="18dp"
+                android:background="@color/material_dynamic_neutral80" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/confirmed_info_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="'s confirmed information"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_md"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingVertical="10dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/verification_truege"
+                android:layout_width="30dp"
+                android:src="@drawable/cross"
+                android:layout_height="30dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:text="Email address"
+            android:textSize="@dimen/font_sm"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

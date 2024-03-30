@@ -1,10 +1,15 @@
 package com.example.wayfare.Fragment;
-
+import com.example.wayfare.Activity.MainActivity;
+import com.example.wayfare.Models.UserModel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
+import com.example.wayfare.Utils.AuthHelper;
+import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
+import com.example.wayfare.ViewModel.UserViewModel;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Handler;
@@ -19,12 +24,17 @@ import com.example.wayfare.Adapters.ShortsAdapter;
 import com.example.wayfare.Models.ShortsObject;
 import com.example.wayfare.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import androidx.activity.OnBackPressedCallback;
 
 public class ExploreFragment extends Fragment {
+    private boolean loggedIn;
+    private UserViewModel userViewModel;
     private Context context = null;
     private ViewPager2 shortsViewPager;
     private List<ShortsObject> shortsObjectList;
@@ -45,24 +55,25 @@ public class ExploreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_explore, container, false);
 
         List<ShortsObject> shortsObjectList = new ArrayList<>();
         ShortsObject shortsObject1 = new ShortsObject();
-        shortsObject1.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video1);
+        shortsObject1.setUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
         shortsObject1.setTitle("Singapore!");
         shortsObject1.setDescription("Singapore Tours #sg #local");
         shortsObjectList.add(shortsObject1);
 
         ShortsObject shortsObject2 = new ShortsObject();
-        shortsObject2.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video2);
+        shortsObject2.setUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
         shortsObject2.setTitle("Overrated Cities?!");
         shortsObject2.setDescription("#dontgo #cities");
         shortsObjectList.add(shortsObject2);
 
         ShortsObject shortsObject3 = new ShortsObject();
-        shortsObject3.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video3);
+        shortsObject3.setUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
         shortsObject3.setTitle("Lorem");
         shortsObject3.setDescription("GreyNibba");
         shortsObjectList.add(shortsObject3);
@@ -72,21 +83,30 @@ public class ExploreFragment extends Fragment {
         shortsObject4.setDescription("#must go");
         shortsObjectList.add(shortsObject4);
         ShortsObject shortsObject5 = new ShortsObject();
-        shortsObject5.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video2);
+        shortsObject5.setUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
         shortsObject5.setTitle("Lorem");
         shortsObject5.setDescription("GeyNibba");
         shortsObjectList.add(shortsObject5);
         ShortsObject shortsObject6 = new ShortsObject();
-        shortsObject6.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video3);
+        shortsObject6.setUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
         shortsObject6.setTitle("yyyy");
         shortsObject6.setDescription("yyyy");
         shortsObjectList.add(shortsObject6);
         ShortsObject shortsObject7 = new ShortsObject();
-        shortsObject7.setUrl("android.resource://"+getActivity().getPackageName()+"/"+R.raw.video1);
+        shortsObject7.setUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
         shortsObject7.setTitle("xxxx");
         shortsObject7.setDescription("xxxx");
         shortsObjectList.add(shortsObject7);
-
+        //get user stuff
+        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()){
+            loggedIn = true;
+        } else {
+            loggedIn = false;
+        }
+        if(loggedIn) {
+            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+            UserModel userData = userViewModel.getUserProfileData();
+        }
         shortsViewPager = rootView.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         shortsAdapter = new ShortsAdapter(shortsObjectList,context);
@@ -114,19 +134,19 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        bottomNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Remove the listener to prevent multiple calls
-                bottomNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                // Get the height of the BottomNavigationView
-                int bottomNavHeight = bottomNavigationView.getHeight();
-                Log.d("BottomNavHeight", "Height: " + bottomNavHeight);
-                // Set bottom padding for the ViewPager2
-                shortsViewPager.setPadding(0, 0, 0, bottomNavHeight);
-            }
-        });
+//        bottomNavigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                // Remove the listener to prevent multiple calls
+//                bottomNavigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//
+//                // Get the height of the BottomNavigationView
+//                int bottomNavHeight = bottomNavigationView.getHeight();
+//                Log.d("BottomNavHeight", "Height: " + bottomNavHeight);
+//                // Set bottom padding for the ViewPager2
+//                shortsViewPager.setPadding(0, 0, 0, bottomNavHeight);
+//            }
+//        });
 
         shortsViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
@@ -179,13 +199,14 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        continueVideo();
+        //continueVideo();
 
     }
 
     public void pauseVideo() {
-        SharedPreferences currentPosPref = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
-        SharedPreferences.Editor positionEditor = currentPosPref.edit();
+        //save pos
+        SharedPreferences currentShortsPref = requireActivity().getSharedPreferences("shortsSharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor positionEditor = currentShortsPref.edit();
         int currentPosition = shortsAdapter.getCurrentPosition();
         positionEditor.putInt("position", currentPosition);
         shortsAdapter.pauseVideo(currentPosition);
@@ -193,7 +214,7 @@ public class ExploreFragment extends Fragment {
     }
 
     public void continueVideo() {
-        SharedPreferences currentPosPref = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
+        SharedPreferences currentPosPref = requireActivity().getSharedPreferences("shortsSharedPref", Context.MODE_PRIVATE);
         int currentPosition = currentPosPref.getInt("position", -1);
         if (currentPosition != -1) {
             shortsAdapter.playVideo(currentPosition);
