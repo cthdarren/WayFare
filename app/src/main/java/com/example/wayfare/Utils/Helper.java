@@ -16,9 +16,23 @@ public class Helper {
                 .commit();
     }
 
-    public static void goToFragment(FragmentManager fm, Fragment fragment){
+    public static void goToFragment(FragmentManager fm, int fragmentId, Fragment fragment){
         fm.beginTransaction()
-                .replace(R.id.flFragment, fragment)
+                .replace(fragmentId, fragment)
+                .addToBackStack(null)
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
+    public static void goToFragmentSlideInRight(FragmentManager fm, int fragmentId, Fragment fragment){
+        fm.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_left_to_right, // enter
+                        R.anim.slide_right_to_left, // exit
+                        R.anim.fade_in, // popEnter
+                        R.anim.slide_out_left_to_right// popExit
+                )
+                .add(fragmentId, fragment)
                 .addToBackStack(null)
                 .setReorderingAllowed(true)
                 .commit();

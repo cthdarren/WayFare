@@ -3,6 +3,7 @@ package com.example.wayfare.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +15,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -31,8 +35,8 @@ import okhttp3.Response;
 
 public class SignUpFragment extends Fragment {
 
-    Button sign_up_button;
-    EditText username, firstName, lastName, email, phoneNumber, password, verifyPassword;
+    Button continue_button;
+    EditText username, email;
     BottomNavigationView navBar;
     ImageView register_exit;
 
@@ -50,34 +54,46 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
-        sign_up_button = view.findViewById(R.id.sign_up_button);
         username = view.findViewById(R.id.username);
-        firstName = view.findViewById(R.id.firstName);
-        lastName = view.findViewById(R.id.lastName);
-        email = view.findViewById(R.id.email);
-        phoneNumber = view.findViewById(R.id.phoneNumber);
-        password = view.findViewById(R.id.password);
-        verifyPassword = view.findViewById(R.id.verifyPassword);
+        email = view.findViewById(R.id.emailAddress );
         register_exit = view.findViewById(R.id.register_exit);
+        continue_button = view.findViewById(R.id.continue_button);
 
         register_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getParentFragmentManager().popBackStack();
             }
         });
-        sign_up_button.setOnClickListener(new View.OnClickListener() {
+        continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    register();
-                } catch (IOException e) {
+                    checkUserNameAndEmail();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
         return view;
+    }
+
+    private void checkUserNameAndEmail() {
+        String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), email.getText());
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        new AuthService(getContext()).getResponse("/api/v1/user/checknewuseremail", false, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                makeToast(message);
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                if (json.success){
+                    getParentFragmentManager().beginTransaction().replace(R.id.flFragment, new SignUpFragment()).commit();
+                }
+            }
+        });
     }
 
 
@@ -88,7 +104,7 @@ public class SignUpFragment extends Fragment {
                 public void run() {
                     final OkHttpClient client = new OkHttpClient();
                     makeToast("bruh");
-                    String json = String.format("{\"username\":\"%s\", \"firstName\":\"%s\", \"lastName\":\"%s\", \"email\":\"%s\", \"phoneNumber\":\"%s\", \"password\":\"%s\", \"verifyPassword\":\"%s\"}", username.getText(), firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(), password.getText(), verifyPassword.getText());
+                    String json = String.format("{\"username\":\"%s\", \"email\":\"%s\"}", username.getText(), email.getText());
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
                     Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/register")
                             .post(body)

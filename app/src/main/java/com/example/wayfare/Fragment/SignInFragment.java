@@ -28,6 +28,7 @@ import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.Helper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -53,6 +54,7 @@ public class SignInFragment extends Fragment{
 
     BottomNavigationView navBar;
     ImageView login_exit;
+    private TextView signUpBtn;
 
 
     @Override
@@ -63,6 +65,7 @@ public class SignInFragment extends Fragment{
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
         sign_in_button = view.findViewById(R.id.sign_in_button);
+        signUpBtn = view.findViewById(R.id.signUpBtn);
         username = view.findViewById(R.id.usernamelog);
         password = view.findViewById(R.id.passwordlog);
         login_exit = view.findViewById(R.id.login_exit);
@@ -83,6 +86,14 @@ public class SignInFragment extends Fragment{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+        
+        signUpBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(),R.id.container, new SignUpFragment());
             }
         });
         return view;
