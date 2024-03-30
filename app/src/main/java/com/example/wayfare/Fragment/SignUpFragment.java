@@ -67,7 +67,7 @@ public class SignUpFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     checkUserNameAndEmail();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -76,7 +76,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private void checkUserNameAndEmail() {
-        new AuthService(getContext()).
+//        new AuthService(getContext()).
     }
 
 
@@ -87,7 +87,7 @@ public class SignUpFragment extends Fragment {
                 public void run() {
                     final OkHttpClient client = new OkHttpClient();
                     makeToast("bruh");
-                    String json = String.format("{\"username\":\"%s\", \"firstName\":\"%s\", \"lastName\":\"%s\", \"email\":\"%s\", \"phoneNumber\":\"%s\", \"password\":\"%s\", \"verifyPassword\":\"%s\"}", username.getText(), firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(), password.getText(), verifyPassword.getText());
+                    String json = String.format("{\"username\":\"%s\", \"email\":\"%s\"}", username.getText(), email.getText());
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
                     Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/register")
                             .post(body)

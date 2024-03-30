@@ -88,7 +88,12 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     }
     public void setUpListingModels(List<TourListModel> listingList) {
         for (TourListModel tour : listingList) {
-            ListingItemModel toAdd = new ListingItemModel(tour.getThumbnailUrls()[1], tour.getTitle(), tour.getRating(), tour.getReviewCount(), tour.getRegion());
+            String thumbnailUrl;
+            if (tour.getThumbnailUrls().length == 0)
+               thumbnailUrl = "";
+            else
+                thumbnailUrl = tour.getThumbnailUrls()[0];
+            ListingItemModel toAdd = new ListingItemModel(thumbnailUrl, tour.getTitle(), tour.getRating(), tour.getReviewCount(), tour.getRegion());
             listingItemModels.add(toAdd);
         }
     }
