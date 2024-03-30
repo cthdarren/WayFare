@@ -11,8 +11,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="48dp">
+        android:layout_height="match_parent">
 
         <!-- NestedScrollingChild goes here (NestedScrollView, RecyclerView, etc.). -->
 
@@ -59,7 +58,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="135dp"
-            android:layout_marginBottom="80dp"
             android:contentDescription="Recycler View for Listing Cards"
             app:layout_anchorGravity="center"
             app:layout_constraintBottom_toBottomOf="@+id/searchView"
