@@ -88,6 +88,16 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     public void onItemClick(int position) {
         Log.d("Do nothing", String.valueOf(position));
         Intent intent = new Intent(getActivity(), ConfirmBooking.class);
+        intent.putExtra("title", getArguments().getString("title"));
+        intent.putExtra("rating", getArguments().getString("rating"));
+        intent.putExtra("location", getArguments().getString("location"));
+        intent.putExtra("price", getArguments().getString("price"));
+        intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
+        intent.putExtra("description", getArguments().getString("description"));
+        intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
+
+        String timing = timingArray[position];
+        intent.putExtra("timing", timing);
         startActivity(intent);
     }
 }
