@@ -26,8 +26,15 @@
                 android:id="@+id/imv_appear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/common_google_signin_btn_text_dark"
+                android:src="@drawable/travel_icon"
+                android:layout_gravity="left"
                 android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </androidx.media3.ui.PlayerView>
     <LinearLayout
@@ -47,11 +54,7 @@
             app:tint="@color/white"
             />
     </LinearLayout>
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -176,7 +179,7 @@
                 android:layout_marginEnd="18dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_share"
-                app:tint="@color/semi_white"/>
+                app:tint="@color/white"/>
 
             <ImageView
                 android:id="@+id/imvMore"
@@ -188,7 +191,7 @@
                 android:clickable="true"
                 android:padding="2dp"
                 android:src="@drawable/ic_more"
-                app:tint="@color/semi_white"/>
+                app:tint="@color/white"/>
         </LinearLayout>
 
 

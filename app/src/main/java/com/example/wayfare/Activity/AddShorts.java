@@ -1,18 +1,29 @@
 package com.example.wayfare.Activity;
 
 import android.Manifest;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.hardware.camera2.CameraManager;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.SurfaceTexture;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCaptureSession;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
-import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.params.StreamConfigurationMap;
+import com.example.wayfare.R;
+
+import androidx.camera.core.AspectRatio;
+import androidx.camera.core.Camera;
+import androidx.camera.core.FocusMeteringResult;
+import androidx.camera.core.MeteringPoint;
+import androidx.camera.core.MeteringPointFactory;
+import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.core.CameraSelector;
+import androidx.camera.core.Preview;
+import androidx.camera.video.*;
+import androidx.camera.core.FocusMeteringAction;
 import android.media.MediaRecorder;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -21,9 +32,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -32,6 +45,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -41,13 +56,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.wayfare.R;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,78 +77,101 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class AddShorts extends AppCompatActivity implements View.OnClickListener {
     private static final int STORAGE_PERMISSION_CODE = 1;
     private static final int PICK_VIDEO_REQUEST_CODE = 1001;
     private List<Video> videoList;
     private ActivityResultLauncher<Intent> videoPickerLauncher;
+    private ExecutorService backgroundExecutor = Executors.newSingleThreadExecutor();
+    private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
     CameraManager manager;
-    FrameLayout cameraFrameLayout;
-    TextureView textureFront;
-    String frontId, backId, defaultId;
-    Size previewSize;
-    Size videoSize;
+    private final MutableLiveData<String> captureLiveStatus = new MutableLiveData<>();
+    private static final String FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS";
+    private static final int DEFAULT_QUALITY_IDX = 0;
+    private VideoCapture<Recorder> videoCapture;
+    private Recording currentRecording;
+    private VideoRecordEvent recordingState;
+    private PreviewView previewView;
+    private TextView liveCountdown;
+    ExecutorService service;
+    ProcessCameraProvider cameraProvider;
     Button btnUploadVideo;
     Button btnExit;
     Button btnPause;
     Button btnContinue;
-
+    ImageView focusIcon;
     MediaRecorder mediaRecorder;
-    File videoFileHolder;
     Button btnStartRecord;
     ImageButton btnFlip;
     Button btnStopRecord;
     boolean isRecording = false;
     boolean isPaused = false;
-
-    String videoFileName;
-    String userId;
-    File videoFolder;
-
+    int cameraFacing = CameraSelector.LENS_FACING_BACK;
     Animation animRotate;
-
-    int totalRotation;
-    static int sensorToDeviceToRotation(CameraCharacteristics characteristics, int deviceOrientation) {
-        if (deviceOrientation == android.view.OrientationEventListener.ORIENTATION_UNKNOWN) return 0;
-        int sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
-
-        // Round device orientation to a multiple of 90
-        deviceOrientation = (deviceOrientation + 45) / 90 * 90;
-
-        // Reverse device orientation for front-facing cameras
-        boolean facingFront = characteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT;
-        if (facingFront) deviceOrientation = -deviceOrientation;
-
-        // Calculate desired JPEG orientation relative to camera orientation to make
-        // the image upright relative to the device orientation
-        int jpegOrientation = (sensorOrientation + deviceOrientation + 360) % 360;
-
-        return jpegOrientation;
-    }
-    CameraDevice mainCamera;
+    private final ActivityResultLauncher<String> activityResultLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            startCamera(cameraFacing);
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_shorts);
-        mediaRecorder = new MediaRecorder();
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO},
+                    STORAGE_PERMISSION_CODE);
+            startCamera(cameraFacing);
+
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        } else {
+            startCamera(cameraFacing);
+        }
+        //rectOverlay = findViewById(R.id.rect_overlay);
+        mediaRecorder = new MediaRecorder();
+        previewView = findViewById(R.id.previewView);
         btnUploadVideo = findViewById(R.id.btnUploadVideo);
-        btnUploadVideo.setOnClickListener(this);
         btnStartRecord = findViewById(R.id.button_record);
         btnExit = findViewById(R.id.button_close);
         btnFlip = findViewById(R.id.imb_flip_camera);
         btnPause = findViewById(R.id.button_pause);
         btnContinue = findViewById(R.id.button_continue);
         btnStopRecord = findViewById(R.id.button_stop);
+        focusIcon = findViewById(R.id.img_focus);
+        liveCountdown = findViewById(R.id.liveCountdown);
+        btnUploadVideo.setOnClickListener(this);
+        btnFlip.setOnClickListener(this);
+
         // Get Camera TextureView
-        cameraFrameLayout = findViewById(R.id.camera_frame);
-        textureFront = findViewById(R.id.texture_view_front);
 
         animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        captureLiveStatus.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String text) {
+                liveCountdown.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        liveCountdown.setText(text);
+                    }
+                });
+            }
+        });
+
+        // Set initial value for captureLiveStatus
+        captureLiveStatus.setValue("");
+
+
         // Filter list
         // Initialize the video picker launcher
         videoPickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -145,6 +187,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                         }
                     }
                 });
+        service = Executors.newSingleThreadExecutor();
     }
 
     @Override
@@ -152,7 +195,6 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
             }else {
                 Toast.makeText(this,"Permission is denied, please allow permission.", Toast.LENGTH_SHORT).show();
             }
@@ -163,6 +205,13 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
     public void onClick(View view) {
         if (view.getId() == R.id.imb_flip_camera) {
             view.startAnimation(animRotate);
+            if (cameraFacing == CameraSelector.LENS_FACING_BACK) {
+                cameraFacing = CameraSelector.LENS_FACING_FRONT;
+            } else {
+                cameraFacing = CameraSelector.LENS_FACING_BACK;
+            }
+            startCamera(cameraFacing);
+
 
 
         }
@@ -182,15 +231,15 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         }
 
         if (view.getId() == R.id.button_record) {
-            btnStopRecord.setVisibility(View.VISIBLE);
-            btnPause.setVisibility(View.VISIBLE);
-            btnFlip.setVisibility(View.GONE);
-            findViewById(R.id.tv_flip_camera).setVisibility(View.GONE);
-            btnUploadVideo.setVisibility(View.GONE);
-            btnStartRecord.setVisibility(View.GONE);
-            btnExit.setVisibility(View.GONE);
-
-            isRecording = true;
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
+                        STORAGE_PERMISSION_CODE);
+            }
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+            startRecording();
 
         }
         if (view.getId() == R.id.button_pause) {
@@ -198,6 +247,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                 btnPause.setVisibility(View.GONE);
                 btnContinue.setVisibility(View.VISIBLE);
                 isPaused = true;
+                currentRecording.pause();
             }
         }
         if (view.getId() == R.id.button_continue) {
@@ -205,23 +255,12 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                 btnPause.setVisibility(View.VISIBLE);
                 btnContinue.setVisibility(View.GONE);
                 isPaused = false;
+                currentRecording.resume();
             }
         }
         if (view.getId() == R.id.button_stop) {
-            if (isRecording) {
+            stopRecording();
 
-                btnStartRecord.setVisibility(View.VISIBLE);
-                isRecording = false;
-                btnFlip.setVisibility(View.VISIBLE);
-                findViewById(R.id.tv_flip_camera).setVisibility(View.VISIBLE);
-                btnPause.setVisibility(View.GONE);
-                btnUploadVideo.setVisibility(View.VISIBLE);
-                btnStopRecord.setVisibility(View.GONE);
-                btnPause.setVisibility(View.GONE);
-                btnContinue.setVisibility(View.GONE);
-                btnExit.setVisibility(View.VISIBLE);
-//                connectCamera();
-            }
         }
         if (view.getId() == R.id.button_close) {
             finish();
@@ -234,6 +273,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_MEDIA_LOCATION},
                     STORAGE_PERMISSION_CODE);
+            pickVideo();
         } else {
             pickVideo();
         }
@@ -244,6 +284,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         videoPickerLauncher.launch(intent);
     }
     void startUploadingActivity(Uri videoUri) {
+        captureLiveStatus.setValue("");
         Intent i = new Intent(this,
                 PreviewShortsActivity.class);
         Bundle bundle = new Bundle();
@@ -260,6 +301,191 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         cursor.close();
         return duration;
     }
+
+    public void startCamera(int cameraFacing) {
+        ListenableFuture<ProcessCameraProvider> processCameraProvider = ProcessCameraProvider.getInstance(AddShorts.this);
+        processCameraProvider.addListener(() -> {
+            try {
+                ProcessCameraProvider cameraProvider = processCameraProvider.get();
+                Preview preview = new Preview.Builder()
+                        .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                        .build();
+                preview.setSurfaceProvider(previewView.getSurfaceProvider());
+
+                Recorder recorder = new Recorder.Builder()
+                        .setQualitySelector(QualitySelector.from(Quality.HIGHEST))
+                        .build();
+                videoCapture = VideoCapture.withOutput(recorder);
+
+                cameraProvider.unbindAll();
+
+                CameraSelector cameraSelector = new CameraSelector.Builder()
+                        .requireLensFacing(cameraFacing).build();
+                // Perform flip animation
+
+                Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, videoCapture);
+                previewView.setOnTouchListener((view, event) -> {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        float x = event.getX();
+                        float y = event.getY();
+                        focusIcon.setVisibility(View.VISIBLE);
+                        focusIcon.setX(x);
+                        focusIcon.setY(y);
+                        focusIcon.setColorFilter(Color.WHITE);
+                        focusIcon.animate()
+                                .scaleX(1.5f)  // scale up to 150%
+                                .scaleY(1.5f)  // scale up to 150%
+                                .setDuration(200)  // duration of the animation in milliseconds
+                                .withEndAction(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // Animation ended, scale back to original size
+                                        focusIcon.animate()
+                                                .scaleX(1.0f)  // scale down to original size
+                                                .scaleY(1.0f)  // scale down to original size
+                                                .setDuration(200)  // duration of the animation in milliseconds
+                                                .start();
+                                    }
+                                })
+                                .start();
+                        // Convert touch coordinates to camera's metering point
+                        MeteringPointFactory factory = previewView.getMeteringPointFactory();
+                        MeteringPoint point = factory.createPoint(x, y);
+
+                        // Create action to focus camera
+                        FocusMeteringAction action = new FocusMeteringAction.Builder(point,
+                                FocusMeteringAction.FLAG_AF)
+                                .build();
+
+                        // Execute the focus action
+                        ListenableFuture<FocusMeteringResult> future = camera.getCameraControl().startFocusAndMetering(action);
+                        future.addListener(() -> {
+                            try {
+                                // Get the result of the focus action
+                                FocusMeteringResult result = future.get();
+                                if (result.isFocusSuccessful()) {
+                                    // Focus was successful, handle accordingly
+                                    focusIcon.setColorFilter(Color.GREEN);
+
+                                } else {
+                                    // Focus failed, handle accordingly
+                                    focusIcon.setColorFilter(Color.RED);
+                                }
+                            } catch (ExecutionException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }, ContextCompat.getMainExecutor(AddShorts.this));
+                        view.performClick();
+                    }
+                    return true;
+                });
+
+//                toggleFlash.setOnClickListener(view -> toggleFlash(camera));
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }, ContextCompat.getMainExecutor(AddShorts.this));
+    }
+    public void startRecording() {
+        String name = "Wayfare-Shorts-" +
+                new SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+                        .format(System.currentTimeMillis()) + ".mp4";
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MediaStore.Video.Media.DISPLAY_NAME, name);
+        MediaStoreOutputOptions mediaStoreOutput = new MediaStoreOutputOptions.Builder(
+                getContentResolver(),
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+                .setContentValues(contentValues)
+                .build();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        currentRecording = videoCapture.getOutput()
+                .prepareRecording(AddShorts.this, mediaStoreOutput)
+                .withAudioEnabled()  // Use setAudioEnabled() for Java
+                .start(ContextCompat.getMainExecutor(AddShorts.this), videoRecordEvent -> {
+                    RecordingStats stats = videoRecordEvent.getRecordingStats();
+                    long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
+                    String text = String.format(time + "s/60s");
+                    if(time > 10){
+                        stopRecording();
+                    }else{
+                        captureLiveStatus.setValue(text);
+                    }
+                    captureLiveStatus.setValue(text);
+                    if (!(videoRecordEvent instanceof VideoRecordEvent.Status)) {
+                        recordingState = videoRecordEvent;
+                    }
+                    if (videoRecordEvent instanceof VideoRecordEvent.Start) {
+                        btnStopRecord.setVisibility(View.VISIBLE);
+                        btnPause.setVisibility(View.VISIBLE);
+                        btnFlip.setVisibility(View.GONE);
+                        findViewById(R.id.tv_flip_camera).setVisibility(View.GONE);
+                        btnUploadVideo.setVisibility(View.GONE);
+                        btnStartRecord.setVisibility(View.GONE);
+                        btnExit.setVisibility(View.GONE);
+                        isRecording = true;
+                    } else if (videoRecordEvent instanceof VideoRecordEvent.Finalize) {
+                        if (!((VideoRecordEvent.Finalize) videoRecordEvent).hasError()) {
+                            String msg = "Video capture succeeded: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
+                            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                            Uri capturedVideoUri = ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
+                            startUploadingActivity(capturedVideoUri);
+                        } else {
+                            currentRecording.close();
+                            currentRecording = null;
+                            String msg = "Error: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getError();
+                            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+    private void stopRecording(){
+        if (currentRecording == null || recordingState instanceof VideoRecordEvent.Finalize) {
+            return;  // Exit if no active recording or already finalized
+        }
+        // Stop the recording
+        Recording recording = currentRecording;
+        if (recording != null) {
+            recording.stop();
+            currentRecording = null;
+        }
+
+        btnStartRecord.setVisibility(View.VISIBLE);
+        isRecording = false;
+        btnFlip.setVisibility(View.VISIBLE);
+        findViewById(R.id.tv_flip_camera).setVisibility(View.VISIBLE);
+        btnPause.setVisibility(View.GONE);
+        btnUploadVideo.setVisibility(View.VISIBLE);
+        btnStopRecord.setVisibility(View.GONE);
+        btnPause.setVisibility(View.GONE);
+        btnContinue.setVisibility(View.GONE);
+        btnExit.setVisibility(View.VISIBLE);
+    }
+//    private void toggleFlash(Camera camera) {
+//        if (camera.getCameraInfo().hasFlashUnit()) {
+//            if (camera.getCameraInfo().getTorchState().getValue() == 0) {
+//                camera.getCameraControl().enableTorch(true);
+//                toggleFlash.setImageResource(R.drawable.round_flash_off_24);
+//            } else {
+//                camera.getCameraControl().enableTorch(false);
+//                toggleFlash.setImageResource(R.drawable.round_flash_on_24);
+//            }
+//        } else {
+//            runOnUiThread(() -> Toast.makeText(MainActivity.this, "Flash is not available currently", Toast.LENGTH_SHORT).show());
+//        }
+//    }
+private void updateUI(VideoRecordEvent event) {
+    RecordingStats stats = event.getRecordingStats();
+    //long size = stats.getNumBytesRecorded() / 1000;
+    long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
+    String text = String.format(time + "s/60s");
+
+    captureLiveStatus.setValue(text);
+
+}
+
     // Container for information about each video.
     private static class Video {
         private final Uri uri;
@@ -274,4 +500,9 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
             this.size = size;
         }
     }
+
+
+
+
 }
+
