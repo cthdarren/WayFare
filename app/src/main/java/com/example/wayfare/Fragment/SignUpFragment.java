@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.R;
-import com.example.wayfare.Utils.AuthService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -32,8 +31,8 @@ import okhttp3.Response;
 
 public class SignUpFragment extends Fragment {
 
-    Button continue_button;
-    EditText username, email;
+    Button sign_up_button;
+    EditText username, firstName, lastName, email, phoneNumber, password, verifyPassword;
     BottomNavigationView navBar;
     ImageView register_exit;
 
@@ -51,32 +50,34 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
+        sign_up_button = view.findViewById(R.id.sign_up_button);
         username = view.findViewById(R.id.username);
-        email = view.findViewById(R.id.emailAddress );
+        firstName = view.findViewById(R.id.firstName);
+        lastName = view.findViewById(R.id.lastName);
+        email = view.findViewById(R.id.email);
+        phoneNumber = view.findViewById(R.id.phoneNumber);
+        password = view.findViewById(R.id.password);
+        verifyPassword = view.findViewById(R.id.verifyPassword);
         register_exit = view.findViewById(R.id.register_exit);
-        continue_button = view.findViewById(R.id.continue_button);
 
         register_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 getParentFragmentManager().popBackStack();
             }
         });
-        continue_button.setOnClickListener(new View.OnClickListener() {
+        sign_up_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    checkUserNameAndEmail();
-                } catch (Exception e) {
+                    register();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
         return view;
-    }
-
-    private void checkUserNameAndEmail() {
-//        new AuthService(getContext()).
     }
 
 
@@ -87,7 +88,7 @@ public class SignUpFragment extends Fragment {
                 public void run() {
                     final OkHttpClient client = new OkHttpClient();
                     makeToast("bruh");
-                    String json = String.format("{\"username\":\"%s\", \"email\":\"%s\"}", username.getText(), email.getText());
+                    String json = String.format("{\"username\":\"%s\", \"firstName\":\"%s\", \"lastName\":\"%s\", \"email\":\"%s\", \"phoneNumber\":\"%s\", \"password\":\"%s\", \"verifyPassword\":\"%s\"}", username.getText(), firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(), password.getText(), verifyPassword.getText());
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
                     Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/register")
                             .post(body)
