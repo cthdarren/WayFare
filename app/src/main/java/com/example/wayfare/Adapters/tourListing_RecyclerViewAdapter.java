@@ -47,7 +47,7 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         String price_text = "$" + String.valueOf(tourListModels.get(position).getPrice()) + " / person";
         holder.tvPrice.setText(price_text);
         holder.tvRating.setText(String.valueOf(tourListModels.get(position).getRating()));
-        holder.tvLocation.setText(tourListModels.get(position).getLocation().getXY());
+        holder.tvLocation.setText(tourListModels.get(position).getRegion());
     }
 
     @Override

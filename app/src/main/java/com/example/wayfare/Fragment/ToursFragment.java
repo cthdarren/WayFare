@@ -146,7 +146,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         Bundle data = new Bundle();
 
         data.putString("title", tourListModels.get(position).getTitle());
-        data.putString("location", tourListModels.get(position).getLocation().getXY());
+        data.putString("location", tourListModels.get(position).getRegion());
         data.putString("rating", String.valueOf(tourListModels.get(position).getRating()));
         data.putString("price", String.valueOf(tourListModels.get(position).getPrice()));
         data.putString("thumbnail", tourListModels.get(position).getThumbnailUrls()[0]);
