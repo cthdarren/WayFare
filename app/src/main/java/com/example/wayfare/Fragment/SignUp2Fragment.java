@@ -44,8 +44,6 @@ public class SignUp2Fragment extends Fragment {
     TextView helperTextHeader;
     BottomNavigationView navBar;
     ImageView register_back;
-    String username;
-    String email;
     boolean validpassword = false;
     public SignUp2Fragment() {
     }
@@ -58,8 +56,6 @@ public class SignUp2Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        username = getArguments().getString("username");
-        email = getArguments().getString("email");
         View view = inflater.inflate(R.layout.fragment_sign_up2, container, false);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
@@ -132,8 +128,7 @@ public class SignUp2Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Bundle args = new Bundle();
-                args.putString("username", username);
-                args.putString("email", email);
+                args.putAll(getArguments());
                 args.putString("password", String.valueOf(password.getText()));
                 args.putString("verifypassword", String.valueOf(verifyPassword.getText()));
                 SignUp3Fragment fragment = new SignUp3Fragment();

@@ -49,7 +49,19 @@ public class SignUp4Fragment extends Fragment {
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new SignUp4Fragment());
+                Bundle args = new Bundle();
+
+                args.putAll(getArguments());
+                args.putString("languages", String.valueOf(languages.getText()));
+                args.putString("bio", String.valueOf(bio.getText()));
+
+                SignUp5Fragment fragment = new SignUp5Fragment();
+                fragment.setArguments(args);
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .addToBackStack(null)
+                        .setReorderingAllowed(true)
+                        .commit();
             }
         });
         return view;

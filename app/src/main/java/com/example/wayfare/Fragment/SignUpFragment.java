@@ -127,47 +127,6 @@ public class SignUpFragment extends Fragment {
     }
 
 
-    public void register() throws IOException {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    final OkHttpClient client = new OkHttpClient();
-                    makeToast("bruh");
-                    String json = String.format("{\"username\":\"%s\", \"email\":\"%s\"}", username.getText(), email.getText());
-                    RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/register")
-                            .post(body)
-                            .build();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            if (e instanceof SocketTimeoutException) {
-                                makeToast("Request Timed Out");
-                                e.printStackTrace();
-                            } else if (e instanceof SocketException) {
-                                makeToast("Server Error");
-                                Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
-                                e.printStackTrace();
-                            }
-                        }
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String serverResponse = response.body().string();
-                            System.out.println(serverResponse);
-                            Log.i("Tag", "it worked>");
-                        }
-                    });
-                }
-       /* FragmentTransaction ft = getParentFragmentManager().beginTransaction();
-        ft
-                .replace(, new ExploreFragment())
-                .setReorderingAllowed(true)
-                .addToBackStack("name") // Name can be null
-                .commit();*/
-            });
-        }
-    }
     public void makeToast(String msg) {
 
         if (getActivity() == null) {

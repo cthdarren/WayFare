@@ -32,6 +32,7 @@ public class SignUp3Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_sign_up3, container, false);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
@@ -50,7 +51,18 @@ public class SignUp3Fragment extends Fragment {
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new SignUp4Fragment());
+                Bundle args = new Bundle();
+                args.putAll(getArguments());
+                args.putString("firstname", String.valueOf(first_name.getText()));
+                args.putString("lastname", String.valueOf(last_name.getText()));
+                args.putString("phonenumber", String.valueOf(phone_number.getText()));
+                SignUp4Fragment fragment = new SignUp4Fragment();
+                fragment.setArguments(args);
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .addToBackStack(null)
+                        .setReorderingAllowed(true)
+                        .commit();
             }
         });
         return view;
