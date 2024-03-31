@@ -79,4 +79,5 @@ dependencies {
     implementation("androidx.camera:camera-view:$camerax_version")
     implementation("androidx.camera:camera-extensions:$camerax_version")
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
+    implementation("com.intuit.sdp:sdp-android:1.0.6")
 }

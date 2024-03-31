@@ -26,6 +26,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".Activity.PostShortActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ConfirmBooking"
             android:exported="false" />
         <activity
@@ -44,7 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Activity.UserLanding"
             android:exported="true" />
@@ -69,8 +71,8 @@
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustNothing"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustNothing" />
 
         <meta-data
             android:name="preloaded_fonts"

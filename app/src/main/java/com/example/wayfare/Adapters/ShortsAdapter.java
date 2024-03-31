@@ -128,8 +128,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         public void pauseVideo() {
             if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
                 exoPlayer.setPlayWhenReady(false);
-                imvAppear.setImageResource(R.drawable.ic_baseline_play_arrow_24);
-                imvAppear.setVisibility(View.VISIBLE);
+                appearImage(R.drawable.ic_baseline_play_arrow_24);
             }
         }
         public void stopVideo() {
@@ -143,17 +142,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         }
         public void appearImage(int src) {
             imvAppear.setImageResource(src);
-            // Get the parent view's dimensions
-            int parentWidth = ((ViewGroup)imvAppear.getParent()).getWidth();
-            int parentHeight = ((ViewGroup)imvAppear.getParent()).getHeight();
-
-            // Calculate the center coordinates
-            int centerX = (parentWidth - imvAppear.getWidth()) / 2;
-            int centerY = (parentHeight - imvAppear.getHeight()) / 2;
-
-            // Set the ImageView's position
-            imvAppear.setX(centerX);
-            imvAppear.setY(centerY);
             imvAppear.setVisibility(View.VISIBLE);
             imvAppear.animate()
                     .scaleX(1.5f)  // scale up to 150%
@@ -177,7 +165,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 public void run() {
                     imvAppear.setVisibility(View.GONE);
                 }
-            },  1500);
+            },  500);
         }
         public void disappearImage(){
             imvAppear.setVisibility(View.GONE);
@@ -224,7 +212,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                             if (isPlaying) {
                                 pauseVideo();
                                 isPlaying = false;
-                                appearImage(R.drawable.ic_baseline_play_arrow_24);
+                                //appearImage(R.drawable.ic_baseline_play_arrow_24);
                             } else {
                                 playVideo();
                                 isPlaying = true;

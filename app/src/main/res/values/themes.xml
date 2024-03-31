@@ -105,4 +105,8 @@
         <item name="android:clickable">true</item>
         <item name="android:stateListAnimator">@drawable/button_state_list_anim_shrink</item>
     </style>
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4%</item>
+    </style>
 </resources>
