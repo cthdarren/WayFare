@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,7 +23,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.settings.AccessibilitySettingsActivity;
 import com.example.wayfare.Activity.settings.GeneralSettingsActivity;
 import com.example.wayfare.Activity.settings.NotificationSettingsActivity;
@@ -43,20 +40,13 @@ import com.example.wayfare.ViewModel.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
 
 public class SettingsFragment extends Fragment implements RecyclerViewInterface {
 
@@ -142,6 +132,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
             become_wayfarer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new TodayFragment());
                     //TODO UPDATE THIS
 //                    Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new HostingDashBoardFragment());
                 }

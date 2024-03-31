@@ -34,6 +34,18 @@
         </FrameLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomHostingNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="0dp"
+            android:elevation="10dp"
+            android:visibility="gone"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/hosting_bottom_menu" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,5 +54,7 @@
             android:elevation="10dp"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu" />
+
+
     </LinearLayout>
 </FrameLayout>
