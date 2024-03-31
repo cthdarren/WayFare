@@ -1,7 +1,10 @@
 package com.example.wayfare.Fragment;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -20,6 +23,9 @@ import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -37,6 +43,7 @@ public class SignUpFragment extends Fragment {
 
     Button continue_button;
     EditText username, email;
+    TextInputLayout usernameLayout, emailLayout;
     BottomNavigationView navBar;
     ImageView register_exit;
 
@@ -48,6 +55,7 @@ public class SignUpFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,10 +63,11 @@ public class SignUpFragment extends Fragment {
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
         username = view.findViewById(R.id.username);
+        usernameLayout = view.findViewById(R.id.username_layout);
         email = view.findViewById(R.id.emailAddress );
+        emailLayout= view.findViewById(R.id.email_layout);
         register_exit = view.findViewById(R.id.register_exit);
         continue_button = view.findViewById(R.id.continue_button);
-
         register_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,9 +88,9 @@ public class SignUpFragment extends Fragment {
     }
 
     private void checkUserNameAndEmail() {
-        String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), email.getText());
+        String json = String.format("{\"username\":\"%s\", \"email\":\"%s\"}", username.getText(), email.getText());
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        new AuthService(getContext()).getResponse("/api/v1/user/checknewuseremail", false, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+        new AuthService(getContext()).getResponse("/api/v1/auth/checknewuseremail", false, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 makeToast(message);
@@ -90,7 +99,28 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onResponse(ResponseModel json) {
                 if (json.success){
-                    getParentFragmentManager().beginTransaction().replace(R.id.flFragment, new SignUpFragment()).commit();
+                    Bundle args = new Bundle();
+                    args.putString("username", String.valueOf(username.getText()));
+                    args.putString("email", String.valueOf(email.getText()));
+                    SignUp2Fragment fragment = new SignUp2Fragment();
+                    fragment.setArguments(args);
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.container, fragment)
+                            .addToBackStack(null)
+                            .setReorderingAllowed(true)
+                            .commit();
+                }
+                else{
+                    JsonArray ja= json.data.getAsJsonArray();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            usernameLayout.setHelperText(ja.get(0).getAsString());
+                            usernameLayout.setHelperTextColor(ColorStateList.valueOf(getContext().getResources().getColor(R.color.red)));
+                            emailLayout.setHelperText(ja.get(1).getAsString());
+                            emailLayout.setHelperTextColor(ColorStateList.valueOf(getContext().getResources().getColor(R.color.red)));
+                        }
+                    });
                 }
             }
         });

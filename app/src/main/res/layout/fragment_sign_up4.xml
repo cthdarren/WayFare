@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tourEndTime"
     android:layout_width="match_parent"
-    android:clickable="true"
     android:background="@color/md_theme_background"
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/outer_padding"
     tools:context=".Fragment.SignInFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -42,9 +46,6 @@
                 android:drawableTint="@color/md_theme_background"
                 tools:ignore="MissingConstraints" />
         </LinearLayout></LinearLayout>
-
-
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
@@ -54,35 +55,37 @@
          />
 
     <TextView
-        android:id="@+id/helperTextHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="20dp"
-        android:text="Password must contain:\n1 number (0-9)\n1 uppercase letter\n1 lowercase letter\n8-16 characters with no space\n"
+        android:paddingVertical="30dp"
+        android:text="Tell us more about yourself."
         />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:hint="Password"
+        android:hint="Languages spoken"
+        app:helperText="Seperate by commas (e.g English, Mandarin, Hindu)"
         android:layout_height="wrap_content">
     <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
-        android:id="@+id/password"
-        android:inputType="textPassword"
+        android:id="@+id/languages_spoken"
+        android:maxLines="1"
         android:layout_height="wrap_content"
         />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_marginTop="40dp"
-        android:hint="Verify your password"
+        android:hint="Bio"
+        app:helperText="Max 300 characters"
         android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
-            android:id="@+id/verify_password"
-            android:inputType="textPassword"
+            android:id="@+id/bio"
+            android:maxLength="300"
             android:layout_height="wrap_content"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

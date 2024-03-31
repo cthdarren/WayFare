@@ -11,17 +11,40 @@
     android:paddingHorizontal="@dimen/outer_padding"
     tools:context=".Fragment.SignInFragment">
 
-    <ImageView
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="20dp"
+            android:layout_height="wrap_content">
+             <ImageView
         android:id="@+id/register_exit"
-        android:paddingEnd="15dp"
-        android:paddingBottom="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/cross"
         android:scaleType="fitStart"
          />
-
-
+            <LinearLayout
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <View
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    />
+                <Button
+                    android:id="@+id/continue_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Continue"
+                    android:drawableEnd="@drawable/chevron_right"
+                    android:drawableTint="@color/md_theme_background"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout></LinearLayout>
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
@@ -36,38 +59,33 @@
         android:paddingVertical="30dp"
         android:text="Start by choosing a username unique to yourself."
         />
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:hint="Username"
-        android:layout_height="wrap_content">
-        <EditText
-        android:id="@+id/username"
-        android:layout_width="match_parent"
+        android:id="@+id/username_layout"
         android:layout_height="wrap_content"
-        />
+        android:hint="Username"
+        app:helperText="*required"
+        app:boxBackgroundMode="outline"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:hint="Email address"
+        android:id="@+id/email_layout"
+        android:paddingTop="20dp"
+        app:helperText="*required"
         android:layout_height="wrap_content">
     <EditText
         android:id="@+id/emailAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
         android:inputType="textEmailAddress"
         />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/continue_button"
-        android:layout_gravity="end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Continue"
-        android:drawableEnd="@drawable/chevron_right"
-        android:drawableTint="@color/md_theme_background"
-        tools:ignore="MissingConstraints" />
 </LinearLayout>
