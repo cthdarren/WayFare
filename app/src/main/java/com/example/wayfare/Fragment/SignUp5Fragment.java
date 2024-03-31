@@ -24,6 +24,7 @@ import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -96,7 +97,11 @@ public class SignUp5Fragment extends Fragment {
                 Bundle args = new Bundle();
 
                 args.putAll(getArguments());
-
+                try {
+                    register();
+                } catch (IOException e) {
+                    makeToast("Server Error");
+                }
             }
         });
         open_gallery.setOnClickListener(new View.OnClickListener() {
@@ -119,8 +124,18 @@ public class SignUp5Fragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    username = getArguments().getString("username");
+                    email = getArguments().getString("email");
+                    password = getArguments().getString("password");
+                    verifyPassword = getArguments().getString("verifypassword");
+                    firstName = getArguments().getString("firstname");
+                    lastName = getArguments().getString("lastname");
+                    phoneNumber = getArguments().getString("phonenumber");
+                    bio = getArguments().getString("bio");
+                    languages = getArguments().getString("languages");
+
                     final OkHttpClient client = new OkHttpClient();
-                    String json = String.format("{\"username\":\"%s\", \"firstName\":\"%s\", \"lastName\":\"%s\", \"email\":\"%s\", \"phoneNumber\":\"%s\", \"password\":\"%s\", \"verifyPassword\":\"%s\", \"aboutMe\":\"%s\",\"languagesSpoken\":[\"%s\"],\"pictureUrl\":\"%s\" }", username, firstName, lastName, email, phoneNumber, password, verifyPassword, bio, languages, pictureUrl);
+                    String json = String.format("{\"username\":\"%s\", \"firstName\":\"%s\", \"lastName\":\"%s\", \"email\":\"%s\", \"phoneNumber\":\"%s\", \"password\":\"%s\", \"verifyPassword\":\"%s\", \"aboutMe\":\"%s\",\"languagesSpoken\":%s,\"pictureUrl\":\"%s\" }", username, firstName, lastName, email, phoneNumber, password, verifyPassword, bio, new Gson().toJson(languages.split(",")), pictureUrl);
 
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
                     Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/register")
@@ -140,6 +155,8 @@ public class SignUp5Fragment extends Fragment {
                         }
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
+                            if (response.code() == 200){
+
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -153,6 +170,10 @@ public class SignUp5Fragment extends Fragment {
                                             .commit();
                                 }
                             });
+                                }
+                            else{
+                                makeToast("Server Error");
+                            }
                         }
 
                     });

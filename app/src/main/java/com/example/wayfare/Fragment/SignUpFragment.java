@@ -78,6 +78,9 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
+                    continue_button.setEnabled(false);
+                    username.setEnabled(false);
+                    email.setEnabled(false);
                     checkUserNameAndEmail();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -104,17 +107,29 @@ public class SignUpFragment extends Fragment {
                     args.putString("email", String.valueOf(email.getText()));
                     SignUp2Fragment fragment = new SignUp2Fragment();
                     fragment.setArguments(args);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            continue_button.setEnabled(true);
+                            username.setEnabled(true);
+                            email.setEnabled(true);
+                        }
+                    });
                     getParentFragmentManager().beginTransaction()
                             .replace(R.id.container, fragment)
                             .addToBackStack(null)
                             .setReorderingAllowed(true)
                             .commit();
+
                 }
                 else{
                     JsonArray ja= json.data.getAsJsonArray();
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            continue_button.setEnabled(true);
+                            username.setEnabled(true);
+                            email.setEnabled(true);
                             usernameLayout.setHelperText(ja.get(0).getAsString());
                             usernameLayout.setHelperTextColor(ColorStateList.valueOf(getContext().getResources().getColor(R.color.red)));
                             emailLayout.setHelperText(ja.get(1).getAsString());
