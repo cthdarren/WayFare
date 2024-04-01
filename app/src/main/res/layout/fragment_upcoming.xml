@@ -32,7 +32,7 @@
             android:id="@+id/bookmarks"
             android:layout_width="@dimen/font_2xl"
             android:layout_height="@dimen/font_2xl"
-            android:src="@drawable/outline_bookmark_border_24" />
+            android:src="@drawable/listing_bookmark_outlined" />
 
     </LinearLayout>
 
