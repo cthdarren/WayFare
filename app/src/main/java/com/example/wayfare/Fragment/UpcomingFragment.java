@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.wayfare.Adapters.PastBookingAdapter;
@@ -44,7 +45,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
     ImageView bookmarksBtn;
     TextView Test;
     RecyclerView upcomingRecycler, pastRecycler;
-
+    ProgressBar progBar;
     List<BookingItemModel> upcomingBookings = new ArrayList<>();
     List<BookingItemModel> pastBookings = new ArrayList<>();
 
@@ -80,6 +81,9 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming, container, false);
+        progBar = getActivity().findViewById(R.id.progressBar);
+        progBar.setVisibility(View.VISIBLE);
+
         bookmarksBtn = view.findViewById(R.id.bookmarks);
 //        upcomingBookings.add(new BookingItemModel("thumbnail", "title", 5, "today", "picurl", "test"));
 
@@ -125,6 +129,8 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
 
                             SnapHelper snapHelper = new LinearSnapHelper();
                             snapHelper.attachToRecyclerView(upcomingRecycler);
+
+                            progBar.setVisibility(View.GONE);
                         }
                     });
 

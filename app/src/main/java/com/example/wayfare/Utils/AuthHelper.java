@@ -12,7 +12,7 @@ import okhttp3.RequestBody;
 public class AuthHelper {
     public static String PREFS_NAME = "sharedPref";
     public static String JSON_DATA_KEY = "user_info";
-    public static SharedPreferences sharedPreferences;
+    public SharedPreferences sharedPreferences;
 
     public AuthHelper(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);

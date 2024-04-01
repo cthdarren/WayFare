@@ -1,10 +1,9 @@
 package com.example.wayfare.Utils;
 
 import static com.example.wayfare.Utils.AuthHelper.JSON_DATA_KEY;
-import static com.example.wayfare.Utils.AuthHelper.PREFS_NAME;
-import static com.example.wayfare.Utils.AuthHelper.sharedPreferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,13 +27,13 @@ public class AuthService {
         private final String token;
         private final String baseUrl;
         private final Context context;
+        private final SharedPreferences sharedPreferences;
 
     public AuthService(Context context) {
         this.context = context;
         this.baseUrl = BuildConfig.API_URL;
-        sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        sharedPreferences = new AuthHelper(context).sharedPreferences;
         token = sharedPreferences.getString(JSON_DATA_KEY, "");
-
     }
 
     public interface ResponseListener {

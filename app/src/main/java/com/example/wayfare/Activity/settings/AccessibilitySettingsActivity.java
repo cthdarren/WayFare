@@ -1,5 +1,6 @@
 package com.example.wayfare.Activity.settings;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthHelper;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class AccessibilitySettingsActivity extends AppCompatActivity {
@@ -43,10 +45,13 @@ public class AccessibilitySettingsActivity extends AppCompatActivity {
         theme_change_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
+                if (isChecked) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    new AuthHelper(getApplicationContext()).sharedPreferences.edit().putString("Theme", "DARK").apply();
+                }
                 else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    new AuthHelper(getApplicationContext()).sharedPreferences.edit().putString("Theme", "LIGHT").apply();
                 }
 //                Intent intent = new Intent(buttonView.getContext(), MainActivity.class);
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

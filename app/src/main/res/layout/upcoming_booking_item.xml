@@ -32,7 +32,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
                 android:text="In 3 months"
-                android:textColor="@color/md_theme_background"
+                android:textColor="#E1E4D9"
                 android:textStyle="bold" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

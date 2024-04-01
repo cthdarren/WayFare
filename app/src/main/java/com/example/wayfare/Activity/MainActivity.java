@@ -3,6 +3,7 @@ package com.example.wayfare.Activity;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
@@ -46,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progBar;
 
     private boolean loggedIn;
-    //TODO when i log in to the app update a viewmodel with all the user details so you can share
-    // around the settings/profile fragments
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -58,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
         progBar = findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
+
+        if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
 
         if (new AuthHelper(getApplicationContext()).isLoggedIn()){
             loggedIn = true;
