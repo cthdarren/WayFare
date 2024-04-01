@@ -56,7 +56,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                 thumbnailUrl = "";
             else
                 thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
-            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername());
+            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername());
             upcomingBookings.add(toAdd);
         }
     }
@@ -68,7 +68,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                 thumbnailUrl = "";
             else
                 thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
-            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername());
+            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername());
             upcomingBookings.add(toAdd);
         }
     }

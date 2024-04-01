@@ -57,7 +57,8 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.wayfarerUsername.setText(upcomingBookingItemModels.get(position).wayfarerUsername);
         holder.title.setText(upcomingBookingItemModels.get(position).title);
-        holder.timeToBooking.setText(upcomingBookingItemModels.get(position).timeToBooking);
+        holder.bookingLocation.setText(upcomingBookingItemModels.get(position).location);
+        holder.timeToBooking.setText("In " + upcomingBookingItemModels.get(position).timeToBooking);
         holder.dateOfBooking.setText(upcomingBookingItemModels.get(position).dateOfBooking);
         holder.wayfarerUsername.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +122,7 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView thumbnail, wayfarerPicture;
-        private TextView title, wayfarerUsername, timeToBooking, dateOfBooking;
+        private TextView title, wayfarerUsername, timeToBooking, dateOfBooking, bookingLocation;
         private LinearLayout wayfarerDetailsWrapper;
 
 
@@ -133,6 +134,7 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
             wayfarerUsername = itemView.findViewById(R.id.wayfarerUsername);
             title = itemView.findViewById(R.id.title);
             timeToBooking = itemView.findViewById(R.id.timeToBooking);
+            bookingLocation = itemView.findViewById(R.id.bookingLocation);
             dateOfBooking = itemView.findViewById(R.id.dateOfBooking);
 
             itemView.setOnClickListener(new View.OnClickListener() {

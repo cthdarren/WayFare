@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/upcomingListingWrapper"
+    android:layout_marginEnd="0dp"
+    android:paddingHorizontal="@dimen/outer_padding"
+    android:clickable="true"
+    app:rippleColor="@color/transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="100dp"
+            android:layout_height="100dp">
+            <ImageView
+                android:id="@+id/pastListingThumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@color/md_theme_onSurface"
+                android:scaleType="centerCrop"/>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingStart="15dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/pastBookingTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingBottom="10dp"
+            android:textSize="@dimen/font_sm"
+            android:textStyle="bold"
+            android:text="Test booking 101"/>
+            <TextView
+                android:id="@+id/pastBookingDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_sm"
+                android:text="12 Nov 2024"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
