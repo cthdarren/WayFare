@@ -61,7 +61,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         currentPosition = pos;
     }
     public void pauseVideo(int position) {
-        shortsViewHolderList.get(position).pauseVideo();
+        if (shortsViewHolderList.size() > 0)
+            shortsViewHolderList.get(position).pauseVideo();
     }
 
     public void playVideo(int position) {
