@@ -13,8 +13,9 @@ public class BookingModel {
     private final int pax;
     private final String remarks;
     private final String status;
+    private final ReturnedUser user;
 
-    public BookingModel(TourListModel listing, String userId, TourListModel.TimeRange bookingDuration, String dateBooked, Double bookingPrice, int pax, String remarks, String status) {
+    public BookingModel(TourListModel listing, String userId, TourListModel.TimeRange bookingDuration, String dateBooked, Double bookingPrice, int pax, String remarks, String status, ReturnedUser user) {
         this.listing = listing;
         this.userId = userId;
         this.bookingDuration = bookingDuration;
@@ -23,6 +24,7 @@ public class BookingModel {
         this.pax = pax;
         this.remarks = remarks;
         this.status = status;
+        this.user = user;
     }
 
 
@@ -57,4 +59,12 @@ public class BookingModel {
     public String getStatus() {
         return status;
     }
+
+    public ReturnedUser getUser() {
+        return user;
+    }
+
+
 }
+
+
