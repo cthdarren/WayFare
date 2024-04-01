@@ -4,21 +4,26 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Models.BookingItemModel;
 import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
+import com.example.wayfare.Utils.Helper;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,7 +41,7 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
 
     public UpcomingBookingAdapter(Context context, List<BookingItemModel> upcomingBookingItemModels, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
-        this.upcomingBookingItemModels= upcomingBookingItemModels;
+        this.upcomingBookingItemModels = upcomingBookingItemModels;
         this.recyclerViewInterface = recyclerViewInterface;
     }
 
@@ -54,6 +59,20 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
         holder.title.setText(upcomingBookingItemModels.get(position).title);
         holder.timeToBooking.setText(upcomingBookingItemModels.get(position).timeToBooking);
         holder.dateOfBooking.setText(upcomingBookingItemModels.get(position).dateOfBooking);
+        holder.wayfarerUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle username = new Bundle();
+                username.putString("username", upcomingBookingItemModels.get(position).wayfarerUsername);
+                ProfileFragment pf = new ProfileFragment();
+                pf.setArguments(username);
+                AppCompatActivity containingActivity = (AppCompatActivity) context;
+                Helper.goToFragmentSlideInRight(containingActivity.getSupportFragmentManager(), R.id.container, pf);
+
+                containingActivity.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+                containingActivity.findViewById(R.id.bottomNavigationView).setVisibility(View.GONE);
+            }
+        });
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
@@ -63,19 +82,17 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
             public void run() {
                 try {
                     String picUrl = upcomingBookingItemModels.get(position).thumbnailUrl;
-                    String wayfarerPictureUrl= upcomingBookingItemModels.get(position).wayfarerPicUrl;
+                    String wayfarerPictureUrl = upcomingBookingItemModels.get(position).wayfarerPicUrl;
                     Bitmap wayfarerImage, image;
                     if (wayfarerPictureUrl != null) {
                         URL wpUrl = new URL(wayfarerPictureUrl);
                         wayfarerImage = BitmapFactory.decodeStream(wpUrl.openConnection().getInputStream());
-                    }
-                    else
+                    } else
                         wayfarerImage = null;
-                    if (picUrl != null){
+                    if (picUrl != null) {
                         URL url = new URL(picUrl);
                         image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    }
-                    else
+                    } else
                         image = null;
                     handler.post(new Runnable() {
                         @Override
@@ -83,7 +100,7 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
                             holder.thumbnail.setImageBitmap(image);
                             if (wayfarerImage != null)
                                 holder.wayfarerPicture.setImageBitmap(wayfarerImage);
-                            else{
+                            else {
                                 holder.wayfarerPicture.setBackgroundResource(R.drawable.default_avatar);
                             }
                         }
@@ -105,11 +122,13 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
 
         private ImageView thumbnail, wayfarerPicture;
         private TextView title, wayfarerUsername, timeToBooking, dateOfBooking;
+        private LinearLayout wayfarerDetailsWrapper;
 
 
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.thumbnail);
+            wayfarerDetailsWrapper = itemView.findViewById(R.id.wayfarerDetailsWrapper);
             wayfarerPicture = itemView.findViewById(R.id.wayfarerPicture);
             wayfarerUsername = itemView.findViewById(R.id.wayfarerUsername);
             title = itemView.findViewById(R.id.title);

@@ -25,6 +25,7 @@ import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.ReviewItemModel;
 import com.example.wayfare.Models.ReviewModel;
 import com.example.wayfare.Models.TourListModel;
+import com.example.wayfare.Models.UpcomingPastBookingResponse;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.AuthService;
@@ -45,10 +46,11 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
 
     List<BookingItemModel> upcomingBookings = new ArrayList<>();
 
-    public UpcomingFragment(){}
+    public UpcomingFragment() {
+    }
 
     public void setUpUpcomingModels(List<BookingModel> upcomingBookingModels) {
-        for (BookingModel booking: upcomingBookingModels) {
+        for (BookingModel booking : upcomingBookingModels) {
             String thumbnailUrl;
             if (booking.getListing().getThumbnailUrls().length == 0)
                 thumbnailUrl = "";
@@ -58,17 +60,19 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
             upcomingBookings.add(toAdd);
         }
     }
-//    public void setUpListingModels(List<TourListModel> listingList) {
-//        for (TourListModel tour : listingList) {
-//            String thumbnailUrl;
-//            if (tour.getThumbnailUrls().length == 0)
-//                thumbnailUrl = "";
-//            else
-//                thumbnailUrl = tour.getThumbnailUrls()[0];
-//            ListingItemModel toAdd = new ListingItemModel(thumbnailUrl, tour.getTitle(), tour.getRating(), tour.getReviewCount(), tour.getRegion());
-//            listingItemModels.add(toAdd);
-//        }
-//    }
+
+    public void setupPastBookingModels(List<BookingModel> upcomingBookingModels) {
+        for (BookingModel booking : upcomingBookingModels) {
+            String thumbnailUrl;
+            if (booking.getListing().getThumbnailUrls().length == 0)
+                thumbnailUrl = "";
+            else
+                thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
+            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername());
+            upcomingBookings.add(toAdd);
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -102,9 +106,10 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
 
             @Override
             public void onResponse(ResponseModel json) {
-                if (json.success){
-                    Type bookingList = new TypeToken<List<BookingModel>>(){}.getType();
-                    List<BookingModel> bookingModelList = new Gson().fromJson(json.data, bookingList);
+                if (json.success) {
+                    UpcomingPastBookingResponse response = new Gson().fromJson(json.data, UpcomingPastBookingResponse.class);
+                    List<BookingModel> bookingModelList = response.upcoming();
+                    List<BookingModel> pastBookingModelList = response.past();
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
