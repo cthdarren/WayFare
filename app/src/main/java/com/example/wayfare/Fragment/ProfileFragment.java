@@ -54,6 +54,7 @@ import java.util.concurrent.Executors;
 
 public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
+    String profileUsername;
     UserViewModel userViewModel;
     ImageView backButton;
     ProgressBar progBar;
@@ -87,22 +88,25 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
             reviewItemModels.add(toAdd);
         }
     }
+
     public void setUpListingModels(List<TourListModel> listingList) {
         for (TourListModel tour : listingList) {
             String thumbnailUrl;
             if (tour.getThumbnailUrls().length == 0)
-               thumbnailUrl = "";
+                thumbnailUrl = "";
             else
                 thumbnailUrl = tour.getThumbnailUrls()[0];
             ListingItemModel toAdd = new ListingItemModel(thumbnailUrl, tour.getTitle(), tour.getRating(), tour.getReviewCount(), tour.getRegion());
             listingItemModels.add(toAdd);
         }
     }
+
     @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        profileUsername = getArguments().getString("username");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         backButton = view.findViewById(R.id.profile_back);
@@ -143,118 +147,127 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         if (userData.isVerified())
             verification_truege.setImageResource(R.drawable.done);
 
-        if(Objects.equals(userData.getRole(), "ROLE_USER"))
+        if (Objects.equals(userData.getRole(), "ROLE_USER"))
             listings_wrapper.setVisibility(GONE);
 
         listingRecycler = view.findViewById(R.id.listing_carousel);
         listingRecycler.setAdapter(new ProfileListingAdapter(getContext(), listingItemModels, this));
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(reviewRecycler);
-        new AuthService(getContext()).getResponse("/api/v1/profile/" + userViewModel.getUserProfileData().getUsername(), false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
-            @Override
-            public void onError(String message) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                        getParentFragmentManager().popBackStack();
-                        progBar.setVisibility(GONE);
-                    }
-                });
-            }
+        if (profileUsername != null) {
 
-            @Override
-            public void onResponse(ResponseModel json) {
-                if (json.success) {
-                    ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
-
-                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                    Looper uiLooper = Looper.getMainLooper();
-                    final Handler handler = new Handler(uiLooper);
-                    executor.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Bitmap image;
-                                if (profileInfo.getPictureUrl() == null | Objects.equals(profileInfo.getPictureUrl(), ""))
-                                    image = null;
-                                else {
-                                    URL url = new URL(profileInfo.getPictureUrl());
-                                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                }
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (image != null)
-                                            profile_pic.setImageBitmap(image);
-                                        progBar.setVisibility(GONE);
-                                    }
-                                });
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getContext(), "Unexpected Error", Toast.LENGTH_SHORT).show();
-                                        getParentFragmentManager().popBackStack();
-                                        progBar.setVisibility(GONE);
-                                    }
-                                });
-                            }
-                        }
-                    });
-
+            new AuthService(getContext()).getResponse("/api/v1/profile/" + profileUsername, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+                @Override
+                public void onError(String message) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                            full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
-                            reviewCount.setText(profileInfo.getReviewCount().toString());
-                            languagesSpoken.setText(String.join(", ", profileInfo.getLanguagesSpoken()));
-                            review_title.setText(profileInfo.getFirstName() + "'s reviews");
-                            listings_wrapper_header.setText(profileInfo.getFirstName() + "'s listings");
-                            confirmed_info_header.setText(profileInfo.getFirstName() + "'s confirmed information");
-                            int numratings = profileInfo.getReviewCount();
-                            if (numratings == 0){
-                                ratings.setText("No ratings yet");
-                                ratings.setTextSize(16);
-                            }
-                            else{
-                                ratings.setText(String.valueOf(numratings));
-                            }
-                            int years = LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear();
-                            if (years < 1){
-                                years_on_wayfare.setText("First year");
-                                years_on_wayfare.setTextSize(16);
-                            }
-                            else{
-                                years_on_wayfare.setText(String.valueOf(years));
-                            }
-                            about_me.setText(profileInfo.getAboutMe());
-                            show_all_reviews_button.setText(String.format("Show all %d reviews", profileInfo.getReviewCount()));
-                            if (profileInfo.getReviewCount() == 0) {
-                                review_segment.setVisibility(GONE);
-                                ratings.setText("-");
-                            }
-                            else{
-                                ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
-                            }
-
-                            setupReviewModels(profileInfo.getReviews());
-                            setUpListingModels(profileInfo.getTours());
-
-                            reviewRecycler = view.findViewById(R.id.review_carousel);
-                            reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
-
-                            SnapHelper snapHelper = new LinearSnapHelper();
-                            snapHelper.attachToRecyclerView(reviewRecycler);
-
-                            listingRecycler.getAdapter().notifyDataSetChanged();
+                            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                            getParentFragmentManager().popBackStack();
+                            progBar.setVisibility(GONE);
                         }
                     });
                 }
-            }
-        });
+
+                @Override
+                public void onResponse(ResponseModel json) {
+                    if (json.success) {
+                        ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
+
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        Looper uiLooper = Looper.getMainLooper();
+                        final Handler handler = new Handler(uiLooper);
+                        executor.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Bitmap image;
+                                    if (profileInfo.getPictureUrl() == null | Objects.equals(profileInfo.getPictureUrl(), ""))
+                                        image = null;
+                                    else {
+                                        URL url = new URL(profileInfo.getPictureUrl());
+                                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                    }
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (image != null)
+                                                profile_pic.setImageBitmap(image);
+                                            progBar.setVisibility(GONE);
+                                        }
+                                    });
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "Unexpected Error", Toast.LENGTH_SHORT).show();
+                                            getParentFragmentManager().popBackStack();
+                                            progBar.setVisibility(GONE);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
+                                reviewCount.setText(profileInfo.getReviewCount().toString());
+                                languagesSpoken.setText(String.join(", ", profileInfo.getLanguagesSpoken()));
+                                review_title.setText(profileInfo.getFirstName() + "'s reviews");
+                                listings_wrapper_header.setText(profileInfo.getFirstName() + "'s listings");
+                                confirmed_info_header.setText(profileInfo.getFirstName() + "'s confirmed information");
+                                int numratings = profileInfo.getReviewCount();
+                                if (numratings == 0) {
+                                    ratings.setText("No ratings yet");
+                                    ratings.setTextSize(16);
+                                } else {
+                                    ratings.setText(String.valueOf(numratings));
+                                }
+                                int years = LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear();
+                                if (years < 1) {
+                                    years_on_wayfare.setText("First year");
+                                    years_on_wayfare.setTextSize(16);
+                                } else {
+                                    years_on_wayfare.setText(String.valueOf(years));
+                                }
+                                about_me.setText(profileInfo.getAboutMe());
+                                show_all_reviews_button.setText(String.format("Show all %d reviews", profileInfo.getReviewCount()));
+                                if (profileInfo.getReviewCount() == 0) {
+                                    review_segment.setVisibility(GONE);
+                                    ratings.setText("-");
+                                } else {
+                                    ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
+                                }
+
+                                setupReviewModels(profileInfo.getReviews());
+                                setUpListingModels(profileInfo.getTours());
+
+                                reviewRecycler = view.findViewById(R.id.review_carousel);
+                                reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
+
+                                SnapHelper snapHelper = new LinearSnapHelper();
+                                snapHelper.attachToRecyclerView(reviewRecycler);
+
+                                listingRecycler.getAdapter().notifyDataSetChanged();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else{
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), "No such profile", Toast.LENGTH_SHORT).show();
+                }
+            });
+            getParentFragmentManager().popBackStack();
+        }
     }
 
     @Override

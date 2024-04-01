@@ -64,15 +64,28 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
                 try {
                     String picUrl = upcomingBookingItemModels.get(position).thumbnailUrl;
                     String wayfarerPictureUrl= upcomingBookingItemModels.get(position).wayfarerPicUrl;
-                    URL url = new URL(picUrl);
-                    URL wpUrl = new URL(wayfarerPictureUrl);
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    Bitmap wayfarerImage = BitmapFactory.decodeStream(wpUrl.openConnection().getInputStream());
+                    Bitmap wayfarerImage, image;
+                    if (wayfarerPictureUrl != null) {
+                        URL wpUrl = new URL(wayfarerPictureUrl);
+                        wayfarerImage = BitmapFactory.decodeStream(wpUrl.openConnection().getInputStream());
+                    }
+                    else
+                        wayfarerImage = null;
+                    if (picUrl != null){
+                        URL url = new URL(picUrl);
+                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                    }
+                    else
+                        image = null;
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
                             holder.thumbnail.setImageBitmap(image);
-                            holder.wayfarerPicture.setImageBitmap(wayfarerImage);
+                            if (wayfarerImage != null)
+                                holder.wayfarerPicture.setImageBitmap(wayfarerImage);
+                            else{
+                                holder.wayfarerPicture.setBackgroundResource(R.drawable.default_avatar);
+                            }
                         }
                     });
 

@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,11 +105,14 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                 if (json.success){
                     Type bookingList = new TypeToken<List<BookingModel>>(){}.getType();
                     List<BookingModel> bookingModelList = new Gson().fromJson(json.data, bookingList);
-                    setUpUpcomingModels(bookingModelList);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            setUpUpcomingModels(bookingModelList);
                             upcomingRecycler.getAdapter().notifyDataSetChanged();
+
+                            SnapHelper snapHelper = new LinearSnapHelper();
+                            snapHelper.attachToRecyclerView(upcomingRecycler);
                         }
                     });
 

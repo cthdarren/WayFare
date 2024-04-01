@@ -66,8 +66,9 @@
                     <TextView
                         android:id="@+id/title"
                         android:layout_width="match_parent"
+                        android:textStyle="bold"
                         android:layout_height="wrap_content"
-                        android:maxLength="20"
+                        android:maxLines="1"
                         android:layout_marginBottom="6dp"
                         android:text="new boooooooooooooooooooooooooooooking"
                         android:textSize="@dimen/font_md" />

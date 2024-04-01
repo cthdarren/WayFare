@@ -52,7 +52,14 @@ public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAd
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.listingTitle.setText(listingItemModels.get(position).title);
         holder.listingRegion.setText(listingItemModels.get(position).region);
-        holder.listingRating.setText(String.valueOf(listingItemModels.get(position).rating) + "★" + " (" + listingItemModels.get(position).ratingCount + ")");
+        int ratingCount = listingItemModels.get(position).ratingCount;
+        if (ratingCount > 0)
+            holder.listingRating.setText(String.valueOf(listingItemModels.get(position).rating) + "★" + " (" + listingItemModels.get(position).ratingCount + ")");
+        else{
+            holder.listingRating.setText("No reviews yet");
+            holder.listingRating.setTextSize(14);
+        }
+
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
