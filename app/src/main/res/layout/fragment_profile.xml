@@ -50,7 +50,7 @@
                     <ImageView
                         android:id="@+id/profile_picture"
                         android:layout_width="100dp"
-                        android:src="@drawable/account_circle"
+                        android:src="@drawable/default_avatar"
                         android:layout_height="100dp"
                         android:scaleType="centerCrop">
                     </ImageView>

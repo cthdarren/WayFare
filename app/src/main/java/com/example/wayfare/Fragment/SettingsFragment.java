@@ -191,7 +191,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
             });
         }
         else{
-            user_profile_pic.setBackgroundResource(R.drawable.account_circle);
+            user_profile_pic.setBackgroundResource(R.drawable.default_avatar);
             progBar.setVisibility(View.GONE);
         }
     }

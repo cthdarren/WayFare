@@ -73,6 +73,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView listings_wrapper_header;
     TextView confirmed_info_header;
     ImageView verification_truege;
+    TextView languagesSpoken;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
     List<ListingItemModel> listingItemModels = new ArrayList<>();
 
@@ -110,6 +111,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         profile_pic = view.findViewById(R.id.profile_picture);
         full_name = view.findViewById(R.id.full_name);
+        languagesSpoken = view.findViewById(R.id.languages_spoken);
         review_segment = view.findViewById(R.id.review_segment);
         review_title = view.findViewById(R.id.review_title);
         reviewCount = view.findViewById(R.id.num_reviews);
@@ -155,6 +157,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                     @Override
                     public void run() {
                         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        getParentFragmentManager().popBackStack();
                         progBar.setVisibility(GONE);
                     }
                 });
@@ -193,6 +196,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                     @Override
                                     public void run() {
                                         Toast.makeText(getContext(), "Unexpected Error", Toast.LENGTH_SHORT).show();
+                                        getParentFragmentManager().popBackStack();
                                         progBar.setVisibility(GONE);
                                     }
                                 });
@@ -206,6 +210,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
                             full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
                             reviewCount.setText(profileInfo.getReviewCount().toString());
+                            languagesSpoken.setText(String.join(", ", profileInfo.getLanguagesSpoken()));
                             review_title.setText(profileInfo.getFirstName() + "'s reviews");
                             listings_wrapper_header.setText(profileInfo.getFirstName() + "'s listings");
                             confirmed_info_header.setText(profileInfo.getFirstName() + "'s confirmed information");

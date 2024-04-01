@@ -135,7 +135,7 @@ public class SignUp5Fragment extends Fragment {
                     languages = getArguments().getString("languages");
 
                     final OkHttpClient client = new OkHttpClient();
-                    String json = String.format("{\"username\":\"%s\", \"firstName\":\"%s\", \"lastName\":\"%s\", \"email\":\"%s\", \"phoneNumber\":\"%s\", \"password\":\"%s\", \"verifyPassword\":\"%s\", \"aboutMe\":\"%s\",\"languagesSpoken\":%s,\"pictureUrl\":\"%s\" }", username, firstName, lastName, email, phoneNumber, password, verifyPassword, bio, new Gson().toJson(languages.split(",")), pictureUrl);
+                    String json = String.format("{\"username\":\"%s\", \"firstName\":\"%s\", \"lastName\":\"%s\", \"email\":\"%s\", \"phoneNumber\":\"%s\", \"password\":\"%s\", \"verifyPassword\":\"%s\", \"aboutMe\":\"%s\",\"languagesSpoken\":%s,\"pictureUrl\":\"%s\" }", username, firstName, lastName, email, phoneNumber, password, verifyPassword, bio, new Gson().toJson(languages.trim().split(",")), pictureUrl);
 
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
                     Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/register")

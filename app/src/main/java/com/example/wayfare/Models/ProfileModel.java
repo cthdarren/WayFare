@@ -1,6 +1,5 @@
 package com.example.wayfare.Models;
 
-import java.time.Instant;
 import java.util.List;
 
 public class ProfileModel {
@@ -10,6 +9,7 @@ public class ProfileModel {
     private final String aboutMe;
     private final String pictureUrl;
     private final List<String> badges;
+    private final List<String> languagesSpoken;
     private final Double avgScore;
     private final Integer reviewCount;
     private final String role;
@@ -17,13 +17,14 @@ public class ProfileModel {
     private final List<TourListModel> tours;
     private final String dateCreated;
 
-    public ProfileModel(String username, String firstName, String lastName, String aboutMe, String pictureUrl, List<String> badges, Double avgScore, Integer reviewCount, String role, List<ReviewModel> reviews, List<TourListModel> tours, String dateCreated) {
+    public ProfileModel(String username, String firstName, String lastName, String aboutMe, String pictureUrl, List<String> badges, List<String> languagesSpoken, Double avgScore, Integer reviewCount, String role, List<ReviewModel> reviews, List<TourListModel> tours, String dateCreated) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.aboutMe = aboutMe;
         this.pictureUrl = pictureUrl;
         this.badges = badges;
+        this.languagesSpoken = languagesSpoken;
         this.avgScore = avgScore;
         this.reviewCount = reviewCount;
         this.role = role;
@@ -78,5 +79,9 @@ public class ProfileModel {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public List<String> getLanguagesSpoken() {
+        return languagesSpoken;
     }
 }
