@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.wayfare.Adapters.PastBookingAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.Adapters.UpcomingBookingAdapter;
 import com.example.wayfare.Models.BookingItemModel;
@@ -42,9 +43,10 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
 
     ImageView bookmarksBtn;
     TextView Test;
-    RecyclerView upcomingRecycler;
+    RecyclerView upcomingRecycler, pastRecycler;
 
     List<BookingItemModel> upcomingBookings = new ArrayList<>();
+    List<BookingItemModel> pastBookings = new ArrayList<>();
 
     public UpcomingFragment() {
     }
@@ -61,15 +63,15 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         }
     }
 
-    public void setupPastBookingModels(List<BookingModel> upcomingBookingModels) {
-        for (BookingModel booking : upcomingBookingModels) {
+    public void setupPastBookingModels(List<BookingModel> pastBookingModels) {
+        for (BookingModel booking : pastBookingModels) {
             String thumbnailUrl;
             if (booking.getListing().getThumbnailUrls().length == 0)
                 thumbnailUrl = "";
             else
                 thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
             BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername());
-            upcomingBookings.add(toAdd);
+            pastBookings.add(toAdd);
         }
     }
 
@@ -97,6 +99,8 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
 
         upcomingRecycler = view.findViewById(R.id.upcomingBookingsCarousel);
         upcomingRecycler.setAdapter(new UpcomingBookingAdapter(getContext(), upcomingBookings, this));
+        pastRecycler = view.findViewById(R.id.pastBookingList);
+        pastRecycler.setAdapter(new PastBookingAdapter(getContext(), pastBookings, this));
 
         new AuthService(getContext()).getResponse("/bookings", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
@@ -114,7 +118,10 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                         @Override
                         public void run() {
                             setUpUpcomingModels(bookingModelList);
+                            setupPastBookingModels(pastBookingModelList);
+
                             upcomingRecycler.getAdapter().notifyDataSetChanged();
+                            pastRecycler.getAdapter().notifyDataSetChanged();
 
                             SnapHelper snapHelper = new LinearSnapHelper();
                             snapHelper.attachToRecyclerView(upcomingRecycler);

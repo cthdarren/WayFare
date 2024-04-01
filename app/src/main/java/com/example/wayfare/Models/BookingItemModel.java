@@ -12,6 +12,7 @@ public class BookingItemModel {
     public final String location;
     public final String timeToBooking;
     public final String dateOfBooking;
+    public final String timeOfBooking;
     public final String wayfarerPicUrl;
     public final String wayfarerUsername;
 
@@ -29,8 +30,9 @@ public class BookingItemModel {
         if (startTimeOfBooking == 0)
             startTimeOfBooking = 12;
 
-        this.dateOfBooking = LocalDate.parse(dateOfBooking.substring(0,10)).format( DateTimeFormatter.ofPattern("dd MMM YYYY, ")) + String.valueOf(startTimeOfBooking) + timePostfix;
+        this.dateOfBooking = LocalDate.parse(dateOfBooking.substring(0,10)).format( DateTimeFormatter.ofPattern("dd MMM YYYY"));
 
+        this.timeOfBooking = String.valueOf(startTimeOfBooking) + timePostfix;
 
         timeToBooking = Helper.getDifferenceInTimeString(Instant.parse(dateOfBooking), Instant.now());
     }

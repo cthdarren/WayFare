@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/upcomingListingWrapper"
-    android:layout_marginEnd="0dp"
-    android:paddingHorizontal="@dimen/outer_padding"
+    android:layout_marginBottom="15dp"
     android:clickable="true"
     app:rippleColor="@color/transparent"
     android:orientation="vertical">
@@ -37,16 +36,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:paddingBottom="10dp"
             android:textSize="@dimen/font_sm"
+            android:paddingBottom="5dp"
             android:textStyle="bold"
             android:text="Test booking 101"/>
+            <TextView
+                android:id="@+id/pastBookingLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_sm"
+                android:paddingBottom="5dp"
+                android:text="Singapore"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/pastBookingWayfarer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_xs"
+                    android:text="Hosted by me"/>
             <TextView
                 android:id="@+id/pastBookingDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_sm"
+                android:layout_weight="1"
+                android:textSize="@dimen/font_xs"
+                android:gravity="end"
                 android:text="12 Nov 2024"/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

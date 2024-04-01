@@ -59,7 +59,7 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
         holder.title.setText(upcomingBookingItemModels.get(position).title);
         holder.bookingLocation.setText(upcomingBookingItemModels.get(position).location);
         holder.timeToBooking.setText("In " + upcomingBookingItemModels.get(position).timeToBooking);
-        holder.dateOfBooking.setText(upcomingBookingItemModels.get(position).dateOfBooking);
+        holder.dateOfBooking.setText(upcomingBookingItemModels.get(position).dateOfBooking + ", " + upcomingBookingItemModels.get(position).timeOfBooking);
         holder.wayfarerUsername.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
