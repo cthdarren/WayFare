@@ -139,8 +139,7 @@ public class ConfirmBooking extends AppCompatActivity {
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
-        // timing need to edit back to 24 hour format?
-        //String json = String.format("{'listing':'%s', 'userId':'%s', 'bookingDuration':'%s', 'dateBooked':'%s', 'bookingPrice':'%s', 'pax':'%s', 'remarks':'%s'}", title, userId, timing, dateBooked, price, pax, remarks);
+        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, userId, timing, dateBooked, price, pax, remarks);
         //RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         //new AuthService(this).getResponse("/booking/create/{id})");
     }
