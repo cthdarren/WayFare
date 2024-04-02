@@ -17,11 +17,14 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.Helper;
+import com.example.wayfare.ViewModel.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -55,6 +58,8 @@ public class SignUpSuccessFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up_success, container, false);
+
+
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         navBar.setVisibility(View.INVISIBLE);
         welcome_message = view.findViewById(R.id.welcome_message);
@@ -65,8 +70,7 @@ public class SignUpSuccessFragment extends Fragment {
         verify_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO REROUTE TO VERIFICATION ACCOUNT SCREEN
-                Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new SignInFragment());
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new VerifyAccountFragment());
             }
         });
         sign_in.setOnClickListener(new View.OnClickListener() {

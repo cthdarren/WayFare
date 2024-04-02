@@ -41,6 +41,7 @@ import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -61,11 +62,12 @@ import okhttp3.OkHttpClient;
 public class SettingsFragment extends Fragment implements RecyclerViewInterface {
 
     private RecyclerView settingsRecyclerView;
-    private Button logoutBtn;
+    private Button logoutBtn, verifyButton;
     private ImageView user_profile_pic;
     private TextView user_greeting;
     private BottomNavigationView navBar;
     private UserViewModel userViewModel;
+    private MaterialCardView verification_prompt;
     private ProgressBar progBar;
     private LinearLayout route_to_profile;
     private LinearLayout become_wayfarer;
@@ -95,15 +97,17 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        logoutBtn = view.findViewById(R.id.logoutBtn);
-        route_to_profile = view.findViewById(R.id.route_to_profile);
-        become_wayfarer = view.findViewById(R.id.become_wayfarer);
-        become_wayfarer_text = view.findViewById(R.id.become_wayfarer_text);
-        become_wayfarer_icon = view.findViewById(R.id.become_wayfarer_icon);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
 
+        logoutBtn = view.findViewById(R.id.logoutBtn);
+        verifyButton = view.findViewById(R.id.verifybutton);
+        route_to_profile = view.findViewById(R.id.route_to_profile);
+        become_wayfarer = view.findViewById(R.id.become_wayfarer);
+        become_wayfarer_text = view.findViewById(R.id.become_wayfarer_text);
+        become_wayfarer_icon = view.findViewById(R.id.become_wayfarer_icon);
+        verification_prompt = view.findViewById(R.id.verification_prompt);
 
         route_to_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +131,13 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
             }
         });
 
+        verifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new VerifyAccountFragment());
+            }
+        });
+
         return view;
     }
 
@@ -140,6 +151,13 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         UserModel userData = userViewModel.getUserProfileData();
         String picUrl = userData.getPictureUrl();
         String userFirstName = userData.getFirstName();
+        if (!userData.isVerified()){
+            verification_prompt.setVisibility(View.VISIBLE);
+        }
+        else{
+            verification_prompt.setVisibility(View.GONE);
+        }
+
 
         if (Objects.equals(userData.getRole(), "ROLE_WAYFARER")){
             become_wayfarer_text.setText("Switch to Hosting");

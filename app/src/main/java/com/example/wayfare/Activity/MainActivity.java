@@ -157,31 +157,26 @@ public class MainActivity extends AppCompatActivity {
                 switch (prev) {
                     case "com.example.wayfare.Fragment.SettingsFragment" -> {
                         idToGo = R.id.account;
-                        getSupportFragmentManager().popBackStack();
                     }
                     case "com.example.wayfare.Fragment.Public.PublicSettingsFragment" -> {
                         idToGo = R.id.account;
-                        getSupportFragmentManager().popBackStack();
                     }
                     case "com.example.wayfare.Fragment.ToursFragment" -> {
                         idToGo = R.id.tours;
-                        getSupportFragmentManager().popBackStack();
                     }
-                    case "com.example.wayfare.Fragment.Upcoming" -> {
+                    case "com.example.wayfare.Fragment.UpcomingFragment" -> {
                         idToGo = R.id.upcoming;
-                        getSupportFragmentManager().popBackStack();
                     }
                     case "com.example.wayfare.Fragment.Public.PublicUpcomingFragment" -> {
                         idToGo = R.id.upcoming;
-                        getSupportFragmentManager().popBackStack();
                     }
                     default -> {
                         idToGo = R.id.explore;
-                        getSupportFragmentManager().popBackStack();
                     }
                 }
                 backing = true;
                 navbar.setSelectedItemId(idToGo);
+                getSupportFragmentManager().popBackStack();
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);

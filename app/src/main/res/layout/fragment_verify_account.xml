@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:clickable="true"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     android:padding="@dimen/outer_padding"
     tools:context=".Fragment.AccountFragment">
-
+    <ImageView
+        android:id="@+id/register_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        android:paddingBottom="30dp"
+        android:scaleType="fitStart"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -34,4 +44,4 @@
                 android:text="Click here to verify your email"/>
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

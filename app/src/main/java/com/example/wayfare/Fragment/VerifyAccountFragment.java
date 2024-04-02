@@ -24,7 +24,7 @@ public class VerifyAccountFragment extends Fragment {
         verifyEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new VerifySuccessFragment());
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new VerifySuccessFragment());
             }
         });
         return view;
