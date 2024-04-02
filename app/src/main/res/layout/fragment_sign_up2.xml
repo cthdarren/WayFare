@@ -63,6 +63,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:hint="Password"
+        app:endIconDrawable="@drawable/visibilitytoggle"
+        app:endIconMode="password_toggle"
         android:layout_height="wrap_content">
     <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
@@ -72,8 +74,11 @@
         />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/verify_password_wrapper"
         android:layout_width="match_parent"
         android:layout_marginTop="40dp"
+        app:endIconDrawable="@drawable/visibilitytoggle"
+        app:endIconMode="password_toggle"
         android:hint="Verify your password"
         android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText

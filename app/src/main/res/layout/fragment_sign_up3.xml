@@ -62,6 +62,7 @@
         android:text="Tell us more about yourself."
         />
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/first_name_wrapper"
         android:layout_width="match_parent"
         android:hint="First name"
         android:layout_height="wrap_content">
@@ -73,6 +74,7 @@
         />
     </com.google.android.material.textfield.TextInputLayout>
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/last_name_wrapper"
         android:layout_width="match_parent"
         android:layout_marginTop="40dp"
         android:hint="Last name"
@@ -84,6 +86,7 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phone_number_wrapper"
             android:layout_width="match_parent"
             android:layout_marginTop="40dp"
             android:hint="Phone number"

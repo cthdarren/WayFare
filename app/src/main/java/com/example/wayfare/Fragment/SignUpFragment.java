@@ -26,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -97,6 +98,14 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onError(String message) {
                 makeToast(message);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        continue_button.setEnabled(true);
+                        username.setEnabled(true);
+                        email.setEnabled(true);
+                    }
+                });
             }
 
             @Override
@@ -130,10 +139,20 @@ public class SignUpFragment extends Fragment {
                             continue_button.setEnabled(true);
                             username.setEnabled(true);
                             email.setEnabled(true);
-                            usernameLayout.setHelperText(ja.get(0).getAsString());
-                            usernameLayout.setHelperTextColor(ColorStateList.valueOf(getContext().getResources().getColor(R.color.red)));
-                            emailLayout.setHelperText(ja.get(1).getAsString());
-                            emailLayout.setHelperTextColor(ColorStateList.valueOf(getContext().getResources().getColor(R.color.red)));
+
+                            if (!(ja.get(0) instanceof JsonNull)) {
+                                usernameLayout.setErrorEnabled(true);
+                                usernameLayout.setError(ja.get(0).getAsString());
+                            }
+                            else
+                                usernameLayout.setErrorEnabled(false);
+
+                            if (!(ja.get(1) instanceof JsonNull)){
+                                emailLayout.setErrorEnabled(true);
+                                emailLayout.setError(ja.get(1).getAsString());
+                            }
+                            else
+                                emailLayout.setErrorEnabled(false);
                         }
                     });
                 }

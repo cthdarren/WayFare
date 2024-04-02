@@ -7,6 +7,9 @@ import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.R;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Helper {
     public static void goToLogin(FragmentManager fm) {
@@ -83,4 +86,6 @@ public class Helper {
         }
         return String.format("%s %s", number, timeCategory);
     }
+
+    public static List<String> languages = Arrays.asList("Abkhaz ", "Afar ", "Afrikaans ", "Akan ", "Albanian ", "Amharic ", "Arabic ", "Aragonese ", "Armenian ", "Assamese ", "Avaric ", "Avestan ", "Aymara ", "Azerbaijani ", "Bambara ", "Bashkir ", "Basque ", "Belarusian ", "Bengali; Bangla ", "Bihari ", "Bislama ", "Bosnian ", "Breton ", "Bulgarian ", "Burmese ", "Catalan; Valencian ", "Chamorro ", "Chechen ", "Chichewa; Chewa; Nyanja ", "Chinese ", "Chuvash ", "Cornish ", "Corsican ", "Cree ", "Croatian ", "Czech ", "Danish ", "Divehi; Dhivehi; Maldivian; ", "Dutch ", "Dzongkha ", "English ", "Esperanto ", "Estonian ", "Ewe ", "Faroese ", "Fijian ", "Finnish ", "French ", "Fula; Fulah; Pulaar; Pular ", "Galician ", "Ganda ", "Georgian ", "German ", "Greek", "Guaraní ", "Gujarati ", "Haitian; Haitian Creole ", "Hausa ", "Hebrew (modern) ", "Herero ", "Hindi ", "Hiri Motu ", "Hungarian ", "Icelandic ", "Ido ", "Igbo ", "Indonesian ", "Interlingua ", "Interlingue ", "Inuktitut ", "Inupiaq ", "Irish ", "Italian ", "Japanese ", "Javanese ", "Kalaallisut", "Kannada ", "Kanuri ", "Kashmiri ", "Kazakh ", "Khmer ", "Kikuyu", "Kinyarwanda ", "Kirundi ", "Komi ", "Kongo ", "Korean ", "Kurdish ", "Kwanyama", "Kyrgyz ", "Lao ", "Latin ", "Latvian ", "Limburgish", "Lingala ", "Lithuanian ", "Luba-Katanga ", "Luxembourgish", "Macedonian ", "Malagasy ", "Malay ", "Malayalam ", "Maltese ", "Manx ", "Marathi (Marāṭhī) ", "Marshallese ", "Mongolian ", "Māori ", "Nauru ", "Navajo", "Ndonga ", "Nepali ", "North Ndebele ", "Northern Sami ", "Norwegian ", "Norwegian Bokmål ", "Norwegian Nynorsk ", "Nuosu ", "Occitan ", "Ojibwe", "Old Church Slavonic", "Oriya ", "Oromo ", "Ossetian", "Panjabi", "Pashto", "Persian (Farsi) ", "Polish ", "Portuguese ", "Pāli ", "Quechua ", "Romanian ", "Romansh ", "Russian ", "Samoan ", "Sango ", "Sanskrit (Saṁskṛta) ", "Sardinian ", "Scottish Gaelic; Gaelic ", "Serbian ", "Shona ", "Sindhi ", "Sinhala", "Slovak ", "Slovene ", "Somali ", "South Azerbaijani ", "South Ndebele ", "Southern Sotho ", "Spanish; Castilian ", "Sundanese ", "Swahili ", "Swati ", "Swedish ", "Tagalog ", "Tahitian ", "Tajik ", "Tamil ", "Tatar ", "Telugu ", "Thai ", "Tibetan Standard", "Tigrinya ", "Tonga (Tonga Islands) ", "Tsonga ", "Tswana ", "Turkish ", "Turkmen ", "Twi ", "Ukrainian ", "Urdu ", "Uyghur", "Uzbek ", "Venda ", "Vietnamese ", "Volapük ", "Walloon ", "Welsh ", "Western Frisian ", "Wolof ", "Xhosa ", "Yiddish ", "Yoruba ", "Zhuang", "Zulu ");
 }

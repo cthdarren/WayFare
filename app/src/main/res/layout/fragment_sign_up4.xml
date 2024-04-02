@@ -63,11 +63,15 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:hint="Languages spoken"
-        app:helperText="Seperate by commas (e.g English, Mandarin, Hindu)"
+        app:helperText="*required"
+        android:id="@+id/languages_spoken_wrapper"
         android:layout_height="wrap_content">
     <com.google.android.material.textfield.TextInputEditText
         android:layout_width="match_parent"
+        android:focusable="false"
+        android:textIsSelectable="true"
         android:id="@+id/languages_spoken"
+        android:inputType="none"
         android:maxLines="1"
         android:layout_height="wrap_content"
         />
@@ -76,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="40dp"
         android:hint="Bio"
-        app:helperText="Max 300 characters"
+        app:helperText="Max. 300 characters"
         android:layout_height="wrap_content">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
