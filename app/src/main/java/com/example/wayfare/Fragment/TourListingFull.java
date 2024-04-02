@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -56,6 +57,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     timingAdapter newTimingAdapter;
     String dateChosen = null;
     MaterialButton button;
+    ArrayList<Integer> timeList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,7 +95,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             tvReviewCount.setText(reviewCountFormat);
 
             timingArray = args.getStringArray("timingArray");
-
+            timeList = args.getIntegerArrayList("timeList");
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         newTimingAdapter = new timingAdapter(getContext(), timingArray, this);
@@ -164,6 +166,15 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
             intent.putExtra("description", getArguments().getString("description"));
             intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
+
+            int startingIndex = position * 2;
+            timeList = getArguments().getIntegerArrayList("timeList");
+            if (!timeList.isEmpty()){
+                timeList.subList(startingIndex, startingIndex+1);
+
+                intent.putExtra("startTime", timeList.get(0));
+                intent.putExtra("startTime", timeList.get(1));
+            }
 
             String timing = timingArray[position];
             intent.putExtra("timing", timing);

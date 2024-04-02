@@ -2,6 +2,7 @@ package com.example.wayfare.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.os.Bundle;
@@ -35,6 +36,9 @@ public class ConfirmBooking extends AppCompatActivity {
     String thumbnail = null;
     String timing = null;
     String dateChosen = null;
+    int startTime;
+    int endTime;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class ConfirmBooking extends AppCompatActivity {
             reviewCount = extras.getString("reviewCount");
             timing = extras.getString("timing");
             dateChosen = extras.getString("dateChosen");
+            startTime = extras.getInt("startTime");
+            endTime = extras.getInt("endTime");
         }
 
         MaterialTextView tvTitle = findViewById(R.id.title);
@@ -68,6 +74,7 @@ public class ConfirmBooking extends AppCompatActivity {
         MaterialTextView tvReviewCount = findViewById(R.id.reviewCount);
         MaterialTextView tvTiming = findViewById(R.id.timing);
         MaterialTextView tvDateChosen = findViewById(R.id.dateformat);
+        AppCompatEditText tvRemarks = findViewById(R.id.remarks);
 
         tvTitle.setText(title);
         tvRating.setText(rating);
@@ -82,19 +89,11 @@ public class ConfirmBooking extends AppCompatActivity {
                 .into(ivThumbnail);
 
 
-        Button button = findViewById(R.id.confirmButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                createBooking();
-            }
-        });
-
-
         AppCompatImageButton decrementButton = findViewById(R.id.decrement);
         AppCompatImageButton incrementButton = findViewById(R.id.increment);
         MaterialTextView counter = findViewById(R.id.counter);
         final int[] counterValue = {1};
+
         incrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,6 +111,16 @@ public class ConfirmBooking extends AppCompatActivity {
             }
         });
 
+
+        Button button = findViewById(R.id.confirmButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String remark = tvRemarks.getText().toString();
+                int pax = counterValue[0];
+                createBooking();
+            }
+        });
+
     }
 
     @Override
@@ -125,13 +134,12 @@ public class ConfirmBooking extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
         // timing need to edit back to 24 hour format?
-        // datebooked needs timepicker
-        // paxs need incrementer
-        // remarks need edittext
         //String json = String.format("{'listing':'%s', 'userId':'%s', 'bookingDuration':'%s', 'dateBooked':'%s', 'bookingPrice':'%s', 'pax':'%s', 'remarks':'%s'}", title, userId, timing, dateBooked, price, pax, remarks);
         //RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         //new AuthService(this).getResponse("/booking/create/{id})");

@@ -290,10 +290,11 @@
                 android:layout_marginStart="16dp" />
 
             <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/remarks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:text="add reeeemarks here"
+                android:hint="I hope you can include some information about the food culture!"
                 android:textSize="16dp"
                 android:fontFamily="@font/montserrat"
                 app:layout_constraintTop_toBottomOf="@+id/header2"
