@@ -41,6 +41,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -152,8 +154,16 @@ public class MainActivity extends AppCompatActivity {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
+                String curr = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
                 String prev = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 2).getName();
                 int idToGo;
+                if (
+                        Objects.equals(curr, "com.example.wayfare.Fragment.SettingsFragment") |
+                        Objects.equals(curr, "com.example.wayfare.Fragment.Public.PublicSettingsFragment") |
+                        Objects.equals(curr, "com.example.wayfare.Fragment.ToursFragment") |
+                        Objects.equals(curr, "com.example.wayfare.Fragment.UpcomingFragment") |
+                        Objects.equals(curr, "com.example.wayfare.Fragment.Public.PublicUpcomingFragment")
+                ){
                 if (prev != null) {
                     switch (prev) {
                         case "com.example.wayfare.Fragment.SettingsFragment" -> {
@@ -175,8 +185,10 @@ public class MainActivity extends AppCompatActivity {
                             idToGo = R.id.explore;
                         }
                     }
+                    //By setting backing, navbar item will not create a new fragment on select
                     backing = true;
                     navbar.setSelectedItemId(idToGo);
+                    }
                 }
                 getSupportFragmentManager().popBackStack();
             }

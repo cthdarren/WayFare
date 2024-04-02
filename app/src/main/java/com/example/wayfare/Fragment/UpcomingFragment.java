@@ -52,8 +52,8 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
     RecyclerView upcomingRecycler, pastRecycler;
     ProgressBar progBar;
     BottomNavigationView navBar;
-    List<BookingItemModel> upcomingBookings = new ArrayList<>();
-    List<BookingItemModel> pastBookings = new ArrayList<>();
+    List<BookingItemModel> upcomingBookings ;
+    List<BookingItemModel> pastBookings ;
 
     public UpcomingFragment() {
     }
@@ -87,6 +87,8 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming, container, false);
+        upcomingBookings = new ArrayList<>();
+        pastBookings = new ArrayList<>();
 
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         progBar = getActivity().findViewById(R.id.progressBar);
