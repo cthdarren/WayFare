@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toolbar;
@@ -65,10 +67,11 @@ public class ConfirmBooking extends AppCompatActivity {
                 .into(ivThumbnail);
 
 
-        Button button = (Button) findViewById(R.id.confirmButton);
+        Button button = findViewById(R.id.confirmButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("BUTTONS", "User tapped the Supabutton");
+                Log.d("BUTTONS", "User tapped the confirm button");
+                
             }
         });
     }
