@@ -135,6 +135,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                         Log.d("HI", "hi thereeee");
                     }
                 });
+                datePicker.show(activity.getSupportFragmentManager(), "tag");
             }
         });
         return view;
