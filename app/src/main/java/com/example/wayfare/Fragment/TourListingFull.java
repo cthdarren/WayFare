@@ -60,16 +60,18 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         recyclerView = view.findViewById(R.id.recyclerView2);
         //ListView list = view.findViewById(R.id.list);
 
+        MaterialTextView tvTitle = view.findViewById(R.id.materialTextView);
+        MaterialTextView tvLocation = view.findViewById(R.id.location);
+        MaterialTextView tvPrice = view.findViewById(R.id.materialTextView4);
+        MaterialTextView tvRating = view.findViewById(R.id.materialTextView2);
+        ImageView tvImage = view.findViewById(R.id.imageView2);
+        MaterialTextView tvDescription = view.findViewById(R.id.description);
+        MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
+        button = view.findViewById(R.id.bookButton);
+        MaterialButton buttonDatePicker = view.findViewById(R.id.datePicker);
+
         Bundle args = getArguments();
         if (args != null) {
-            MaterialTextView tvTitle = view.findViewById(R.id.materialTextView);
-            MaterialTextView tvLocation = view.findViewById(R.id.location);
-            MaterialTextView tvPrice = view.findViewById(R.id.materialTextView4);
-            MaterialTextView tvRating = view.findViewById(R.id.materialTextView2);
-            ImageView tvImage = view.findViewById(R.id.imageView2);
-            MaterialTextView tvDescription = view.findViewById(R.id.description);
-            MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
-            button = view.findViewById(R.id.bookButton);
 
             tvTitle.setText(args.getString("title"));
             tvRating.setText(args.getString("rating"));
@@ -94,7 +96,6 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         recyclerView.setAdapter(newTimingAdapter);
         //recyclerView.suppressLayout(true);
 
-
         MaterialToolbar toolbar = view.findViewById(R.id.materialToolbar);
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
         activity.setSupportActionBar(toolbar);
@@ -118,21 +119,24 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
 
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder().setOpenAt(february).build();
 
-        // datepicker
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-        .setTitleText("Select date")
-        .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
-        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-        .setCalendarConstraints(constraintsBuilder)
-        .build();
-
-        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+        buttonDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPositiveButtonClick(Long selection) {
-                Log.d("HI", "hi thereeee");
+            public void onClick(View v) {
+                // datepicker
+                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Select date")
+                        .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
+                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .setCalendarConstraints(constraintsBuilder)
+                        .build();
+                datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                    @Override
+                    public void onPositiveButtonClick(Long selection) {
+                        Log.d("HI", "hi thereeee");
+                    }
+                });
             }
         });
-
         return view;
     }
 
