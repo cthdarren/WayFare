@@ -13,9 +13,12 @@ import androidx.recyclerview.widget.SnapHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wayfare.Adapters.PastBookingAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
@@ -43,7 +46,8 @@ import java.util.List;
 public class UpcomingFragment extends Fragment implements RecyclerViewInterface {
 
     ImageView bookmarksBtn;
-    TextView Test;
+    Button goToToursButton;
+    LinearLayout noBookingsMessage;
     RecyclerView upcomingRecycler, pastRecycler;
     ProgressBar progBar;
     List<BookingItemModel> upcomingBookings = new ArrayList<>();
@@ -85,6 +89,8 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         progBar.setVisibility(View.VISIBLE);
 
         bookmarksBtn = view.findViewById(R.id.bookmarks);
+        noBookingsMessage = view.findViewById(R.id.noBookingsMessage);
+        goToToursButton = view.findViewById(R.id.goToToursButton);
 //        upcomingBookings.add(new BookingItemModel("thumbnail", "title", 5, "today", "picurl", "test"));
 
         bookmarksBtn.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +115,13 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         new AuthService(getContext()).getResponse("/bookings", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
-
+                progBar.setVisibility(View.GONE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
@@ -124,17 +136,29 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                             setUpUpcomingModels(bookingModelList);
                             setupPastBookingModels(pastBookingModelList);
 
-                            upcomingRecycler.getAdapter().notifyDataSetChanged();
-                            pastRecycler.getAdapter().notifyDataSetChanged();
+                            if (upcomingBookings.size() > 0){
+                                upcomingRecycler.setVisibility(View.VISIBLE);
+                                noBookingsMessage.setVisibility(View.GONE);
 
-                            SnapHelper snapHelper = new LinearSnapHelper();
-                            snapHelper.attachToRecyclerView(upcomingRecycler);
+                                upcomingRecycler.getAdapter().notifyDataSetChanged();
+                                pastRecycler.getAdapter().notifyDataSetChanged();
+
+                                SnapHelper snapHelper = new LinearSnapHelper();
+                                snapHelper.attachToRecyclerView(upcomingRecycler);
+                            }
 
                             progBar.setVisibility(View.GONE);
                         }
                     });
-
-
+                }
+                else{
+                    progBar.setVisibility(View.GONE);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getContext(), "Server Error", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
