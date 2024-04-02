@@ -7,7 +7,6 @@ import java.util.List;
 // we are creating variables thats gonna hold all the data that represents one of our items
 public class TourListModel {
     public TourListModel(String title, String id, String description, String[] thumbnailUrls, String category, Location tourListingLocation, String region, double price, int minPax, int maxPax, double rating, int reviewCount, String userId, List<TimeRange> timeRangeList) {
-        this.title = title;
         this.id = id;
         this.title = title;
         this.description = description;
