@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,9 +35,16 @@ import com.example.wayfare.timingOnItemClickedInterface;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class TourListingFull extends Fragment implements tourListing_RecyclerViewInterface{
     private RecyclerView recyclerView;
@@ -100,6 +108,31 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+
+        // constraintbuilder
+        // open at curr month
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
+        long february = calendar.getTimeInMillis();
+
+        CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder().setOpenAt(february).build();
+
+        // datepicker
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+        .setTitleText("Select date")
+        .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
+        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+        .setCalendarConstraints(constraintsBuilder)
+        .build();
+
+        datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+            @Override
+            public void onPositiveButtonClick(Long selection) {
+                Log.d("HI", "hi thereeee");
+            }
+        });
+
         return view;
     }
 
