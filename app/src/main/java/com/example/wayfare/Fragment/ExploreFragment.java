@@ -1,13 +1,17 @@
 package com.example.wayfare.Fragment;
+
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.Models.UserModel;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
+
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -39,15 +43,18 @@ public class ExploreFragment extends Fragment {
     private ViewPager2 shortsViewPager;
     private List<ShortsObject> shortsObjectList;
     private ShortsAdapter shortsAdapter;
-    private BottomNavigationView bottomNavigationView;;
+    private BottomNavigationView bottomNavigationView;
+    ;
     private boolean doubleBackToExitPressedOnce = false;
-    public ExploreFragment(){}
+
+    public ExploreFragment() {
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
             context = getActivity(); // use this reference to invoke main callbacks
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             throw new IllegalStateException();
         }
     }
@@ -98,18 +105,18 @@ public class ExploreFragment extends Fragment {
         shortsObject7.setDescription("xxxx");
         shortsObjectList.add(shortsObject7);
         //get user stuff
-        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()){
+        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
             loggedIn = true;
         } else {
             loggedIn = false;
         }
-        if(loggedIn) {
+        if (loggedIn) {
             userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
             UserModel userData = userViewModel.getUserProfileData();
         }
         shortsViewPager = rootView.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        shortsAdapter = new ShortsAdapter(shortsObjectList,context);
+        shortsAdapter = new ShortsAdapter(shortsObjectList, context);
         shortsViewPager.setAdapter(shortsAdapter);
 
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -164,32 +171,40 @@ public class ExploreFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                if (doubleBackToExitPressedOnce) {
-                    // Exit the app
-                    shortsAdapter.stopAllVideo();
-                    requireActivity().finish();
-                } else {
-                    moveToNextScroll();
-                    // Show toast message
-                    Toast.makeText(requireContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
-                    // Set the flag
-                    doubleBackToExitPressedOnce = true;
-                    // Reset the flag after a certain delay
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleBackToExitPressedOnce = false;
-                        }
-                    }, 2000); // Adjust the duration as needed (here, 2000 milliseconds = 2 seconds)
+                if (getParentFragmentManager().getBackStackEntryCount() > 2) {
+                    getParentFragmentManager().popBackStack();
+                }
+                else{
+                    if (doubleBackToExitPressedOnce) {
+                        // Exit the app
+                        shortsAdapter.stopAllVideo();
+                        requireActivity().finish();
+                    } else {
+                        moveToNextScroll();
+                        // Show toast message
+                        Toast.makeText(requireContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+                        // Set the flag
+                        doubleBackToExitPressedOnce = true;
+                        // Reset the flag after a certain delay
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                doubleBackToExitPressedOnce = false;
+                            }
+                        }, 2000); // Adjust the duration as needed (here, 2000 milliseconds = 2 seconds)
+                    }
                 }
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
         return rootView;
     }
-    @Override public void onStart() {
+
+    @Override
+    public void onStart() {
         super.onStart();
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -220,9 +235,10 @@ public class ExploreFragment extends Fragment {
             shortsAdapter.playVideo(currentPosition);
         }
     }
+
     private void moveToNextScroll() {
         int currentItem = shortsViewPager.getCurrentItem();
-        if (currentItem < shortsAdapter.getItemCount() - 1 && currentItem+1 <shortsAdapter.getViewsCount()) {
+        if (currentItem < shortsAdapter.getItemCount() - 1 && currentItem + 1 < shortsAdapter.getViewsCount()) {
             shortsViewPager.setCurrentItem(currentItem + 1, true); // Move to the next scroll
         } else {
             // Do something else, or handle reaching the end of the scrolls
