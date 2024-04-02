@@ -40,9 +40,11 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -69,6 +71,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
         button = view.findViewById(R.id.bookButton);
         MaterialButton buttonDatePicker = view.findViewById(R.id.datePicker);
+        MaterialTextView chosenDate = view.findViewById(R.id.chosenDate);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -126,13 +129,14 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText("Select date")
                         .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+//                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                         .setCalendarConstraints(constraintsBuilder)
                         .build();
                 datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
-                        Log.d("HI", "hi thereeee");
+                        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date(selection));
+                        chosenDate.setText(MessageFormat.format("Selected Date: {0}", date));
                     }
                 });
                 datePicker.show(activity.getSupportFragmentManager(), "tag");
