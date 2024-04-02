@@ -5,17 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F5E8"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".Activity.SplashActivity">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:background="#F7F5E8"
-        android:padding="66dp"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/wayfarelogonobg_01" />
 
 
 </LinearLayout>
