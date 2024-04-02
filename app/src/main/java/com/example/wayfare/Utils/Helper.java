@@ -16,7 +16,7 @@ public class Helper {
         fm.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_bottom, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_bottom)
                 .add(R.id.container, new SignInFragment())
-                .addToBackStack(null)
+                .addToBackStack(SignInFragment.class.getName())
                 .setReorderingAllowed(true)
                 .commit();
     }
@@ -24,7 +24,7 @@ public class Helper {
     public static void goToFragment(FragmentManager fm, int fragmentId, Fragment fragment) {
         fm.beginTransaction()
                 .replace(fragmentId, fragment)
-                .addToBackStack(null)
+                .addToBackStack(fragment.getClass().getName())
                 .setReorderingAllowed(true)
                 .commit();
     }
@@ -38,7 +38,7 @@ public class Helper {
                         R.anim.slide_out_left_to_right// popExit
                 )
                 .add(fragmentId, fragment)
-                .addToBackStack(null)
+                .addToBackStack(fragment.getClass().getName())
                 .setReorderingAllowed(true)
                 .commit();
     }
@@ -47,7 +47,7 @@ public class Helper {
         fm.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_bottom, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_bottom)
                 .replace(R.id.container, fragment)
-                .addToBackStack(null)
+                .addToBackStack(fragment.getClass().getName())
                 .setReorderingAllowed(true)
                 .commit();
     }

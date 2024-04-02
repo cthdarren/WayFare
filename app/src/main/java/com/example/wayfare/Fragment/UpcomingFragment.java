@@ -108,7 +108,6 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         goToToursButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new ToursFragment());
                 navBar.setSelectedItemId(R.id.tours);
             }
         });

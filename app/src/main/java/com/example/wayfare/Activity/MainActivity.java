@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         backing = value;
     }
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
 
-        if (new AuthHelper(getApplicationContext()).isLoggedIn()){
+        if (new AuthHelper(getApplicationContext()).isLoggedIn()) {
             loggedIn = true;
             viewModel = new ViewModelProvider(this).get(UserViewModel.class);
             new AuthService(getApplicationContext()).getResponse("/account", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(ResponseModel json) {
-                    if(json.success){
+                    if (json.success) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -105,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                 progBar.setVisibility(View.GONE);
                             }
                         });
-                    }
-                    else{
+                    } else {
                         Toast.makeText(MainActivity.this, json.data.getAsString(), Toast.LENGTH_SHORT).show();
                         loggedIn = false;
                         progBar.setVisibility(View.GONE);
@@ -124,58 +123,61 @@ public class MainActivity extends AppCompatActivity {
         //binding.bottomNavigationView.setBackground(null);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (!backing) {
-                if (item.getItemId() == R.id.explore) {
-                    replaceFragment(new ExploreFragment());
-                } else if (item.getItemId() == R.id.upcoming) {
-                    if (loggedIn) {
-                        replaceFragment(new UpcomingFragment());
-                    } else {
-                        replaceFragment(new PublicUpcomingFragment());
-                    }
-                } else if (item.getItemId() == R.id.tours) {
-                    replaceFragment(new ToursFragment());
-                } else if (item.getItemId() == R.id.addShorts) {
-                    Intent intent = new Intent(MainActivity.this, AddShorts.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
-                } else if (item.getItemId() == R.id.account) {
-                    if (loggedIn) {
-                        replaceFragment(new SettingsFragment());
-                    } else {
-                        replaceFragment(new PublicSettingsFragment());
-                    }
+            if (item.getItemId() == R.id.explore) {
+                replaceFragment(new ExploreFragment());
+            } else if (item.getItemId() == R.id.upcoming) {
+                if (loggedIn) {
+                    replaceFragment(new UpcomingFragment());
+                } else {
+                    replaceFragment(new PublicUpcomingFragment());
+                }
+            } else if (item.getItemId() == R.id.tours) {
+                replaceFragment(new ToursFragment());
+            } else if (item.getItemId() == R.id.addShorts) {
+                Intent intent = new Intent(MainActivity.this, AddShorts.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
+            } else if (item.getItemId() == R.id.account) {
+                if (loggedIn) {
+                    replaceFragment(new SettingsFragment());
+                } else {
+                    replaceFragment(new PublicSettingsFragment());
                 }
             }
+            }
             backing = false;
-                return true;
+            return true;
         });
+//    }
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
                 String prev = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 2).getName();
                 int idToGo;
-                switch (prev) {
-                    case "com.example.wayfare.Fragment.SettingsFragment" -> {
-                        idToGo = R.id.account;
+                if (prev != null) {
+                    switch (prev) {
+                        case "com.example.wayfare.Fragment.SettingsFragment" -> {
+                            idToGo = R.id.account;
+                        }
+                        case "com.example.wayfare.Fragment.Public.PublicSettingsFragment" -> {
+                            idToGo = R.id.account;
+                        }
+                        case "com.example.wayfare.Fragment.ToursFragment" -> {
+                            idToGo = R.id.tours;
+                        }
+                        case "com.example.wayfare.Fragment.UpcomingFragment" -> {
+                            idToGo = R.id.upcoming;
+                        }
+                        case "com.example.wayfare.Fragment.Public.PublicUpcomingFragment" -> {
+                            idToGo = R.id.upcoming;
+                        }
+                        default -> {
+                            idToGo = R.id.explore;
+                        }
                     }
-                    case "com.example.wayfare.Fragment.Public.PublicSettingsFragment" -> {
-                        idToGo = R.id.account;
-                    }
-                    case "com.example.wayfare.Fragment.ToursFragment" -> {
-                        idToGo = R.id.tours;
-                    }
-                    case "com.example.wayfare.Fragment.UpcomingFragment" -> {
-                        idToGo = R.id.upcoming;
-                    }
-                    case "com.example.wayfare.Fragment.Public.PublicUpcomingFragment" -> {
-                        idToGo = R.id.upcoming;
-                    }
-                    default -> {
-                        idToGo = R.id.explore;
-                    }
+                    backing = true;
+                    navbar.setSelectedItemId(idToGo);
                 }
-                backing = true;
-                navbar.setSelectedItemId(idToGo);
                 getSupportFragmentManager().popBackStack();
             }
         };
