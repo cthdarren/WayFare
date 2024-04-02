@@ -131,21 +131,8 @@
                 app:layout_constraintTop_toBottomOf="@+id/materialTextView4" />
 
 
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:id="@+id/selectDate"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:textStyle="bold"
-                android:textSize="24dp"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="Available times"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/description" />
-
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/datePicker"
+                android:id="@+id/datePickerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -154,19 +141,19 @@
                 android:fontFamily="@font/montserrat"
                 android:text="Choose your date"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/selectDate" />
+                app:layout_constraintTop_toBottomOf="@+id/description" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/chosenDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:textStyle="bold"
-                android:textSize="24dp"
-                android:fontFamily="@font/montserrat_bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/datePicker" />
+<!--            <com.google.android.material.textview.MaterialTextView-->
+<!--                android:id="@+id/chosenDate"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:fontFamily="@font/montserrat_bold"-->
+<!--                android:text="Placeholder date"-->
+<!--                android:textSize="20dp"-->
+<!--                android:layout_marginStart="16dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/datePicker"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/datePicker"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/datePicker" />-->
 
 <!--            <DatePicker-->
 <!--                android:id="@+id/date"-->
@@ -180,7 +167,18 @@
 <!--                android:fontFamily="@font/montserrat"-->
 <!--                app:layout_constraintStart_toStartOf="parent"-->
 <!--                app:layout_constraintTop_toBottomOf="@+id/selectDate" />-->
-
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:id="@+id/selectDate"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"
+                android:textSize="24dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Available times"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView2"
@@ -190,7 +188,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/chosenDate" />
+                app:layout_constraintTop_toBottomOf="@+id/selectDate" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

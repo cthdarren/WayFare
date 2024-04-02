@@ -70,8 +70,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         MaterialTextView tvDescription = view.findViewById(R.id.description);
         MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
         button = view.findViewById(R.id.bookButton);
-        MaterialButton buttonDatePicker = view.findViewById(R.id.datePicker);
-        MaterialTextView chosenDate = view.findViewById(R.id.chosenDate);
+        MaterialButton buttonDatePicker = view.findViewById(R.id.datePickerButton);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -135,8 +134,8 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
-                        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date(selection));
-                        chosenDate.setText(MessageFormat.format("Selected Date: {0}", date));
+                        String date = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date(selection));
+                        buttonDatePicker.setText(date);
                     }
                 });
                 datePicker.show(activity.getSupportFragmentManager(), "tag");
