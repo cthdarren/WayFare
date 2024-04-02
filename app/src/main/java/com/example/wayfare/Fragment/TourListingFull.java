@@ -36,6 +36,7 @@ import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textview.MaterialTextView;
@@ -52,8 +53,9 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     private RecyclerView recyclerView;
     public TourListingFull(){};
     String[] timingArray;
-    MaterialButton button;
     timingAdapter newTimingAdapter;
+    String dateChosen = null;
+    MaterialButton button;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -116,10 +118,15 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         // constraintbuilder
         // open at curr month
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, Calendar.FEBRUARY);
-        long february = calendar.getTimeInMillis();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+        calendar.setTimeInMillis(today);
+        long startOfDay = calendar.getTimeInMillis();
 
-        CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder().setOpenAt(february).build();
+        CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
+                .setStart(startOfDay)
+                .setOpenAt(startOfDay)
+                .setValidator(DateValidatorPointForward.now())
+                .build();
 
         buttonDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,8 +141,10 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
-                        String date = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date(selection));
-                        buttonDatePicker.setText(date);
+                        dateChosen = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date(selection));
+                        buttonDatePicker.setText(dateChosen);
+                        newTimingAdapter.isButtonEnabled = true;
+                        newTimingAdapter.notifyDataSetChanged();
                     }
                 });
                 datePicker.show(activity.getSupportFragmentManager(), "tag");
@@ -146,18 +155,23 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
 
     @Override
     public void onItemClick(int position) {
-        Log.d("Do nothing", String.valueOf(position));
-        Intent intent = new Intent(getActivity(), ConfirmBooking.class);
-        intent.putExtra("title", getArguments().getString("title"));
-        intent.putExtra("rating", getArguments().getString("rating"));
-        intent.putExtra("location", getArguments().getString("location"));
-        intent.putExtra("price", getArguments().getString("price"));
-        intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
-        intent.putExtra("description", getArguments().getString("description"));
-        intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
+        if (dateChosen != null) {
+            Intent intent = new Intent(getActivity(), ConfirmBooking.class);
+            intent.putExtra("title", getArguments().getString("title"));
+            intent.putExtra("rating", getArguments().getString("rating"));
+            intent.putExtra("location", getArguments().getString("location"));
+            intent.putExtra("price", getArguments().getString("price"));
+            intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
+            intent.putExtra("description", getArguments().getString("description"));
+            intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
 
-        String timing = timingArray[position];
-        intent.putExtra("timing", timing);
-        startActivity(intent);
+            String timing = timingArray[position];
+            intent.putExtra("timing", timing);
+
+            intent.putExtra("dateChosen", dateChosen);
+            startActivity(intent);
+        } else {
+            Log.d("Do nothing", String.valueOf(position));
+        }
     }
 }

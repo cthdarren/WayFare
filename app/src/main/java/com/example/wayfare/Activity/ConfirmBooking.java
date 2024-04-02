@@ -32,6 +32,8 @@ public class ConfirmBooking extends AppCompatActivity {
     String reviewCount = null;
     String thumbnail = null;
     String timing = null;
+    String dateChosen = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,6 +55,7 @@ public class ConfirmBooking extends AppCompatActivity {
             thumbnail = extras.getString("thumbnail");
             reviewCount = extras.getString("reviewCount");
             timing = extras.getString("timing");
+            dateChosen = extras.getString("dateChosen");
         }
 
         MaterialTextView tvTitle = findViewById(R.id.title);
@@ -62,6 +65,7 @@ public class ConfirmBooking extends AppCompatActivity {
         ImageView ivThumbnail = findViewById(R.id.image);
         MaterialTextView tvReviewCount = findViewById(R.id.reviewCount);
         MaterialTextView tvTiming = findViewById(R.id.timing);
+        MaterialTextView tvDateChosen = findViewById(R.id.dateformat);
 
         tvTitle.setText(title);
         tvRating.setText(rating);
@@ -69,6 +73,7 @@ public class ConfirmBooking extends AppCompatActivity {
         tvPrice.setText(price);
         tvReviewCount.setText(reviewCount);
         tvTiming.setText(timing);
+        tvDateChosen.setText(dateChosen);
 
         Glide.with(this)
                 .load(thumbnail)
