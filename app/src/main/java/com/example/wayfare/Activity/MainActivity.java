@@ -1,6 +1,7 @@
 package com.example.wayfare.Activity;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView navbar;
 
     private boolean loggedIn;
+    private boolean backing = false;
+
+    public void setBacking(boolean value){
+        backing = value;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -117,32 +123,68 @@ public class MainActivity extends AppCompatActivity {
         replaceFragment(new ExploreFragment());
         //binding.bottomNavigationView.setBackground(null);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.explore){
-                replaceFragment(new ExploreFragment());
-            } else if (item.getItemId() == R.id.upcoming) {
-                if (loggedIn){
-                    replaceFragment(new UpcomingFragment());
-                }
-                else {
-                    replaceFragment(new PublicUpcomingFragment());
-                }
-            } else if (item.getItemId() == R.id.tours) {
-                replaceFragment(new ToursFragment());
-            } else if (item.getItemId() == R.id.addShorts) {
-                Intent intent = new Intent(MainActivity.this, AddShorts.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
-            } else if (item.getItemId() == R.id.account) {
-                if (loggedIn) {
-                    replaceFragment(new SettingsFragment());
-                }
-                else {
-                    replaceFragment(new PublicSettingsFragment());
+            if (!backing) {
+                if (item.getItemId() == R.id.explore) {
+                    replaceFragment(new ExploreFragment());
+                } else if (item.getItemId() == R.id.upcoming) {
+                    if (loggedIn) {
+                        replaceFragment(new UpcomingFragment());
+                    } else {
+                        replaceFragment(new PublicUpcomingFragment());
+                    }
+                } else if (item.getItemId() == R.id.tours) {
+                    replaceFragment(new ToursFragment());
+                } else if (item.getItemId() == R.id.addShorts) {
+                    Intent intent = new Intent(MainActivity.this, AddShorts.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
+                } else if (item.getItemId() == R.id.account) {
+                    if (loggedIn) {
+                        replaceFragment(new SettingsFragment());
+                    } else {
+                        replaceFragment(new PublicSettingsFragment());
+                    }
                 }
             }
-            return true;
+            backing = false;
+                return true;
         });
-
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                String prev = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 2).getName();
+                int idToGo;
+                switch (prev) {
+                    case "com.example.wayfare.Fragment.SettingsFragment" -> {
+                        idToGo = R.id.account;
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    case "com.example.wayfare.Fragment.Public.PublicSettingsFragment" -> {
+                        idToGo = R.id.account;
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    case "com.example.wayfare.Fragment.ToursFragment" -> {
+                        idToGo = R.id.tours;
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    case "com.example.wayfare.Fragment.Upcoming" -> {
+                        idToGo = R.id.upcoming;
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    case "com.example.wayfare.Fragment.Public.PublicUpcomingFragment" -> {
+                        idToGo = R.id.upcoming;
+                        getSupportFragmentManager().popBackStack();
+                    }
+                    default -> {
+                        idToGo = R.id.explore;
+                        getSupportFragmentManager().popBackStack();
+                    }
+                }
+                backing = true;
+                navbar.setSelectedItemId(idToGo);
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void replaceFragment(Fragment fragment){
@@ -150,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.flFragment, fragment)
                 .setReorderingAllowed(true)
-                .addToBackStack("name") // Name can be null
+                .addToBackStack(fragment.getClass().getName()) // Name can be null
                 .commit();
     }
 

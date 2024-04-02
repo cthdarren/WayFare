@@ -173,6 +173,30 @@ public class ExploreFragment extends Fragment {
             public void handleOnBackPressed() {
                 if (getParentFragmentManager().getBackStackEntryCount() > 2) {
                     getParentFragmentManager().popBackStack();
+                    String prev = getParentFragmentManager().getBackStackEntryAt(getParentFragmentManager().getBackStackEntryCount()-2).getName();
+                    int idToGo;
+                    switch (prev){
+                        case "com.example.wayfare.Fragment.SettingsFragment":
+                            idToGo = R.id.account;
+                            break;
+                        case "com.example.wayfare.Fragment.Public.PublicSettingsFragment":
+                            idToGo = R.id.account;
+                            break;
+                        case "com.example.wayfare.Fragment.ToursFragment":
+                            idToGo = R.id.tours;
+                            break;
+                        case "com.example.wayfare.Fragment.Upcoming":
+                            idToGo = R.id.upcoming;
+                            break;
+                        case "com.example.wayfare.Fragment.Public.PublicUpcomingFragment":
+                            idToGo = R.id.upcoming;
+                            break;
+                        default:
+                            idToGo = R.id.explore;
+                            break;
+                    }
+                    ((MainActivity) getActivity()).setBacking(true);
+                    bottomNavigationView.setSelectedItemId(idToGo);
                 }
                 else{
                     if (doubleBackToExitPressedOnce) {
