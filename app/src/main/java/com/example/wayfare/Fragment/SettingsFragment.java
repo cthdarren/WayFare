@@ -123,6 +123,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
             public void onClick(View v) {
                 new AuthHelper(getActivity().getApplicationContext()).logout();
                 getActivity().recreate();
+                navBar.setSelectedItemId(R.id.explore);
             }
         });
 

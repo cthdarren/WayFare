@@ -36,6 +36,7 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.example.wayfare.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     private UserViewModel viewModel;
     private ProgressBar progBar;
+    private BottomNavigationView navbar;
 
     private boolean loggedIn;
     @Override
@@ -54,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
         setContentView(view);
+
+        // Makes it such that when a user reclicks the navbar it doesn't refresh
+        navbar = findViewById(R.id.bottomNavigationView);
+        navbar.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+                //DO NOTHING
+            }
+        });
 
         progBar = findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);

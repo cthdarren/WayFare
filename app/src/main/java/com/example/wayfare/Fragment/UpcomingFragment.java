@@ -35,6 +35,7 @@ import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -50,6 +51,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
     LinearLayout noBookingsMessage;
     RecyclerView upcomingRecycler, pastRecycler;
     ProgressBar progBar;
+    BottomNavigationView navBar;
     List<BookingItemModel> upcomingBookings = new ArrayList<>();
     List<BookingItemModel> pastBookings = new ArrayList<>();
 
@@ -85,6 +87,8 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_upcoming, container, false);
+
+        navBar = getActivity().findViewById(R.id.bottomNavigationView);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
 
@@ -98,6 +102,14 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
             @Override
             public void onClick(View v) {
                 //TODO Navigate to bookmarked bookings
+            }
+        });
+
+        goToToursButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new ToursFragment());
+                navBar.setSelectedItemId(R.id.tours);
             }
         });
         return view;
