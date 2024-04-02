@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.core.graphics.ImageDecoderKt;
 import androidx.fragment.app.Fragment;
 
 import com.example.wayfare.Models.ResponseModel;
@@ -29,7 +28,7 @@ public class VerifyAccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 verifyEmailButton.setEnabled(false);
-                new AuthService(getContext()).getResponse("/generateverifylink", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+                new AuthService(getContext()).getResponse("/generateotp", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
                     @Override
                     public void onError(String message) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -47,7 +46,7 @@ public class VerifyAccountFragment extends Fragment {
                             @Override
                             public void run() {
                                 verifyEmailButton.setEnabled(true);
-                                Helper.goToFragmentSlideInRight(getActivity().getSupportFragmentManager(), R.id.container, new VerifySuccessFragment());
+                                Helper.goToFragmentSlideInRight(getActivity().getSupportFragmentManager(), R.id.container, new VerifyOtpFragment());
                             }
                         });
                     }

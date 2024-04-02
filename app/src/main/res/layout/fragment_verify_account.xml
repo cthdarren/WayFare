@@ -31,17 +31,18 @@
             android:layout_height="wrap_content"
             android:paddingTop="40dp"
             android:textSize="@dimen/font_sm"
-            android:text="It is recommended that you verify your account to increase your profile's credibiltiy among users."/>
+            android:text="Verifying your account to increase your profile's credibiltiy among users."/>
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="40dp"
-    android:text="After clicking the button below, an email will be sent to your email address with a link. Please click on that link to verify your email address"/>
+    android:textSize="@dimen/font_sm"
+    android:paddingVertical="20dp"
+    android:text="An email will be sent to your email address with a 6-digit OTP."/>
             <Button
                 android:id="@+id/verifyemailbutton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Click here to verify your email"/>
+                android:text="Send OTP"/>
     </LinearLayout>
 
 </LinearLayout>
