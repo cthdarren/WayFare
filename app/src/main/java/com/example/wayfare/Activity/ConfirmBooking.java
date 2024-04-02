@@ -2,6 +2,7 @@ package com.example.wayfare.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageButton;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
@@ -87,6 +89,29 @@ public class ConfirmBooking extends AppCompatActivity {
                 createBooking();
             }
         });
+
+
+        AppCompatImageButton decrementButton = findViewById(R.id.decrement);
+        AppCompatImageButton incrementButton = findViewById(R.id.increment);
+        MaterialTextView counter = findViewById(R.id.counter);
+        final int[] counterValue = {1};
+        incrementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counterValue[0]++;
+                counter.setText(String.valueOf(counterValue[0]));
+            }
+        });
+        decrementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (counterValue[0] != 0) {
+                    counterValue[0]--;
+                    counter.setText(String.valueOf(counterValue[0]));
+                }
+            }
+        });
+
     }
 
     @Override
