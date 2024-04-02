@@ -193,7 +193,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                         public void run() {
                                             if (image != null)
                                                 profile_pic.setImageBitmap(image);
-                                            progBar.setVisibility(GONE);
                                         }
                                     });
                                 } catch (IOException e) {
@@ -253,6 +252,8 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                 snapHelper.attachToRecyclerView(reviewRecycler);
 
                                 listingRecycler.getAdapter().notifyDataSetChanged();
+
+                                progBar.setVisibility(GONE);
                             }
                         });
                     }
@@ -264,6 +265,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                 @Override
                 public void run() {
                     Toast.makeText(getContext(), "No such profile", Toast.LENGTH_SHORT).show();
+                    progBar.setVisibility(GONE);
                 }
             });
             getParentFragmentManager().popBackStack();

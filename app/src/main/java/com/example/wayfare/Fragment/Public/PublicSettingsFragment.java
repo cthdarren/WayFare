@@ -26,9 +26,11 @@ import com.example.wayfare.Activity.settings.PrivacySettingsActivity;
 import com.example.wayfare.Activity.settings.ReportSettingsActivity;
 import com.example.wayfare.Adapters.SettingsRecViewAdapter;
 import com.example.wayfare.Fragment.SignInFragment;
+import com.example.wayfare.Fragment.SignUpFragment;
 import com.example.wayfare.Models.SettingItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
+import com.example.wayfare.Utils.Helper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -79,7 +81,7 @@ public class PublicSettingsFragment extends Fragment implements RecyclerViewInte
         signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToLogin(getParentFragmentManager());
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(),R.id.container, new SignUpFragment());
             }
         });
 
