@@ -16,8 +16,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/outer_padding">
+        android:paddingBottom="20dp"
+        android:paddingHorizontal="@dimen/outer_padding">
 
         <TextView
             android:layout_width="0dp"
@@ -28,11 +30,13 @@
             android:textSize="@dimen/font_xl"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/bookmarks"
-            android:layout_width="@dimen/font_2xl"
-            android:layout_height="@dimen/font_2xl"
-            android:src="@drawable/listing_bookmark_outlined" />
+        <Button
+            android:id="@+id/bookmarksButton"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:iconSize="30dp"
+            app:icon="@drawable/icon_selection_bookmarks" />
 
     </LinearLayout>
 

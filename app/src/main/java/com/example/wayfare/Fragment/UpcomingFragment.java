@@ -46,7 +46,7 @@ import java.util.List;
 
 public class UpcomingFragment extends Fragment implements RecyclerViewInterface {
 
-    ImageView bookmarksBtn;
+    Button bookmarksBtn;
     Button goToToursButton;
     LinearLayout noBookingsMessage;
     RecyclerView upcomingRecycler, pastRecycler;
@@ -94,7 +94,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
 
-        bookmarksBtn = view.findViewById(R.id.bookmarks);
+        bookmarksBtn = view.findViewById(R.id.bookmarksButton);
         noBookingsMessage = view.findViewById(R.id.noBookingsMessage);
         goToToursButton = view.findViewById(R.id.goToToursButton);
 //        upcomingBookings.add(new BookingItemModel("thumbnail", "title", 5, "today", "picurl", "test"));
@@ -103,7 +103,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
 
             @Override
             public void onClick(View v) {
-                //TODO Navigate to bookmarked bookings
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new BookmarksFragment());
             }
         });
 
