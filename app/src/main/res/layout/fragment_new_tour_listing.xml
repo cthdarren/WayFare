@@ -2,10 +2,10 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tourEndTime"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/md_theme_background"
+    android:foreground="@color/md_theme_onSurface"
     android:orientation="vertical"
     android:padding="30dp"
     tools:context=".Fragment.AddNewTourListingFragment">

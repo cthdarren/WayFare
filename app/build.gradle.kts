@@ -47,7 +47,9 @@ android {
     }
 }
 
+
 dependencies {
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -81,4 +83,6 @@ dependencies {
     implementation("androidx.camera:camera-extensions:$camerax_version")
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.intuit.sdp:sdp-android:1.0.6")
+    implementation("com.google.maps:google-maps-services:2.2.0")
+    implementation("org.slf4j:slf4j-simple:1.7.25")
 }
