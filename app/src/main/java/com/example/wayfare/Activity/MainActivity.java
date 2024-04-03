@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentOnAttachListener;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -25,6 +26,7 @@ import com.example.wayfare.Fragment.AddShortsFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
 import com.example.wayfare.Fragment.Public.PublicUpcomingFragment;
 import com.example.wayfare.Fragment.SettingsFragment;
+import com.example.wayfare.Fragment.TodayFragment;
 import com.example.wayfare.Fragment.UpcomingFragment;
 import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.SignInFragment;
@@ -194,6 +196,36 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottomHostingNav);
+        bottomNav.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.hosting_today){
+                replaceFragment(new TodayFragment());
+            } else if (item.getItemId() == R.id.hosting_account) {
+                replaceFragment(new SettingsFragment());
+            }
+            return true;
+        });
+
+        getSupportFragmentManager().addFragmentOnAttachListener(new FragmentOnAttachListener() {
+            @Override
+            public void onAttachFragment(@NonNull FragmentManager fragmentManager, @NonNull Fragment fragment) {
+                updateViewForFragment(fragment);
+            }
+        });
+
+
+    }
+    private void updateViewForFragment(Fragment fragment) {
+        BottomNavigationView bottomNavbar = findViewById(R.id.bottomNavigationView);
+        BottomNavigationView hostNavbar = findViewById(R.id.bottomHostingNav);
+        if (fragment instanceof TodayFragment) {
+            bottomNavbar.setVisibility(View.GONE);
+            hostNavbar.setVisibility(View.VISIBLE);
+        }else{
+            bottomNavbar.setVisibility(View.VISIBLE);
+            hostNavbar.setVisibility(View.GONE);
+        }
     }
 
     private void replaceFragment(Fragment fragment){
