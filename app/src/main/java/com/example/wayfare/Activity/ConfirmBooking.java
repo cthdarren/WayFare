@@ -158,7 +158,7 @@ public class ConfirmBooking extends AppCompatActivity {
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
-        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, listingId, timeSlot, date, price, pax, remark);
+        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, listingId, timeSlot, date, Double.valueOf(price), pax, remark);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         new AuthService(this).getResponse("/booking/create/" + listingId, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
