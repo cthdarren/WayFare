@@ -16,6 +16,7 @@ import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -39,6 +40,7 @@ public class ConfirmBooking extends AppCompatActivity {
     int startTime;
     int endTime;
 
+    TourListModel.TimeRange timeSlot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,8 @@ public class ConfirmBooking extends AppCompatActivity {
             startTime = extras.getInt("startTime");
             endTime = extras.getInt("endTime");
         }
+
+        timeSlot = new TourListModel.TimeRange(startTime, endTime);
 
         MaterialTextView tvTitle = findViewById(R.id.title);
         MaterialTextView tvRating = findViewById(R.id.rating);
@@ -139,7 +143,7 @@ public class ConfirmBooking extends AppCompatActivity {
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
-        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, userId, timing, dateBooked, price, pax, remarks);
+        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, "660532c92ddff75d32e2b24c", timeSlot, dateBooked, price, pax, remarks);
         //RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         //new AuthService(this).getResponse("/booking/create/{id})");
     }

@@ -106,6 +106,11 @@ public class TourListModel {
         private int startTime;
         private int endTime;
 
+        public TimeRange(int startTime, int endTime){
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
+
         // Constructor, getters, and setters
         // You can generate these using your IDE or write them manually
     }
