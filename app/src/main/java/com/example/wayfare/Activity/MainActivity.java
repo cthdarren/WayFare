@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.wayfare.Fragment.AddShortsFragment;
+import com.example.wayfare.Fragment.MapFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
 import com.example.wayfare.Fragment.Public.PublicUpcomingFragment;
 import com.example.wayfare.Fragment.SettingsFragment;
