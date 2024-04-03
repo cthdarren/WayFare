@@ -59,6 +59,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     MaterialButton button;
     ArrayList<Integer> timeList;
     Date date;
+    String listingId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
 
             timingArray = args.getStringArray("timingArray");
             timeList = args.getIntegerArrayList("timeList");
+            listingId = args.getString("listingId");
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         newTimingAdapter = new timingAdapter(getContext(), timingArray, this);
@@ -162,6 +164,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         if (dateChosen != null) {
             Intent intent = new Intent(getActivity(), ConfirmBooking.class);
             intent.putExtra("title", getArguments().getString("title"));
+            intent.putExtra("listingId", getArguments().getString("listingId"));
             intent.putExtra("rating", getArguments().getString("rating"));
             intent.putExtra("location", getArguments().getString("location"));
             intent.putExtra("price", getArguments().getString("price"));

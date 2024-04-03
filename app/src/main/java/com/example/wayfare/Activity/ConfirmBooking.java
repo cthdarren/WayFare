@@ -12,15 +12,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Fragment.SignUp2Fragment;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
 
 import java.util.Date;
 
@@ -44,6 +50,7 @@ public class ConfirmBooking extends AppCompatActivity {
     Date date;
     String remark;
     int pax;
+    String listingId;
 
     TourListModel.TimeRange timeSlot;
 
@@ -71,8 +78,9 @@ public class ConfirmBooking extends AppCompatActivity {
             dateChosen = extras.getString("dateChosen");
             startTime = extras.getInt("startTime");
             endTime = extras.getInt("endTime");
-            long timeInMillis = getIntent().getLongExtra("date_key", 0); // 0 is the default value
+            long timeInMillis = extras.getLong("date_key");
             date = new Date(timeInMillis);
+            listingId = extras.getString("listingId");
         }
 
         timeSlot = new TourListModel.TimeRange(startTime, endTime);
@@ -150,8 +158,44 @@ public class ConfirmBooking extends AppCompatActivity {
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
-        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, "660532c92ddff75d32e2b24c", timeSlot, date, price, pax, remark);
+        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, listingId, timeSlot, date, price, pax, remark);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        //new AuthService(this).getResponse("/booking/create/{id})");
+        new AuthService(this).getResponse("/booking/create/" + listingId, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                makeToast(message);
+                ConfirmBooking.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                if (json.success){
+                    Log.d("JSON", "onResponse: success");
+                }
+                else{
+                    JsonArray ja= json.data.getAsJsonArray();
+                    Log.d("JSON", "onResponse: no response");
+                }
+            }
+
+            public void makeToast(String msg) {
+
+                if (ConfirmBooking.this == null) {
+                    Log.d("ERROR", "ACTIVITY CONTEXT IS NULL, UNABLE TO MAKE TOAST");
+                    return;
+                }
+                ConfirmBooking.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ConfirmBooking.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 }
