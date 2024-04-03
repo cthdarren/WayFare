@@ -58,6 +58,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     String dateChosen = null;
     MaterialButton button;
     ArrayList<Integer> timeList;
+    Date date;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -143,6 +144,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
                     @Override
                     public void onPositiveButtonClick(Long selection) {
+                        date = new Date(selection);
                         dateChosen = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date(selection));
                         buttonDatePicker.setText(dateChosen);
                         newTimingAdapter.isButtonEnabled = true;
@@ -180,6 +182,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             intent.putExtra("timing", timing);
 
             intent.putExtra("dateChosen", dateChosen);
+            intent.putExtra("date_key", date.getTime());
             startActivity(intent);
         } else {
             Log.d("Do nothing", String.valueOf(position));

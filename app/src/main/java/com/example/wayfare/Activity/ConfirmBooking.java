@@ -22,6 +22,8 @@ import com.example.wayfare.Utils.AuthService;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.util.Date;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -39,6 +41,9 @@ public class ConfirmBooking extends AppCompatActivity {
     String dateChosen = null;
     int startTime;
     int endTime;
+    Date date;
+    String remark;
+    int pax;
 
     TourListModel.TimeRange timeSlot;
 
@@ -66,6 +71,8 @@ public class ConfirmBooking extends AppCompatActivity {
             dateChosen = extras.getString("dateChosen");
             startTime = extras.getInt("startTime");
             endTime = extras.getInt("endTime");
+            long timeInMillis = getIntent().getLongExtra("date_key", 0); // 0 is the default value
+            date = new Date(timeInMillis);
         }
 
         timeSlot = new TourListModel.TimeRange(startTime, endTime);
@@ -119,8 +126,8 @@ public class ConfirmBooking extends AppCompatActivity {
         Button button = findViewById(R.id.confirmButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                String remark = tvRemarks.getText().toString();
-                int pax = counterValue[0];
+                remark = tvRemarks.getText().toString();
+                pax = counterValue[0];
                 createBooking();
             }
         });
@@ -143,8 +150,8 @@ public class ConfirmBooking extends AppCompatActivity {
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
-        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, "660532c92ddff75d32e2b24c", timeSlot, dateBooked, price, pax, remarks);
-        //RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        String json = String.format("{\"title\":\"%s\", \"userId\":\"%s\", \"timing\":\"%s\", \"dateBooked\":\"%s\", \"price\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, "660532c92ddff75d32e2b24c", timeSlot, date, price, pax, remark);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         //new AuthService(this).getResponse("/booking/create/{id})");
     }
 }
