@@ -43,6 +43,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
 
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -207,19 +208,27 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        getSupportFragmentManager().addFragmentOnAttachListener(new FragmentOnAttachListener() {
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
-            public void onAttachFragment(@NonNull FragmentManager fragmentManager, @NonNull Fragment fragment) {
-                updateViewForFragment(fragment);
+            public void onBackStackChanged() {
+                updateViewForFragment();
             }
         });
 
 
     }
-    private void updateViewForFragment(Fragment fragment) {
+    private void updateViewForFragment() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        Fragment currentFragment = null;
+        for (Fragment fragment : fragments) {
+            if (fragment.isVisible()) {
+                currentFragment = fragment;
+                break;
+            }
+        }
         BottomNavigationView bottomNavbar = findViewById(R.id.bottomNavigationView);
         BottomNavigationView hostNavbar = findViewById(R.id.bottomHostingNav);
-        if (fragment instanceof TodayFragment) {
+        if (currentFragment instanceof TodayFragment) {
             bottomNavbar.setVisibility(View.GONE);
             hostNavbar.setVisibility(View.VISIBLE);
         }else{
