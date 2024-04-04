@@ -127,7 +127,6 @@ public class SignInFragment extends Fragment{
                 // sharedpref store
                 try {
                     Gson gson = new Gson();
-                    String jsonString = gson.toJson(serverResponse);
                     ResponseModel res = gson.fromJson(serverResponse, ResponseModel.class);
                     if (res.success) {
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);

@@ -46,7 +46,7 @@ public class VerifyAccountFragment extends Fragment {
                             @Override
                             public void run() {
                                 verifyEmailButton.setEnabled(true);
-                                Helper.goToFragmentSlideInRight(getActivity().getSupportFragmentManager(), R.id.container, new VerifyOtpFragment());
+                                Helper.goToFragmentSlideInRightArgs(getArguments(), getActivity().getSupportFragmentManager(), R.id.container, new VerifyOtpFragment());
                             }
                         });
                     }

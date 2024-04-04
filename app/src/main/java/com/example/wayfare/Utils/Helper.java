@@ -1,5 +1,7 @@
 package com.example.wayfare.Utils;
 
+import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -30,6 +32,20 @@ public class Helper {
     }
 
     public static void goToFragmentSlideInRight(FragmentManager fm, int fragmentId, Fragment fragment) {
+        fm.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_left_to_right, // enter
+                        R.anim.slide_right_to_left, // exit
+                        R.anim.fade_in, // popEnter
+                        R.anim.slide_out_left_to_right// popExit
+                )
+                .add(fragmentId, fragment)
+                .addToBackStack(fragment.getClass().getName())
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
+    public static void goToFragmentSlideInRightArgs(Bundle args, FragmentManager fm, int fragmentId, Fragment fragment) {
         fm.beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_left_to_right, // enter

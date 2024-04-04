@@ -33,6 +33,7 @@ public class VerifyOtpFragment extends Fragment {
     TextView email;
     TextInputEditText otpText;
     UserViewModel userViewModel;
+    String emailText = "";
     public VerifyOtpFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +49,15 @@ public class VerifyOtpFragment extends Fragment {
         verifyOtpButton = view.findViewById(R.id.verifyotpbutton);
         otpText = view.findViewById(R.id.otptextbox);
 
-        email.setText(userData.getEmail());
+        //TODO FIX THIS
+        if (getArguments() != null)
+            emailText = getArguments().getString("email");
+        else if (userData != null)
+            emailText = userData.getEmail();
+        else
+            emailText = "Your email address";
+
+        email.setText(emailText);
         sendAnother.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

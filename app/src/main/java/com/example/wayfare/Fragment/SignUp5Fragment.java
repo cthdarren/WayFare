@@ -1,6 +1,8 @@
 package com.example.wayfare.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,7 +24,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
@@ -47,7 +51,7 @@ public class SignUp5Fragment extends Fragment {
     Uri pictureUri;
     String username, email, password, verifyPassword, firstName, lastName, phoneNumber, languages, bio, pictureUrl;
 
-    ActivityResultLauncher<String> getPic = registerForActivityResult(new ActivityResultContracts.GetContent(),new ActivityResultCallback<Uri>(){
+    ActivityResultLauncher<String> getPic = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri o) {
             pictureUri = o;
@@ -65,6 +69,7 @@ public class SignUp5Fragment extends Fragment {
             });
         }
     });
+
     public SignUp5Fragment() {
     }
 
@@ -73,6 +78,7 @@ public class SignUp5Fragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -153,25 +159,36 @@ public class SignUp5Fragment extends Fragment {
                                 e.printStackTrace();
                             }
                         }
+
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            if (response.code() == 200){
+                            if (response.code() == 200) {
+                                ResponseModel res = new Gson().fromJson(response.body().string(), ResponseModel.class);
+                                if (res.success) {
+                                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("user_info", res.data.getAsString())
+                                            .apply();
 
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Bundle args = getArguments();
-                                    SignUpSuccessFragment fragment = new SignUpSuccessFragment();
-                                    fragment.setArguments(args);
-                                    getParentFragmentManager().beginTransaction()
-                                            .replace(R.id.container, fragment)
-                                            .addToBackStack(null)
-                                            .setReorderingAllowed(true)
-                                            .commit();
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Bundle args = getArguments();
+                                            SignUpSuccessFragment fragment = new SignUpSuccessFragment();
+                                            fragment.setArguments(args);
+                                            getParentFragmentManager().beginTransaction()
+                                                    .replace(R.id.container, fragment)
+                                                    .addToBackStack(null)
+                                                    .setReorderingAllowed(true)
+                                                    .commit();
+                                        }
+                                    });
+                                }else {
+                                    makeToast(res.data.getAsString());
                                 }
-                            });
-                                }
-                            else{
+
+                            } else {
                                 makeToast("Server Error");
                             }
                         }
@@ -187,6 +204,7 @@ public class SignUp5Fragment extends Fragment {
             });
         }
     }
+
     public void makeToast(String msg) {
 
         if (getActivity() == null) {

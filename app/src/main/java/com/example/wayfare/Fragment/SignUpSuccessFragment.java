@@ -70,7 +70,7 @@ public class SignUpSuccessFragment extends Fragment {
         verify_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new VerifyAccountFragment());
+                Helper.goToFragmentSlideInRightArgs(getArguments(), getParentFragmentManager(), R.id.container, new VerifyAccountFragment());
             }
         });
         sign_in.setOnClickListener(new View.OnClickListener() {
