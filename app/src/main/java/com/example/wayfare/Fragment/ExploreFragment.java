@@ -171,7 +171,7 @@ public class ExploreFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-                if (getParentFragmentManager().getBackStackEntryCount() > 2) {
+                if (getParentFragmentManager().getBackStackEntryCount() > 1) {
                     getParentFragmentManager().popBackStack();
                     String prev = getParentFragmentManager().getBackStackEntryAt(getParentFragmentManager().getBackStackEntryCount()-2).getName();
                     int idToGo;
@@ -185,7 +185,7 @@ public class ExploreFragment extends Fragment {
                         case "com.example.wayfare.Fragment.ToursFragment":
                             idToGo = R.id.tours;
                             break;
-                        case "com.example.wayfare.Fragment.Upcoming":
+                        case "com.example.wayfare.Fragment.UpcomingFragment":
                             idToGo = R.id.upcoming;
                             break;
                         case "com.example.wayfare.Fragment.Public.PublicUpcomingFragment":

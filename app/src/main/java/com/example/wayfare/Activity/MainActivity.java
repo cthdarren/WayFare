@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
-            setTheme(R.style.Theme_Wayfare_Dark);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else{
-            setTheme(R.style.Theme_Wayfare);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         super.onCreate(savedInstanceState);
 
@@ -131,7 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         View decorView = getWindow().getDecorView();
-        replaceFragment(new ExploreFragment());
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0)
+            replaceFragment(new ExploreFragment());
+
         //binding.bottomNavigationView.setBackground(null);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (!backing) {
