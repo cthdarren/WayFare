@@ -1,6 +1,5 @@
 package com.example.wayfare.Fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.Activity.WayfarerActivity;
 import com.example.wayfare.Activity.settings.AccessibilitySettingsActivity;
-import com.example.wayfare.Activity.settings.AccessibilitySettingsFragment;
 import com.example.wayfare.Activity.settings.GeneralSettingsActivity;
 import com.example.wayfare.Activity.settings.NotificationSettingsActivity;
 import com.example.wayfare.Activity.settings.PaymentSettingsActivity;
@@ -112,7 +110,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
                 pf.setArguments(username);
                 Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, pf);
                 progBar.setVisibility(View.VISIBLE);
-                navBar.setVisibility(View.GONE);
+//                navBar.setVisibility(View.GONE);
             }
         });
 
@@ -120,8 +118,9 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
             @Override
             public void onClick(View v) {
                 new AuthHelper(getActivity().getApplicationContext()).logout();
-                getActivity().recreate();
-                navBar.setSelectedItemId(R.id.explore);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
 
@@ -154,20 +153,23 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
 
         Intent intent;
-
+        String wayfarerview;
         if (Objects.equals(userData.getRole(), "ROLE_WAYFARER")){
-            if (new AuthHelper(getContext()).sharedPreferences.getString("WAYFARER_VIEW", "").equals("TRUE")) {
-                become_wayfarer_text.setText("Switch to travelling");
+            if (new AuthHelper(getContext()).getSharedPrefsValue("WAYFARER_VIEW").equals("TRUE")) {
+                become_wayfarer_text.setText("Switch to Travelling");
                 intent = new Intent(getActivity(), MainActivity.class);
+                wayfarerview = "FALSE";
             }
             else {
                 become_wayfarer_text.setText("Switch to Hosting");
                 intent = new Intent(getActivity(), WayfarerActivity.class);
+                wayfarerview = "TRUE";
             }
             become_wayfarer_icon.setImageResource(R.drawable.swap);
             become_wayfarer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    new AuthHelper(getContext()).setSharedPrefsValue("WAYFARER_VIEW", wayfarerview);
                     getActivity().startActivity(intent);
                     getActivity().finish();
                 }
@@ -224,8 +226,8 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
     @Override
     public void onItemClick(int position) {
-        Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new AccessibilitySettingsFragment());
-//        Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
-//        startActivity(intent);
+//        Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new AccessibilitySettingsFragment());
+        Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
+        startActivity(intent);
     }
 }

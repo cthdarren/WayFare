@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -31,6 +32,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
 
+import java.util.Objects;
+
 public class WayfarerActivity extends AppCompatActivity {
 
     private UserViewModel viewModel;
@@ -41,6 +44,12 @@ public class WayfarerActivity extends AppCompatActivity {
     private boolean backing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         super.onCreate(savedInstanceState);
         // Hide the status bar.
         setContentView(R.layout.activity_wayfarer);
@@ -73,7 +82,8 @@ public class WayfarerActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 viewModel.updateUserData(new Gson().fromJson(json.data, UserModel.class));
-                                replaceFragment(new TodayFragment());
+                                if (getSupportFragmentManager().getBackStackEntryCount() == 0)
+                                    replaceFragment(new TodayFragment());
                                 progBar.setVisibility(View.GONE);
                             }
                         });
@@ -97,11 +107,14 @@ public class WayfarerActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottomHostingNav);
 
         bottomNav.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.hosting_today){
-                replaceFragment(new TodayFragment());
-            } else if (item.getItemId() == R.id.hosting_account) {
-                replaceFragment(new SettingsFragment());
+            if (!backing) {
+                if (item.getItemId() == R.id.hosting_today) {
+                    replaceFragment(new TodayFragment());
+                } else if (item.getItemId() == R.id.hosting_account) {
+                    replaceFragment(new SettingsFragment());
+                }
             }
+            backing = false;
             return true;
         });
 
@@ -112,6 +125,44 @@ public class WayfarerActivity extends AppCompatActivity {
                 //DO NOTHING
             }
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                String curr = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
+                String prev = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 2).getName();
+                int idToGo;
+                if (
+                        // if curr == one of the objects on the navbar, means you're routing to another fragment on the navbar
+                        Objects.equals(curr, "com.example.wayfare.Fragment.SettingsFragment") |
+                        Objects.equals(curr, "com.example.wayfare.Fragment.TodayFragment")
+                ){
+                    if (prev != null) {
+                        switch (prev) {
+                            case "com.example.wayfare.Fragment.SettingsFragment" -> {
+                                idToGo = R.id.hosting_account;
+                            }
+                            //these names are temporary, if you create them in the future do update accordingly
+                            case "com.example.wayfare.Fragment.CalendarFragment" -> {
+                                idToGo = R.id.hosting_calendar;
+                            }
+                            //these names are temporary, if you create them in the future do update accordingly
+                            case "com.example.wayfare.Fragment.HostingTourFragment" -> {
+                                idToGo = R.id.hosting_tour;
+                            }
+                            default -> {
+                                idToGo = R.id.hosting_today;
+                            }
+                        }
+                        //By setting backing, navbar item will not create a new fragment on select
+                        backing = true;
+                        bottomNav.setSelectedItemId(idToGo);
+                    }
+                }
+                getSupportFragmentManager().popBackStack();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
     private void replaceFragment(Fragment fragment){
@@ -120,6 +171,6 @@ public class WayfarerActivity extends AppCompatActivity {
                 .replace(R.id.flFragment, fragment)
                 .setReorderingAllowed(true)
                 .addToBackStack(fragment.getClass().getName()) // Name can be null
-                .commit();
+                .commitAllowingStateLoss();
     }
 }

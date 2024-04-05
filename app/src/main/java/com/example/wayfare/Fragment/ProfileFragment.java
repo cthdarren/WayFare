@@ -58,7 +58,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     UserViewModel userViewModel;
     ImageView backButton;
     ProgressBar progBar;
-    BottomNavigationView navBar;
+    BottomNavigationView navBar, hostingBar;
     ImageView profile_pic;
     TextView full_name;
     TextView ratings;
@@ -113,6 +113,8 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
+        hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
+
         profile_pic = view.findViewById(R.id.profile_picture);
         full_name = view.findViewById(R.id.full_name);
         languagesSpoken = view.findViewById(R.id.languages_spoken);
@@ -275,7 +277,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        navBar.setVisibility(View.VISIBLE);
+//        navBar.setVisibility(View.VISIBLE);
     }
 
     @Override

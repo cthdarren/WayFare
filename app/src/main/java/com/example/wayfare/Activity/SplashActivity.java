@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent;
-                if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("WAYFARER_VIEW", "").equals("TRUE")){
+                if (new AuthHelper(getApplicationContext()).getSharedPrefsValue("WAYFARER_VIEW").equals("TRUE")){
                     intent = new Intent(SplashActivity.this, WayfarerActivity.class);
                 }
                 else{

@@ -18,11 +18,18 @@ public class AuthHelper {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
 
+    public void setSharedPrefsValue(String prefsName, String prefsValue){
+        sharedPreferences.edit().putString(prefsName, prefsValue).apply();
+    }
+
+    public String getSharedPrefsValue(String prefsName){
+        return sharedPreferences.getString(prefsName, "");
+    }
+
     public boolean isLoggedIn() {
         // default state of jsonString in sharedPref is empty
         // use isLoggedIn true for checking if user is authed
         String token = sharedPreferences.getString(JSON_DATA_KEY, "");
-        System.out.println(token);
         return !token.isEmpty();
     }
 
@@ -30,8 +37,4 @@ public class AuthHelper {
         sharedPreferences.edit().putString("user_info", "")
                 .apply();
     }
-
-
-
-
 }
