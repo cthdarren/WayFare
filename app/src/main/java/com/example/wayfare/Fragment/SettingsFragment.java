@@ -1,5 +1,6 @@
 package com.example.wayfare.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,7 +24,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wayfare.Activity.MainActivity;
+import com.example.wayfare.Activity.WayfarerActivity;
 import com.example.wayfare.Activity.settings.AccessibilitySettingsActivity;
+import com.example.wayfare.Activity.settings.AccessibilitySettingsFragment;
 import com.example.wayfare.Activity.settings.GeneralSettingsActivity;
 import com.example.wayfare.Activity.settings.NotificationSettingsActivity;
 import com.example.wayfare.Activity.settings.PaymentSettingsActivity;
@@ -149,15 +153,23 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         }
 
 
+        Intent intent;
+
         if (Objects.equals(userData.getRole(), "ROLE_WAYFARER")){
-            become_wayfarer_text.setText("Switch to Hosting");
+            if (new AuthHelper(getContext()).sharedPreferences.getString("WAYFARER_VIEW", "").equals("TRUE")) {
+                become_wayfarer_text.setText("Switch to travelling");
+                intent = new Intent(getActivity(), MainActivity.class);
+            }
+            else {
+                become_wayfarer_text.setText("Switch to Hosting");
+                intent = new Intent(getActivity(), WayfarerActivity.class);
+            }
             become_wayfarer_icon.setImageResource(R.drawable.swap);
             become_wayfarer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new TodayFragment());
-                    //TODO UPDATE THIS
-//                    Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new HostingDashBoardFragment());
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
                 }
             });
         }
@@ -212,7 +224,8 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
-        startActivity(intent);
+        Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new AccessibilitySettingsFragment());
+//        Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
+//        startActivity(intent);
     }
 }

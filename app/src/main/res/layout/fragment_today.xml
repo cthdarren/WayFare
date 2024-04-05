@@ -20,7 +20,7 @@
             android:id="@+id/host_welcome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/md_theme_onSurface"
             android:text="Welcome Back, "
             android:textSize="25dp"
             app:layout_constraintStart_toStartOf="parent"

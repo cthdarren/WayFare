@@ -76,6 +76,11 @@
             android:exported="true"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".Activity.WayfarerActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustNothing" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -63,10 +63,18 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
+            setTheme(R.style.Theme_Wayfare_Dark);
+        }
+        else{
+            setTheme(R.style.Theme_Wayfare);
+        }
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
+
         setContentView(view);
 
         // Makes it such that when a user reclicks the navbar it doesn't refresh
@@ -78,12 +86,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         progBar = findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
 
-        if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
 
         if (new AuthHelper(getApplicationContext()).isLoggedIn()) {
             loggedIn = true;
@@ -199,44 +205,36 @@ public class MainActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottomHostingNav);
-        bottomNav.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.hosting_today){
-                replaceFragment(new TodayFragment());
-            } else if (item.getItemId() == R.id.hosting_account) {
-                replaceFragment(new SettingsFragment());
-            }
-            return true;
-        });
 
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                updateViewForFragment();
-            }
-        });
 
+//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//            @Override
+//            public void onBackStackChanged() {
+//                updateViewForFragment();
+//            }
+//        });
+//
 
     }
-    private void updateViewForFragment() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        Fragment currentFragment = null;
-        for (Fragment fragment : fragments) {
-            if (fragment.isVisible()) {
-                currentFragment = fragment;
-                break;
-            }
-        }
-        BottomNavigationView bottomNavbar = findViewById(R.id.bottomNavigationView);
-        BottomNavigationView hostNavbar = findViewById(R.id.bottomHostingNav);
-        if (currentFragment instanceof TodayFragment) {
-            bottomNavbar.setVisibility(View.GONE);
-            hostNavbar.setVisibility(View.VISIBLE);
-        }else{
-            bottomNavbar.setVisibility(View.VISIBLE);
-            hostNavbar.setVisibility(View.GONE);
-        }
-    }
+//    private void updateViewForFragment() {
+//        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+//        Fragment currentFragment = null;
+//        for (Fragment fragment : fragments) {
+//            if (fragment.isVisible()) {
+//                currentFragment = fragment;
+//                break;
+//            }
+//        }
+//        BottomNavigationView bottomNavbar = findViewById(R.id.bottomNavigationView);
+//        BottomNavigationView hostNavbar = findViewById(R.id.bottomHostingNav);
+//        if (currentFragment instanceof TodayFragment) {
+//            bottomNavbar.setVisibility(View.GONE);
+//            hostNavbar.setVisibility(View.VISIBLE);
+//        }else{
+//            bottomNavbar.setVisibility(View.VISIBLE);
+//            hostNavbar.setVisibility(View.GONE);
+//        }
+//    }
 
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
