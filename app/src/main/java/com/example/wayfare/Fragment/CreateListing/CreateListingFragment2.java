@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.camera.core.impl.CameraFactory;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,11 @@ import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -47,6 +53,7 @@ public class CreateListingFragment2 extends Fragment {
     LatLng latLngAddress;
     String placeName;
     String placeAddress;
+    SupportMapFragment confirmMap;
 
     public CreateListingFragment2() {
     }
@@ -65,8 +72,8 @@ public class CreateListingFragment2 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_listing_create2, container, false);
         continue_button = view.findViewById(R.id.continue_button);
         addressAutocomplete = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.addressAutocomplete);
+        confirmMap = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.confirmMap);
 
-        //addressAutocomplete.setTypesFilter(Arrays.asList("Address"));
         addressAutocomplete.setLocationBias(RectangularBounds.newInstance(
                 new LatLng(-33.880490, 151.184363),
                 new LatLng(-33.858754, 151.229596)
@@ -85,7 +92,15 @@ public class CreateListingFragment2 extends Fragment {
                 latLngAddress = place.getLatLng();
                 placeName = place.getName();
                 placeAddress = place.getAddress();
-                Log.i("Place Selected", placeName + placeAddress);
+
+                Log.i("Place Selected", placeName + " " + placeAddress);
+
+                confirmMap.getMapAsync(new OnMapReadyCallback() {
+                    @Override
+                    public void onMapReady(@NonNull GoogleMap googleMap) {
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngAddress, 20));
+                    }
+                });
             }
         });
 
