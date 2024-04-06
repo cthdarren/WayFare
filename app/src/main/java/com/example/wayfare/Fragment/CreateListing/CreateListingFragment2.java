@@ -1,5 +1,7 @@
 package com.example.wayfare.Fragment.CreateListing;
 
+import static com.google.maps.android.Context.getApplicationContext;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
@@ -68,7 +71,9 @@ public class CreateListingFragment2 extends Fragment {
         addressAutocomplete.setCountries("SG");
         addressAutocomplete.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME,
                 Place.Field.ADDRESS, Place.Field.ID));
-
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+        }
         addressAutocomplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onError(@NonNull Status status) {
@@ -91,7 +96,9 @@ public class CreateListingFragment2 extends Fragment {
                 args.putAll(getArguments());
                 args.putString("locationLatLng", latLngAddress.toString());
                 args.putString("locationName", placeAddress);
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment3());
+                CreateListingFragment3 fragment3 = new CreateListingFragment3();
+                fragment3.setArguments(args);
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, fragment3);
             }
         });
         return view;
