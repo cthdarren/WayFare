@@ -24,7 +24,7 @@ To use AzureStorageManager in your Android application, follow these steps:
 ## Contents of AzureStorageManager
 
 ### Methods
-- **`uploadBlob(Context context, Uri videoUri, Callback callback)`**:
+- **`uploadBlob(Context context, Uri fileUri, Callback callback)`**:
   Initiates the file upload process to Azure Blob Storage. ***This is what you will be using.***
 - **`uploadFile(Uri videoUri, Context context, String sasToken, String accountName, String containerName, Callback callback)`**:
   Uploads the file to the specified Azure Blob Storage container.
