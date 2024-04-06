@@ -50,7 +50,7 @@
         <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">#000000</item>
+        <item name="android:statusBarColor">@color/transparent</item>
         <!-- Customize your theme here. -->
         <item name="android:windowDisablePreview">true</item>
         <item name="bottomNavigationStyle">@menu/bottom_menu</item>

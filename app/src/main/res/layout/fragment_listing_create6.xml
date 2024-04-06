@@ -69,6 +69,7 @@
             android:text="Add Images (Up to 10)"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listingImagesRecycler"
+            tools:listitem="@layout/list_item_listing_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -10,10 +10,13 @@ import androidx.fragment.app.Fragment;
 
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.Helper;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class CreateListingFragment5 extends Fragment {
 
     Button continue_button;
+
+    TextInputEditText listingDesc, listingTitle;
 
     public CreateListingFragment5() {
     }
@@ -29,13 +32,17 @@ public class CreateListingFragment5 extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listing_create5, container, false);
         continue_button = view.findViewById(R.id.continue_button);
-
+        listingDesc = view.findViewById(R.id.listingDescription);
+        listingTitle = view.findViewById(R.id.listingTitle);
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle args = getArguments();
+                args.putString("description", listingDesc.getText().toString());
+                args.putString("description", listingTitle.getText().toString());
                 //TODO change to createlisting fragment3
                 continue_button.setEnabled(false);
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment6());
+                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment6());
                 continue_button.setEnabled(true);
             }
         });
