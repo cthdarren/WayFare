@@ -54,45 +54,84 @@
         android:text="Some more information about your tour"
         android:textSize="@dimen/font_2xl"
          />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/first_name_wrapper"
-        android:layout_width="match_parent"
-        android:hint="First name"
-        android:layout_height="wrap_content">
-    <com.google.android.material.textfield.TextInputEditText
-        android:layout_width="match_parent"
-        android:id="@+id/first_name"
-        android:maxLines="1"
-        android:layout_height="wrap_content"
-        />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/last_name_wrapper"
-        android:layout_width="match_parent"
-        android:layout_marginTop="40dp"
-        android:hint="Last name"
-        android:layout_height="wrap_content">
-        <com.google.android.material.textfield.TextInputEditText
+        <TextView
             android:layout_width="match_parent"
-            android:id="@+id/last_name"
             android:layout_height="wrap_content"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phone_number_wrapper"
-            android:layout_width="match_parent"
-            android:layout_marginTop="40dp"
-            android:hint="Phone number"
-            android:layout_height="wrap_content">
-            <com.google.android.material.textfield.TextInputEditText
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp"
+            android:text="How many participants can your tour accomodate?"/>
+
+            <LinearLayout
+                android:paddingTop="40dp"
                 android:layout_width="match_parent"
-                android:id="@+id/phone_number"
-                android:inputType="number"
+                android:gravity="center_vertical"
                 android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
+                android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_sm"
+                android:text="Min. number of participants"/>
+                <ImageView
+                    android:id="@+id/minusMinParticipants"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_remove_24"/>
+                <TextView
+                    android:id="@+id/minParticipants"
+                    android:layout_height="wrap_content"
+                    android:layout_width="56dp"
+                    android:gravity="center"
+                    android:text="1"
+                    android:paddingHorizontal="20dp"
+                    android:textSize="@dimen/font_sm"/>
+                <ImageView
+                    android:id="@+id/addMinParticipants"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                android:src="@drawable/baseline_add_24"/>
+            </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/md_theme_outlineVariant" />
+       <LinearLayout
+                android:paddingTop="40dp"
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_sm"
+                android:text="Max. number of participants"/>
+                <ImageView
+                    android:id="@+id/minusMaxParticipants"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_remove_24"/>
+                <TextView
+                    android:id="@+id/maxParticipants"
+                    android:layout_width="56dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1"
+                    android:paddingHorizontal="20dp"
+                    android:textSize="@dimen/font_sm"/>
+                <ImageView
+                    android:id="@+id/addMaxParticipants"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                android:src="@drawable/baseline_add_24"/>
+            </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/md_theme_outlineVariant" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

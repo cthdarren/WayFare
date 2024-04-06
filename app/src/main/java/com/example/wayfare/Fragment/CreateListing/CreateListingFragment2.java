@@ -91,7 +91,7 @@ public class CreateListingFragment2 extends Fragment {
                 args.putAll(getArguments());
                 args.putString("locationLatLng", latLngAddress.toString());
                 args.putString("locationName", placeAddress);
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment2());
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment3());
             }
         });
         return view;
