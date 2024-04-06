@@ -29,12 +29,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "EXCHANGE_RATE_API_KEY", "\"146eca710f9e57af8848cb4f\"")
             buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
             signingConfig = signingConfigs.getByName("debug")
         }
         debug {
 //            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
             buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
+            buildConfigField("String", "EXCHANGE_RATE_API_KEY", "\"146eca710f9e57af8848cb4f\"")
         }
     }
     compileOptions {

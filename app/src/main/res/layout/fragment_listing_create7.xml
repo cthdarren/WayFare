@@ -64,22 +64,25 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            app:suffixText="/pax"
             app:suffixTextAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_height="wrap_content">
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usdPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:gravity="center"
                 android:background="@color/transparent"
                 android:paddingVertical="20dp"
-                android:text="$USD 991232312312312123123"
+                android:text="US$"
                 android:textSize="@dimen/font_2xl"
-                android:paddingHorizontal="70dp"
-                android:maxLength="10"
-                android:maxWidth="100dp"
+                android:maxLength="15"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Prices are set per tour participant"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 

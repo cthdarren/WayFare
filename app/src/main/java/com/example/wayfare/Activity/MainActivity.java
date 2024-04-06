@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
             progBar.setVisibility(View.GONE);
         }
 
+        Helper.getExchangeRate();
 
         View decorView = getWindow().getDecorView();
         if (getSupportFragmentManager().getBackStackEntryCount() == 0)

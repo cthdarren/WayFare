@@ -51,6 +51,7 @@
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
         <!-- Customize your theme here. -->
         <item name="android:windowDisablePreview">true</item>
         <item name="bottomNavigationStyle">@menu/bottom_menu</item>

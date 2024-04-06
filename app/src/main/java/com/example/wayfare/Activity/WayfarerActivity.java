@@ -106,6 +106,8 @@ public class WayfarerActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        Helper.getExchangeRate();
         BottomNavigationView bottomNav = findViewById(R.id.bottomHostingNav);
 
         bottomNav.setOnItemSelectedListener(item -> {
