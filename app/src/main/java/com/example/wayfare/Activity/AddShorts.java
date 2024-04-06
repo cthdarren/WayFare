@@ -25,6 +25,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -106,7 +107,6 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                     new String[]{Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO},
                     STORAGE_PERMISSION_CODE);
             startCamera(cameraFacing);
-
         } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             activityResultLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         } else {
@@ -125,6 +125,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         focusIcon = findViewById(R.id.img_focus);
         liveCountdown = findViewById(R.id.liveCountdown);
         toggleFlash = findViewById(R.id.toggleFlash);
+        btnStartRecord.setOnClickListener(this);
         btnUploadVideo.setOnClickListener(this);
         btnFlip.setOnClickListener(this);
         btnPause.setOnClickListener(this);
@@ -377,47 +378,53 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                 .setContentValues(contentValues)
                 .build();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            return;
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO},
+                    STORAGE_PERMISSION_CODE);
         }
-        currentRecording = videoCapture.getOutput()
-                .prepareRecording(AddShorts.this, mediaStoreOutput)
-                .withAudioEnabled()  // Use setAudioEnabled() for Java
-                .start(ContextCompat.getMainExecutor(AddShorts.this), videoRecordEvent -> {
-                    RecordingStats stats = videoRecordEvent.getRecordingStats();
-                    long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
-                    String text = String.format(time + "s/60s");
-                    if(time > 10){
-                        stopRecording();
-                    }else{
-                        captureLiveStatus.setValue(text);
-                    }
-                    captureLiveStatus.setValue(text);
-                    if (!(videoRecordEvent instanceof VideoRecordEvent.Status)) {
-                        recordingState = videoRecordEvent;
-                    }
-                    if (videoRecordEvent instanceof VideoRecordEvent.Start) {
-                        btnStopRecord.setVisibility(View.VISIBLE);
-                        btnPause.setVisibility(View.VISIBLE);
-                        btnFlip.setVisibility(View.GONE);
-                        btnUploadVideo.setVisibility(View.GONE);
-                        btnStartRecord.setVisibility(View.GONE);
-                        btnExit.setVisibility(View.GONE);
-                        isRecording = true;
-                    } else if (videoRecordEvent instanceof VideoRecordEvent.Finalize) {
-                        if (!((VideoRecordEvent.Finalize) videoRecordEvent).hasError()) {
-                            String msg = "Video capture succeeded: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
-                            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-                            Uri capturedVideoUri = ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
-                            startUploadingActivity(capturedVideoUri);
+        try {
+            currentRecording = videoCapture.getOutput()
+                    .prepareRecording(AddShorts.this, mediaStoreOutput)
+                   // .withAudioEnabled() // Use setAudioEnabled() for Java
+                    .start(ContextCompat.getMainExecutor(AddShorts.this), videoRecordEvent -> {
+                        RecordingStats stats = videoRecordEvent.getRecordingStats();
+                        long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
+                        String text = String.format(time + "s/60s");
+                        if (time > 10) {
+                            stopRecording();
                         } else {
-                            currentRecording.close();
-                            currentRecording = null;
-                            String msg = "Error: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getError();
-                            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                            captureLiveStatus.setValue(text);
                         }
+                        captureLiveStatus.setValue(text);
+                        if (!(videoRecordEvent instanceof VideoRecordEvent.Status)) {
+                            recordingState = videoRecordEvent;
+                        }
+                        if (videoRecordEvent instanceof VideoRecordEvent.Start) {
+                            btnStopRecord.setVisibility(View.VISIBLE);
+                            btnPause.setVisibility(View.VISIBLE);
+                            btnFlip.setVisibility(View.GONE);
+                            btnUploadVideo.setVisibility(View.GONE);
+                            btnStartRecord.setVisibility(View.GONE);
+                            btnExit.setVisibility(View.GONE);
+                            isRecording = true;
+                        } else if (videoRecordEvent instanceof VideoRecordEvent.Finalize) {
+                            if (!((VideoRecordEvent.Finalize) videoRecordEvent).hasError()) {
+                                String msg = "Video capture succeeded: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
+                                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                                Uri capturedVideoUri = ((VideoRecordEvent.Finalize) videoRecordEvent).getOutputResults().getOutputUri();
+                                startUploadingActivity(capturedVideoUri);
+                            } else {
+                                currentRecording.close();
+                                currentRecording = null;
+                                String msg = "Error: " + ((VideoRecordEvent.Finalize) videoRecordEvent).getError();
+                                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+                            }
 
-                    }
-                });
+                        }
+                    });
+        }catch (Exception e) {
+            Log.e("audio", "Error during recording preparation:", e);
+        }
     }
     private void stopRecording(){
         if (currentRecording == null || recordingState instanceof VideoRecordEvent.Finalize) {
@@ -427,6 +434,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         Recording recording = currentRecording;
         if (recording != null) {
             recording.stop();
+            recording.close();
             currentRecording = null;
         }
 
@@ -453,15 +461,15 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
             runOnUiThread(() -> Toast.makeText(AddShorts.this, "Flash is not available currently", Toast.LENGTH_SHORT).show());
         }
     }
-private void updateUI(VideoRecordEvent event) {
-    RecordingStats stats = event.getRecordingStats();
-    //long size = stats.getNumBytesRecorded() / 1000;
-    long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
-    String text = String.format(time + "s/60s");
+    private void updateUI(VideoRecordEvent event) {
+        RecordingStats stats = event.getRecordingStats();
+        //long size = stats.getNumBytesRecorded() / 1000;
+        long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
+        String text = String.format(time + "s/60s");
 
-    captureLiveStatus.setValue(text);
+        captureLiveStatus.setValue(text);
 
-}
+    }
 
     // Container for information about each video.
     private static class Video {
@@ -482,4 +490,3 @@ private void updateUI(VideoRecordEvent event) {
 
 
 }
-
