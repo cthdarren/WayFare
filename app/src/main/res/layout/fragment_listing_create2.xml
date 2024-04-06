@@ -63,7 +63,25 @@
         android:text="The exact location of the meetup will only be shared with tour participants after they've made a booking."
         />
 
-<!--    TODO insert map search + view here-->
+        <fragment
+            android:id="@+id/addressAutocomplete"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+
+        <fragment
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/confirmMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+
+        <!--    TODO insert map search + view here-->
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
