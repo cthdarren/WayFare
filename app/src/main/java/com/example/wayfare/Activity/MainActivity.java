@@ -1,5 +1,7 @@
 package com.example.wayfare.Activity;
 
+import static com.google.maps.android.Context.getApplicationContext;
+
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.wayfare.Fragment.AddShortsFragment;
+import com.example.wayfare.Fragment.CreateListing.CreateListingFragment2;
 import com.example.wayfare.Fragment.MapFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
 import com.example.wayfare.Fragment.Public.PublicUpcomingFragment;
@@ -40,6 +43,8 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.example.wayfare.databinding.ActivityMainBinding;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
@@ -63,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+        }
+        //PlacesClient placesClient = Places.createClient(this);
+
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
