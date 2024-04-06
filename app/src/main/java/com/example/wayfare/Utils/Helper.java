@@ -46,6 +46,7 @@ public class Helper {
     }
 
     public static void goToFragmentSlideInRightArgs(Bundle args, FragmentManager fm, int fragmentId, Fragment fragment) {
+        fragment.setArguments(args);
         fm.beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_left_to_right, // enter
