@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourEndTime"
+    android:layout_width="match_parent"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/outer_padding"
+    tools:context=".Fragment.SignInFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/register_exit"
+        android:paddingEnd="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        android:scaleType="fitStart"
+         />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <View
+                     android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    />
+        <Button
+            android:id="@+id/continue_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:drawableEnd="@drawable/chevron_right"
+            android:drawableTint="@color/md_theme_background"
+            tools:ignore="MissingConstraints" />
+        </LinearLayout></LinearLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Some more information about your tour"
+        android:textSize="@dimen/font_2xl"
+         />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/first_name_wrapper"
+        android:layout_width="match_parent"
+        android:hint="First name"
+        android:layout_height="wrap_content">
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:id="@+id/first_name"
+        android:maxLines="1"
+        android:layout_height="wrap_content"
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/last_name_wrapper"
+        android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
+        android:hint="Last name"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:id="@+id/last_name"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phone_number_wrapper"
+            android:layout_width="match_parent"
+            android:layout_marginTop="40dp"
+            android:hint="Phone number"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:id="@+id/phone_number"
+                android:inputType="number"
+                android:layout_height="wrap_content"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

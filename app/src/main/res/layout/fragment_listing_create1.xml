@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourEndTime"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/outer_padding"
+    tools:context=".Fragment.SignInFragment">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="20dp"
+            android:layout_height="wrap_content">
+             <ImageView
+        android:id="@+id/register_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cross"
+        android:scaleType="fitStart"
+         />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <View
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    />
+                <Button
+                    android:id="@+id/continue_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Continue"
+                    android:drawableEnd="@drawable/chevron_right"
+                    android:drawableTint="@color/md_theme_background"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout></LinearLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:paddingBottom="40dp"
+        android:layout_height="wrap_content"
+        android:text="Which of these categories best describes your tour?"
+        android:textSize="@dimen/font_xl"
+         />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categoryRecycler"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="-15dp"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/category_list_item"
+        />
+</LinearLayout>

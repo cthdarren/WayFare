@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourEndTime"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/outer_padding"
+    tools:context=".Fragment.SignInFragment">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingBottom="20dp"
+            android:layout_height="wrap_content">
+             <ImageView
+        android:id="@+id/register_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cross"
+        android:scaleType="fitStart"
+         />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <View
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    />
+                <Button
+                    android:id="@+id/get_started_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Get Started"
+                    android:drawableEnd="@drawable/chevron_right"
+                    android:drawableTint="@color/md_theme_background"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout></LinearLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Begin hosting with WayFare"
+        android:textSize="@dimen/font_2xl"
+         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="30dp"
+        android:text="Here are the steps required to complete your listing:"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:textSize="@dimen/font_sm"
+        android:textStyle="bold"
+        android:text="Step 1: Tell us about your tour."
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/font_2xl"
+        android:textSize="@dimen/font_xs"
+        android:text="Share some basic information such as where your tour is held and how many participants are able to join your tour."/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/md_theme_outlineVariant" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:textSize="@dimen/font_sm"
+        android:textStyle="bold"
+        android:text="Step 2: Make it stand out from the rest!"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/font_2xl"
+        android:textSize="@dimen/font_xs"
+        android:text="Add attractive photos, a meaningful description or even a short video."/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/md_theme_outlineVariant" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:text="Step 3: Finish up and publish your listing"
+        android:textSize="@dimen/font_sm"
+        android:textStyle="bold"
+
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/font_2xl"
+        android:textSize="@dimen/font_xs"
+        android:text="Set a reasonable starting price and publish your listing!"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/md_theme_outlineVariant" />
+
+</LinearLayout>
