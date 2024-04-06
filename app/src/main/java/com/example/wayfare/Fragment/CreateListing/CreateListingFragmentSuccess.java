@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.Helper;
 
-public class CreateListingFragment4 extends Fragment {
+public class CreateListingFragmentSuccess extends Fragment {
 
     Button continue_button;
 
-    public CreateListingFragment4() {
+    public CreateListingFragmentSuccess() {
     }
 
     @Override
@@ -27,14 +27,17 @@ public class CreateListingFragment4 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_listing_create4, container, false);
+        View view = inflater.inflate(R.layout.fragment_listing_create_success, container, false);
         continue_button = view.findViewById(R.id.continue_button);
 
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO change to createlisting fragment3
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment5());
+                // there are 9 fragments created for the creation listing, pop all of them back
+                for (int i = 0; i < 9; i++){
+                    getParentFragmentManager().popBackStack();
+                    getActivity().recreate();
+                }
             }
         });
         return view;
