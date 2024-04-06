@@ -34,7 +34,9 @@ public class CreateListingFragment5 extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO change to createlisting fragment3
+                continue_button.setEnabled(false);
                 Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment6());
+                continue_button.setEnabled(true);
             }
         });
         return view;

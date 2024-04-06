@@ -79,7 +79,11 @@ public class CreateListingFragment1 extends Fragment implements HostListingsRecy
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment2());
+                continue_button.setEnabled(false);
+                Bundle args = new Bundle();
+                args.putString("category", selectedCategory);
+                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment2());
+                continue_button.setEnabled(true);
             }
         });
         return view;

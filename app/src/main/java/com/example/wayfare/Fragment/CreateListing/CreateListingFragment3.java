@@ -33,8 +33,11 @@ public class CreateListingFragment3 extends Fragment {
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                continue_button.setEnabled(false);
                 //TODO change to createlisting fragment3
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment4());
+                Bundle args = getArguments();
+                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment4());
+                continue_button.setEnabled(true);
             }
         });
         return view;
