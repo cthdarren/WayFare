@@ -54,19 +54,107 @@
         android:text="Some more information about your tour"
         android:textSize="@dimen/font_2xl"
          />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="20dp"
-            android:text="What time will the tour be held at?"/>
-
-        <Button
-            android:id="@+id/addTimeSlotButton"
-            android:layout_width="wrap_content"
+            android:text="At what time(s) will the tour be held at?" />
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add a new time slot"/>
-            
+            android:text="Add a new time slot"
+            android:textStyle="bold"
+            android:paddingBottom="10dp"
+            android:textSize="@dimen/font_md"/>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+             <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="20dp"
+                    android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/font_sm"
+            android:paddingTop="10dp"
+            android:text="From:"/>
+                    <TextView
+                        android:id="@+id/startTimeString"
+                        android:layout_width="wrap_content"
+                        android:paddingTop="10dp"
+                        android:textSize="@dimen/font_sm"
+                        android:paddingHorizontal="20dp"
+                        android:layout_height="match_parent"
+                        android:text="3 pm"/>
+                    <TextView
+                        android:id="@+id/changeStartTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="10dp"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold"
+                        android:text="Change"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:textSize="@dimen/font_sm"
+                android:text="To: "/>
+                    <TextView
+                        android:id="@+id/endTimeString"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="20dp"
+                        android:textSize="@dimen/font_sm"
+                        android:text="3 pm"/>
+                    <TextView
+                        android:id="@+id/changeEndTime"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:gravity="start"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold"
+                        android:text="Change"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_marginStart="30dp"
+                android:layout_height="match_parent">
+            <Button
+                android:id="@+id/addTimeSlotButton"
+                android:layout_width="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_height="wrap_content"
+                android:text="Add "/>
+            </LinearLayout>
+
+        </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/timeSlotRecycler"
             android:layout_width="match_parent"
