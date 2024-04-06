@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wayfare.HostListingsRecyclerViewInterface;
 import com.example.wayfare.Models.CategoryItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
@@ -22,9 +23,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private final List<CategoryItemModel> categoryItemModels;
     private final Context context;
 
-    private final RecyclerViewInterface recyclerViewInterface;
+    private final HostListingsRecyclerViewInterface recyclerViewInterface;
 
-    public CategoryAdapter(Context context, List<CategoryItemModel> categoryItemModels, RecyclerViewInterface recyclerViewInterface){
+    public CategoryAdapter(Context context, List<CategoryItemModel> categoryItemModels, HostListingsRecyclerViewInterface recyclerViewInterface){
         this.context = context;
         this.categoryItemModels = categoryItemModels;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -41,7 +42,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.categoryName.setText(categoryItemModels.get(position).name);
         holder.categoryIcon.setImageDrawable(categoryItemModels.get(position).icon);
-
+        if (categoryItemModels.get(position).selected == true){
+            holder.categoryCard.setStrokeColor(context.getColor(R.color.black));
+        }
+        else
+            holder.categoryCard.setStrokeColor(context.getColor(R.color.md_theme_outlineVariant));
     }
 
     @Override
@@ -55,7 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         private ImageView categoryIcon;
         private MaterialCardView categoryCard;
 
-        public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public ViewHolder(@NonNull View itemView, HostListingsRecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             categoryName = itemView.findViewById(R.id.categoryName);
             categoryIcon = itemView.findViewById(R.id.categoryIcon);

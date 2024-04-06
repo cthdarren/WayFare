@@ -93,13 +93,14 @@ public class CreateListingFragment2 extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO change to createlisting fragment3
+                continue_button.setEnabled(false);
                 Bundle args = new Bundle();
                 args.putAll(getArguments());
-                args.putString("locationLatLng", latLngAddress.toString());
-                args.putString("locationName", placeAddress);
-                CreateListingFragment3 fragment3 = new CreateListingFragment3();
-                fragment3.setArguments(args);
-                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, fragment3);
+
+//                args.putString("locationLatLng", latLngAddress.toString());
+//                args.putString("locationName", placeAddress);
+                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment3());
+                continue_button.setEnabled(true);
             }
         });
         return view;
