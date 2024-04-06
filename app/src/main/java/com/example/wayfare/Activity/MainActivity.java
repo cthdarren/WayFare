@@ -160,8 +160,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new PublicUpcomingFragment());
                 }
             } else if (item.getItemId() == R.id.tours) {
-                //replaceFragment(new ToursFragment());
-                replaceFragment(new CreateListingFragment2());
+                replaceFragment(new ToursFragment());
             } else if (item.getItemId() == R.id.addShorts) {
                 Intent intent = new Intent(MainActivity.this, AddShorts.class);
                 startActivity(intent);
