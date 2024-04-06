@@ -41,6 +41,7 @@ public class CreateListingFragment7 extends Fragment {
         Currency currency = Currency.getInstance(new AuthHelper(getContext()).getSharedPrefsCurrencyName());
         String currencyPrefix = currency.getSymbol();
         localPrice.setText(currencyPrefix);
+        continue_button.setEnabled(false);
 
         localPrice.addTextChangedListener(new TextWatcher() {
             @Override
@@ -57,13 +58,19 @@ public class CreateListingFragment7 extends Fragment {
                     localPrice.setText(currencyPrefix);
                     Selection.setSelection(localPrice.getText(), localPrice.getText().length());
                 }
+                else {
+                    if (s.toString().substring(currencyPrefix.length(), s.length()).length() == 0) {
+                        continue_button.setEnabled(false);
+                    } else
+                        continue_button.setEnabled(true);
+                }
             }
         });
 
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO change to createlisting fragment3
+                localPrice.clearFocus();
                 Bundle args = getArguments();
                 int usdPrice = Helper.exchangeToNearestIntUsd(
                         Integer.parseInt(localPrice.getText().toString().substring(currencyPrefix.length(), localPrice.getText().toString().length())),

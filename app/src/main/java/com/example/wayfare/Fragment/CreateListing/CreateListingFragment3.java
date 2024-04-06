@@ -1,5 +1,6 @@
 package com.example.wayfare.Fragment.CreateListing;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.wayfare.R;
@@ -44,7 +46,6 @@ public class CreateListingFragment3 extends Fragment {
             @Override
             public void onClick(View v) {
                 continue_button.setEnabled(false);
-                //TODO change to createlisting fragment3
                 Bundle args = getArguments();
                 args.putString("minPax", minPax.getText().toString());
                 args.putString("maxPax", maxPax.getText().toString());

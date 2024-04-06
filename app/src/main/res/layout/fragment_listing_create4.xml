@@ -5,6 +5,8 @@
     android:id="@+id/tourEndTime"
     android:layout_width="match_parent"
     android:background="@color/md_theme_background"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/outer_padding"

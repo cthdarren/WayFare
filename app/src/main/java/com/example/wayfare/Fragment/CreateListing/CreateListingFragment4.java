@@ -55,21 +55,23 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
         timeSlotRecycler.setAdapter(new ListingTimeSlotAdapter(getContext(), timeSlotItemModelList, this));
         timeSlotRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                MaterialTimePicker startTimePicker =
-                new MaterialTimePicker.Builder()
-                        .setTimeFormat(TimeFormat.CLOCK_12H)
-                        .setHour(13)
-                        .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
-                        .setTitleText("Select start time")
-                        .build();
+        continue_button.setEnabled(false);
 
-                MaterialTimePicker endTimePicker =
-                new MaterialTimePicker.Builder()
-                        .setTimeFormat(TimeFormat.CLOCK_12H)
-                        .setHour(13)
-                        .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
-                        .setTitleText("Select end time")
-                        .build();
+        MaterialTimePicker startTimePicker =
+            new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_12H)
+                    .setHour(13)
+                    .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
+                    .setTitleText("Select start time")
+                    .build();
+
+        MaterialTimePicker endTimePicker =
+            new MaterialTimePicker.Builder()
+                    .setTimeFormat(TimeFormat.CLOCK_12H)
+                    .setHour(13)
+                    .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
+                    .setTitleText("Select end time")
+                    .build();
 
         startTimePicker.addOnPositiveButtonClickListener(
                 new View.OnClickListener() {
@@ -119,6 +121,7 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
             public void onClick(View v) {
                 timeSlotItemModelList.add(new TimeSlotItemModel(toAddStart, toAddEnd));
                 timeSlotRecycler.getAdapter().notifyItemInserted(timeSlotItemModelList.size()- 1);
+                continue_button.setEnabled(true);
             }
         });
         continue_button.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +130,6 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
                 Bundle args = getArguments();
                 args.putParcelableArrayList("timeslots", (ArrayList<? extends Parcelable>) timeSlotItemModelList);
                 continue_button.setEnabled(false);
-                //TODO change to createlisting fragment3
                 Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment5());
                 continue_button.setEnabled(true);
             }
@@ -139,5 +141,7 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
     public void onItemClick(int position) {
         timeSlotItemModelList.remove(position);
         timeSlotRecycler.getAdapter().notifyItemRemoved(position);
+        if (timeSlotItemModelList.size() == 0)
+            continue_button.setEnabled(false);
     }
 }
