@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.Adapters.CategoryAdapter;
 import com.example.wayfare.Fragment.SignUp2Fragment;
+import com.example.wayfare.HostListingsRecyclerViewInterface;
 import com.example.wayfare.Models.CategoryItemModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
@@ -34,26 +35,26 @@ import java.util.List;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class CreateListingFragment1 extends Fragment implements RecyclerViewInterface {
+public class CreateListingFragment1 extends Fragment implements HostListingsRecyclerViewInterface {
 
     RecyclerView categoryRecycler;
     List<CategoryItemModel> categoryItemModels;
     Button continue_button;
+    String selectedCategory = null;
 
 
     public void setupCategoryModels(Context context) {
         categoryItemModels = Arrays.asList(
-                new CategoryItemModel("Arts and Culture", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Entertainment", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Food and Drink", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Sports", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Tours", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Sightseeing", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Wellness", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Nature and Outdoors", context.getDrawable(R.drawable.settings_icon))
+                new CategoryItemModel("Art and Culture", "ART_AND_CULTURE", context.getDrawable(R.drawable.settings_icon)),
+                new CategoryItemModel("Entertainment", "ENTERTAINMENT", context.getDrawable(R.drawable.settings_icon)),
+                new CategoryItemModel("Food and Drink","FOOD_AND_DRINK", context.getDrawable(R.drawable.settings_icon)),
+                new CategoryItemModel("Sports","SPORTS", context.getDrawable(R.drawable.settings_icon)),
+                new CategoryItemModel("Tours", "TOURS", context.getDrawable(R.drawable.settings_icon)),
+                new CategoryItemModel("Sightseeing", "SIGHTSEEING", context.getDrawable(R.drawable.settings_icon)),
+                new CategoryItemModel("Wellness", "WELLNESS", context.getDrawable(R.drawable.settings_icon)),
+                new CategoryItemModel("Nature and Outdoors", "NATURE_AND_OUTDOORS", context.getDrawable(R.drawable.settings_icon))
         );
     }
-
     public CreateListingFragment1() {
     }
 
@@ -70,6 +71,7 @@ public class CreateListingFragment1 extends Fragment implements RecyclerViewInte
         continue_button = view.findViewById(R.id.continue_button);
         categoryRecycler = view.findViewById(R.id.categoryRecycler);
 
+        continue_button.setEnabled(false);
         setupCategoryModels(getContext());
         categoryRecycler.setAdapter(new CategoryAdapter(getContext(), categoryItemModels, this));
         categoryRecycler.setLayoutManager(new GridLayoutManager(getContext(),2));
@@ -85,6 +87,19 @@ public class CreateListingFragment1 extends Fragment implements RecyclerViewInte
 
     @Override
     public void onItemClick(int position) {
-        System.out.println(position);
+        continue_button.setEnabled(true);
+        selectedCategory = categoryItemModels.get(position).enumName;
+        resetOtherItems(position);
+        categoryItemModels.get(position).selected = true;
+        categoryRecycler.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void resetOtherItems(int position) {
+        for (int i = 0; i < categoryItemModels.size(); i ++){
+            if (position != i){
+                categoryItemModels.get(i).selected = false;
+            }
+        }
     }
 }
