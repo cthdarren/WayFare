@@ -1,5 +1,7 @@
 package com.example.wayfare.Fragment.CreateListing;
 
+import static com.google.maps.android.Context.getApplicationContext;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +27,11 @@ import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.maps.model.AutocompletePrediction;
@@ -56,19 +60,20 @@ public class CreateListingFragment2 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.fragment_listing_create2, container, false);
         continue_button = view.findViewById(R.id.continue_button);
         addressAutocomplete = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.addressAutocomplete);
 
-        addressAutocomplete.setTypesFilter(Arrays.asList("Address"));
+        //addressAutocomplete.setTypesFilter(Arrays.asList("Address"));
         addressAutocomplete.setLocationBias(RectangularBounds.newInstance(
-                new LatLng(1.3521, 103.8198),
-                new LatLng(3.140853, 101.693207)
+                new LatLng(-33.880490, 151.184363),
+                new LatLng(-33.858754, 151.229596)
         ));
         addressAutocomplete.setCountries("SG");
         addressAutocomplete.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME,
                 Place.Field.ADDRESS, Place.Field.ID));
-
         addressAutocomplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onError(@NonNull Status status) {
@@ -80,6 +85,7 @@ public class CreateListingFragment2 extends Fragment {
                 latLngAddress = place.getLatLng();
                 placeName = place.getName();
                 placeAddress = place.getAddress();
+                Log.i("Place Selected", placeName + placeAddress);
             }
         });
 
@@ -90,6 +96,7 @@ public class CreateListingFragment2 extends Fragment {
                 continue_button.setEnabled(false);
                 Bundle args = new Bundle();
                 args.putAll(getArguments());
+
 //                args.putString("locationLatLng", latLngAddress.toString());
 //                args.putString("locationName", placeAddress);
                 Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment3());
