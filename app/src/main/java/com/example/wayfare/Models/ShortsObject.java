@@ -1,31 +1,60 @@
 package com.example.wayfare.Models;
 
+
+import java.util.ArrayList;
+import java.util.Date;
+
 public class ShortsObject {
+    //    private String id;
+    private String shortsUrl;
+    private String userId;
+    private String userName;
+    private String description;
+    private TourListModel listing;
+    private ArrayList<String> likes;
+    private Date datePosted;
     public ShortsObject(){}
-    private String url, title, description, date, user_id;
 
-    public ShortsObject(String url, String title, String description, String date, String user_id) {
-        this.url = url;
-        this.title = title;
+    public ShortsObject(String shortsUrl, String userName,String userId, String description, Date datePosted, TourListModel listing,ArrayList<String> likes) {
+        this.shortsUrl = shortsUrl;
+        this.userId = userId;
+        this.userName = userName;
         this.description = description;
-        this.date = date;
-        this.user_id = user_id;
+        this.listing = listing;
+        this.likes = likes;
+        this.datePosted = datePosted;
     }
 
-    public String getUrl() {
-        return url;
+//    public String getId() {
+//        return id;
+//    }
+//
+//    public void setId(String id) {
+//        this.id = id;
+//    }
+
+    public String getShortsUrl() {
+        return shortsUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setShortsUrl(String shortsUrl) {
+        this.shortsUrl = shortsUrl;
     }
 
-    public String getTitle() {
-        return title;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDescription() {
@@ -36,19 +65,27 @@ public class ShortsObject {
         this.description = description;
     }
 
-    public String getDate() {
-        return date;
+    public TourListModel getListing() {
+        return listing;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setListing(TourListModel listing) {
+        this.listing = listing;
     }
 
-    public String getUser_id() {
-        return user_id;
+    public ArrayList<String> getLikes() {
+        return likes;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setLikes(ArrayList<String> likes) {
+        this.likes = likes;
+    }
+
+    public Date getDatePosted() {
+        return datePosted;
+    }
+
+    public void setDatePosted(Date datePosted) {
+        this.datePosted = datePosted;
     }
 }

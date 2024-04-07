@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 import android.widget.ImageView;
 
+import androidx.cardview.widget.CardView;
 import androidx.media3.common.Player;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.SimpleExoPlayer;
@@ -25,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.Models.ShortsObject;
+import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 
 import java.util.ArrayList;
@@ -100,7 +103,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public class ShortsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private PlayerView videoView;
         private ExoPlayer exoPlayer;
-        private TextView shortsDescription, shortsTitle;
+        private TextView shortsDescription, shortsTitle, listingTitle;
+        private CardView listingCard;
         private ImageView imvAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
         private ProgressBar videoProgressBar;
         boolean isPaused = false;
@@ -113,8 +117,11 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             videoProgressBar = itemView.findViewById(R.id.progressBar);
             imvVolume = itemView.findViewById(R.id.imvVolume);
             imvAppear = itemView.findViewById(R.id.imv_appear);
+            listingTitle = itemView.findViewById(R.id.listingTitle);
+            listingCard = itemView.findViewById(R.id.listingCard);
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
+            listingTitle.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
@@ -173,10 +180,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         }
         @SuppressLint("ClickableViewAccessibility")
         void setShortsData(ShortsObject shortsData){
-            Uri shortsUri = Uri.parse(shortsData.getUrl());
+            Uri shortsUri = Uri.parse(shortsData.getShortsUrl());
             shortsDescription.setText(shortsData.getDescription());
-            shortsTitle.setText(shortsData.getTitle());
-
+            shortsTitle.setText(shortsData.getUserName());
+            if (shortsData.getListing()!=null){
+                listingCard.setVisibility(View.VISIBLE);
+                listingTitle.setText(shortsData.getListing().getTitle());
+            }
             // Create a media item representing the video
             MediaItem mediaItem = MediaItem.fromUri(shortsUri);
             if (exoPlayer != null) exoPlayer.release();
@@ -242,6 +252,10 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     imvVolume.setImageResource(R.drawable.ic_baseline_volume_off_24);
                     appearImage(R.drawable.ic_baseline_volume_off_24);
                 }
+            }
+            if(view.getId() == listingTitle.getId()){
+                int pos = getCurrentPosition();
+                TourListModel currListing = shortsDataList.get(pos).getListing();
             }
         }
     }
