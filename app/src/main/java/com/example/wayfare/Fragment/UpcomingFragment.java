@@ -54,7 +54,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                 thumbnailUrl = "";
             else
                 thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
-            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getReviewed());
+            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getListing().getId(), booking.getReviewed());
             upcomingBookings.add(toAdd);
         }
     }
@@ -66,7 +66,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                 thumbnailUrl = "";
             else
                 thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
-            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getReviewed());
+            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getListing().getId(), booking.getReviewed());
             pastBookings.add(toAdd);
         }
     }
@@ -117,10 +117,10 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         new AuthService(getContext()).getResponse("/bookings", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
-                progBar.setVisibility(View.GONE);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        progBar.setVisibility(View.GONE);
                         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -159,10 +159,10 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                     });
                 }
                 else{
-                    progBar.setVisibility(View.GONE);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            progBar.setVisibility(View.GONE);
                             Toast.makeText(getContext(), "Server Error", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -173,6 +173,9 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
 
     @Override
     public void onItemClick(int position) {
-        System.out.println(position);
+        Bundle args = new Bundle();
+        args.putString("listingId", pastBookings.get(position).listingUrl);
+        args.putString("wayfarer", pastBookings.get(position).wayfarerUsername);
+        Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateReviewFragment());
     }
 }
