@@ -184,6 +184,8 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
             intent.putExtra("description", getArguments().getString("description"));
             intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
+            intent.putExtra("minPax", getArguments().getInt("minPax"));
+            intent.putExtra("maxPax", getArguments().getInt("maxPax"));
 
             int startingIndex = position * 2;
             if (!timeList.isEmpty()){

@@ -1,15 +1,6 @@
 package com.example.wayfare.Fragment;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,37 +8,47 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.ResponseModel;
-import com.example.wayfare.Models.TimeSlotItemModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 
-public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
+public class AfterSearchToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
     TextView searchParams;
     ProgressBar progBar;
     MaterialCardView searchBar;
     Double latitude, longitude;
     int numberPax, kmdistance;
+    Long startDate, endDate;
     String region, date;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
-    public ToursFragment(){}
+    public AfterSearchToursFragment(){}
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +59,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
 
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
+        searchParams = view.findViewById(R.id.searchParams);
         searchBar = view.findViewById(R.id.clickSearchBar);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
@@ -67,12 +69,23 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
             latitude = args.getDouble("latitude", 0);
             longitude = args.getDouble("longitude", 0);
             kmdistance = args.getInt("kmdistance", 100);
-            numberPax = args.getInt("numberPax", 1);
-            date = args.getString("date", "Any day");
-            String paxString = "people";
+            numberPax = args.getInt("numPax", 1);
+            startDate = args.getLong("startDate", MaterialDatePicker.todayInUtcMilliseconds());
+            endDate = args.getLong("endDate", MaterialDatePicker.todayInUtcMilliseconds());
+            String startDateString = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDate), ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("d MMM"));
+            String endDateString = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDate), ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("d MMM"));
+
+            if (Objects.equals(startDate, endDate))
+                date = startDateString;
+            else
+                date = startDateString + " - " + endDateString;
+
+            String paxString = " people";
             if (numberPax == 1)
-                paxString = "person";
-            searchParams.setText(String.format("%s | %s | %s", region, date, paxString));
+                paxString = " person";
+            if (region.length() > 20)
+                region = region.substring(0,20) + "...";
+            searchParams.setText(String.format("%s  |  %s  |  %s", region, date, numberPax + paxString));
         }
         else{
             latitude = 0.0;
