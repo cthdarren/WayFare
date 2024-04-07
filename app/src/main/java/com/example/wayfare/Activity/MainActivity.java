@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        Helper.getExchangeRate();
+//        Helper.getExchangeRate();
 
         View decorView = getWindow().getDecorView();
         if (getSupportFragmentManager().getBackStackEntryCount() == 0)
