@@ -80,7 +80,7 @@ public class Helper {
         fm.beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_left_to_right, // enter
-                        R.anim.slide_right_to_left, // exit
+                        R.anim.slide_out_right_to_left,  // exit
                         R.anim.fade_in, // popEnter
                         R.anim.slide_out_left_to_right// popExit
                 )
@@ -101,7 +101,7 @@ public class Helper {
 
     public static void goToFullScreenFragmentFromTop(FragmentManager fm, Fragment fragment) {
         fm.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_top, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_top)
+                .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_top, R.anim.slide_in_top, R.anim.slide_out_top)
                 .replace(R.id.container, fragment)
                 .addToBackStack(fragment.getClass().getName())
                 .setReorderingAllowed(true)
