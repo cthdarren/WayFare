@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:elevation="1dp"
         android:orientation="vertical"
         android:paddingTop="10dp"
@@ -44,24 +44,29 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:weightSum="3"
                 android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/thumbnail"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="3"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/default_avatar" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="2">
+                <ImageView
+                    android:id="@+id/thumbnail"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/default_avatar" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:orientation="vertical"
                     android:padding="10dp">
 
@@ -81,9 +86,8 @@
                         android:orientation="horizontal">
                         <TextView
                             android:id="@+id/bookingLocation"
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:textSize="@dimen/font_sm"
-                            android:layout_weight="1"
                             android:layout_height="match_parent"
                             android:maxLines="1"
                             android:text="Singapore"

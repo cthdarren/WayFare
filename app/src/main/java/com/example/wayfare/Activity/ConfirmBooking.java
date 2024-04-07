@@ -49,7 +49,7 @@ public class ConfirmBooking extends AppCompatActivity {
     int endTime;
     Date date;
     String remark;
-    int pax;
+    int pax, minPax, maxPax;
     String listingId;
 
     TourListModel.TimeRange timeSlot;
@@ -81,6 +81,8 @@ public class ConfirmBooking extends AppCompatActivity {
             long timeInMillis = extras.getLong("date_key");
             date = new Date(timeInMillis);
             listingId = extras.getString("listingId");
+            minPax = extras.getInt("minPax");
+            maxPax = extras.getInt("maxPax");
         }
 
         timeSlot = new TourListModel.TimeRange(startTime, endTime);
@@ -111,19 +113,22 @@ public class ConfirmBooking extends AppCompatActivity {
         AppCompatImageButton decrementButton = findViewById(R.id.decrement);
         AppCompatImageButton incrementButton = findViewById(R.id.increment);
         MaterialTextView counter = findViewById(R.id.counter);
-        final int[] counterValue = {1};
+        final int[] counterValue = {minPax};
 
+        counter.setText(String.valueOf(minPax));
         incrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counterValue[0]++;
-                counter.setText(String.valueOf(counterValue[0]));
+                if (counterValue[0] < maxPax) {
+                    counterValue[0]++;
+                    counter.setText(String.valueOf(counterValue[0]));
+                }
             }
         });
         decrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (counterValue[0] != 0) {
+                if (counterValue[0] > minPax) {
                     counterValue[0]--;
                     counter.setText(String.valueOf(counterValue[0]));
                 }
@@ -176,6 +181,13 @@ public class ConfirmBooking extends AppCompatActivity {
             public void onResponse(ResponseModel json) {
                 if (json.success){
                     Log.d("JSON", "onResponse: success");
+                    makeToast(json.data.getAsString());
+                    ConfirmBooking.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    });
                 }
                 else{
                     JsonArray ja= json.data.getAsJsonArray();

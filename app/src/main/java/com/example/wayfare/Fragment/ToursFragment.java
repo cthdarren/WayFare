@@ -144,21 +144,16 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         data.putString("description", tourListModels.get(position).getDescription());
         data.putString("reviewCount", String.valueOf(tourListModels.get(position).getReviewCount()));
         data.putString("listingId", tourListModels.get(position).getId());
-
-
-
+        data.putInt("minPax", tourListModels.get(position).getMinPax());
+        data.putInt("maxPax", tourListModels.get(position).getMinPax());
+        data.putString("userId", tourListModels.get(position).getUserId());
+        data.putString("category", tourListModels.get(position).getCategory());
         data.putParcelableArrayList("timeRangeList", (ArrayList<? extends Parcelable>) tourListModels.get(position).getTimeRangeList());
-//        data.putStringArray("timingArray", timingArray);
-//        data.putIntegerArrayList("timeList", timeList);
 
         TourListingFull tourListingFullFragment = new TourListingFull();
         tourListingFullFragment.setArguments(data);
 
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frameLayoutFragment, tourListingFullFragment);
-        fragmentTransaction.addToBackStack(null); // Optional: Add to back stack
-        fragmentTransaction.commit();
+        Helper.goToFragmentSlideInRightArgs(data, getParentFragmentManager(), R.id.container, tourListingFullFragment);
     }
 
 }
