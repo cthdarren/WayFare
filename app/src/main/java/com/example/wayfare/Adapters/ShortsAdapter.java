@@ -7,15 +7,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 import android.widget.ImageView;
 
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.media3.common.Player;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.SimpleExoPlayer;
@@ -24,8 +28,11 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wayfare.Fragment.TourListingFull;
 import com.example.wayfare.Models.ShortsObject;
+import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +40,16 @@ import java.util.List;
 public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsViewHolder> {
     List<ShortsObject> shortsDataList;
     private int currentPosition;
+    private FragmentManager fragmentManager;
     int numberOfClick = 0;
     float volume;
     boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
-    public ShortsAdapter(List<ShortsObject> shortsDataList,Context context) {
+    public ShortsAdapter(List<ShortsObject> shortsDataList,Context context,FragmentManager fragmentManager) {
         this.shortsDataList = shortsDataList;
         this.context = context;
+        this.fragmentManager = fragmentManager;
         currentPosition = 0;
         shortsViewHolderList = new ArrayList<>();
     }
@@ -100,7 +109,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public class ShortsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private PlayerView videoView;
         private ExoPlayer exoPlayer;
-        private TextView shortsDescription, shortsTitle;
+        private TextView shortsDescription, shortsTitle, listingTitle;
+        private CardView listingCard;
         private ImageView imvAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
         private ProgressBar videoProgressBar;
         boolean isPaused = false;
@@ -113,8 +123,11 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             videoProgressBar = itemView.findViewById(R.id.progressBar);
             imvVolume = itemView.findViewById(R.id.imvVolume);
             imvAppear = itemView.findViewById(R.id.imv_appear);
+            listingTitle = itemView.findViewById(R.id.listingTitle);
+            listingCard = itemView.findViewById(R.id.listingCard);
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
+            listingTitle.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
@@ -173,10 +186,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         }
         @SuppressLint("ClickableViewAccessibility")
         void setShortsData(ShortsObject shortsData){
-            Uri shortsUri = Uri.parse(shortsData.getUrl());
+            Uri shortsUri = Uri.parse(shortsData.getShortsUrl());
             shortsDescription.setText(shortsData.getDescription());
-            shortsTitle.setText(shortsData.getTitle());
-
+            shortsTitle.setText(shortsData.getUserName());
+            if (shortsData.getListing()!=null){
+                listingCard.setVisibility(View.VISIBLE);
+                listingTitle.setText(shortsData.getListing().getTitle());
+            }
             // Create a media item representing the video
             MediaItem mediaItem = MediaItem.fromUri(shortsUri);
             if (exoPlayer != null) exoPlayer.release();
@@ -242,6 +258,33 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     imvVolume.setImageResource(R.drawable.ic_baseline_volume_off_24);
                     appearImage(R.drawable.ic_baseline_volume_off_24);
                 }
+            }
+            if(view.getId() == listingTitle.getId()){
+                if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                    exoPlayer.setPlayWhenReady(false);
+                }
+                int pos = getCurrentPosition();
+                TourListModel currListing = shortsDataList.get(pos).getListing();
+                Bundle data = new Bundle();
+
+                data.putString("title", currListing.getTitle());
+                data.putString("location", currListing.getRegion());
+                data.putString("rating", String.valueOf(currListing.getRating()));
+                data.putString("price", String.valueOf(currListing.getPrice()));
+                data.putString("thumbnail", currListing.getThumbnailUrls()[0]);
+                data.putString("description", currListing.getDescription());
+                data.putString("reviewCount", String.valueOf(currListing.getReviewCount()));
+                data.putString("listingId", currListing.getId());
+                data.putInt("minPax", currListing.getMinPax());
+                data.putInt("maxPax", currListing.getMinPax());
+                data.putString("userId", currListing.getUserId());
+                data.putString("category", currListing.getCategory());
+                data.putParcelableArrayList("timeRangeList", (ArrayList<? extends Parcelable>) currListing.getTimeRangeList());
+
+                TourListingFull tourListingFullFragment = new TourListingFull();
+                tourListingFullFragment.setArguments(data);
+
+                Helper.goToFragmentSlideInRightArgs(data, fragmentManager, R.id.container, tourListingFullFragment);
             }
         }
     }
