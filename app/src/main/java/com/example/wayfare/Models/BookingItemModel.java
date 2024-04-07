@@ -15,13 +15,15 @@ public class BookingItemModel {
     public final String timeOfBooking;
     public final String wayfarerPicUrl;
     public final String wayfarerUsername;
+    public final boolean reviewed;
 
-    public BookingItemModel(String thumbnailUrl, String title, String location, int startTimeOfBooking, String dateOfBooking, String wayfarerPicUrl, String wayfarerUsername) {
+    public BookingItemModel(String thumbnailUrl, String title, String location, int startTimeOfBooking, String dateOfBooking, String wayfarerPicUrl, String wayfarerUsername, boolean reviewed) {
         this.thumbnailUrl = thumbnailUrl;
         this.title = title;
         this.location = location;
         this.wayfarerPicUrl = wayfarerPicUrl;
         this.wayfarerUsername = wayfarerUsername;
+        this.reviewed = reviewed;
         String timePostfix = "am";
 
         if (startTimeOfBooking > 12)

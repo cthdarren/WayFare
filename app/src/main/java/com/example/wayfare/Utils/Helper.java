@@ -122,9 +122,12 @@ public class Helper {
         if (epochDiff > 60 * 60 * 24 * 365) {
             number = epochDiff / (60 * 60 * 24 * 365);
             timeCategory = "year";
-        } else if (epochDiff > 60 * 60 * 24 * 12) {
-            number = epochDiff / (60 * 60 * 24 * 12);
+        } else if (epochDiff > 60 * 60 * 24 * 30) {
+            number = epochDiff / (60 * 60 * 24 * 30);
             timeCategory = "month";
+        } else if (epochDiff > 60 * 60 * 24 * 7) {
+            number = epochDiff / (60 * 60 * 24 * 7);
+            timeCategory = "week";
         } else if (epochDiff > 60 * 60 * 24) {
             number = epochDiff / (60 * 60 * 24);
             timeCategory = "day";

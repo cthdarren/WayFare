@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wayfare.Models.BookingItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
+import com.google.android.material.card.MaterialCardView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -54,6 +55,9 @@ public class PastBookingAdapter extends RecyclerView.Adapter<PastBookingAdapter.
         holder.pastBookingLocation.setText(pastBookingItemModels.get(position).location);
         holder.pastBookingDate.setText(pastBookingItemModels.get(position).dateOfBooking);
 
+        if (pastBookingItemModels.get(position).reviewed)
+            holder.reviewButton.setVisibility(View.GONE);
+
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Looper uiLooper = Looper.getMainLooper();
         final Handler handler = new Handler(uiLooper);
@@ -62,13 +66,8 @@ public class PastBookingAdapter extends RecyclerView.Adapter<PastBookingAdapter.
             public void run() {
                 try {
                     String picUrl = pastBookingItemModels.get(position).thumbnailUrl;
-                    String wayfarerPictureUrl = pastBookingItemModels.get(position).wayfarerPicUrl;
-                    Bitmap wayfarerImage, image;
-                    if (wayfarerPictureUrl != null) {
-                        URL wpUrl = new URL(wayfarerPictureUrl);
-                        wayfarerImage = BitmapFactory.decodeStream(wpUrl.openConnection().getInputStream());
-                    } else
-                        wayfarerImage = null;
+                    Bitmap image;
+
                     if (picUrl != null) {
                         URL url = new URL(picUrl);
                         image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -97,6 +96,7 @@ public class PastBookingAdapter extends RecyclerView.Adapter<PastBookingAdapter.
 
         private ImageView pastBookingThumbnail;
         private TextView pastBookingTitle, pastBookingWayfarer, pastBookingDate, pastBookingLocation;
+        private MaterialCardView reviewButton;
 
 
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
@@ -106,8 +106,9 @@ public class PastBookingAdapter extends RecyclerView.Adapter<PastBookingAdapter.
             pastBookingTitle = itemView.findViewById(R.id.pastBookingTitle);
             pastBookingLocation = itemView.findViewById(R.id.pastBookingLocation);
             pastBookingDate = itemView.findViewById(R.id.pastBookingDate);
+            reviewButton = itemView.findViewById(R.id.reviewButton);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            reviewButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (recyclerViewInterface != null) {
