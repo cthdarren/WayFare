@@ -1,58 +1,40 @@
 package com.example.wayfare.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
-import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.search.SearchView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
     ProgressBar progBar;
+    SearchView searchBar;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
@@ -65,10 +47,17 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
+        searchBar = view.findViewById(R.id.searchView);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
 
+        searchBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new SearchMenuFragment());
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this));
 

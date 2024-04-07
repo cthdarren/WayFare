@@ -68,19 +68,18 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
-        }
-        //PlacesClient placesClient = Places.createClient(this);
 
+        super.onCreate(savedInstanceState);
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        super.onCreate(savedInstanceState);
-
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+        }
+        //PlacesClient placesClient = Places.createClient(this);
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
