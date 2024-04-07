@@ -59,6 +59,7 @@ public class SearchMenuFragment extends Fragment {
     Long startDate, endDate;
     ImageView minusPax, addPax;
     int numPaxInt = 1;
+    String region = null;
     AutocompleteSupportFragment addressAutocomplete;
     public SearchMenuFragment(){}
 
@@ -93,7 +94,7 @@ public class SearchMenuFragment extends Fragment {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
                 latLngAddress = place.getLatLng();
-
+                region = place.getName();
             }});
         startDate = todayInUtcMilliseconds();
         endDate = todayInUtcMilliseconds();
@@ -161,6 +162,8 @@ public class SearchMenuFragment extends Fragment {
                 args.putLong("startDate", startDate);
                 args.putLong("endDate", endDate);
                 args.putInt("numPax", numPaxInt);
+                if (region != null)
+                    args.putString("region", region);
                 Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new AfterSearchToursFragment());
             }
         });

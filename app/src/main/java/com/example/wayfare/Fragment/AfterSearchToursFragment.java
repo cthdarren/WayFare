@@ -33,6 +33,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class AfterSearchToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
@@ -68,16 +69,23 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
             latitude = args.getDouble("latitude", 0);
             longitude = args.getDouble("longitude", 0);
             kmdistance = args.getInt("kmdistance", 100);
-            numberPax = args.getInt("numberPax", 1);
+            numberPax = args.getInt("numPax", 1);
             startDate = args.getLong("startDate", MaterialDatePicker.todayInUtcMilliseconds());
             endDate = args.getLong("endDate", MaterialDatePicker.todayInUtcMilliseconds());
             String startDateString = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDate), ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("d MMM"));
             String endDateString = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDate), ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("d MMM"));
-            date = startDateString + " - " + endDateString;
+
+            if (Objects.equals(startDate, endDate))
+                date = startDateString;
+            else
+                date = startDateString + " - " + endDateString;
+
             String paxString = " people";
             if (numberPax == 1)
                 paxString = " person";
-            searchParams.setText(String.format("%s | %s | %s", region, date, numberPax + paxString));
+            if (region.length() > 20)
+                region = region.substring(0,20) + "...";
+            searchParams.setText(String.format("%s  |  %s  |  %s", region, date, numberPax + paxString));
         }
         else{
             latitude = 0.0;

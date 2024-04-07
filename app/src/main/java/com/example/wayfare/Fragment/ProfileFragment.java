@@ -277,7 +277,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        navBar.setVisibility(View.VISIBLE);
+        navBar.setVisibility(View.VISIBLE);
     }
 
     @Override
