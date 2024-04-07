@@ -13,10 +13,12 @@ import androidx.fragment.app.FragmentOnAttachListener;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.content.Intent;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -48,6 +50,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
+import com.google.maps.android.Context;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,8 +71,19 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        android.content.Context applicationContext = getApplicationContext();
+        ApplicationInfo applicationInfo;
+        Bundle bundle;
+        try {
+
+            applicationInfo = applicationContext.getPackageManager().getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
+            bundle = applicationInfo.metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+            //Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+            Places.initialize(applicationContext, bundle.getString("com.google.android.geo.API_KEY"));
         }
         //PlacesClient placesClient = Places.createClient(this);
 
@@ -161,7 +175,8 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new PublicUpcomingFragment());
                 }
             } else if (item.getItemId() == R.id.tours) {
-                replaceFragment(new ToursFragment());
+                //replaceFragment(new ToursFragment());
+                replaceFragment(new CreateListingFragment2());
             } else if (item.getItemId() == R.id.addShorts) {
                 Intent intent = new Intent(MainActivity.this, AddShorts.class);
                 startActivity(intent);
