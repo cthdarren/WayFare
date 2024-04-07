@@ -85,6 +85,12 @@ public class WayfarerActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 viewModel.updateUserData(new Gson().fromJson(json.data, UserModel.class));
+                                if (!Objects.equals(viewModel.getUserProfileData().getRole(), "ROLE_WAYFARER")){
+                                    Intent intent = new Intent(WayfarerActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
                                 if (getSupportFragmentManager().getBackStackEntryCount() == 0)
                                     replaceFragment(new TodayFragment());
                                 progBar.setVisibility(View.GONE);

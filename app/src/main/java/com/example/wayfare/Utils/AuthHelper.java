@@ -44,6 +44,8 @@ public class AuthHelper {
     }
 
     public void logout(){
+        sharedPreferences.edit().putString("WAYFARER_VIEW", "")
+                .apply();
         sharedPreferences.edit().putString("user_info", "")
                 .apply();
     }

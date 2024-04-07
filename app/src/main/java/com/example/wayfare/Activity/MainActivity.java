@@ -88,11 +88,7 @@ public class MainActivity extends AppCompatActivity {
         View view = (View) binding.getRoot();
 
         setContentView(view);
-        if (new AuthHelper(getApplicationContext()).getSharedPrefsValue("WAYFARER_VIEW").equals("TRUE")){
-            Intent intent = new Intent(MainActivity.this, WayfarerActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
         // Makes it such that when a user reclicks the navbar it doesn't refresh
         navbar = findViewById(R.id.bottomNavigationView);
         navbar.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
@@ -145,6 +141,12 @@ public class MainActivity extends AppCompatActivity {
             progBar.setVisibility(View.GONE);
         }
 
+        if (loggedIn)
+            if (new AuthHelper(getApplicationContext()).getSharedPrefsValue("WAYFARER_VIEW").equals("TRUE")){
+                Intent intent = new Intent(MainActivity.this, WayfarerActivity.class);
+                startActivity(intent);
+                finish();
+            }
         Helper.getExchangeRate();
 
         View decorView = getWindow().getDecorView();
