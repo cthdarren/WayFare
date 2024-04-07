@@ -181,6 +181,7 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/montserrat"
                 android:text="18 Aug 2024"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date" />
@@ -265,7 +266,53 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/thirdCardView"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/header2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add a note for your guide (optional)"
+                android:textSize="18dp"
+                android:fontFamily="@font/montserrat"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/remarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:hint="I hope you can include some information about the food culture!"
+                android:textSize="16dp"
+                android:fontFamily="@font/montserrat"
+                app:layout_constraintTop_toBottomOf="@+id/header2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/confirmButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

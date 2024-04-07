@@ -17,6 +17,7 @@ import com.google.android.material.button.MaterialButton;
 public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHolder>{
     Context context;
     String[] tourTimings;
+    public boolean isButtonEnabled = false;
     private final tourListing_RecyclerViewInterface tourListing_recyclerViewInterface;
 
     public timingAdapter(Context context, String[] tourTimings, tourListing_RecyclerViewInterface tourListing_recyclerViewInterface) {
@@ -37,6 +38,7 @@ public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull timingAdapter.MyViewHolder holder, int position) {
         holder.tvTiming.setText(tourTimings[position]);
+        holder.bind(isButtonEnabled);
     }
 
     @Override
@@ -65,6 +67,10 @@ public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHold
                     }
                 }
             });
+        }
+
+        public void bind(boolean isButtonEnabled) {
+            tvBookButton.setEnabled(isButtonEnabled);
         }
     }
 }

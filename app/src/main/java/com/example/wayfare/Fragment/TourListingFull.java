@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,16 +35,31 @@ import com.example.wayfare.timingOnItemClickedInterface;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointForward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textview.MaterialTextView;
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class TourListingFull extends Fragment implements tourListing_RecyclerViewInterface{
     private RecyclerView recyclerView;
     public TourListingFull(){};
     String[] timingArray;
-    MaterialButton button;
     timingAdapter newTimingAdapter;
+    String dateChosen = null;
+    MaterialButton button;
+    ArrayList<Integer> timeList;
+    Date date;
+    String listingId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,16 +68,18 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         recyclerView = view.findViewById(R.id.recyclerView2);
         //ListView list = view.findViewById(R.id.list);
 
+        MaterialTextView tvTitle = view.findViewById(R.id.materialTextView);
+        MaterialTextView tvLocation = view.findViewById(R.id.location);
+        MaterialTextView tvPrice = view.findViewById(R.id.materialTextView4);
+        MaterialTextView tvRating = view.findViewById(R.id.materialTextView2);
+        ImageView tvImage = view.findViewById(R.id.imageView2);
+        MaterialTextView tvDescription = view.findViewById(R.id.description);
+        MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
+        button = view.findViewById(R.id.bookButton);
+        MaterialButton buttonDatePicker = view.findViewById(R.id.datePickerButton);
+
         Bundle args = getArguments();
         if (args != null) {
-            MaterialTextView tvTitle = view.findViewById(R.id.materialTextView);
-            MaterialTextView tvLocation = view.findViewById(R.id.location);
-            MaterialTextView tvPrice = view.findViewById(R.id.materialTextView4);
-            MaterialTextView tvRating = view.findViewById(R.id.materialTextView2);
-            ImageView tvImage = view.findViewById(R.id.imageView2);
-            MaterialTextView tvDescription = view.findViewById(R.id.description);
-            MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
-            button = view.findViewById(R.id.bookButton);
 
             tvTitle.setText(args.getString("title"));
             tvRating.setText(args.getString("rating"));
@@ -79,13 +97,13 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             tvReviewCount.setText(reviewCountFormat);
 
             timingArray = args.getStringArray("timingArray");
-
+            timeList = args.getIntegerArrayList("timeList");
+            listingId = args.getString("listingId");
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         newTimingAdapter = new timingAdapter(getContext(), timingArray, this);
         recyclerView.setAdapter(newTimingAdapter);
         //recyclerView.suppressLayout(true);
-
 
         MaterialToolbar toolbar = view.findViewById(R.id.materialToolbar);
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
@@ -100,23 +118,77 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+
+        // constraintbuilder
+        // open at curr month
+        Calendar calendar = Calendar.getInstance();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+        calendar.setTimeInMillis(today);
+        long startOfDay = calendar.getTimeInMillis();
+
+        CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
+                .setStart(startOfDay)
+                .setOpenAt(startOfDay)
+                .setValidator(DateValidatorPointForward.now())
+                .build();
+
+        buttonDatePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // datepicker
+                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                        .setTitleText("Select date")
+                        .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
+//                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .setCalendarConstraints(constraintsBuilder)
+                        .build();
+                datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                    @Override
+                    public void onPositiveButtonClick(Long selection) {
+                        date = new Date(selection);
+                        dateChosen = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date(selection));
+                        buttonDatePicker.setText(dateChosen);
+                        newTimingAdapter.isButtonEnabled = true;
+                        newTimingAdapter.notifyDataSetChanged();
+                    }
+                });
+                datePicker.show(activity.getSupportFragmentManager(), "tag");
+            }
+        });
         return view;
     }
 
     @Override
     public void onItemClick(int position) {
-        Log.d("Do nothing", String.valueOf(position));
-        Intent intent = new Intent(getActivity(), ConfirmBooking.class);
-        intent.putExtra("title", getArguments().getString("title"));
-        intent.putExtra("rating", getArguments().getString("rating"));
-        intent.putExtra("location", getArguments().getString("location"));
-        intent.putExtra("price", getArguments().getString("price"));
-        intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
-        intent.putExtra("description", getArguments().getString("description"));
-        intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
+        if (dateChosen != null) {
+            Intent intent = new Intent(getActivity(), ConfirmBooking.class);
+            intent.putExtra("title", getArguments().getString("title"));
+            intent.putExtra("listingId", getArguments().getString("listingId"));
+            intent.putExtra("rating", getArguments().getString("rating"));
+            intent.putExtra("location", getArguments().getString("location"));
+            intent.putExtra("price", getArguments().getString("price"));
+            intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
+            intent.putExtra("description", getArguments().getString("description"));
+            intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
 
-        String timing = timingArray[position];
-        intent.putExtra("timing", timing);
-        startActivity(intent);
+            int startingIndex = position * 2;
+            timeList = getArguments().getIntegerArrayList("timeList");
+            if (!timeList.isEmpty()){
+                timeList.subList(startingIndex, startingIndex+1);
+
+                intent.putExtra("startTime", timeList.get(0));
+                intent.putExtra("startTime", timeList.get(1));
+            }
+
+            String timing = timingArray[position];
+            intent.putExtra("timing", timing);
+
+            intent.putExtra("dateChosen", dateChosen);
+            intent.putExtra("date_key", date.getTime());
+            startActivity(intent);
+        } else {
+            Log.d("Do nothing", String.valueOf(position));
+        }
     }
 }

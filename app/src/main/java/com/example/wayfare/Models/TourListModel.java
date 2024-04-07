@@ -1,5 +1,8 @@
 package com.example.wayfare.Models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import java.util.List;
@@ -7,7 +10,6 @@ import java.util.List;
 // we are creating variables thats gonna hold all the data that represents one of our items
 public class TourListModel {
     public TourListModel(String title, String id, String description, String[] thumbnailUrls, String category, Location tourListingLocation, String region, double price, int minPax, int maxPax, double rating, int reviewCount, String userId, List<TimeRange> timeRangeList) {
-        this.title = title;
         this.id = id;
         this.title = title;
         this.description = description;
@@ -103,6 +105,11 @@ public class TourListModel {
 
         private int startTime;
         private int endTime;
+
+        public TimeRange(int startTime, int endTime){
+            this.startTime = startTime;
+            this.endTime = endTime;
+        }
 
         // Constructor, getters, and setters
         // You can generate these using your IDE or write them manually

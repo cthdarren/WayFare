@@ -20,13 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Search destinations or activities"
-            app:layout_constraintTop_toTopOf="@+id/searchView"
-            tools:layout_editor_absoluteX="16dp" />
+            app:layout_constraintTop_toTopOf="@+id/searchView" />
 
         <com.google.android.material.search.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="Search destinations or activities"
             app:layout_anchor="@id/search_bar"
             app:layout_constraintBottom_toBottomOf="parent"

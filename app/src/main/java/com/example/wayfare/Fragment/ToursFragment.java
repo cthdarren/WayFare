@@ -152,10 +152,12 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         data.putString("thumbnail", tourListModels.get(position).getThumbnailUrls()[0]);
         data.putString("description", tourListModels.get(position).getDescription());
         data.putString("reviewCount", String.valueOf(tourListModels.get(position).getReviewCount()));
+        data.putString("listingId", tourListModels.get(position).getId());
 
 
         List<TourListModel.TimeRange> timeRangeList = tourListModels.get(position).getTimeRangeList();
         String[] timingArray = new String[timeRangeList.size()];
+        ArrayList<Integer> timeList = new ArrayList<>();
         for (int i = 0; i < timeRangeList.size(); i++){
             String startTime;
             String endTime;
@@ -171,8 +173,11 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
                 endTime = endTimeInt + "AM";
             }
             timingArray[i] = startTime + " - " + endTime;
+            timeList.add(startTimeInt);
+            timeList.add(endTimeInt);
         }
         data.putStringArray("timingArray", timingArray);
+        data.putIntegerArrayList("timeList", timeList);
 
         TourListingFull tourListingFullFragment = new TourListingFull();
         tourListingFullFragment.setArguments(data);

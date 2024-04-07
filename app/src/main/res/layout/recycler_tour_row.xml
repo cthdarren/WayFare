@@ -13,7 +13,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="20dp"
-        app:cardBackgroundColor="@color/cardview_light_background"
+        app:cardBackgroundColor="@color/md_theme_background"
         app:cardCornerRadius="14dp"
         app:cardElevation="3dp"
         android:transitionName="tour_listing_transition">
