@@ -108,9 +108,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
                 username.putString("username", userViewModel.getUserProfileData().getUsername());
                 ProfileFragment pf = new ProfileFragment();
                 pf.setArguments(username);
-                Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, pf);
-                progBar.setVisibility(View.VISIBLE);
-//                navBar.setVisibility(View.GONE);
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, pf);
             }
         });
 

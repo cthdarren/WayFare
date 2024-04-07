@@ -111,7 +111,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
         backButton = view.findViewById(R.id.profile_back);
         progBar = getActivity().findViewById(R.id.progressBar);
-        progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
 

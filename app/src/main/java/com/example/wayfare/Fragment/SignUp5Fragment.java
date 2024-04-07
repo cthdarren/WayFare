@@ -19,6 +19,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -27,6 +28,7 @@ import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthHelper;
+import com.example.wayfare.Utils.AzureStorageManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
 
@@ -56,17 +58,7 @@ public class SignUp5Fragment extends Fragment {
         public void onActivityResult(Uri o) {
             pictureUri = o;
             profile_picture.setImageURI(pictureUri);
-            // TODO
-            // Upload image to server
-            // get image url from the server upload api, put it in here
-            pictureUrl = "";
-            // After getting async result from upload api, (wheter true or false) set the button to true
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    continue_button.setEnabled(true);
-                }
-            });
+            continue_button.setEnabled(true);
         }
     });
 
@@ -100,14 +92,39 @@ public class SignUp5Fragment extends Fragment {
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle args = new Bundle();
+                continue_button.setEnabled(false);
+                AzureStorageManager.uploadBlob(getContext(), pictureUri, new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
-                args.putAll(getArguments());
-                try {
-                    register();
-                } catch (IOException e) {
-                    makeToast("Server Error");
-                }
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                makeToast("Failed to upload picture to server");
+                                continue_button.setEnabled(false);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                continue_button.setEnabled(true);
+                                pictureUrl = response.request().url().toString();
+                                Bundle args = new Bundle();
+                                args.putAll(getArguments());
+                                try {
+                                    register();
+                                } catch (IOException e) {
+                                    makeToast("Unexpected Error");
+                                }
+                            }
+                        });
+                    }
+                });
+
             }
         });
         open_gallery.setOnClickListener(new View.OnClickListener() {

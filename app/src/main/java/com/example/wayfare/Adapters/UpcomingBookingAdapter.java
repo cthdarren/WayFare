@@ -69,9 +69,6 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
                 pf.setArguments(username);
                 AppCompatActivity containingActivity = (AppCompatActivity) context;
                 Helper.goToFragmentSlideInRight(containingActivity.getSupportFragmentManager(), R.id.container, pf);
-
-                containingActivity.findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
-                containingActivity.findViewById(R.id.bottomNavigationView).setVisibility(View.GONE);
             }
         });
 
