@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.wayfare.Fragment.CalendarFragment;
 import com.example.wayfare.Fragment.SettingsFragment;
 import com.example.wayfare.Fragment.TodayFragment;
 import com.example.wayfare.Models.ResponseModel;
@@ -112,6 +113,8 @@ public class WayfarerActivity extends AppCompatActivity {
                     replaceFragment(new TodayFragment());
                 } else if (item.getItemId() == R.id.hosting_account) {
                     replaceFragment(new SettingsFragment());
+                }else if(item.getItemId() == R.id.hosting_calendar){
+                    replaceFragment(new CalendarFragment());
                 }
             }
             backing = false;

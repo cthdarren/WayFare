@@ -68,6 +68,7 @@ public class TodayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
 
+
         recyclerView = view.findViewById(R.id.hostRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));  // Assuming vertical list
         recyclerView.setAdapter(new TodayAdapter(bookingModels));
@@ -95,9 +96,8 @@ public class TodayFragment extends Fragment {
                         // Handle selection of radio button 2
                         break;
                     case 3:
-                        // Handle selection of radio button 1
+                        // Handle selection of radio button 3
                         break;
-                    // Add cases for other radio buttons
                 }
             }
         });
