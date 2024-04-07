@@ -32,14 +32,20 @@ public class TodayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         BookingModel booking = bookings.get(position);
         BookingViewHolder viewHolder = (BookingViewHolder) holder;  // Cast to BookingViewHolder
 
-        viewHolder.tourBooker.setText(booking.getUser().getUsername());
+        if (booking.getUser()==null){
+            viewHolder.tourBooker.setText(booking.getUserId());
+        }else
+        {viewHolder.tourBooker.setText(booking.getUser().getUsername());} //returned user throws a null pointer exception
         viewHolder.tourName.setText(booking.getListing().getTitle());
-        viewHolder.tourPax.setText(booking.getPax());
-        viewHolder.tourTime.setText(booking.getBookingDuration().getStartTime());
+        viewHolder.tourPax.setText(String.valueOf(booking.getPax()));
+        viewHolder.tourTime.setText(booking.getDateBooked().substring(0,10));
     }
 
     @Override
     public int getItemCount() {
+        if (bookings == null) {
+            return 0;
+        }
         return bookings.size();
     }
 

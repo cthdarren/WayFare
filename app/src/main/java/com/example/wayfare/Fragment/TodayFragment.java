@@ -1,9 +1,5 @@
 package com.example.wayfare.Fragment;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,30 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioGroup;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.Adapters.TodayAdapter;
 import com.example.wayfare.Models.BookingModel;
-import com.example.wayfare.Models.TourListModel;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.CountDownLatch;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TodayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class TodayFragment extends Fragment {
@@ -51,7 +45,15 @@ public class TodayFragment extends Fragment {
     private UserViewModel userViewModel;
     private RecyclerView recyclerView;
 
-    private ArrayList<BookingModel> bookingModels = new ArrayList<>();
+    private ProgressBar progBar;
+
+    private ArrayList<BookingModel> bookingModelsToday;
+    private ArrayList<BookingModel> bookingModelsWeek;
+    private ArrayList<BookingModel> bookingModelsMonth;
+
+    private TodayAdapter todayAdapter;
+    private TodayAdapter weekAdapter;
+    private TodayAdapter monthAdapter;
 
     public TodayFragment() {
         // Required empty public constructor
@@ -68,12 +70,26 @@ public class TodayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
 
+        progBar = getActivity().findViewById(R.id.progressBar);
+
+        bookingModelsToday = new ArrayList<>();
+        bookingModelsWeek = new ArrayList<>();
+        bookingModelsMonth = new ArrayList<>();
+
+
+        setUpBookingModels();
+
+        todayAdapter = new TodayAdapter(bookingModelsToday);
+        weekAdapter = new TodayAdapter(bookingModelsWeek);
+        monthAdapter = new TodayAdapter(bookingModelsMonth);
+
 
         recyclerView = view.findViewById(R.id.hostRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));  // Assuming vertical list
-        recyclerView.setAdapter(new TodayAdapter(bookingModels));
+        recyclerView.setAdapter(todayAdapter);
 
-        return inflater.inflate(R.layout.fragment_today, container, false);
+
+        return view;
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -83,30 +99,75 @@ public class TodayFragment extends Fragment {
         TextView user_welcome = view.findViewById(R.id.host_welcome);
         user_welcome.setText("Welcome back, " + userFirstName);
 
-        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        RadioButton radioButton1 = view.findViewById(R.id.radioButton);
+        RadioButton radioButton2 = view.findViewById(R.id.radioButton2);
+        RadioButton radioButton3 = view.findViewById(R.id.radioButton3);
+
+
+        setRadioButtonListener(radioButton1,todayAdapter);
+        setRadioButtonListener(radioButton2,weekAdapter);
+        setRadioButtonListener(radioButton3,monthAdapter);
+
+
+
+    }
+
+    public void setUpBookingModels() {
+        new AuthService(getContext()).getResponse("/wayfarer/bookings", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // Handle the checked radio button here
-                switch (checkedId) {
-                    case 1:
-                        // Handle selection of radio button 1
-                        break;
-                    case 2:
-                        // Handle selection of radio button 2
-                        break;
-                    case 3:
-                        // Handle selection of radio button 3
-                        break;
+            public void onError(String message) {
+                progBar.setVisibility(View.GONE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                if (json.success) {
+                    JsonElement dataElement = json.data;
+                    if (dataElement.isJsonObject()) {
+                        JsonObject dataObject = dataElement.getAsJsonObject();
+                        JsonArray dayArray = dataObject.getAsJsonArray("day");
+                        JsonArray weekArray = dataObject.getAsJsonArray("week");
+                        JsonArray monthArray = dataObject.getAsJsonArray("month");
+                        setBookingLists(dayArray,bookingModelsToday);
+                        setBookingLists(weekArray,bookingModelsWeek);
+                        setBookingLists(monthArray,bookingModelsMonth);
+                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.getAdapter().notifyDataSetChanged();
+                            progBar.setVisibility(View.GONE);
+                        }
+                    });
                 }
+
             }
         });
-
-
     }
 
-    public void setUpBookingModels (Callback callback) throws IOException {
-
+    public void setRadioButtonListener(RadioButton radioButton, TodayAdapter adapter){
+        radioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.setAdapter(adapter);
+            }
+        });
     }
+
+    public void setBookingLists(JsonArray dataArray, ArrayList<BookingModel> bookingModelList){
+        for (JsonElement listing : dataArray) {
+            String eachString = listing.toString();
+            BookingModel listingModel = new Gson().fromJson(eachString, BookingModel.class);
+            bookingModelList.add(listingModel);
+        }
+    }
+
+
 
 }
