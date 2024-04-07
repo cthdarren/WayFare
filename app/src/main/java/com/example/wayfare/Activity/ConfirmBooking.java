@@ -185,13 +185,13 @@ public class ConfirmBooking extends AppCompatActivity {
                     ConfirmBooking.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            getSupportFragmentManager().popBackStack();
                             finish();
                         }
                     });
                 }
                 else{
-                    JsonArray ja= json.data.getAsJsonArray();
-                    Log.d("JSON", "onResponse: no response");
+                    makeToast(json.data.getAsString());
                 }
             }
 
