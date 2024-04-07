@@ -7,22 +7,33 @@
     android:focusable="true"
     android:background="@color/md_theme_background"
     android:orientation="vertical"
-    android:paddingHorizontal="10dp"
+    android:paddingHorizontal="20dp"
     android:layout_marginEnd="0dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="20dp"
+        android:paddingBottom="30dp"
         android:src="@drawable/cross"/>
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"/>
+    </LinearLayout>
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:paddingVertical="10dp"
+            android:paddingVertical="20dp"
             android:paddingHorizontal="20dp"
             android:orientation="vertical"
             android:layout_height="match_parent">
@@ -48,4 +59,134 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="20dp"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_md"
+                android:textStyle="bold"
+                android:text="When"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/font_sm"
+                    android:text="1st Jan"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    style="@style/Widget.Material3.Button.IconButton"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_sm"
+                    android:text="Change Start Date"/>
+
+            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top"
+                        android:textSize="@dimen/font_sm"
+                        android:text="to"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/font_sm"
+                    android:layout_height="wrap_content"
+                    android:text="20th Jan"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    style="@style/Widget.Material3.Button.TextButton.Icon"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/font_sm"
+                    android:text="Change End Date"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+        android:layout_marginTop="40dp"
+    android:layout_height="wrap_content"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_md"
+            android:textStyle="bold"
+            android:text="Who's coming?"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="20dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:textSize="@dimen/font_sm"
+                android:text="Number of people"/>
+            <ImageView
+                android:id="@+id/minusPax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingHorizontal="10dp"
+                android:src="@drawable/baseline_remove_24"/>
+            <TextView
+                android:id="@+id/numPax"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="@dimen/font_md"
+                android:gravity="bottom"
+                android:paddingHorizontal="20dp"
+                android:text="1"/>
+
+            <ImageView
+                android:id="@+id/addPax"
+                android:layout_width="wrap_content"
+                android:paddingHorizontal="10dp"
+                android:layout_gravity="bottom"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_24"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
 </LinearLayout>

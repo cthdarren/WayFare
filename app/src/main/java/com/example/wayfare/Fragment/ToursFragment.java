@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.ResponseModel;
@@ -35,8 +36,12 @@ import java.util.List;
 
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
+    TextView searchParams;
     ProgressBar progBar;
     MaterialCardView searchBar;
+    Double latitude, longitude;
+    int numberPax, kmdistance;
+    String region, date;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
@@ -45,15 +50,34 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle args = getArguments();
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
         searchBar = view.findViewById(R.id.clickSearchBar);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
-
+        if (args != null){
+            region = args.getString("region", "Anywhere");
+            latitude = args.getDouble("latitude", 0);
+            longitude = args.getDouble("longitude", 0);
+            kmdistance = args.getInt("kmdistance", 100);
+            numberPax = args.getInt("numberPax", 1);
+            date = args.getString("date", "Any day");
+            String paxString = "people";
+            if (numberPax == 1)
+                paxString = "person";
+            searchParams.setText(String.format("%s | %s | %s", region, date, paxString));
+        }
+        else{
+            latitude = 0.0;
+            longitude = 0.0;
+            kmdistance = 50000;
+            numberPax = 1;
+        }
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +97,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     }
 
     public void setupTourListings(){
-        new AuthService(getContext()).getResponse("/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=30000&numberPax=2", false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+        new AuthService(getContext()).getResponse(String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d&numberPax=%d",latitude, longitude, kmdistance, numberPax), false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 getActivity().runOnUiThread(new Runnable() {
