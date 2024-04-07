@@ -1,54 +1,42 @@
 package com.example.wayfare.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
-import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.search.SearchBar;
+import com.google.android.material.search.SearchView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-
-import java.io.IOException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
+    ProgressBar progBar;
+    MaterialCardView searchBar;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
@@ -61,34 +49,21 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
-
-        final CountDownLatch latch = new CountDownLatch(1);
-        try {
-            setUpTourListModels(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    // Notify the latch that the setup is complete
-                    latch.countDown();
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        searchBar = view.findViewById(R.id.clickSearchBar);
+        progBar = getActivity().findViewById(R.id.progressBar);
+        progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
+        searchBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFullScreenFragmentFromTop(getParentFragmentManager(), new SearchMenuFragment());
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this));
+
+        setupTourListings();
         return view;
     }
 
@@ -97,48 +72,38 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         super.onViewCreated(view, savedInstanceState);
     }
 
+    public void setupTourListings(){
+        new AuthService(getContext()).getResponse("/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=30000&numberPax=2", false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progBar.setVisibility(View.GONE);
+                    }
+                });
+            }
 
-    public void setUpTourListModels(Callback callback) throws IOException {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void onResponse(ResponseModel json) {
+                if (json.success) {
+                    JsonArray listingArray = json.data.getAsJsonArray();
+                    for (JsonElement listing : listingArray) {
+                        String eachString = listing.toString();
+                        TourListModel listingModel = new Gson().fromJson(eachString, TourListModel.class);
+                        tourListModels.add(listingModel);
+                    }
 
-                @Override
-                public void run() {
-
-                    final OkHttpClient client = new OkHttpClient();
-                    Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/listing/search?latitude=1.24853&longitude=103.84483&kmdistance=30000&numberPax=2")
-                            .get()
-                            .build();
-                    client.newCall(request).enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            if (e instanceof SocketTimeoutException) {
-                                e.printStackTrace();
-                            } else if (e instanceof SocketException) {
-                                Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
-                                e.printStackTrace();
-                            }
-                        }
-
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String serverResponse = response.body().string();
-                            System.out.println(serverResponse);
-                            ResponseModel test = new Gson().fromJson(serverResponse, ResponseModel.class);
-                            JsonArray peepo = test.data.getAsJsonArray();
-                            for (JsonElement testi : peepo){
-                                String eachString = testi.toString();
-                                TourListModel testing = new Gson().fromJson(eachString, TourListModel.class);
-                                tourListModels.add(testing);
-                            }
-                            Log.i("Tag", "it worked>");
-                            callback.onResponse(call,response);
-                        }
-                    });
                 }
-            });
-        }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        progBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -152,10 +117,12 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         data.putString("thumbnail", tourListModels.get(position).getThumbnailUrls()[0]);
         data.putString("description", tourListModels.get(position).getDescription());
         data.putString("reviewCount", String.valueOf(tourListModels.get(position).getReviewCount()));
+        data.putString("listingId", tourListModels.get(position).getId());
 
 
         List<TourListModel.TimeRange> timeRangeList = tourListModels.get(position).getTimeRangeList();
         String[] timingArray = new String[timeRangeList.size()];
+        ArrayList<Integer> timeList = new ArrayList<>();
         for (int i = 0; i < timeRangeList.size(); i++){
             String startTime;
             String endTime;
@@ -171,8 +138,11 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
                 endTime = endTimeInt + "AM";
             }
             timingArray[i] = startTime + " - " + endTime;
+            timeList.add(startTimeInt);
+            timeList.add(endTimeInt);
         }
         data.putStringArray("timingArray", timingArray);
+        data.putIntegerArrayList("timeList", timeList);
 
         TourListingFull tourListingFullFragment = new TourListingFull();
         tourListingFullFragment.setArguments(data);

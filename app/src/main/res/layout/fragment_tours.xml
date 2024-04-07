@@ -15,26 +15,67 @@
 
         <!-- NestedScrollingChild goes here (NestedScrollView, RecyclerView, etc.). -->
 
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/search_bar"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/clickSearchBar"
+            android:layout_marginHorizontal="20dp"
+            app:cardCornerRadius="100dp"
+            app:cardBackgroundColor="@color/md_theme_surfaceContainer"
+            app:strokeColor="@color/md_theme_surfaceContainer"
             android:layout_width="match_parent"
+            android:clickable="true"
             android:layout_height="wrap_content"
-            android:hint="Search destinations or activities"
-            app:layout_constraintTop_toTopOf="@+id/searchView"
-            tools:layout_editor_absoluteX="16dp" />
-
-        <com.google.android.material.search.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Search destinations or activities"
-            app:layout_anchor="@id/search_bar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-            <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
-        </com.google.android.material.search.SearchView>
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:paddingHorizontal="20dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_search_24"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:paddingVertical="15dp"
+                    android:paddingStart="10dp"
+                    android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Where to?"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_sm"
+                />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/font_xs"
+                        android:text="Anywhere | Any day | Add people"/>
+                </LinearLayout>
+            </LinearLayout>
+<!--        <com.google.android.material.search.SearchBar-->
+<!--            android:id="@+id/search_bar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            app:forceDefaultNavigationOnClickListener="false"-->
+<!--            android:clickable="false"-->
+<!--            android:elevation="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:hint="Search destinations or activities"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/searchView" />-->
+        </com.google.android.material.card.MaterialCardView>
+<!--        <com.google.android.material.search.SearchView-->
+<!--            android:id="@+id/searchView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:hint="Search destinations or activities"-->
+<!--            app:layout_anchor="@id/search_bar"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+<!--            &lt;!&ndash; Search suggestions/results go here (ScrollView, RecyclerView, etc.). &ndash;&gt;-->
+<!--        </com.google.android.material.search.SearchView>-->
 
         <com.google.android.material.tabs.TabLayout
             android:contentDescription="tabLayout for activities"

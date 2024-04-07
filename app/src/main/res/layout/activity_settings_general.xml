@@ -31,6 +31,10 @@
             android:layout_height="wrap_content"/>
 
         <LinearLayout
+            android:id="@+id/currency_button"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
+            android:focusable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -41,6 +45,7 @@
                 android:textSize="@dimen/font_sm"
                 android:text="Currency"/>
             <TextView
+                android:id="@+id/currency_text"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingVertical="22dp"

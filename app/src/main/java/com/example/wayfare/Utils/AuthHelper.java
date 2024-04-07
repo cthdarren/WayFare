@@ -22,10 +22,20 @@ public class AuthHelper {
         sharedPreferences.edit().putString(prefsName, prefsValue).apply();
     }
 
+    public void setSharedPrefsValueInt(String prefsName, int prefsValue){
+        sharedPreferences.edit().putInt(prefsName, prefsValue).apply();
+    }
+
+    public String getSharedPrefsCurrencyName(){
+        return sharedPreferences.getString("CURRENCYNAME", "USD");
+    }
+
     public String getSharedPrefsValue(String prefsName){
         return sharedPreferences.getString(prefsName, "");
     }
-
+    public int getSharedPrefsValueInt(String prefsName){
+        return sharedPreferences.getInt(prefsName, 0);
+    }
     public boolean isLoggedIn() {
         // default state of jsonString in sharedPref is empty
         // use isLoggedIn true for checking if user is authed

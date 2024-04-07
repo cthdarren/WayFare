@@ -10,6 +10,10 @@ android {
     packaging{
         resources{
             excludes.add("META-INF/native-image/org.mongodb/bson/native-image.properties")
+            excludes.add("META-INF/INDEX.LIST")
+            excludes.add("META-INF/AL2.0")
+            excludes.add("META-INF/LGPL2.1")
+            excludes.add("META-INF/io.netty.versions.properties")
         }
     }
     defaultConfig {
@@ -29,12 +33,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "EXCHANGE_RATE_API_KEY", "\"146eca710f9e57af8848cb4f\"")
             buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
             signingConfig = signingConfigs.getByName("debug")
         }
         debug {
 //            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
             buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
+            buildConfigField("String", "EXCHANGE_RATE_API_KEY", "\"146eca710f9e57af8848cb4f\"")
         }
     }
     compileOptions {
@@ -47,9 +53,9 @@ android {
     }
 }
 
-
 dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.libraries.places:places:3.4.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -83,6 +89,13 @@ dependencies {
     implementation("androidx.camera:camera-extensions:$camerax_version")
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.intuit.sdp:sdp-android:1.0.6")
+    implementation(platform("com.azure:azure-sdk-bom:1.2.22"))
+    implementation("com.azure:azure-storage-blob")
+    implementation("com.azure:azure-identity")
+    implementation("com.azure:azure-storage-queue")
+    implementation("com.azure:azure-storage-file-share")
+    implementation("com.azure:azure-storage-file-datalake")
+    implementation("com.azure:azure-security-keyvault-secrets")
     implementation("com.google.maps:google-maps-services:2.2.0")
     implementation("org.slf4j:slf4j-simple:1.7.25")
 }

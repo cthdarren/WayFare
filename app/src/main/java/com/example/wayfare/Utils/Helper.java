@@ -1,19 +1,49 @@
 package com.example.wayfare.Utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.wayfare.Activity.MainActivity;
+import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Fragment.CreateListing.CreateListingFragment7;
 import com.example.wayfare.Fragment.SignInFragment;
+import com.example.wayfare.Models.ConversionRatesModel;
+import com.example.wayfare.Models.CurrencyResponseModel;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Helper {
+
+    public static List<String> languages = Arrays.asList("Abkhaz ", "Afar ", "Afrikaans ", "Akan ", "Albanian ", "Amharic ", "Arabic ", "Aragonese ", "Armenian ", "Assamese ", "Avaric ", "Avestan ", "Aymara ", "Azerbaijani ", "Bambara ", "Bashkir ", "Basque ", "Belarusian ", "Bengali; Bangla ", "Bihari ", "Bislama ", "Bosnian ", "Breton ", "Bulgarian ", "Burmese ", "Catalan; Valencian ", "Chamorro ", "Chechen ", "Chichewa; Chewa; Nyanja ", "Chinese ", "Chuvash ", "Cornish ", "Corsican ", "Cree ", "Croatian ", "Czech ", "Danish ", "Divehi; Dhivehi; Maldivian; ", "Dutch ", "Dzongkha ", "English ", "Esperanto ", "Estonian ", "Ewe ", "Faroese ", "Fijian ", "Finnish ", "French ", "Fula; Fulah; Pulaar; Pular ", "Galician ", "Ganda ", "Georgian ", "German ", "Greek", "Guaraní ", "Gujarati ", "Haitian; Haitian Creole ", "Hausa ", "Hebrew (modern) ", "Herero ", "Hindi ", "Hiri Motu ", "Hungarian ", "Icelandic ", "Ido ", "Igbo ", "Indonesian ", "Interlingua ", "Interlingue ", "Inuktitut ", "Inupiaq ", "Irish ", "Italian ", "Japanese ", "Javanese ", "Kalaallisut", "Kannada ", "Kanuri ", "Kashmiri ", "Kazakh ", "Khmer ", "Kikuyu", "Kinyarwanda ", "Kirundi ", "Komi ", "Kongo ", "Korean ", "Kurdish ", "Kwanyama", "Kyrgyz ", "Lao ", "Latin ", "Latvian ", "Limburgish", "Lingala ", "Lithuanian ", "Luba-Katanga ", "Luxembourgish", "Macedonian ", "Malagasy ", "Malay ", "Malayalam ", "Maltese ", "Manx ", "Marathi (Marāṭhī) ", "Marshallese ", "Mongolian ", "Māori ", "Nauru ", "Navajo", "Ndonga ", "Nepali ", "North Ndebele ", "Northern Sami ", "Norwegian ", "Norwegian Bokmål ", "Norwegian Nynorsk ", "Nuosu ", "Occitan ", "Ojibwe", "Old Church Slavonic", "Oriya ", "Oromo ", "Ossetian", "Panjabi", "Pashto", "Persian (Farsi) ", "Polish ", "Portuguese ", "Pāli ", "Quechua ", "Romanian ", "Romansh ", "Russian ", "Samoan ", "Sango ", "Sanskrit (Saṁskṛta) ", "Sardinian ", "Scottish Gaelic; Gaelic ", "Serbian ", "Shona ", "Sindhi ", "Sinhala", "Slovak ", "Slovene ", "Somali ", "South Azerbaijani ", "South Ndebele ", "Southern Sotho ", "Spanish; Castilian ", "Sundanese ", "Swahili ", "Swati ", "Swedish ", "Tagalog ", "Tahitian ", "Tajik ", "Tamil ", "Tatar ", "Telugu ", "Thai ", "Tibetan Standard", "Tigrinya ", "Tonga (Tonga Islands) ", "Tsonga ", "Tswana ", "Turkish ", "Turkmen ", "Twi ", "Ukrainian ", "Urdu ", "Uyghur", "Uzbek ", "Venda ", "Vietnamese ", "Volapük ", "Walloon ", "Welsh ", "Western Frisian ", "Wolof ", "Xhosa ", "Yiddish ", "Yoruba ", "Zhuang", "Zulu ");
+    public static List<String> currencies = Arrays.asList("USD", "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY", "COP", "CRC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "EUR", "FJD", "FKP", "FOK", "GBP", "GEL", "GGP", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "IMP", "INR", "IQD", "IRR", "ISK", "JEP", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KID", "KMF", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLE", "SLL", "SOS", "SRD", "SSP", "STN", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TVD", "TWD", "TZS", "UAH", "UGX", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XDR", "XOF", "XPF", "YER", "ZAR", "ZMW", "ZWL");
+    public static Map conversionRates;
     public static void goToLogin(FragmentManager fm) {
         fm.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_bottom, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_bottom)
@@ -46,6 +76,7 @@ public class Helper {
     }
 
     public static void goToFragmentSlideInRightArgs(Bundle args, FragmentManager fm, int fragmentId, Fragment fragment) {
+        fragment.setArguments(args);
         fm.beginTransaction()
                 .setCustomAnimations(
                         R.anim.slide_left_to_right, // enter
@@ -67,6 +98,16 @@ public class Helper {
                 .setReorderingAllowed(true)
                 .commit();
     }
+
+    public static void goToFullScreenFragmentFromTop(FragmentManager fm, Fragment fragment) {
+        fm.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_top)
+                .replace(R.id.container, fragment)
+                .addToBackStack(fragment.getClass().getName())
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
 
     public enum RequestType {
         REQ_GET,
@@ -103,5 +144,53 @@ public class Helper {
         return String.format("%s %s", number, timeCategory);
     }
 
-    public static List<String> languages = Arrays.asList("Abkhaz ", "Afar ", "Afrikaans ", "Akan ", "Albanian ", "Amharic ", "Arabic ", "Aragonese ", "Armenian ", "Assamese ", "Avaric ", "Avestan ", "Aymara ", "Azerbaijani ", "Bambara ", "Bashkir ", "Basque ", "Belarusian ", "Bengali; Bangla ", "Bihari ", "Bislama ", "Bosnian ", "Breton ", "Bulgarian ", "Burmese ", "Catalan; Valencian ", "Chamorro ", "Chechen ", "Chichewa; Chewa; Nyanja ", "Chinese ", "Chuvash ", "Cornish ", "Corsican ", "Cree ", "Croatian ", "Czech ", "Danish ", "Divehi; Dhivehi; Maldivian; ", "Dutch ", "Dzongkha ", "English ", "Esperanto ", "Estonian ", "Ewe ", "Faroese ", "Fijian ", "Finnish ", "French ", "Fula; Fulah; Pulaar; Pular ", "Galician ", "Ganda ", "Georgian ", "German ", "Greek", "Guaraní ", "Gujarati ", "Haitian; Haitian Creole ", "Hausa ", "Hebrew (modern) ", "Herero ", "Hindi ", "Hiri Motu ", "Hungarian ", "Icelandic ", "Ido ", "Igbo ", "Indonesian ", "Interlingua ", "Interlingue ", "Inuktitut ", "Inupiaq ", "Irish ", "Italian ", "Japanese ", "Javanese ", "Kalaallisut", "Kannada ", "Kanuri ", "Kashmiri ", "Kazakh ", "Khmer ", "Kikuyu", "Kinyarwanda ", "Kirundi ", "Komi ", "Kongo ", "Korean ", "Kurdish ", "Kwanyama", "Kyrgyz ", "Lao ", "Latin ", "Latvian ", "Limburgish", "Lingala ", "Lithuanian ", "Luba-Katanga ", "Luxembourgish", "Macedonian ", "Malagasy ", "Malay ", "Malayalam ", "Maltese ", "Manx ", "Marathi (Marāṭhī) ", "Marshallese ", "Mongolian ", "Māori ", "Nauru ", "Navajo", "Ndonga ", "Nepali ", "North Ndebele ", "Northern Sami ", "Norwegian ", "Norwegian Bokmål ", "Norwegian Nynorsk ", "Nuosu ", "Occitan ", "Ojibwe", "Old Church Slavonic", "Oriya ", "Oromo ", "Ossetian", "Panjabi", "Pashto", "Persian (Farsi) ", "Polish ", "Portuguese ", "Pāli ", "Quechua ", "Romanian ", "Romansh ", "Russian ", "Samoan ", "Sango ", "Sanskrit (Saṁskṛta) ", "Sardinian ", "Scottish Gaelic; Gaelic ", "Serbian ", "Shona ", "Sindhi ", "Sinhala", "Slovak ", "Slovene ", "Somali ", "South Azerbaijani ", "South Ndebele ", "Southern Sotho ", "Spanish; Castilian ", "Sundanese ", "Swahili ", "Swati ", "Swedish ", "Tagalog ", "Tahitian ", "Tajik ", "Tamil ", "Tatar ", "Telugu ", "Thai ", "Tibetan Standard", "Tigrinya ", "Tonga (Tonga Islands) ", "Tsonga ", "Tswana ", "Turkish ", "Turkmen ", "Twi ", "Ukrainian ", "Urdu ", "Uyghur", "Uzbek ", "Venda ", "Vietnamese ", "Volapük ", "Walloon ", "Welsh ", "Western Frisian ", "Wolof ", "Xhosa ", "Yiddish ", "Yoruba ", "Zhuang", "Zulu ");
+    public static Double exchangeToLocal(Double usdPrice, String sharedPrefsCurrencyName){
+        BigDecimal exchangeRate = BigDecimal.valueOf((Double)Helper.conversionRates.get(sharedPrefsCurrencyName));
+        BigDecimal usd = BigDecimal.valueOf(usdPrice);
+        return usd.multiply(exchangeRate).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+    }
+
+
+    public static Double exchangeToUsd(int localPrice, String sharedPrefsCurrencyName){
+        BigDecimal exchangeRate = BigDecimal.valueOf((Double)Helper.conversionRates.get(sharedPrefsCurrencyName));
+        BigDecimal local = BigDecimal.valueOf(localPrice);
+        return local.divide(exchangeRate, 20, RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
+    }
+
+    public static void getExchangeRate(){
+    final OkHttpClient client = new OkHttpClient();
+    Request request = new Request.Builder().url(String.format("https://v6.exchangerate-api.com/v6/%s/latest/USD/", BuildConfig.EXCHANGE_RATE_API_KEY))
+            .get()
+            .build();
+        client.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                if (e instanceof SocketTimeoutException) {
+                    e.printStackTrace();
+                } else if (e instanceof SocketException) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String serverResponse = response.body().string();
+                // debugging
+                System.out.println(serverResponse);
+                // sharedpref store
+                try {
+                    Gson gson = new Gson();
+                    CurrencyResponseModel res = gson.fromJson(serverResponse, CurrencyResponseModel.class);
+                    if (Objects.equals(res.result, "success")) {
+                        conversionRates = gson.fromJson(gson.toJson(res.conversion_rates), Map.class);
+                    }
+                    else{
+                        Log.e("Error ER_API", serverResponse);
+                    }
+                    } catch(Exception e){
+                        Log.e("Error", e.getMessage());
+                        e.printStackTrace();
+                    }
+            }
+        });
+    }
 }

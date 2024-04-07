@@ -26,6 +26,7 @@
             <TextView
                 android:id="@+id/timeToBooking"
                 android:layout_width="wrap_content"
+                android:outlineProvider="none"
                 android:layout_height="wrap_content"
                 android:alpha="0.9"
                 android:background="#FF333333"

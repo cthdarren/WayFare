@@ -19,6 +19,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.wayfare.Fragment.CalendarFragment;
+import com.example.wayfare.Fragment.CreateListing.CreateListingFragment;
+import com.example.wayfare.Fragment.HostingToursFragment;
 import com.example.wayfare.Fragment.SettingsFragment;
 import com.example.wayfare.Fragment.TodayFragment;
 import com.example.wayfare.Models.ResponseModel;
@@ -105,12 +107,16 @@ public class WayfarerActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+
+        Helper.getExchangeRate();
         BottomNavigationView bottomNav = findViewById(R.id.bottomHostingNav);
 
         bottomNav.setOnItemSelectedListener(item -> {
             if (!backing) {
                 if (item.getItemId() == R.id.hosting_today) {
                     replaceFragment(new TodayFragment());
+                } else if (item.getItemId() == R.id.hosting_tour) {
+                    replaceFragment(new HostingToursFragment());
                 } else if (item.getItemId() == R.id.hosting_account) {
                     replaceFragment(new SettingsFragment());
                 }else if(item.getItemId() == R.id.hosting_calendar){
