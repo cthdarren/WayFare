@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,10 +24,14 @@ import android.widget.Toast;
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.Adapters.TodayAdapter;
 import com.example.wayfare.Models.BookingModel;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthService;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
@@ -51,6 +56,8 @@ public class TodayFragment extends Fragment {
     private UserViewModel userViewModel;
     private RecyclerView recyclerView;
 
+    private ProgressBar progBar;
+
     private ArrayList<BookingModel> bookingModels = new ArrayList<>();
 
     public TodayFragment() {
@@ -68,10 +75,7 @@ public class TodayFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
 
-
-        recyclerView = view.findViewById(R.id.hostRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));  // Assuming vertical list
-        recyclerView.setAdapter(new TodayAdapter(bookingModels));
+        progBar = getActivity().findViewById(R.id.progressBar);
 
         return inflater.inflate(R.layout.fragment_today, container, false);
     }
@@ -102,11 +106,33 @@ public class TodayFragment extends Fragment {
             }
         });
 
+        recyclerView = view.findViewById(R.id.hostRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));  // Assuming vertical list
+        recyclerView.setAdapter(new TodayAdapter(bookingModels));
+
+        setUpBookingModels();
+
 
     }
 
-    public void setUpBookingModels (Callback callback) throws IOException {
+    public void setUpBookingModels() {
+        new AuthService(getContext()).getResponse("/wayfarer/bookings", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                progBar.setVisibility(View.GONE);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
 
+            @Override
+            public void onResponse(ResponseModel json) {
+                Toast.makeText(getContext(), "It works", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

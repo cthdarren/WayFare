@@ -33,7 +33,7 @@ public class AuthService {
         this.context = context;
         this.baseUrl = BuildConfig.API_URL;
         sharedPreferences = new AuthHelper(context).sharedPreferences;
-        token = sharedPreferences.getString(JSON_DATA_KEY, "");
+        token = "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJxdWVlcmxvcmQxMjMiLCJpYXQiOjE3MTE3MDEwMDEsImV4cCI6MTcxNjg4NTAwMX0.zfhWhgWyyzOpgmULknDX6TqdKuUVH0-carQfo7IOUFupCIYkbiP110cAcQCIP__p";
     }
 
     public interface ResponseListener {
