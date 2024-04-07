@@ -22,6 +22,8 @@ import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -34,7 +36,7 @@ import java.util.List;
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
     private RecyclerView recyclerView;
     ProgressBar progBar;
-    SearchView searchBar;
+    MaterialCardView searchBar;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
@@ -47,7 +49,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
-        searchBar = view.findViewById(R.id.searchView);
+        searchBar = view.findViewById(R.id.clickSearchBar);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
@@ -55,7 +57,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new SearchMenuFragment());
+                Helper.goToFullScreenFragmentFromTop(getParentFragmentManager(), new SearchMenuFragment());
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));

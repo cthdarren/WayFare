@@ -99,6 +99,16 @@ public class Helper {
                 .commit();
     }
 
+    public static void goToFullScreenFragmentFromTop(FragmentManager fm, Fragment fragment) {
+        fm.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_top, R.anim.fade_out, R.anim.fade_in, R.anim.slide_out_top)
+                .replace(R.id.container, fragment)
+                .addToBackStack(fragment.getClass().getName())
+                .setReorderingAllowed(true)
+                .commit();
+    }
+
+
     public enum RequestType {
         REQ_GET,
         REQ_POST
