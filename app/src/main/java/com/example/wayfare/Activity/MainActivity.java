@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.wayfare.Fragment.AddShortsFragment;
+import com.example.wayfare.Fragment.CreateListing.CreateListingFragment;
 import com.example.wayfare.Fragment.CreateListing.CreateListingFragment2;
 import com.example.wayfare.Fragment.MapFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
@@ -175,8 +176,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new PublicUpcomingFragment());
                 }
             } else if (item.getItemId() == R.id.tours) {
-                //replaceFragment(new ToursFragment());
-                replaceFragment(new CreateListingFragment2());
+                replaceFragment(new ToursFragment());
             } else if (item.getItemId() == R.id.addShorts) {
                 Intent intent = new Intent(MainActivity.this, AddShorts.class);
                 startActivity(intent);

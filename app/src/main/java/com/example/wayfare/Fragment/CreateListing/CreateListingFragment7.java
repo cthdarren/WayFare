@@ -106,7 +106,12 @@ public class CreateListingFragment7 extends Fragment {
                 );
                 args.putString("price", String.valueOf(usdPrice));
                 continue_button.setEnabled(false);
-                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragmentSuccess());
+                //Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragmentSuccess());
+                try {
+                    listingCreate();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 continue_button.setEnabled(true);
             }
         });
@@ -128,10 +133,16 @@ public class CreateListingFragment7 extends Fragment {
                     maxPax = getArguments().getString("maxPax");
                     timeSlotItemModelList = getArguments().getParcelableArrayList("timeslots");
                     thumbnailUrls = getArguments().getStringArrayList("thumbnailurls");
+                    String locationX = locationString.split(",")[0];
+                    String locationY = locationString.split(",")[1];
+
+
 
                     final OkHttpClient client = new OkHttpClient();
                     // TODO Complete JSON string
-                    String json = String.format("{\"title\":\"%s\", \"description\":\"%s\", \"thumbnailUrls\":\"%s\", \"category\":\"%s\", \"location\": {\"y\":%s,\"x\":%s}, \"timeRangeList\": [");
+                    String json = String.format("{\"title\":\"%s\", \"description\":\"%s\", \"thumbnailUrls\":\"%s\", \"category\":\"%s\", \"location\": {\"y\":%s,\"x\":%s}, \"timeRangeList\": %s, \"price\":%s, \"maxPax\":%s, \"minPax\":%s}",
+                            title, description, thumbnailUrls.toString(), category, locationY, locationX, timeSlotItemModelList.toString(), localPrice.toString(), maxPax, minPax);
+                    Log.i("New TourListing JSON", json);
 
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
                     Request request = new Request.Builder().url(BuildConfig.API_URL + "/wayfarer/listing/create").post(body).build();
@@ -163,7 +174,7 @@ public class CreateListingFragment7 extends Fragment {
                                         public void run() {
 
                                             Bundle args = getArguments();
-                                            SignUpSuccessFragment fragment = new SignUpSuccessFragment();
+                                            CreateListingFragmentSuccess fragment = new CreateListingFragmentSuccess();
                                             fragment.setArguments(args);
                                             getParentFragmentManager().beginTransaction()
                                                     .replace(R.id.container, fragment)
