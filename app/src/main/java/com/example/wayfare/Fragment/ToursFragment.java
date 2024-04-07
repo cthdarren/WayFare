@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.ResponseModel;
+import com.example.wayfare.Models.TimeSlotItemModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
@@ -144,29 +146,10 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         data.putString("listingId", tourListModels.get(position).getId());
 
 
-        List<TourListModel.TimeRange> timeRangeList = tourListModels.get(position).getTimeRangeList();
-        String[] timingArray = new String[timeRangeList.size()];
-        ArrayList<Integer> timeList = new ArrayList<>();
-        for (int i = 0; i < timeRangeList.size(); i++){
-            String startTime;
-            String endTime;
-            int startTimeInt = timeRangeList.get(i).getStartTime();
-            int endTimeInt = timeRangeList.get(i).getEndTime();
-            if (startTimeInt > 12) {
-                startTimeInt = startTimeInt - 12;
-                endTimeInt = endTimeInt - 12;
-                startTime = startTimeInt + "PM";
-                endTime = endTimeInt + "PM";
-            } else {
-                startTime = startTimeInt + "AM";
-                endTime = endTimeInt + "AM";
-            }
-            timingArray[i] = startTime + " - " + endTime;
-            timeList.add(startTimeInt);
-            timeList.add(endTimeInt);
-        }
-        data.putStringArray("timingArray", timingArray);
-        data.putIntegerArrayList("timeList", timeList);
+
+        data.putParcelableArrayList("timeRangeList", (ArrayList<? extends Parcelable>) tourListModels.get(position).getTimeRangeList());
+//        data.putStringArray("timingArray", timingArray);
+//        data.putIntegerArrayList("timeList", timeList);
 
         TourListingFull tourListingFullFragment = new TourListingFull();
         tourListingFullFragment.setArguments(data);

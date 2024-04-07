@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.sql.Time;
 import java.util.List;
 
 // we are creating variables thats gonna hold all the data that represents one of our items
@@ -94,7 +95,7 @@ public class TourListModel {
     private List<TimeRange> timeRangeList;
 
 
-    public static class TimeRange {
+    public static class TimeRange extends TimeSlotItemModel {
         public int getStartTime() {
             return startTime;
         }
@@ -103,12 +104,9 @@ public class TourListModel {
             return endTime;
         }
 
-        private int startTime;
-        private int endTime;
 
         public TimeRange(int startTime, int endTime){
-            this.startTime = startTime;
-            this.endTime = endTime;
+            super(startTime, endTime);
         }
 
         // Constructor, getters, and setters

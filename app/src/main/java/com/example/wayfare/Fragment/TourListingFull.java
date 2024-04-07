@@ -31,6 +31,7 @@ import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.timingOnItemClickedInterface;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -57,7 +58,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     timingAdapter newTimingAdapter;
     String dateChosen = null;
     MaterialButton button;
-    ArrayList<Integer> timeList;
+    ArrayList<Integer> timeList = new ArrayList<>();
     Date date;
     String listingId;
     @Override
@@ -96,8 +97,20 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             String reviewCountFormat = "(" + args.getString("reviewCount") + ")" + " •";
             tvReviewCount.setText(reviewCountFormat);
 
-            timingArray = args.getStringArray("timingArray");
-            timeList = args.getIntegerArrayList("timeList");
+            ArrayList<TourListModel.TimeRange> timeRangeList = args.getParcelableArrayList("timeRangeList");
+            timingArray = new String[timeRangeList.size()];
+            for (int i = 0; i < timeRangeList.size(); i++){
+                String startTime;
+                String endTime;
+                int startTimeInt = timeRangeList.get(i).getStartTime();
+                int endTimeInt = timeRangeList.get(i).getEndTime();
+                startTime = Helper.convert24to12(startTimeInt);
+                endTime = Helper.convert24to12(endTimeInt);
+
+                timingArray[i] = startTime + " - " + endTime;
+                timeList.add(startTimeInt);
+                timeList.add(endTimeInt);
+            }
             listingId = args.getString("listingId");
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -173,12 +186,11 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
 
             int startingIndex = position * 2;
-            timeList = getArguments().getIntegerArrayList("timeList");
             if (!timeList.isEmpty()){
                 timeList.subList(startingIndex, startingIndex+1);
 
                 intent.putExtra("startTime", timeList.get(0));
-                intent.putExtra("startTime", timeList.get(1));
+                intent.putExtra("endTime", timeList.get(1));
             }
 
             String timing = timingArray[position];

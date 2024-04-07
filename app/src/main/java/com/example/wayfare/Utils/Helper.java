@@ -144,6 +144,16 @@ public class Helper {
         return String.format("%s %s", number, timeCategory);
     }
 
+    public static String convert24to12(int hour){
+        String timeSuffix = "PM";
+        if (hour < 12)
+            timeSuffix = "AM";
+        if (hour > 12)
+            return hour - 12 + timeSuffix;
+
+        return hour + timeSuffix;
+    }
+
     public static Double exchangeToLocal(Double usdPrice, String sharedPrefsCurrencyName){
         BigDecimal exchangeRate = BigDecimal.valueOf((Double)Helper.conversionRates.get(sharedPrefsCurrencyName));
         BigDecimal usd = BigDecimal.valueOf(usdPrice);
