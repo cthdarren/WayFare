@@ -17,6 +17,7 @@ import com.example.wayfare.ViewModel.UserViewModel;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -127,7 +128,7 @@ public class ExploreFragment extends Fragment {
         }
         shortsViewPager = rootView.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        shortsAdapter = new ShortsAdapter(shortsObjectList, context);
+        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager());
         shortsViewPager.setAdapter(shortsAdapter);
 
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

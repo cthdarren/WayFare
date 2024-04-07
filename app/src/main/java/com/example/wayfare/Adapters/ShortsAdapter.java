@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.VideoView;
 import android.widget.ImageView;
 
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.media3.common.Player;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.SimpleExoPlayer;
@@ -26,9 +28,11 @@ import androidx.media3.exoplayer.ExoPlayer;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wayfare.Fragment.TourListingFull;
 import com.example.wayfare.Models.ShortsObject;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +40,16 @@ import java.util.List;
 public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsViewHolder> {
     List<ShortsObject> shortsDataList;
     private int currentPosition;
+    private FragmentManager fragmentManager;
     int numberOfClick = 0;
     float volume;
     boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
-    public ShortsAdapter(List<ShortsObject> shortsDataList,Context context) {
+    public ShortsAdapter(List<ShortsObject> shortsDataList,Context context,FragmentManager fragmentManager) {
         this.shortsDataList = shortsDataList;
         this.context = context;
+        this.fragmentManager = fragmentManager;
         currentPosition = 0;
         shortsViewHolderList = new ArrayList<>();
     }
@@ -254,8 +260,31 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 }
             }
             if(view.getId() == listingTitle.getId()){
+                if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                    exoPlayer.setPlayWhenReady(false);
+                }
                 int pos = getCurrentPosition();
                 TourListModel currListing = shortsDataList.get(pos).getListing();
+                Bundle data = new Bundle();
+
+                data.putString("title", currListing.getTitle());
+                data.putString("location", currListing.getRegion());
+                data.putString("rating", String.valueOf(currListing.getRating()));
+                data.putString("price", String.valueOf(currListing.getPrice()));
+                data.putString("thumbnail", currListing.getThumbnailUrls()[0]);
+                data.putString("description", currListing.getDescription());
+                data.putString("reviewCount", String.valueOf(currListing.getReviewCount()));
+                data.putString("listingId", currListing.getId());
+                data.putInt("minPax", currListing.getMinPax());
+                data.putInt("maxPax", currListing.getMinPax());
+                data.putString("userId", currListing.getUserId());
+                data.putString("category", currListing.getCategory());
+                data.putParcelableArrayList("timeRangeList", (ArrayList<? extends Parcelable>) currListing.getTimeRangeList());
+
+                TourListingFull tourListingFullFragment = new TourListingFull();
+                tourListingFullFragment.setArguments(data);
+
+                Helper.goToFragmentSlideInRightArgs(data, fragmentManager, R.id.container, tourListingFullFragment);
             }
         }
     }
