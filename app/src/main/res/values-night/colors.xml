@@ -1,4 +1,5 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources name="dark">
     <color name="md_theme_primary">#A9D291</color>
     <color name="md_theme_onPrimary">#173807</color>
     <color name="md_theme_primaryContainer">#2D4F1C</color>

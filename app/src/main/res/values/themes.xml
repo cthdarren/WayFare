@@ -75,11 +75,6 @@
 <!--        <item name="android:windowBackground">@drawable/travel_icon</item>-->
         <item name="android:fontFamily">@font/poppins</item>
     </style>
-  <!-- Base application theme. -->
-    <style name="Base.Theme.Wayfare" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
     <style name="shorts_button_red" parent="Widget.AppCompat.Button">
         <item name="android:gravity">center_vertical|center_horizontal</item>
         <item name="android:textColor">@color/white</item>

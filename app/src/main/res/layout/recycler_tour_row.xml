@@ -42,7 +42,7 @@
                     android:contentDescription="image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/guide1"
-                    android:theme="@style/Base.Theme.Wayfare"
+                    android:theme="@style/Theme.Wayfare"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
