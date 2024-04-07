@@ -20,6 +20,8 @@ import com.example.wayfare.R;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.time.Instant;
@@ -132,15 +134,17 @@ public class Helper {
         return String.format("%s %s", number, timeCategory);
     }
 
-    public static int exchangeToNearestIntLocal(int usdPrice, String sharedPrefsCurrencyName){
-        Double exchangeRate = (Double) Helper.conversionRates.get(sharedPrefsCurrencyName);
-        return (int)(usdPrice*exchangeRate);
+    public static Double exchangeToLocal(Double usdPrice, String sharedPrefsCurrencyName){
+        BigDecimal exchangeRate = BigDecimal.valueOf((Double)Helper.conversionRates.get(sharedPrefsCurrencyName));
+        BigDecimal usd = BigDecimal.valueOf(usdPrice);
+        return usd.multiply(exchangeRate).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 
 
-    public static int exchangeToNearestIntUsd(int localPrice, String sharedPrefsCurrencyName){
-        Double exchangeRate = (Double) Helper.conversionRates.get(sharedPrefsCurrencyName);
-        return (int)(localPrice/exchangeRate);
+    public static Double exchangeToUsd(int localPrice, String sharedPrefsCurrencyName){
+        BigDecimal exchangeRate = BigDecimal.valueOf((Double)Helper.conversionRates.get(sharedPrefsCurrencyName));
+        BigDecimal local = BigDecimal.valueOf(localPrice);
+        return local.divide(exchangeRate, 20, RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 
     public static void getExchangeRate(){

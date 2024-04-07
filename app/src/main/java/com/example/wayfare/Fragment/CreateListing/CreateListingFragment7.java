@@ -72,10 +72,10 @@ public class CreateListingFragment7 extends Fragment {
             public void onClick(View v) {
                 localPrice.clearFocus();
                 Bundle args = getArguments();
-                int usdPrice = Helper.exchangeToNearestIntUsd(
-                        Integer.parseInt(localPrice.getText().toString().substring(currencyPrefix.length(), localPrice.getText().toString().length())),
+                Double usdPrice = Helper.exchangeToUsd(
+                        Integer.parseInt(localPrice.getText().toString().substring(currencyPrefix.length())),
                         new AuthHelper((getContext())).getSharedPrefsCurrencyName()
-                        );
+                );
                 args.putString("price", String.valueOf(usdPrice));
                 continue_button.setEnabled(false);
                 Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragmentSuccess());
