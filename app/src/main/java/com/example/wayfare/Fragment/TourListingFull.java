@@ -31,6 +31,8 @@ import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.ConfirmBooking;
 import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
+import com.example.wayfare.Models.BookmarkItemModel;
+import com.example.wayfare.Models.BookmarkModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
@@ -46,7 +48,10 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,6 +60,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -69,6 +75,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     ArrayList<Integer> timeList = new ArrayList<>();
     Date date;
     String listingId;
+    MaterialCheckBox bookmarkCheckbox;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,7 +93,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
         button = view.findViewById(R.id.bookButton);
         MaterialButton buttonDatePicker = view.findViewById(R.id.datePickerButton);
-        MaterialCheckBox bookmarkCheckbox = view.findViewById(R.id.bookmarkCheckbox);
+        bookmarkCheckbox = view.findViewById(R.id.bookmarkCheckbox);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -159,9 +166,9 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    createBookmark();
+                    updateBookmark("/bookmark");
                 } else {
-                    // do nothing for now
+                    updateBookmark("/unbookmark");
                 }
             }
         });
@@ -190,6 +197,12 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             }
         });
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        checkBookmarked();
     }
 
     @Override
@@ -225,11 +238,11 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             Log.d("Do nothing", String.valueOf(position));
         }
     }
-    public void createBookmark(){
+    public void updateBookmark(String apiurl){
         String listingId = getArguments().getString("listingId");
         String json = String.format("{\"listingId\":\"%s\"}", listingId);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        new AuthService(getContext()).getResponse("/bookmark", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+        new AuthService(getContext()).getResponse(apiurl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 makeToast(message);
@@ -239,15 +252,11 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             public void onResponse(ResponseModel json) {
                 if (json.success){
                     Log.d("JSON", "onResponse: success");
-                    makeToast(json.data.getAsString());
-                }
-                else{
-                    makeToast(json.data.getAsString());
+
                 }
             }
 
             public void makeToast(String msg) {
-
                 if (getActivity() == null) {
                     Log.d("ERROR", "FRAGMENT CONTEXT IS NULL, UNABLE TO MAKE TOAST");
                     return;
@@ -258,6 +267,33 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                         Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+            }
+        });
+    }
+
+    private void checkBookmarked() {
+        new AuthService(getContext()).getResponse("/getbookmarks", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onResponse(ResponseModel json) {
+                if (json.success){
+                    Type listType = new TypeToken<ArrayList<BookmarkModel>>(){}.getType();
+                    List<BookmarkModel> bookmarks = new Gson().fromJson(json.data.toString(), listType);
+                    String currentListingId = getArguments().getString("listingId");
+                    boolean isBookmarked = bookmarks.stream().anyMatch(bookmark -> currentListingId.equals(bookmark.listing.getId()));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            bookmarkCheckbox.setChecked(isBookmarked);
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+                // Do nothing (update later?)
+                Log.d("BOOKMARK", "error fetching bookmarks");
             }
         });
     }
