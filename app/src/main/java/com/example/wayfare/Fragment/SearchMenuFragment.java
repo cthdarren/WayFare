@@ -58,6 +58,7 @@ public class SearchMenuFragment extends Fragment {
     Button dateRangeSelect;
     Long startDate, endDate;
     ImageView minusPax, addPax, cancelButton;
+
     int numPaxInt = 1;
     String region = null;
     AutocompleteSupportFragment addressAutocomplete;
@@ -176,7 +177,6 @@ public class SearchMenuFragment extends Fragment {
                 Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new AfterSearchToursFragment());
             }
         });
-
 
         return view;
     }
