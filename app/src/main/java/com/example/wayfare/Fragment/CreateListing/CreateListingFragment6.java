@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -91,32 +92,36 @@ public class CreateListingFragment6 extends Fragment implements RecyclerViewInte
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                continue_button.setEnabled(false);
-                massUploadUriList(new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                continue_button.setEnabled(true);
-                                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment7());
-                            }
-                        });
-                    }
+                if (uriList.size() != 0) {
+                    continue_button.setEnabled(false);
+                    massUploadUriList(new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    continue_button.setEnabled(true);
+                                    Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment7());
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        args.putStringArrayList("thumbnailurls", picUrlList);
-                        Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment7());
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                continue_button.setEnabled(true);
-                            }
-                        });
-                    }
-                });
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            args.putStringArrayList("thumbnailurls", picUrlList);
+                            Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment7());
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    continue_button.setEnabled(true);
+                                }
+                            });
+                        }
+                    });
 
+                }
+                else
+                    Toast.makeText(getContext(), "Please insert at least one image", Toast.LENGTH_SHORT).show();
             }
         });
         return view;

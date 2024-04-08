@@ -131,6 +131,7 @@ public class CreateListingFragment7 extends Fragment {
                     @Override
                     public void onError(String message) {
                         makeToast(message);
+                        continue_button.setEnabled(true);
                     }
 
                     @Override
@@ -139,7 +140,6 @@ public class CreateListingFragment7 extends Fragment {
                     }
                 });
 
-                continue_button.setEnabled(true);
             }
         });
         return view;

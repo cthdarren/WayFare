@@ -31,7 +31,8 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
     Button continue_button, addTimeSlotBtn;
     RecyclerView timeSlotRecycler;
     TextView changeStartTime, changeEndTime, startTimeString, endTimeString;
-    int toAddStart, toAddEnd;
+    int toAddStart = 13;
+    int toAddEnd = 15;
     List<TimeSlotItemModel> timeSlotItemModelList = new ArrayList<TimeSlotItemModel>();
 
     public CreateListingFragment4() {
@@ -70,7 +71,7 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
         MaterialTimePicker endTimePicker =
             new MaterialTimePicker.Builder()
                     .setTimeFormat(TimeFormat.CLOCK_12H)
-                    .setHour(13)
+                    .setHour(15)
                     .setInputMode(MaterialTimePicker.INPUT_MODE_KEYBOARD)
                     .setTitleText("Select end time")
                     .build();
@@ -108,14 +109,16 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
         changeStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTimePicker.show(getParentFragmentManager(), "nosepicker");
+                if (!startTimePicker.isAdded())
+                    startTimePicker.show(getParentFragmentManager(), "nosepicker");
             }
         });
 
         changeEndTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                endTimePicker.show(getParentFragmentManager(), "nosepicker");
+                if (!endTimePicker.isAdded())
+                    endTimePicker.show(getParentFragmentManager(), "nosepicker");
             }
         });
         addTimeSlotBtn.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +130,7 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
                     continue_button.setEnabled(true);
                 }
                 else {
-                    makeToast("Start time must be before end time!");
+                    makeToast("Start time must be before end time and must not clash with other time slots!");
                 }
             }
         });
@@ -153,6 +156,14 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
     }
 
     public boolean validateTime(int startTime, int endTime) {
+        for (TimeSlotItemModel timeslot: timeSlotItemModelList){
+            boolean startTimeClash = startTime >= timeslot.startTime & startTime < timeslot.endTime;
+            boolean endTimeClashOther = timeslot.endTime > startTime & timeslot.endTime <= endTime;
+            boolean endTimeClash = endTime > timeslot.startTime & endTime <= timeslot.endTime;
+            boolean startTimeClashOther = timeslot.startTime >= startTime & timeslot.startTime < endTime;
+            if (startTimeClash | startTimeClashOther | endTimeClash | endTimeClashOther)
+                return false;
+        }
         return startTime < endTime;
     }
 

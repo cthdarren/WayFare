@@ -173,9 +173,7 @@ public class Helper {
 
 
     public static Double exchangeToUsd(int localPrice, String sharedPrefsCurrencyName){
-        //BigDecimal exchangeRate = BigDecimal.valueOf((Double)Helper.conversionRates.get(sharedPrefsCurrencyName));
-        // TODO REMOVE HARDCODED LINE BELOW FOR FINAL DEMO
-        BigDecimal exchangeRate = BigDecimal.valueOf(0.2);
+        BigDecimal exchangeRate = BigDecimal.valueOf((Double)Helper.conversionRates.get(sharedPrefsCurrencyName));
         BigDecimal local = BigDecimal.valueOf(localPrice);
         return local.divide(exchangeRate, 20, RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }

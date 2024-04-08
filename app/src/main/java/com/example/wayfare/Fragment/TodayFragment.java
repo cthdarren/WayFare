@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -54,6 +55,7 @@ public class TodayFragment extends Fragment {
     private TodayAdapter todayAdapter;
     private TodayAdapter weekAdapter;
     private TodayAdapter monthAdapter;
+    private LinearLayout noBookingMessage;
 
     public TodayFragment() {
         // Required empty public constructor
@@ -69,7 +71,7 @@ public class TodayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_today, container, false);
-
+        noBookingMessage = view.findViewById(R.id.noBookingsMessage);
         progBar = getActivity().findViewById(R.id.progressBar);
 
         bookingModelsToday = new ArrayList<>();
@@ -142,6 +144,10 @@ public class TodayFragment extends Fragment {
                         @Override
                         public void run() {
                             recyclerView.getAdapter().notifyDataSetChanged();
+                            if (bookingModelsToday.size() == 0)
+                                noBookingMessage.setVisibility(View.VISIBLE);
+                            else
+                                noBookingMessage.setVisibility(View.GONE);
                             progBar.setVisibility(View.GONE);
                         }
                     });
@@ -155,6 +161,15 @@ public class TodayFragment extends Fragment {
         radioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (adapter == todayAdapter){
+                    if (bookingModelsToday.size() == 0)
+                        noBookingMessage.setVisibility(View.VISIBLE);
+                    else
+                        noBookingMessage.setVisibility(View.GONE);
+                }
+                else{
+                    noBookingMessage.setVisibility(View.GONE);
+                }
                 recyclerView.setAdapter(adapter);
             }
         });
