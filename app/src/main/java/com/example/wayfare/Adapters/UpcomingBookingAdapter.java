@@ -134,17 +134,17 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
             bookingLocation = itemView.findViewById(R.id.bookingLocation);
             dateOfBooking = itemView.findViewById(R.id.dateOfBooking);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (recyclerViewInterface != null) {
-                        int pos = getBindingAdapterPosition();
-                        if (pos != RecyclerView.NO_POSITION) {
-                            recyclerViewInterface.onItemClick(pos);
-                        }
-                    }
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (recyclerViewInterface != null) {
+//                        int pos = getBindingAdapterPosition();
+//                        if (pos != RecyclerView.NO_POSITION) {
+//                            recyclerViewInterface.onItemClick(pos);
+//                        }
+//                    }
+//                }
+//            });
         }
     }
 
