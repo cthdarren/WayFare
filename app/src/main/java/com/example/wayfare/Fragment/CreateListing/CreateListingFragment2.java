@@ -74,6 +74,8 @@ public class CreateListingFragment2 extends Fragment {
         addressAutocomplete = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.addressAutocomplete);
         confirmMap = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.confirmMap);
 
+        continue_button.setEnabled(false);
+
         addressAutocomplete.setLocationBias(RectangularBounds.newInstance(
                 new LatLng(-33.880490, 151.184363),
                 new LatLng(-33.858754, 151.229596)
@@ -92,7 +94,7 @@ public class CreateListingFragment2 extends Fragment {
                 latLngAddress = place.getLatLng();
                 placeName = place.getName();
                 placeAddress = place.getAddress();
-
+                continue_button.setEnabled(true);
                 Log.i("Place Selected", placeName + " " + placeAddress);
 
                 confirmMap.getMapAsync(new OnMapReadyCallback() {
