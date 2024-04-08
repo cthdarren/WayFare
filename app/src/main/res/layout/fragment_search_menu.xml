@@ -88,7 +88,7 @@
                     android:id="@+id/dateRangeSelect"
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_gravity="end"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:textSize="@dimen/font_sm"
                     android:layout_height="wrap_content"
                     android:text="20th Jan"/>
@@ -152,4 +152,36 @@
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_marginTop="40dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        >-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:paddingVertical="10dp"-->
+<!--            android:paddingHorizontal="20dp"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_height="match_parent">-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:textSize="@dimen/font_md"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textStyle="bold"-->
+<!--                android:text="How far?"/>-->
+
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:id="@+id/kmdistancebutton"-->
+<!--                style="@style/Widget.Material3.Button.TextButton"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:gravity="center"-->
+<!--                android:textSize="@dimen/font_sm"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="100km"/>-->
+
+<!--        </LinearLayout>-->
+<!--    </com.google.android.material.card.MaterialCardView>-->
 </LinearLayout>
