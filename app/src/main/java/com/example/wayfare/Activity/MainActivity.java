@@ -74,15 +74,16 @@ public class MainActivity extends AppCompatActivity {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
         }
-
-        //PlacesClient placesClient = Places.createClient(this);
-        super.onCreate(savedInstanceState);
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        //PlacesClient placesClient = Places.createClient(this);
+        super.onCreate(savedInstanceState);
+
+
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-//        Helper.getExchangeRate();
+        Helper.getExchangeRate(getApplicationContext());
 
         View decorView = getWindow().getDecorView();
         if (getSupportFragmentManager().getBackStackEntryCount() == 0)

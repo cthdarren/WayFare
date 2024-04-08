@@ -170,40 +170,25 @@ public class Helper {
         return local.divide(exchangeRate, 20, RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN).doubleValue();
     }
 
-    public static void getExchangeRate(){
-    final OkHttpClient client = new OkHttpClient();
-    Request request = new Request.Builder().url(String.format("https://v6.exchangerate-api.com/v6/%s/latest/USD/", BuildConfig.EXCHANGE_RATE_API_KEY))
-            .get()
-            .build();
-        client.newCall(request).enqueue(new Callback() {
-            public void onFailure(Call call, IOException e) {
-                if (e instanceof SocketTimeoutException) {
-                    e.printStackTrace();
-                } else if (e instanceof SocketException) {
-                    e.printStackTrace();
-                }
+    public static void getExchangeRate(Context context){
+        new AuthService(context).getResponse("/api/v1/getrates", false, RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String serverResponse = response.body().string();
-                // debugging
-                System.out.println(serverResponse);
-                // sharedpref store
-                try {
+            public void onResponse(ResponseModel json) {
+                if (json.success) {
                     Gson gson = new Gson();
-                    CurrencyResponseModel res = gson.fromJson(serverResponse, CurrencyResponseModel.class);
-                    if (Objects.equals(res.result, "success")) {
-                        conversionRates = gson.fromJson(gson.toJson(res.conversion_rates), Map.class);
-                    }
-                    else{
-                        Log.e("Error ER_API", serverResponse);
-                    }
-                    } catch(Exception e){
-                        Log.e("Error", e.getMessage());
-                        e.printStackTrace();
-                    }
+                    ConversionRatesModel rates = new Gson().fromJson(new Gson().toJson(json.data), ConversionRatesModel.class);
+                    conversionRates = gson.fromJson(gson.toJson(rates), Map.class);
+                }
+                else {
+                    Log.d("ERROR EXCHANGE RATE", "FAILED TO GET EXCHANGE RATES");
+                }
             }
         });
+
     }
 }
