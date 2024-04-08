@@ -143,4 +143,15 @@
     <color name="md_theme_surfaceContainerHighest_highContrast">#32362F</color>
     <color name="red">#ff0033</color>
     <color name="light_red">#80ff0033</color>
+    <color name="light_grey">#E8E6E6</color>
+    <color name="light_green">#64FB06</color>
+    <color name="light_blue">#47AAF4</color>
+    <color name="light_black">#525252</color>
+    <color name="light_white">#E8E6E6</color>
+
+    <color name="medium_grey">#7A7777</color>
+    <color name="medium_red">#ff0033</color>
+    <color name="dark_blue">#037AF8</color>
+    <color name="dark_orange">#F4460F</color>
+    <color name="dark_black">#272525</color>
 </resources>

@@ -86,6 +86,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
     Button btnStartRecord;
     ImageButton btnFlip, toggleFlash;
     Button btnStopRecord;
+    String userName;
     boolean isRecording = false;
     boolean isPaused = false;
     int cameraFacing = CameraSelector.LENS_FACING_BACK;
@@ -112,6 +113,9 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         } else {
             startCamera(cameraFacing);
         }
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        userName = bundle.getString("userName");
         //rectOverlay = findViewById(R.id.rect_overlay);
         mediaRecorder = new MediaRecorder();
         previewView = findViewById(R.id.previewView);
@@ -267,6 +271,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         Intent i = new Intent(this,
                 PreviewShortsActivity.class);
         Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
         bundle.putString("videoUri", videoUri.toString());
         i.putExtras(bundle);
         startActivity(i);

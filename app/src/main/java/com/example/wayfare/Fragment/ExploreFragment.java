@@ -39,6 +39,8 @@ import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -114,6 +116,13 @@ public class ExploreFragment extends Fragment {
                         ShortsObject testing = new Gson().fromJson(eachString, ShortsObject.class);
                         shortsObjectList.add(testing);
                     }
+                    Collections.sort(shortsObjectList, new Comparator<ShortsObject>() {
+                        @Override
+                        public int compare(ShortsObject o1, ShortsObject o2) {
+                            // Compare dates in descending order
+                            return o2.getDatePosted().compareTo(o1.getDatePosted());
+                        }
+                    });
                     if (getActivity() != null) {
                         requireActivity().runOnUiThread(new Runnable() {
                             @Override

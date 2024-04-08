@@ -8,4 +8,5 @@
     <dimen name="font_xl">28sp</dimen>
     <dimen name="font_2xl">32sp</dimen>
     <dimen name="outer_padding">30dp</dimen>
+    <dimen name="listing_preview_height">450dp</dimen>
 </resources>

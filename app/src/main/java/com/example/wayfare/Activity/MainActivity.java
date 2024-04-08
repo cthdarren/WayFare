@@ -1,5 +1,6 @@
 package com.example.wayfare.Activity;
 
+import static com.example.wayfare.Utils.Helper.goToLogin;
 import static com.google.maps.android.Context.getApplicationContext;
 
 import androidx.activity.EdgeToEdge;
@@ -182,9 +183,17 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.tours) {
                 replaceFragment(new ToursFragment());
             } else if (item.getItemId() == R.id.addShorts) {
-                Intent intent = new Intent(MainActivity.this, AddShorts.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
+                if (loggedIn) {
+                    Intent intent = new Intent(MainActivity.this, AddShorts.class);
+                    Bundle bundle2 = new Bundle();
+                    String userName = viewModel.getUserProfileData().getUsername();
+                    bundle2.putString("userName", userName);
+                    intent.putExtras(bundle2);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
+                } else{
+                    goToLogin(getSupportFragmentManager());
+                }
             } else if (item.getItemId() == R.id.account) {
                 if (loggedIn) {
                     replaceFragment(new SettingsFragment());
