@@ -1,9 +1,12 @@
 package com.example.wayfare.Fragment;
 
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +34,7 @@ public class BookmarksFragment extends Fragment implements RecyclerViewInterface
     RecyclerView bookmarkRecycler;
     List<BookmarkModel> bookmarkModelList;
     List<BookmarkItemModel> bookmarkItemModels;
+    ImageView backButton;
 
     public void setupBookmarksList(List<BookmarkModel> bookmarkModels){
         for (BookmarkModel bm: bookmarkModels){
@@ -46,11 +50,13 @@ public class BookmarksFragment extends Fragment implements RecyclerViewInterface
         bookmarkItemModels = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
         bookmarkRecycler = view.findViewById(R.id.bookmarkRecycler);
+        backButton = view.findViewById(R.id.profile_back);
 
         bookmarkRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         bookmarkRecycler.setAdapter(new BookmarkAdapter(getContext(), bookmarkItemModels, this));
 
         return view;
+
 
     }
 
@@ -81,10 +87,19 @@ public class BookmarksFragment extends Fragment implements RecyclerViewInterface
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
     }
 
     @Override
     public void onItemClick(int position) {
         //TODO GO TO LISTING
+//        TourListingFull tourListingFullFragment = new TourListingFull();
+//        tourListingFullFragment.setArguments(data);
+//        Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new TourListingFull());
     }
 }
