@@ -4,17 +4,18 @@ import java.time.Instant;
 import java.util.List;
 
 public class UserModel {
-    private final String username;
-    private final String firstName;
-    private final String lastName;
-    private final String email;
-    private final String phoneNumber;
-    private final boolean isVerified;
-    private final String dateCreated;
-    private final String pictureUrl;
-    private final String aboutMe;
-    private final List<String> badges;
-    private final String role;
+    private String username;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private List<String> languagesSpoken;
+    private String phoneNumber;
+    private boolean isVerified;
+    private String dateCreated;
+    private String pictureUrl;
+    private String aboutMe;
+    private List<String> badges;
+    private String role;
 
     public UserModel(String username, String firstName, String lastName, String email, String phoneNumber, boolean isVerified, String dateCreated, String pictureUrl, String aboutMe, List<String> badges, String role) {
         this.username = username;
@@ -75,4 +76,36 @@ public class UserModel {
     }
 
 
+    public List<String> getLanguagesSpoken() {
+        return languagesSpoken;
+    }
+
+    public void setLanguagesSpoken(List<String> languagesSpoken) {
+        this.languagesSpoken = languagesSpoken;
+    }
+
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public void setAboutMe(String aboutMe) {
+        this.aboutMe = aboutMe;
+    }
 }

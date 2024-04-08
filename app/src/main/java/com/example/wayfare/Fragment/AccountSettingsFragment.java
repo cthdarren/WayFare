@@ -79,15 +79,27 @@ public class AccountSettingsFragment extends Fragment {
                         @Override
                         public void onResponse(ResponseModel json) {
                             if (json.success){
+
+                                int fragmentId = getParentFragmentManager().getBackStackEntryAt(getParentFragmentManager().getBackStackEntryCount()-2).getId();
+                                Fragment settingsPage = getParentFragmentManager().findFragmentById(fragmentId);
+
                                 makeToast("Successfully updated account details");
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-
+                                        userDetails.setEmail(email.getText().toString());
+                                        userDetails.setFirstName(firstName.getText().toString());
+                                        userDetails.setLastName(lastName.getText().toString());
+                                        userDetails.setPhoneNumber(phoneNumber.getText().toString());
                                         userViewModel.updateUserData(userDetails);
                                     }
                                 });
                                 getParentFragmentManager().popBackStack();
+                                getParentFragmentManager().popBackStack();
+                                getParentFragmentManager().beginTransaction()
+                                        .replace(R.id.flFragment, new SettingsFragment())
+                                        .addToBackStack(SettingsFragment.class.getName())
+                                        .commit();
                             }
                             else{
                                 makeToast(json.data.getAsString());
