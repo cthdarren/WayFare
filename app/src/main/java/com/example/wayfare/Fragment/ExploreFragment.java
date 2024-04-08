@@ -117,7 +117,7 @@ public class ExploreFragment extends Fragment {
                     requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            shortsAdapter.updateShortsData(shortsObjectList);
+                            shortsAdapter.notifyDataSetChanged();
                         }
                     });
 
@@ -248,11 +248,11 @@ public class ExploreFragment extends Fragment {
     @NonNull
     private static List<ShortsObject> getShortsObjects() {
         List<ShortsObject> shortsObjectList = new ArrayList<>();
-        ShortsObject shortsObject1 = new ShortsObject();
-        shortsObject1.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
-        shortsObject1.setUserName("Singapore!");
-        shortsObject1.setDescription("Singapore Tours #sg #local");
-        shortsObjectList.add(shortsObject1);
+//        ShortsObject shortsObject1 = new ShortsObject();
+//        shortsObject1.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
+//        shortsObject1.setUserName("Singapore!");
+//        shortsObject1.setDescription("Singapore Tours #sg #local");
+//        shortsObjectList.add(shortsObject1);
 //
 //        ShortsObject shortsObject2 = new ShortsObject();
 //        shortsObject2.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
