@@ -1,6 +1,8 @@
 package com.example.wayfare.Activity;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -31,6 +33,7 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.example.wayfare.databinding.ActivityMainBinding;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
@@ -47,6 +50,22 @@ public class WayfarerActivity extends AppCompatActivity {
     private boolean backing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        android.content.Context applicationContext = getApplicationContext();
+        ApplicationInfo applicationInfo;
+        Bundle bundle;
+        try {
+
+            applicationInfo = applicationContext.getPackageManager().getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
+            bundle = applicationInfo.metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        if (!Places.isInitialized()) {
+            //Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+            Places.initialize(applicationContext, bundle.getString("com.google.android.geo.API_KEY"));
+        }
+
 
         super.onCreate(savedInstanceState);
         // Hide the status bar.

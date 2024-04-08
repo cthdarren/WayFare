@@ -1,5 +1,6 @@
 package com.example.wayfare.Fragment.CreateListing;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.google.maps.android.Context.getApplicationContext;
 
 import android.app.Activity;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -100,7 +102,7 @@ public class CreateListingFragment2 extends Fragment {
                 confirmMap.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(@NonNull GoogleMap googleMap) {
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngAddress, 20));
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLngAddress, 15));
                     }
                 });
             }
@@ -109,15 +111,24 @@ public class CreateListingFragment2 extends Fragment {
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    View curr = getActivity().getCurrentFocus();
+                    curr.clearFocus();
+                    inputMethodManager.hideSoftInputFromWindow(curr.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                catch (NullPointerException ignored){}
+
+
                 //TODO change to createlisting fragment3
                 continue_button.setEnabled(false);
-                Bundle args = new Bundle();
-                args.putAll(getArguments());
-
-                args.putString("locationLatLng", latLngAddress.toString());
-                args.putString("locationName", placeAddress);
-                if ()
-                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment3());
+                if (latLngAddress.toString().length() != 0 && placeAddress.length() != 0) {
+                    Bundle args = getArguments();
+                    args.putString("locationLatLng", latLngAddress.toString());
+                    args.putString("locationName", placeAddress);
+                    args.putString("locationAddress", placeAddress);
+                    Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment3());
+                }
                 continue_button.setEnabled(true);
             }
         });
