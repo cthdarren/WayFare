@@ -79,6 +79,11 @@ public class ExploreFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_explore, container, false);
+        return rootView;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         List<ShortsObject> shortsObjectList = getShortsObjects();
         OkHttpClient tokenClient = new OkHttpClient();
         Request request = new Request.Builder()
@@ -86,51 +91,56 @@ public class ExploreFragment extends Fragment {
                 .get()
                 .build();
         tokenClient.newCall(request).enqueue(new Callback() {
-             @Override
-             public void onFailure(Call call, IOException e) {
-                 // Handle failure
-                 e.printStackTrace();
-             }
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Handle failure
+                e.printStackTrace();
+            }
 
-             @Override
-             public void onResponse(Call call, Response response) throws IOException {
-                 // Handle success
-                 if (!response.isSuccessful()) {
-                     throw new IOException("Unexpected response code: " + response);
-                 }
-                 String responseBody = response.body().string();
-                 Gson gson = new Gson();
-                 ResponseModel responseModel = gson.fromJson(responseBody,ResponseModel.class);
-                 if (responseModel != null && responseModel.success) {
-                     JsonArray allShortsInfo = responseModel.data.getAsJsonArray();
-                     shortsObjectList.clear();
-                     for (JsonElement shorts : allShortsInfo){
-                         String eachString = shorts.toString();
-                         ShortsObject testing = new Gson().fromJson(eachString, ShortsObject.class);
-                         shortsObjectList.add(testing);
-                     }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                // Handle success
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected response code: " + response);
+                }
+                String responseBody = response.body().string();
+                Gson gson = new Gson();
+                ResponseModel responseModel = gson.fromJson(responseBody,ResponseModel.class);
+                if (responseModel != null && responseModel.success) {
+                    JsonArray allShortsInfo = responseModel.data.getAsJsonArray();
+                    shortsObjectList.clear();
+                    for (JsonElement shorts : allShortsInfo){
+                        String eachString = shorts.toString();
+                        ShortsObject testing = new Gson().fromJson(eachString, ShortsObject.class);
+                        shortsObjectList.add(testing);
+                    }
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            shortsAdapter.notifyDataSetChanged();
+                        }
+                    });
 
-                 } else {
-                     System.out.println("API response indicates failure.");
-                 }
-             }
-         });
+                } else {
+                    System.out.println("API response indicates failure.");
+                }
+            }
+        });
 
         //get user stuff
-        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
-            loggedIn = true;
-        } else {
-            loggedIn = false;
-        }
-        if (loggedIn) {
-            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-            UserModel userData = userViewModel.getUserProfileData();
-        }
-        shortsViewPager = rootView.findViewById(R.id.shortsViewPager);
+//        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
+//            loggedIn = true;
+//        } else {
+//            loggedIn = false;
+//        }
+//        if (loggedIn) {
+//            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+//            UserModel userData = userViewModel.getUserProfileData();
+//        }
+        shortsViewPager = view.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager());
         shortsViewPager.setAdapter(shortsAdapter);
-
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -170,7 +180,7 @@ public class ExploreFragment extends Fragment {
         shortsViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {
-
+                onStart();
             }
 
             @Override
@@ -233,22 +243,16 @@ public class ExploreFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
-        return rootView;
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        onStart();
     }
 
     @NonNull
     private static List<ShortsObject> getShortsObjects() {
         List<ShortsObject> shortsObjectList = new ArrayList<>();
-        ShortsObject shortsObject1 = new ShortsObject();
-        shortsObject1.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
-        shortsObject1.setUserName("Singapore!");
-        shortsObject1.setDescription("Singapore Tours #sg #local");
-        shortsObjectList.add(shortsObject1);
+//        ShortsObject shortsObject1 = new ShortsObject();
+//        shortsObject1.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
+//        shortsObject1.setUserName("Singapore!");
+//        shortsObject1.setDescription("Singapore Tours #sg #local");
+//        shortsObjectList.add(shortsObject1);
 //
 //        ShortsObject shortsObject2 = new ShortsObject();
 //        shortsObject2.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
