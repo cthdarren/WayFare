@@ -79,12 +79,14 @@ public class VerifyOtpFragment extends Fragment {
                         makeToast("Another OTP has been sent to your email.");
                         try {
                             Thread.sleep(30000);
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    sendAnother.setEnabled(true);
-                                }
-                            });
+                            if (getActivity() != null) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        sendAnother.setEnabled(true);
+                                    }
+                                });
+                            }
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
