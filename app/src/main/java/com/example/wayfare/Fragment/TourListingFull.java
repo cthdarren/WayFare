@@ -19,23 +19,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.ConfirmBooking;
 import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.timingOnItemClickedInterface;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -50,6 +55,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class TourListingFull extends Fragment implements tourListing_RecyclerViewInterface{
     private RecyclerView recyclerView;
@@ -78,6 +86,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
         button = view.findViewById(R.id.bookButton);
         MaterialButton buttonDatePicker = view.findViewById(R.id.datePickerButton);
+        MaterialCheckBox bookmarkCheckbox = view.findViewById(R.id.bookmarkCheckbox);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -146,6 +155,17 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 .setValidator(DateValidatorPointForward.now())
                 .build();
 
+        bookmarkCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    createBookmark();
+                } else {
+                    // do nothing for now
+                }
+            }
+        });
+
         buttonDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,5 +224,41 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         } else {
             Log.d("Do nothing", String.valueOf(position));
         }
+    }
+    public void createBookmark(){
+        String listingId = getArguments().getString("listingId");
+        String json = String.format("{\"listingId\":\"%s\"}", listingId);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        new AuthService(getContext()).getResponse("/bookmark", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                makeToast(message);
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                if (json.success){
+                    Log.d("JSON", "onResponse: success");
+                    makeToast(json.data.getAsString());
+                }
+                else{
+                    makeToast(json.data.getAsString());
+                }
+            }
+
+            public void makeToast(String msg) {
+
+                if (getActivity() == null) {
+                    Log.d("ERROR", "FRAGMENT CONTEXT IS NULL, UNABLE TO MAKE TOAST");
+                    return;
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 }
