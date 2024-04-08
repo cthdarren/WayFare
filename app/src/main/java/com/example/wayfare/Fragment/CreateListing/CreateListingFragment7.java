@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class CreateListingFragment7 extends Fragment {
     String title, description, category, locationString, locationName,
     locationAddress, minPax, maxPax;
     List<TimeSlotItemModel> timeSlotItemModelList;
-    List<String> thumbnailUrls;
+    List<String> thumbnailUrls = new ArrayList<String>();
 
     public CreateListingFragment7() {
     }
@@ -135,13 +136,19 @@ public class CreateListingFragment7 extends Fragment {
                     thumbnailUrls = getArguments().getStringArrayList("thumbnailurls");
                     String locationX = locationString.split(",")[0];
                     String locationY = locationString.split(",")[1];
+                    String thumbnailUrlsString;
 
-
+                    //Log.i("NULL CHECK", Arrays.toString(thumbnailUrls.toArray()));
+                    if (thumbnailUrls == null) {
+                        thumbnailUrlsString = "[]";
+                    } else {
+                        thumbnailUrlsString = thumbnailUrls.toString();
+                    }
 
                     final OkHttpClient client = new OkHttpClient();
                     // TODO Complete JSON string
                     String json = String.format("{\"title\":\"%s\", \"description\":\"%s\", \"thumbnailUrls\":\"%s\", \"category\":\"%s\", \"location\": {\"y\":%s,\"x\":%s}, \"timeRangeList\": %s, \"price\":%s, \"maxPax\":%s, \"minPax\":%s}",
-                            title, description, thumbnailUrls.toString(), category, locationY, locationX, timeSlotItemModelList.toString(), localPrice.toString(), maxPax, minPax);
+                            title, description, thumbnailUrlsString, category, locationY, locationX, timeSlotItemModelList.toString(), localPrice.getText(), maxPax, minPax);
                     Log.i("New TourListing JSON", json);
 
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
