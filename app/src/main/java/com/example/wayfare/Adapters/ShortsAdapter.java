@@ -73,7 +73,10 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         if (shortsViewHolderList.size() > 0)
             shortsViewHolderList.get(position).pauseVideo();
     }
-
+    public void updateShortsData(List<ShortsObject> newList) {
+        shortsDataList.addAll(newList);
+        notifyDataSetChanged();
+    }
     public void playVideo(int position) {
         shortsViewHolderList.get(position).playVideo();
     }
