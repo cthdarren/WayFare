@@ -30,6 +30,11 @@ public class TimeSlotItemModel implements Parcelable {
         dest.writeInt(endTime);
     }
 
+    @Override
+    public String toString() {
+        return String.format("{\"startTime\": %s, \"endTime\": %s}", this.startTime, this.endTime);
+    }
+
     public static final Creator<TimeSlotItemModel> CREATOR = new Creator<TimeSlotItemModel>() {
         @Override
         public TimeSlotItemModel createFromParcel(Parcel in) {

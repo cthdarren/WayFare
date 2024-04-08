@@ -141,7 +141,6 @@ public class CreateListingFragment6 extends Fragment implements RecyclerViewInte
             }
             });
         }
-        callback.onFailure(null, null);
     }
 
     public void reduceCount(){
