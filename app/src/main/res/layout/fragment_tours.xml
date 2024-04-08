@@ -17,6 +17,11 @@
 
         <!-- NestedScrollingChild goes here (NestedScrollView, RecyclerView, etc.). -->
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:liftOnScrollColor="@color/md_theme_background">
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/clickSearchBar"
             android:layout_marginHorizontal="20dp"
@@ -80,34 +85,53 @@
 <!--            &lt;!&ndash; Search suggestions/results go here (ScrollView, RecyclerView, etc.). &ndash;&gt;-->
 <!--        </com.google.android.material.search.SearchView>-->
 
-        <com.google.android.material.tabs.TabLayout
-            android:contentDescription="tabLayout for activities"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="88dp">
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Trending"/>
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Popular"/>
-        </com.google.android.material.tabs.TabLayout>
+                android:background="@drawable/tab_background"
+                app:tabMode="fixed"
+                app:tabGravity="fill"
+                app:tabPaddingStart="8dp"
+                app:tabPaddingEnd="8dp"
+                app:tabIndicatorGravity="bottom"
+                app:tabIndicatorFullWidth="false"
+                android:layout_marginTop="15dp"
+                android:elevation="6dp">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:icon="@drawable/baseline_trending_up_24"
+                    android:text="Trending"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:icon="@drawable/baseline_whatshot_24"
+                    android:text="Hot"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:icon="@drawable/baseline_bolt_24"
+                    android:text="New"/>
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="135dp"
             android:contentDescription="Recycler View for Listing Cards"
-            app:layout_anchorGravity="center"
-            app:layout_constraintBottom_toBottomOf="@+id/searchView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
