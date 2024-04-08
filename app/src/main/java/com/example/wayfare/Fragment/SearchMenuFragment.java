@@ -58,6 +58,7 @@ public class SearchMenuFragment extends Fragment {
     Button dateRangeSelect;
     Long startDate, endDate;
     ImageView minusPax, addPax;
+    ImageView backButton;
     int numPaxInt = 1;
     String region = null;
     AutocompleteSupportFragment addressAutocomplete;
@@ -74,6 +75,7 @@ public class SearchMenuFragment extends Fragment {
         numPax = view.findViewById(R.id.numPax);
         minusPax = view.findViewById(R.id.minusPax);
         addPax = view.findViewById(R.id.addPax);
+        backButton = view.findViewById(R.id.searchBack);
 
         addressAutocomplete = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.addressAutocomplete);
         addressAutocomplete.setLocationBias(RectangularBounds.newInstance(
@@ -168,6 +170,12 @@ public class SearchMenuFragment extends Fragment {
             }
         });
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
 
         return view;
     }
