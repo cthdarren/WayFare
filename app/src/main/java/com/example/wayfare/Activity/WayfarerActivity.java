@@ -47,14 +47,15 @@ public class WayfarerActivity extends AppCompatActivity {
     private boolean backing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        // Hide the status bar.
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        super.onCreate(savedInstanceState);
-        // Hide the status bar.
         setContentView(R.layout.activity_wayfarer);
 
 
@@ -151,7 +152,8 @@ public class WayfarerActivity extends AppCompatActivity {
                 if (
                         // if curr == one of the objects on the navbar, means you're routing to another fragment on the navbar
                         Objects.equals(curr, "com.example.wayfare.Fragment.SettingsFragment") |
-                        Objects.equals(curr, "com.example.wayfare.Fragment.TodayFragment")
+                        Objects.equals(curr, "com.example.wayfare.Fragment.TodayFragment") |
+                Objects.equals(curr, "com.example.wayfare.Fragment.CalendarFragment")
                 ){
                     if (prev != null) {
                         switch (prev) {

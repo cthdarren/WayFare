@@ -114,12 +114,14 @@ public class ExploreFragment extends Fragment {
                         ShortsObject testing = new Gson().fromJson(eachString, ShortsObject.class);
                         shortsObjectList.add(testing);
                     }
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            shortsAdapter.notifyDataSetChanged();
-                        }
-                    });
+                    if (getActivity() != null) {
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                shortsAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
 
                 } else {
                     System.out.println("API response indicates failure.");

@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -74,16 +75,16 @@ public class MainActivity extends AppCompatActivity {
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
         }
+
+        //PlacesClient placesClient = Places.createClient(this);
+        super.onCreate(savedInstanceState);
+
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        //PlacesClient placesClient = Places.createClient(this);
-        super.onCreate(savedInstanceState);
-
-
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = (View) binding.getRoot();
@@ -269,6 +270,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    @Override
+    public void onNightModeChanged(int mode) {
+        super.onNightModeChanged(mode);
+
+        // Handle night mode change here
+        switch (mode) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is activated
+                // Update UI or perform any necessary actions
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is deactivated
+                // Update UI or perform any necessary actions
+                break;
+            // Handle other possible night mode states if needed
+        }
+    }
 
 
 }
