@@ -13,11 +13,11 @@ import androidx.fragment.app.FragmentOnAttachListener;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.UiModeManager;
 import android.content.Intent;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.wayfare.Fragment.AddShortsFragment;
+import com.example.wayfare.Fragment.CreateListing.CreateListingFragment;
 import com.example.wayfare.Fragment.CreateListing.CreateListingFragment2;
 import com.example.wayfare.Fragment.MapFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
@@ -49,6 +50,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
+import com.google.maps.android.Context;
 
 import java.util.List;
 import java.util.Objects;
@@ -69,10 +71,19 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        android.content.Context applicationContext = getApplicationContext();
+        ApplicationInfo applicationInfo;
+        Bundle bundle;
+        try {
 
-
+            applicationInfo = applicationContext.getPackageManager().getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
+            bundle = applicationInfo.metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+            //Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+            Places.initialize(applicationContext, bundle.getString("com.google.android.geo.API_KEY"));
         }
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
