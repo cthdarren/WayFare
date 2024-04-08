@@ -33,6 +33,10 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="36dp">
 
+                <ProgressBar
+                    android:id="@+id/settingsProgBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="54dp"

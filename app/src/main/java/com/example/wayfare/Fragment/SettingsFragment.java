@@ -89,7 +89,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        progBar = getActivity().findViewById(R.id.progressBar);
+        progBar = view.findViewById(R.id.settingsProgBar);
         progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
 

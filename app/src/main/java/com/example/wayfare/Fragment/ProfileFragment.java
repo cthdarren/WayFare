@@ -110,7 +110,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         backButton = view.findViewById(R.id.profile_back);
-        progBar = getActivity().findViewById(R.id.progressBar);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
         hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
 
@@ -128,6 +127,9 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         listings_wrapper_header = view.findViewById(R.id.listing_wrapper_header);
         confirmed_info_header = view.findViewById(R.id.confirmed_info_header);
         verification_truege = view.findViewById(R.id.verification_truege);
+
+        progBar = view.findViewById(R.id.profileProgBar);
+        progBar.setVisibility(View.VISIBLE);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
