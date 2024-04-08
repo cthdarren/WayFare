@@ -19,8 +19,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:button="@drawable/selector_bookmark_item"
-            app:buttonTint="@color/md_theme_surface" />
+            android:button="@drawable/icon_selection_bookmarks"
+            app:buttonTint="@color/white"
+
+
+             />
     </LinearLayout>
 
     <LinearLayout

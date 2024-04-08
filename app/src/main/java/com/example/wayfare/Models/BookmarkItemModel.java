@@ -12,10 +12,13 @@ public class BookmarkItemModel {
 
         this.title = title;
         this.thumbnail = thumbnail;
-        this.username = username;
+        this.username = "Hosted by " + username;
         this.location = location;
         this.listingId = listingId;
-        this.ratings = String.valueOf(ratings) + "(" + String.valueOf(ratingCount) + ")";
+        if (ratings == 0)
+            this.ratings = "No reviews yet";
+        else
+            this.ratings =  "★ " +String.valueOf(ratings) + "(" + String.valueOf(ratingCount) + ")";
     }
 
 }

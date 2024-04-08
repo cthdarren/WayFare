@@ -110,7 +110,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         backButton = view.findViewById(R.id.profile_back);
-        navBar = getActivity().findViewById(R.id.bottomNavigationView);
         hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
 
         profile_pic = view.findViewById(R.id.profile_picture);
@@ -278,7 +277,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        navBar.setVisibility(View.VISIBLE);
     }
 
     @Override

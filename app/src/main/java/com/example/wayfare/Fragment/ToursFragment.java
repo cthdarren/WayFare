@@ -61,6 +61,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
         searchBar = view.findViewById(R.id.clickSearchBar);
+        searchParams = view.findViewById(R.id.searchParams);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete

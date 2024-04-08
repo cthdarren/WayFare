@@ -9,15 +9,19 @@
     android:clickable="true"
     app:rippleColor="@color/transparent"
     android:orientation="vertical">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:outlineProvider="none"
+        android:layout_height="wrap_content">
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
-        app:cardElevation="10dp"
-        android:outlineSpotShadowColor="@color/transparent"
-        android:outlineAmbientShadowColor="@color/transparent"
         android:backgroundTint="@color/transparent"
+        android:layout_gravity="end"
         app:strokeColor="@color/transparent"
         android:layout_height="wrap_content">
+
     <CheckBox
         android:id="@+id/bookmarkBtn"
         android:button="@drawable/icon_selection_bookmarks"
@@ -25,6 +29,7 @@
         android:layout_height="wrap_content"
         app:buttonTint="@color/white" />
     </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,7 +63,7 @@
                 <TextView
                     android:id="@+id/listingTitle"
                     android:layout_width="wrap_content"
-                    android:layout_height="40sp"
+                    android:layout_height="wrap_content"
                     android:gravity="left"
                     android:maxLines="2"
                     android:text="Test bookasdfkjklasdjflksdajfkljsadklfjklasd;fkl;asdjklf;jasdl;kfjl;askjflkjas;klfjlaksdfkling 101"
@@ -83,6 +88,7 @@
                     android:id="@+id/wayfarerUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:text="Hosted by me"
                     android:textSize="@dimen/font_xs" />
 

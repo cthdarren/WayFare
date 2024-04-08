@@ -60,6 +60,14 @@ public class Helper {
                 .setReorderingAllowed(true)
                 .commit();
     }
+    public static void goToFragmentArgs(Bundle args, FragmentManager fm, int fragmentId, Fragment fragment) {
+        fragment.setArguments(args);
+        fm.beginTransaction()
+                .replace(fragmentId, fragment)
+                .addToBackStack(fragment.getClass().getName())
+                .setReorderingAllowed(true)
+                .commit();
+    }
 
     public static void goToFragmentSlideInRight(FragmentManager fm, int fragmentId, Fragment fragment) {
         fm.beginTransaction()
