@@ -3,11 +3,13 @@ package com.example.wayfare.Fragment.CreateListing;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -119,9 +121,14 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
         addTimeSlotBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                timeSlotItemModelList.add(new TimeSlotItemModel(toAddStart, toAddEnd));
-                timeSlotRecycler.getAdapter().notifyItemInserted(timeSlotItemModelList.size()- 1);
-                continue_button.setEnabled(true);
+                if (validateTime(toAddStart, toAddEnd)) {
+                    timeSlotItemModelList.add(new TimeSlotItemModel(toAddStart, toAddEnd));
+                    timeSlotRecycler.getAdapter().notifyItemInserted(timeSlotItemModelList.size() - 1);
+                    continue_button.setEnabled(true);
+                }
+                else {
+                    makeToast("Start time must be before end time!");
+                }
             }
         });
         continue_button.setOnClickListener(new View.OnClickListener() {
@@ -143,5 +150,23 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
         timeSlotRecycler.getAdapter().notifyItemRemoved(position);
         if (timeSlotItemModelList.size() == 0)
             continue_button.setEnabled(false);
+    }
+
+    public boolean validateTime(int startTime, int endTime) {
+        return startTime < endTime;
+    }
+
+    public void makeToast(String msg) {
+
+        if (getActivity() == null) {
+            Log.d("ERROR", "ACTIVITY CONTEXT IS NULL, UNABLE TO MAKE TOAST");
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
