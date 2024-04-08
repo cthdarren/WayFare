@@ -134,8 +134,9 @@ public class CreateListingFragment7 extends Fragment {
                     maxPax = getArguments().getString("maxPax");
                     timeSlotItemModelList = getArguments().getParcelableArrayList("timeslots");
                     thumbnailUrls = getArguments().getStringArrayList("thumbnailurls");
-                    String locationX = locationString.split(",")[0];
-                    String locationY = locationString.split(",")[1];
+                    Log.i("LocationString", locationString);
+                    String locationY = locationString.split(",")[0].substring(10, locationString.split(",")[0].length()-1);
+                    String locationX = locationString.split(",")[1].substring(0, locationString.split(",")[1].length()-1);
                     String thumbnailUrlsString;
 
                     //Log.i("NULL CHECK", Arrays.toString(thumbnailUrls.toArray()));
@@ -147,8 +148,8 @@ public class CreateListingFragment7 extends Fragment {
 
                     final OkHttpClient client = new OkHttpClient();
                     // TODO Complete JSON string
-                    String json = String.format("{\"title\":\"%s\", \"description\":\"%s\", \"thumbnailUrls\":\"%s\", \"category\":\"%s\", \"location\": {\"y\":%s,\"x\":%s}, \"timeRangeList\": %s, \"price\":%s, \"maxPax\":%s, \"minPax\":%s}",
-                            title, description, thumbnailUrlsString, category, locationY, locationX, timeSlotItemModelList.toString(), localPrice.getText(), maxPax, minPax);
+                    String json = String.format("{\"title\": \"%s\", \"description\": \"%s\", \"thumbnailUrls\": %s, \"category\": \"%s\", \"location\": {\"y\": %s,\"x\": %s}, \"timeRangeList\": %s, \"price\": %s, \"maxPax\": %s, \"minPax\": %s }",
+                            title, description, thumbnailUrlsString, category, locationY, locationX, timeSlotItemModelList.toString(), localPrice.getText().toString().substring(1, localPrice.getText().toString().length()), maxPax, minPax);
                     Log.i("New TourListing JSON", json);
 
                     RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
