@@ -114,8 +114,9 @@ public class CreateListingFragment2 extends Fragment {
                 Bundle args = new Bundle();
                 args.putAll(getArguments());
 
-//                args.putString("locationLatLng", latLngAddress.toString());
-//                args.putString("locationName", placeAddress);
+                args.putString("locationLatLng", latLngAddress.toString());
+                args.putString("locationName", placeAddress);
+                if ()
                 Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateListingFragment3());
                 continue_button.setEnabled(true);
             }
