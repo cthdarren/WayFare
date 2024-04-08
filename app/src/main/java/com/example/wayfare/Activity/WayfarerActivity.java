@@ -50,6 +50,7 @@ public class WayfarerActivity extends AppCompatActivity {
     private boolean backing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         android.content.Context applicationContext = getApplicationContext();
         ApplicationInfo applicationInfo;
         Bundle bundle;
@@ -64,6 +65,7 @@ public class WayfarerActivity extends AppCompatActivity {
             //Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
             Places.initialize(applicationContext, bundle.getString("com.google.android.geo.API_KEY"));
         }
+
 
         super.onCreate(savedInstanceState);
         // Hide the status bar.
@@ -169,7 +171,8 @@ public class WayfarerActivity extends AppCompatActivity {
                 if (
                         // if curr == one of the objects on the navbar, means you're routing to another fragment on the navbar
                         Objects.equals(curr, "com.example.wayfare.Fragment.SettingsFragment") |
-                        Objects.equals(curr, "com.example.wayfare.Fragment.TodayFragment")
+                        Objects.equals(curr, "com.example.wayfare.Fragment.TodayFragment") |
+                Objects.equals(curr, "com.example.wayfare.Fragment.CalendarFragment")
                 ){
                     if (prev != null) {
                         switch (prev) {

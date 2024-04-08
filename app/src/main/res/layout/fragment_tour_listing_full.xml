@@ -78,7 +78,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/location" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/bookmark"
+                android:id="@+id/bookmarkCheckbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"

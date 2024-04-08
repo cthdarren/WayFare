@@ -47,6 +47,7 @@
                 <ImageView
                     android:id="@+id/review_user_pic"
                     android:layout_width="48dp"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/account_circle"
                     android:layout_height="48dp"
                      />
