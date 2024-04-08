@@ -21,10 +21,10 @@
             android:gravity="center_vertical"
             android:layout_height="wrap_content">
     <ImageView
-        android:id="@+id/register_exit"
-        android:paddingEnd="15dp"
+        android:id="@+id/edit_profile_exit"
+        android:paddingTop="15dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@drawable/arrow_back"
         android:scaleType="fitStart"
          />
@@ -39,7 +39,7 @@
                     android:layout_weight="1"
                     />
         <Button
-            android:id="@+id/continue_button"
+            android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save"

@@ -71,6 +71,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
         settingItemModels = Arrays.asList(
                 new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
+                new SettingItemModel("Account Settings", context.getDrawable(R.drawable.icon_selection_account), new AccountSettingsFragment()),
                 new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
                 new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
                 new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
@@ -225,7 +226,12 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     @Override
     public void onItemClick(int position) {
 //        Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new AccessibilitySettingsFragment());
-        Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
-        startActivity(intent);
+        if (settingItemModels.get(position).activity != null) {
+            Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
+            startActivity(intent);
+        }
+        if (settingItemModels.get(position).fragment != null){
+            Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, settingItemModels.get(position).fragment);
+        }
     }
 }

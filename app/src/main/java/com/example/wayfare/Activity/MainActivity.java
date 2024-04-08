@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
         if (!Places.isInitialized()) {
-            //Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
             Places.initialize(applicationContext, bundle.getString("com.google.android.geo.API_KEY"));
         }
 
