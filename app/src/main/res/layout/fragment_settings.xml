@@ -33,10 +33,7 @@
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="36dp">
 
-                <ProgressBar
-                    android:id="@+id/settingsProgBar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="54dp"
@@ -45,7 +42,11 @@
                     app:cardBackgroundColor="@color/md_theme_background"
                     app:cardCornerRadius="39dp"
                     app:cardElevation="0dp">
-
+                    <ProgressBar
+                        android:id="@+id/settingsProgBar"
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
                     <ImageView
                         android:id="@+id/user_profile_picture"
                         android:layout_width="54dp"
@@ -67,7 +68,7 @@
                         android:id="@+id/user_greeting"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Hi, First_name"
+                        android:text="Hi"
                         android:textSize="@dimen/font_xl"
                         android:textStyle="bold" />
 
