@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wayfare.Adapters.PastBookingAdapter;
@@ -41,6 +42,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
     RecyclerView upcomingRecycler, pastRecycler;
     ProgressBar progBar;
     BottomNavigationView navBar;
+    TextView pastBookingsHeader;
     List<BookingItemModel> upcomingBookings ;
     List<BookingItemModel> pastBookings ;
 
@@ -86,6 +88,8 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         bookmarksBtn = view.findViewById(R.id.bookmarksButton);
         noBookingsMessage = view.findViewById(R.id.noBookingsMessage);
         goToToursButton = view.findViewById(R.id.goToToursButton);
+        pastBookingsHeader = view.findViewById(R.id.pastBookingsHeader);
+        pastBookingsHeader.setVisibility(View.GONE);
 //        upcomingBookings.add(new BookingItemModel("thumbnail", "title", 5, "today", "picurl", "test"));
 
         bookmarksBtn.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +141,9 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                         public void run() {
                             setUpUpcomingModels(bookingModelList);
                             setupPastBookingModels(pastBookingModelList);
+                            if (pastBookings.size() > 0){
+                                pastBookingsHeader.setVisibility(View.VISIBLE);
+                            }
 
                             if (upcomingBookings.size() > 0){
                                 upcomingRecycler.setVisibility(View.VISIBLE);

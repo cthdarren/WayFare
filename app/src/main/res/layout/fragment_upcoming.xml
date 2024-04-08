@@ -105,6 +105,7 @@
 
 
         <TextView
+            android:id="@+id/pastBookingsHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="20dp"
