@@ -57,8 +57,7 @@ public class SearchMenuFragment extends Fragment {
     String startDateString, endDateString;
     Button dateRangeSelect;
     Long startDate, endDate;
-    ImageView minusPax, addPax;
-    ImageView backButton;
+    ImageView minusPax, addPax, cancelButton;
     int numPaxInt = 1;
     String region = null;
     AutocompleteSupportFragment addressAutocomplete;
@@ -72,10 +71,10 @@ public class SearchMenuFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search_menu, container, false);
         dateRangeSelect = view.findViewById(R.id.dateRangeSelect);
         searchButton = view.findViewById(R.id.searchBtn);
+        cancelButton = view.findViewById(R.id.searchCancel);
         numPax = view.findViewById(R.id.numPax);
         minusPax = view.findViewById(R.id.minusPax);
         addPax = view.findViewById(R.id.addPax);
-        backButton = view.findViewById(R.id.searchBack);
 
         addressAutocomplete = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.addressAutocomplete);
         addressAutocomplete.setLocationBias(RectangularBounds.newInstance(
@@ -98,6 +97,14 @@ public class SearchMenuFragment extends Fragment {
                 latLngAddress = place.getLatLng();
                 region = place.getName();
             }});
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
         startDate = todayInUtcMilliseconds();
         endDate = todayInUtcMilliseconds();
         startDateString = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDate), ZoneOffset.UTC).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
@@ -170,12 +177,6 @@ public class SearchMenuFragment extends Fragment {
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().popBackStack();
-            }
-        });
 
         return view;
     }

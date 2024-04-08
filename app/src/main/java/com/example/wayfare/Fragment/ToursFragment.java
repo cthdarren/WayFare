@@ -147,7 +147,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         data.putString("reviewCount", String.valueOf(tourListModels.get(position).getReviewCount()));
         data.putString("listingId", tourListModels.get(position).getId());
         data.putInt("minPax", tourListModels.get(position).getMinPax());
-        data.putInt("maxPax", tourListModels.get(position).getMaxPax());
+        data.putInt("maxPax", tourListModels.get(position).getMinPax());
         data.putString("userId", tourListModels.get(position).getUserId());
         data.putString("category", tourListModels.get(position).getCategory());
         data.putParcelableArrayList("timeRangeList", (ArrayList<? extends Parcelable>) tourListModels.get(position).getTimeRangeList());
