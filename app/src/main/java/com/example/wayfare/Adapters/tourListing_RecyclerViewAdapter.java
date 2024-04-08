@@ -2,6 +2,7 @@ package com.example.wayfare.Adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthHelper;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 
 import java.util.ArrayList;
+import java.util.Currency;
 
 public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourListing_RecyclerViewAdapter.MyViewHolder> {
 
@@ -33,7 +37,7 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
     public tourListing_RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // inflating layout and giving look to each view
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.recycler_tour_row, parent, false);
+        View view = inflater.inflate(R.layout.recycler_tour_new, parent, false);
         return new MyViewHolder(view, tourListing_recyclerViewInterface);
     }
 
@@ -44,9 +48,14 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         Glide.with(context)
                 .load(tourListModels.get(position).getThumbnailUrls()[0]) // Load the first URL from the array
                 .into(holder.imageView); // Set the image to the ImageView
-        String price_text = "$" + String.valueOf(tourListModels.get(position).getPrice()) + " / person";
-        holder.tvPrice.setText(price_text);
-        holder.tvRating.setText(String.valueOf(tourListModels.get(position).getRating()));
+        String localCurrency = new AuthHelper(context).getSharedPrefsCurrencyName();
+        Double localPrice = Helper.exchangeToLocal(tourListModels.get(position).getPrice(), localCurrency);
+        String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
+        holder.tvPrice.setText(Html.fromHtml(String.format("<u><b>%s %.2f</b> per person</u>", currencyPrefix, localPrice), Html.FROM_HTML_MODE_LEGACY));
+        if (tourListModels.get(position).getRating() == 0)
+            holder.tvRating.setText("No reviews yet");
+        else
+            holder.tvRating.setText(String.format("%s (%d)", String.valueOf(tourListModels.get(position).getRating()), tourListModels.get(position).getReviewCount()));
         holder.tvLocation.setText(tourListModels.get(position).getRegion());
     }
 

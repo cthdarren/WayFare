@@ -33,7 +33,7 @@
         </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/upcomingBookingsCarousel"
+        android:id="@+id/yourListingsRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

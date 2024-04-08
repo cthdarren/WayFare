@@ -59,7 +59,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/font_xs"
-                        android:text="Anywhere | Any day | Add people"/>
+                        android:text="Anywhere  |  Any day  |  Add people"/>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
