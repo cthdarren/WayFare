@@ -62,44 +62,13 @@
                         android:text="Anywhere | Any day | Add people"/>
                 </LinearLayout>
             </LinearLayout>
-<!--        <com.google.android.material.search.SearchBar-->
-<!--            android:id="@+id/search_bar"-->
-<!--            android:layout_width="match_parent"-->
-<!--            app:forceDefaultNavigationOnClickListener="false"-->
-<!--            android:clickable="false"-->
-<!--            android:elevation="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="Search destinations or activities"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/searchView" />-->
         </com.google.android.material.card.MaterialCardView>
-<!--        <com.google.android.material.search.SearchView-->
-<!--            android:id="@+id/searchView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:hint="Search destinations or activities"-->
-<!--            app:layout_anchor="@id/search_bar"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent">-->
-<!--            &lt;!&ndash; Search suggestions/results go here (ScrollView, RecyclerView, etc.). &ndash;&gt;-->
-<!--        </com.google.android.material.search.SearchView>-->
-
-
-<<<<<<< HEAD
-=======
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Singapore"/>
->>>>>>> 3283a0f4558039e820eab1e50253477f3e2c93af
 
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-<<<<<<< HEAD
                 android:background="@drawable/tab_background"
                 app:tabMode="fixed"
                 app:tabGravity="fill"
@@ -133,10 +102,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
 
-=======
-                android:text="Malaysia"/>
-        </com.google.android.material.tabs.TabLayout>
->>>>>>> 3283a0f4558039e820eab1e50253477f3e2c93af
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myRecyclerView"
