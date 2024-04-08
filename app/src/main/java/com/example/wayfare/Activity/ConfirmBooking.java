@@ -122,8 +122,6 @@ public class ConfirmBooking extends AppCompatActivity {
                 if (counterValue[0] < maxPax) {
                     counterValue[0]++;
                     counter.setText(String.valueOf(counterValue[0]));
-                } else {
-                    Toast.makeText(ConfirmBooking.this, "Max number of persons reached", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -133,8 +131,6 @@ public class ConfirmBooking extends AppCompatActivity {
                 if (counterValue[0] > minPax) {
                     counterValue[0]--;
                     counter.setText(String.valueOf(counterValue[0]));
-                } else {
-                    Toast.makeText(ConfirmBooking.this, "Min number of persons reached", Toast.LENGTH_SHORT).show();
                 }
             }
         });

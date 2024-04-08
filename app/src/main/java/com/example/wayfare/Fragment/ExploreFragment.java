@@ -109,12 +109,6 @@ public class ExploreFragment extends Fragment {
                          ShortsObject testing = new Gson().fromJson(eachString, ShortsObject.class);
                          shortsObjectList.add(testing);
                      }
-                     requireActivity().runOnUiThread(new Runnable() {
-                         @Override
-                         public void run() {
-                             shortsAdapter.notifyDataSetChanged();
-                         }
-                     });
 
                  } else {
                      System.out.println("API response indicates failure.");
@@ -123,19 +117,18 @@ public class ExploreFragment extends Fragment {
          });
 
         //get user stuff
-//        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
-//            loggedIn = true;
-//        } else {
-//            loggedIn = false;
-//        }
-//        if (loggedIn) {
-//            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-//            UserModel userData = userViewModel.getUserProfileData();
-//        }
+        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
+            loggedIn = true;
+        } else {
+            loggedIn = false;
+        }
+        if (loggedIn) {
+            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+            UserModel userData = userViewModel.getUserProfileData();
+        }
         shortsViewPager = rootView.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager());
-        shortsAdapter.notifyDataSetChanged();
         shortsViewPager.setAdapter(shortsAdapter);
 
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
