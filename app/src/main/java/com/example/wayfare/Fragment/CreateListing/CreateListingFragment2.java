@@ -82,7 +82,7 @@ public class CreateListingFragment2 extends Fragment {
                 new LatLng(-33.880490, 151.184363),
                 new LatLng(-33.858754, 151.229596)
         ));
-        addressAutocomplete.setCountries("SG");
+        //addressAutocomplete.setCountries("SG");
         addressAutocomplete.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.NAME,
                 Place.Field.ADDRESS, Place.Field.ID));
         addressAutocomplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
