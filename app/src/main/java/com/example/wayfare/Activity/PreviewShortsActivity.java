@@ -14,12 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.SimpleExoPlayer;
 import androidx.media3.ui.PlayerView;
 
 import com.example.wayfare.R;
+import com.example.wayfare.ViewModel.UserViewModel;
 
 public class PreviewShortsActivity extends AppCompatActivity implements View.OnClickListener {
     Uri videoUri;
@@ -28,6 +30,7 @@ public class PreviewShortsActivity extends AppCompatActivity implements View.OnC
     private ExoPlayer exoPlayer;
     Button btnBack;
     Button btnToPostScreen;
+    String userName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +42,7 @@ public class PreviewShortsActivity extends AppCompatActivity implements View.OnC
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String videoPath= bundle.getString("videoUri");
+        userName= bundle.getString("userName");
         videoUri = Uri.parse(videoPath);
         playerView = findViewById(R.id.preview_player);
         exoPlayer = new ExoPlayer.Builder(this).build();
@@ -58,6 +62,7 @@ public class PreviewShortsActivity extends AppCompatActivity implements View.OnC
                     PostShortActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("videoUri", videoUri.toString());
+            bundle.putString("userName", userName);
             i.putExtras(bundle);
             startActivity(i);
         }
