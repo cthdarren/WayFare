@@ -28,8 +28,10 @@ public class BookingItemModel {
         this.reviewed = reviewed;
         String timePostfix = "am";
 
-        if (startTimeOfBooking > 12)
+        if (startTimeOfBooking > 12) {
             timePostfix = "pm";
+            startTimeOfBooking = startTimeOfBooking-12;
+        }
 
         if (startTimeOfBooking == 0)
             startTimeOfBooking = 12;
