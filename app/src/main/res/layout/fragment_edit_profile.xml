@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tourEndTime"
+    android:layout_width="match_parent"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/outer_padding"
+    tools:context=".Fragment.SignInFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="20dp"
+        android:layout_height="wrap_content">
+        <ImageView
+        android:id="@+id/register_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/arrow_back"
+        android:scaleType="fitStart"
+         />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                />
+            <Button
+                android:id="@+id/save_changes"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:drawableTint="@color/md_theme_background"
+                tools:ignore="MissingConstraints" />
+        </LinearLayout></LinearLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit your public profile"
+        android:textSize="@dimen/font_2xl"
+         />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        android:text="Other users will be able to see the information you enter here."
+        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/profile_picture_wrapper"
+            android:layout_width="120dp"
+            android:layout_gravity="center"
+            android:layout_height="120dp"
+            app:cardBackgroundColor="@color/md_theme_background"
+            app:cardCornerRadius="777777779dp"
+            app:cardElevation="0dp">
+
+           <ImageView
+            android:layout_width="120dp"
+               android:id="@+id/profile_picture"
+            android:src="@drawable/default_avatar"
+            android:layout_height="120dp"/>
+
+        </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_xs"
+                android:text="Tap on the picture to change it"/>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:hint="Bio"
+            android:layout_marginTop="20dp"
+            app:helperText="Max. 300 characters"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/about_me"
+                android:layout_width="match_parent"
+                android:maxLines="6"
+                android:maxLength="300"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:hint="Languages spoken"
+            app:helperText="*required"
+            android:layout_marginTop="20dp"
+            android:id="@+id/languages_spoken_wrapper"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:focusable="false"
+                android:textIsSelectable="true"
+                android:id="@+id/languages_spoken"
+                android:inputType="none"
+                android:maxLines="1"
+                android:layout_height="wrap_content"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

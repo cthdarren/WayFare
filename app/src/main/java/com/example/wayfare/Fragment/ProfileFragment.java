@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView review_title;
     RecyclerView reviewRecycler;
     RecyclerView listingRecycler;
-    Button show_all_reviews_button;
+    Button show_all_reviews_button, edit_profile_button;
     LinearLayout review_segment;
     LinearLayout listings_wrapper;
     TextView listings_wrapper_header;
@@ -108,7 +108,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         // Inflate the layout for this fragment
         profileUsername = getArguments().getString("username");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
         backButton = view.findViewById(R.id.profile_back);
         hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
 
@@ -126,6 +125,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         listings_wrapper_header = view.findViewById(R.id.listing_wrapper_header);
         confirmed_info_header = view.findViewById(R.id.confirmed_info_header);
         verification_truege = view.findViewById(R.id.verification_truege);
+        edit_profile_button = view.findViewById(R.id.edit_profile_btn);
 
         progBar = view.findViewById(R.id.profileProgBar);
         progBar.setVisibility(View.VISIBLE);
@@ -137,6 +137,13 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
             }
         });
 
+        edit_profile_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new EditProfileFragment());
+            }
+        });
+
         return view;
     }
 
@@ -145,12 +152,20 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         super.onViewCreated(view, savedInstanceState);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         UserModel userData = userViewModel.getUserProfileData();
+        if (Objects.equals(profileUsername, userData.getUsername()))
+            edit_profile_button.setVisibility(View.VISIBLE);
+        else
+            edit_profile_button.setVisibility(GONE);
 
         if (userData.isVerified())
             verification_truege.setImageResource(R.drawable.done);
 
         if (Objects.equals(userData.getRole(), "ROLE_USER"))
             listings_wrapper.setVisibility(GONE);
+
+        if (userData.getAboutMe().length() == 0){
+            about_me.setVisibility(GONE);
+        }
 
         listingRecycler = view.findViewById(R.id.listing_carousel);
         listingRecycler.setAdapter(new ProfileListingAdapter(getContext(), listingItemModels, this));
