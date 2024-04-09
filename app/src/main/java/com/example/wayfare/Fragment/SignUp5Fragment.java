@@ -202,7 +202,7 @@ public class SignUp5Fragment extends Fragment {
                                         }
                                     });
                                 }else {
-                                    makeToast(res.data.getAsString());
+                                    makeToast("Server Error");
                                 }
 
                             } else {

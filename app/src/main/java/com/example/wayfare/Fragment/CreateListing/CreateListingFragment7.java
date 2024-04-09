@@ -131,7 +131,12 @@ public class CreateListingFragment7 extends Fragment {
                     @Override
                     public void onError(String message) {
                         makeToast(message);
-                        continue_button.setEnabled(true);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                continue_button.setEnabled(true);
+                            }
+                        });
                     }
 
                     @Override
