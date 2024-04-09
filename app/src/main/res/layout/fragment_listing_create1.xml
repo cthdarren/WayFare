@@ -24,10 +24,10 @@
             android:paddingBottom="20dp"
             android:layout_height="wrap_content">
              <ImageView
-        android:id="@+id/register_exit"
+        android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/cross"
+        android:src="@drawable/arrow_back"
         android:scaleType="fitStart"
          />
             <LinearLayout

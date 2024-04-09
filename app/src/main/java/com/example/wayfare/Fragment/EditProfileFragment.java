@@ -147,7 +147,6 @@ public class EditProfileFragment extends Fragment {
 
                         @Override
                         public void onResponse(ResponseModel json) {
-                            save_changes.setEnabled(true);
                             sendRequest();
                         }
                     });
@@ -161,7 +160,6 @@ public class EditProfileFragment extends Fragment {
         open_gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save_changes.setEnabled(false);
                 Intent gallery = new Intent(Intent.ACTION_PICK);
                 gallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 getPic.launch("image/*");
@@ -260,13 +258,18 @@ public class EditProfileFragment extends Fragment {
                             userData.setAboutMe(bio.getText().toString());
                             userData.setLanguagesSpoken(Arrays.asList(languages.getText().toString().split(",")));
                             userViewModel.updateUserData(userData);
+                            save_changes.setEnabled(true);
                         }
                     });
+                    ProfileFragment pf = new ProfileFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("username", userData.getUsername());
+                    pf.setArguments(bundle);
                     getParentFragmentManager().popBackStack();
                     getParentFragmentManager().popBackStack();
                     getParentFragmentManager().beginTransaction()
-                            .replace(R.id.container, new ProfileFragment())
-                            .addToBackStack(ProfileFragment.class.getName())
+                            .replace(R.id.container, pf)
+                            .addToBackStack(pf.getClass().getName())
                             .commit();
                 }
                 else

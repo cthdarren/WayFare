@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="310dp"
     android:id="@+id/upcomingListingWrapper"
     android:layout_marginBottom="15dp"
     android:layout_marginEnd="15dp"
@@ -37,8 +37,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp">
+            android:layout_height="200dp">
 
             <ImageView
                 android:id="@+id/listingThumbnail"
@@ -50,9 +49,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:layout_marginTop="5dp"
+            android:layout_height="100dp"
+            android:orientation="vertical">
 
 <TextView
     android:id="@+id/listingRating"
@@ -64,6 +63,7 @@
                     android:id="@+id/listingTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
                     android:gravity="left"
                     android:maxLines="2"
                     android:text="Test bookasdfkjklasdjflksdajfkljsadklfjklasd;fkl;asdjklf;jasdl;kfjl;askjflkjas;klfjlaksdfkling 101"

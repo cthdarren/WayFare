@@ -2,6 +2,8 @@ package com.example.wayfare.Utils;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -12,6 +14,8 @@ import com.example.wayfare.BuildConfig;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import id.zelory.compressor.Compressor;
 import okhttp3.*;
 
 import java.io.ByteArrayOutputStream;
@@ -163,11 +167,13 @@ public class AzureStorageManager {
     private static byte[] getBytesFromUri(Uri uri, Context context) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
+            Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+//            byte[] buffer = new byte[4096];
+//            int bytesRead;
+//            while ((bytesRead = inputStream.read(buffer)) != -1) {
+//                outputStream.write(buffer, 0, bytesRead);
+//            }
         }
         return outputStream.toByteArray();
     }
