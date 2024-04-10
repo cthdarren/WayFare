@@ -76,7 +76,7 @@ public class AzureStorageManager {
                                     throw new IOException("Unexpected response code: " + response);
                                 }
                                 // Handle successful upload
-                                String url = response.request().url().toString();
+                                String url = response.request().url().toString().split("\\?")[0];
                                 // Do something with the uploaded file URL, such as displaying it to the user
                                 Log.d("Upload", "File uploaded successfully. URL: " + url);
                                 callback.onResponse(call, response);
@@ -224,38 +224,6 @@ public class AzureStorageManager {
         fos.close();
         return tempfile;
     }
-
-    private static File getProfilePicFileFromUri(Uri uri, Context c) throws IOException {
-        int requiredSize = 500;
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o);
-
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-
-        // smallest side will be < 1k pixels
-        while (width_tmp / 2 >= requiredSize && height_tmp / 2 >= requiredSize) {
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        Bitmap bmp = BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o2);
-
-
-        bmp.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
-        byte[] refactoredByteArray = outputStream.toByteArray();
-        File tempfile = File.createTempFile("temp", ".jpg");
-        FileOutputStream fos = new FileOutputStream(tempfile);
-        fos.write(refactoredByteArray);
-        fos.close();
-        return tempfile;
-    }
-
     private static String getFileNameFromUri(Uri uri, Context context) {
         String[] projection = {MediaStore.Video.Media.DISPLAY_NAME};
         try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {

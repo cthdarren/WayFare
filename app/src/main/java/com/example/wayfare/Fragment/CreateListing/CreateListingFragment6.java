@@ -54,7 +54,7 @@ public class CreateListingFragment6 extends Fragment implements RecyclerViewInte
                 }
             }
             if (changed)
-                listingImagesRecycler.getAdapter().notifyDataSetChanged();
+                listingImagesRecycler.getAdapter().notifyItemRangeChanged(0, uriList.size());
         }
 
     });

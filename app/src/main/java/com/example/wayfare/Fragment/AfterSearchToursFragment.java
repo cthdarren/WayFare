@@ -140,7 +140,7 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerView.getAdapter().notifyDataSetChanged();
+                        recyclerView.getAdapter().notifyItemRangeInserted(0, tourListModels.size());
                         progBar.setVisibility(View.GONE);
                     }
                 });

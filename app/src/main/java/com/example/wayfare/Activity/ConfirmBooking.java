@@ -106,7 +106,8 @@ public class ConfirmBooking extends AppCompatActivity {
         tvDateChosen.setText(dateChosen);
 
         Glide.with(this)
-                .load(thumbnail)
+                .load(thumbnail.split("\\?")[0])
+                .sizeMultiplier(0.5f)
                 .into(ivThumbnail);
 
 

@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Adapters.ProfileListingAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.Models.ListingItemModel;
@@ -49,8 +50,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
@@ -163,7 +162,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         if (Objects.equals(userData.getRole(), "ROLE_USER"))
             listings_wrapper.setVisibility(GONE);
 
-        if (userData.getAboutMe().length() == 0){
+        if (userData.getAboutMe().length() == 0) {
             about_me.setVisibility(GONE);
         }
 
@@ -191,44 +190,13 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                     if (json.success) {
                         ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
 
-                        ExecutorService executor = Executors.newSingleThreadExecutor();
-                        Looper uiLooper = Looper.getMainLooper();
-                        final Handler handler = new Handler(uiLooper);
-                        executor.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Bitmap image;
-                                    if (profileInfo.getPictureUrl() == null | Objects.equals(profileInfo.getPictureUrl(), ""))
-                                        image = null;
-                                    else {
-                                        URL url = new URL(profileInfo.getPictureUrl());
-                                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                    }
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (image != null)
-                                                profile_pic.setImageBitmap(image);
-                                        }
-                                    });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getContext(), "Unexpected Error", Toast.LENGTH_SHORT).show();
-                                            getParentFragmentManager().popBackStack();
-                                            progBar.setVisibility(GONE);
-                                        }
-                                    });
-                                }
-                            }
-                        });
-
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Glide.with(ProfileFragment.this)
+                                        .load(profileInfo.getPictureUrl().split("\\?")[0])
+                                        .centerCrop()
+                                        .into(profile_pic);
 
                                 full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
                                 reviewCount.setText(profileInfo.getReviewCount().toString());
@@ -268,7 +236,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                 SnapHelper snapHelper = new LinearSnapHelper();
                                 snapHelper.attachToRecyclerView(reviewRecycler);
 
-                                listingRecycler.getAdapter().notifyDataSetChanged();
+                                listingRecycler.getAdapter().notifyItemRangeInserted(0, listingItemModels.size());
 
                                 progBar.setVisibility(GONE);
                             }
@@ -276,8 +244,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                     }
                 }
             });
-        }
-        else{
+        } else {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.Activity.WayfarerActivity;
 import com.example.wayfare.Activity.settings.AccessibilitySettingsActivity;
@@ -48,8 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class SettingsFragment extends Fragment implements RecyclerViewInterface {
 
@@ -192,35 +191,11 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         settingsRecyclerView.setAdapter(adapter);
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        if (!Objects.equals(picUrl, "") & picUrl != null) {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Looper uiLooper = Looper.getMainLooper();
-            final Handler handler = new Handler(uiLooper);
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        URL url = new URL(picUrl);
-                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                user_profile_pic.setImageBitmap(image);
-                                progBar.setVisibility(View.GONE);
-
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        progBar.setVisibility(View.GONE);
-                    }
-                }
-            });
-        }
-        else{
-            user_profile_pic.setBackgroundResource(R.drawable.default_avatar);
-            progBar.setVisibility(View.GONE);
-        }
+        Glide.with(SettingsFragment.this)
+                .load(picUrl)
+                .centerCrop()
+                .sizeMultiplier(0.6f)
+                .into(user_profile_pic);
     }
 
     @Override

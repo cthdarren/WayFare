@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.BookingItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
@@ -23,8 +24,6 @@ import com.google.android.material.card.MaterialCardView;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class PastBookingAdapter extends RecyclerView.Adapter<PastBookingAdapter.ViewHolder> {
 
@@ -58,33 +57,11 @@ public class PastBookingAdapter extends RecyclerView.Adapter<PastBookingAdapter.
         if (pastBookingItemModels.get(position).reviewed)
             holder.reviewButton.setVisibility(View.GONE);
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Looper uiLooper = Looper.getMainLooper();
-        final Handler handler = new Handler(uiLooper);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String picUrl = pastBookingItemModels.get(position).thumbnailUrl;
-                    Bitmap image;
-
-                    if (picUrl != null) {
-                        URL url = new URL(picUrl);
-                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    } else
-                        image = null;
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.pastBookingThumbnail.setImageBitmap(image);
-                        }
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        Glide.with(context)
+                .load(pastBookingItemModels.get(position).thumbnailUrl.split("\\?")[0])
+                .centerCrop()
+                .sizeMultiplier(0.5f)
+                .into(holder.pastBookingThumbnail);
     }
 
     @Override

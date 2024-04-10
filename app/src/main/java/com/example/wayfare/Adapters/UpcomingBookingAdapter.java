@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Models.BookingItemModel;
 import com.example.wayfare.Models.ListingItemModel;
@@ -28,8 +29,6 @@ import com.example.wayfare.Utils.Helper;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBookingAdapter.ViewHolder> {
 
@@ -72,43 +71,17 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
             }
         });
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Looper uiLooper = Looper.getMainLooper();
-        final Handler handler = new Handler(uiLooper);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String picUrl = upcomingBookingItemModels.get(position).thumbnailUrl;
-                    String wayfarerPictureUrl = upcomingBookingItemModels.get(position).wayfarerPicUrl;
-                    Bitmap wayfarerImage, image;
-                    if (wayfarerPictureUrl != null) {
-                        URL wpUrl = new URL(wayfarerPictureUrl);
-                        wayfarerImage = BitmapFactory.decodeStream(wpUrl.openConnection().getInputStream());
-                    } else
-                        wayfarerImage = null;
-                    if (picUrl != null) {
-                        URL url = new URL(picUrl);
-                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    } else
-                        image = null;
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.thumbnail.setImageBitmap(image);
-                            if (wayfarerImage != null)
-                                holder.wayfarerPicture.setImageBitmap(wayfarerImage);
-                            else {
-                                holder.wayfarerPicture.setBackgroundResource(R.drawable.default_avatar);
-                            }
-                        }
-                    });
+        Glide.with(context)
+                .load(upcomingBookingItemModels.get(position).thumbnailUrl.split("\\?")[0])
+                .centerCrop()
+                .sizeMultiplier(0.5f)
+                .into(holder.thumbnail);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        Glide.with(context)
+                .load(upcomingBookingItemModels.get(position).wayfarerPicUrl.split("\\?")[0])
+                .centerCrop()
+                .override(50,50)
+                .into(holder.wayfarerPicture);
     }
 
     @Override

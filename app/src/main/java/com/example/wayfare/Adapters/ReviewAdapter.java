@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.ReviewItemModel;
 import com.example.wayfare.Models.SettingItemModel;
 import com.example.wayfare.R;
@@ -27,8 +28,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
 
@@ -64,28 +63,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         holder.reviewUsername.setText(reviewItemModels.get(position).firstName);
         holder.reviewDate.setText(reviewItemModels.get(position).timeSinceCreation);
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Looper uiLooper = Looper.getMainLooper();
-        final Handler handler = new Handler(uiLooper);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String picUrl = reviewItemModels.get(position).picUrl;
-                    URL url = new URL(picUrl);
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.review_user_pic.setImageBitmap(image);
-                        }
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        Glide.with(context)
+                .load(reviewItemModels.get(position).picUrl.split("\\?")[0])
+                .sizeMultiplier(0.5f)
+                .centerCrop()
+                .into(holder.review_user_pic);
     }
 
     @Override

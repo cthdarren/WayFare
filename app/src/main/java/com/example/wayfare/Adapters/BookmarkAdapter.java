@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.BookmarkItemModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.ReviewItemModel;
@@ -24,13 +25,7 @@ import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -89,28 +84,12 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
             }
         });
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Looper uiLooper = Looper.getMainLooper();
-        final Handler handler = new Handler(uiLooper);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String picUrl = bookmarkItemModels.get(position).thumbnail;
-                    URL url = new URL(picUrl);
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.listingThumbnail.setImageBitmap(image);
-                        }
-                    });
+        Glide.with(context)
+                .load(bookmarkItemModels.get(position).thumbnail.split("\\?")[0])
+                .sizeMultiplier(0.5f)
+                .centerCrop()
+                .into(holder.listingThumbnail);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     @Override

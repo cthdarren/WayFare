@@ -99,7 +99,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             tvPrice.setText(priceFormat);
 
             Glide.with(requireContext())
-                    .load(args.getString("thumbnail")) // Load the first URL from the array
+                    .load(args.getString("thumbnail").split("\\?")[0]) // Load the first URL from the array
                     .into(tvImage); // Set the image to the ImageView
             tvDescription.setText(args.getString("description"));
 

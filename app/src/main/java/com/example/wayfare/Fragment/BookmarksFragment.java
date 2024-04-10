@@ -56,16 +56,6 @@ public class BookmarksFragment extends Fragment implements RecyclerViewInterface
         bookmarkRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         bookmarkRecycler.setAdapter(new BookmarkAdapter(getContext(), bookmarkItemModels, this));
 
-        return view;
-
-
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
         new AuthService(getContext()).getResponse("/getbookmarks", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
@@ -81,12 +71,22 @@ public class BookmarksFragment extends Fragment implements RecyclerViewInterface
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            bookmarkRecycler.getAdapter().notifyDataSetChanged();
+                            bookmarkRecycler.getAdapter().notifyItemRangeChanged(0, bookmarkItemModels.size());
                         }
                     });
                 }
             }
         });
+        return view;
+
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -79,7 +79,7 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            yourListingRecycler.getAdapter().notifyDataSetChanged();
+                            yourListingRecycler.getAdapter().notifyItemRangeChanged(0, tourListModels.size());
                             progressBar.setVisibility(View.GONE);
                         }
                     });

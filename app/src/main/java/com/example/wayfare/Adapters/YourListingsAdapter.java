@@ -45,7 +45,8 @@ public class YourListingsAdapter extends RecyclerView.Adapter<YourListingsAdapte
         // assigning values to each of the views when they come back onto the screen, based on position of recycler view
         holder.tvTitle.setText(tourListModels.get(position).getTitle());
         Glide.with(context)
-                .load(tourListModels.get(position).getThumbnailUrls()[0]) // Load the first URL from the array
+                .load(tourListModels.get(position).getThumbnailUrls()[0].split("\\?")[0]) // Load the first URL from the array
+                .sizeMultiplier(0.8f)
                 .into(holder.imageView); // Set the image to the ImageView
         String localCurrency = new AuthHelper(context).getSharedPrefsCurrencyName();
         Double localPrice = Helper.exchangeToLocal(tourListModels.get(position).getPrice(), localCurrency);

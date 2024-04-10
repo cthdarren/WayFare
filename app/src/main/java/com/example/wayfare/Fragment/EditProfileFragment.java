@@ -28,6 +28,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.UserModel;
@@ -78,7 +79,10 @@ public class EditProfileFragment extends Fragment {
         @Override
         public void onActivityResult(Uri o) {
             pictureUri = o;
-            profile_picture.setImageURI(pictureUri);
+            Glide.with(EditProfileFragment.this)
+                    .load(pictureUri)
+                    .centerCrop()
+                    .into(profile_picture);
             pictureChanged = true;
         }
     });
@@ -198,28 +202,11 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Looper uiLooper = Looper.getMainLooper();
-        final Handler handler = new Handler(uiLooper);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String picUrl = userData.getPictureUrl();
-                    URL url = new URL(picUrl);
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            profile_picture.setImageBitmap(image);
-                        }
-                    });
+        Glide.with(EditProfileFragment.this)
+                .load(userData.getPictureUrl().split("\\?"))
+                .centerCrop()
+                .into(profile_picture);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
         return view;
     }
 

@@ -149,7 +149,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                                 upcomingRecycler.setVisibility(View.VISIBLE);
                                 noBookingsMessage.setVisibility(View.GONE);
 
-                                upcomingRecycler.getAdapter().notifyDataSetChanged();
+                                upcomingRecycler.getAdapter().notifyItemRangeInserted(0, upcomingBookings.size());
 
                                 SnapHelper snapHelper = new LinearSnapHelper();
                                 snapHelper.attachToRecyclerView(upcomingRecycler);
@@ -158,7 +158,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                                 //TODO same thing show error on no data
 //                                upcomingRecycler.setVisibility(View.VISIBLE);
 //                                noBookingsMessage.setVisibility(View.GONE);
-                                pastRecycler.getAdapter().notifyDataSetChanged();
+                                pastRecycler.getAdapter().notifyItemRangeInserted(0, pastBookings.size());
                             }
 
                             progBar.setVisibility(View.GONE);
