@@ -234,6 +234,11 @@
             android:layout_height="300dp"
             tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/md_theme_outlineVariant"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -252,7 +257,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:background="@color/md_theme_outlineVariant"/>
         <Button
             android:id="@+id/cancel_booking"
