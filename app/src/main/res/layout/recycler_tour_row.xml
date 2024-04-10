@@ -61,13 +61,13 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
-                android:layout_width="258dp"
-                android:layout_height="wrap_content"
+                android:layout_width="203dp"
+                android:layout_height="32dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat"
                 android:inputType="textMultiLine"
-                android:text="Chinatown Tour"
-                android:textSize="20dp"
+                android:text="CHine townnnnnnnnnnnnnnnnn"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView2" />
@@ -100,10 +100,11 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/baseline_star_24"
                 android:fontFamily="@font/montserrat"
+                android:layout_marginTop="16dp"
                 android:text="4.88"
                 android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/title" />
+                app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
 <!--            <com.google.android.material.textview.MaterialTextView-->
 <!--                android:layout_width="wrap_content"-->

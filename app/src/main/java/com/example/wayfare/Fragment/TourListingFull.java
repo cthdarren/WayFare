@@ -92,7 +92,16 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         if (args != null) {
 
             tvTitle.setText(args.getString("title"));
-            tvRating.setText(args.getString("rating"));
+            if (args.getString("rating").equals("0.0")) {
+                tvRating.setText("No reviews yet");
+                tvReviewCount.setText(" •");
+            } else {
+                Log.d("NUMC", args.getString("rating"));
+                tvRating.setText(args.getString("rating"));
+                String reviewCountFormat = "(" + args.getString("reviewCount") + ")" + " •";
+                tvReviewCount.setText(reviewCountFormat);
+            }
+
             tvLocation.setText(args.getString("location"));
 
             String priceFormat = "$" + args.getString("price") + " / person";
@@ -102,9 +111,6 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                     .load(args.getString("thumbnail").split("\\?")[0]) // Load the first URL from the array
                     .into(tvImage); // Set the image to the ImageView
             tvDescription.setText(args.getString("description"));
-
-            String reviewCountFormat = "(" + args.getString("reviewCount") + ")" + " •";
-            tvReviewCount.setText(reviewCountFormat);
 
             ArrayList<TourListModel.TimeRange> timeRangeList = args.getParcelableArrayList("timeRangeList");
             timingArray = new String[timeRangeList.size()];
