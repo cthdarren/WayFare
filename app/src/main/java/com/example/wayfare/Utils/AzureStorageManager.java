@@ -1,4 +1,5 @@
 package com.example.wayfare.Utils;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,7 +27,7 @@ import java.io.InputStream;
 
 public class AzureStorageManager {
 
-    public static void uploadBlob(Context context, Uri fileUri, boolean profilePicBoolean, Callback callback){
+    public static void uploadBlob(Context context, Uri fileUri, boolean profilePicBoolean, Callback callback) {
         String containerName = "test";
         OkHttpClient tokenClient = new OkHttpClient();
 
@@ -59,7 +60,7 @@ public class AzureStorageManager {
                         JsonObject azureInfoObject = azureInfo.getAsJsonObject();
                         String sasToken = azureInfoObject.get("sasToken").getAsString();
                         String accountName = azureInfoObject.get("accountName").getAsString();
-                        uploadFile(fileUri, context,sasToken, accountName, containerName, profilePicBoolean, new Callback() {
+                        uploadFile(fileUri, context, sasToken, accountName, containerName, profilePicBoolean, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 // Handle failure
@@ -94,6 +95,8 @@ public class AzureStorageManager {
     }
     private static void uploadFile(Uri fileUri,Context context,String sasToken,String accountName,String containerName,boolean profilePicBoolean, Callback callback){
         String fileName = getFileNameFromUri(fileUri,context);
+        if (profilePicBoolean)
+            fileName = "profilePic" + fileName;
         String extension = getFileExtension(fileName);
         String mediaTypeString;
         switch (extension.toLowerCase()) {
@@ -122,88 +125,55 @@ public class AzureStorageManager {
             url += "?" + sasToken;
         }
         // Convert video content to byte array
-        if (mediaTypeString.startsWith("image")){
+        RequestBody requestBody;
+        // if it's an image, the request body would be a multipart form
+        if (mediaTypeString.startsWith("image")) {
+            File tempFile;
             try {
-                File tempFile = getImageFileFromUri(fileUri, context, profilePicBoolean);
-
-                RequestBody requestBodyFile = RequestBody.create(MediaType.parse("multipart/form-data"), tempFile);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("file", tempFile.getName(), requestBodyFile);
-                Request request = new Request.Builder()
-                        .url(url)
-                        .put(requestBodyFile)
-                        .addHeader("x-ms-blob-type", "BlockBlob")
-                        .build();
-                // Execute the request
-                client.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        // Handle failure
-                        e.printStackTrace();
-                        callback.onFailure(call, e);
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        // Handle success
-                        if (!response.isSuccessful()) {
-                            throw new IOException("Unexpected response code: " + response);
-                        }
-                        // Handle successful upload
-                        System.out.println("File uploaded successfully.");// This is the URL of the uploaded file
-                        callback.onResponse(call, response);
-                    }
-                });
+                tempFile = getImageFileFromUri(fileUri, context, profilePicBoolean);
+                requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), tempFile);
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading image data: " + e.getMessage(), e);
             }
-            catch (IOException e){
-                Log.d("ERORR", "Error reading imagefile");
-            }
-
-        }
-
-        else {
+        } else { // otherwise it is a bytearray for anything else
             byte[] fileBytes;
             try {
                 fileBytes = getBytesFromUri(fileUri, context, mediaTypeString);
+                requestBody = RequestBody.create(MediaType.parse(mediaTypeString), fileBytes);
             } catch (IOException e) {
                 throw new RuntimeException("Error reading video content: " + e.getMessage(), e);
             }
-            // Open an InputStream from the Uri
-            RequestBody requestBody = RequestBody.create(MediaType.parse(mediaTypeString), fileBytes);
-            Request request = new Request.Builder()
-                    .url(url)
-                    .put(requestBody)
-                    .addHeader("x-ms-blob-type", "BlockBlob")
-                    .build();
-            // Execute the request
-            client.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    // Handle failure
-                    e.printStackTrace();
-                    callback.onFailure(call, e);
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    // Handle success
-                    if (!response.isSuccessful()) {
-                        throw new IOException("Unexpected response code: " + response);
-                    }
-                    // Handle successful upload
-                    System.out.println("File uploaded successfully.");// This is the URL of the uploaded file
-                    callback.onResponse(call, response);
-                }
-            });
         }
+        Request request = new Request.Builder()
+                .url(url)
+                .put(requestBody)
+                .addHeader("x-ms-blob-type", "BlockBlob")
+                .build();
+        // Execute the request
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Handle failure
+                e.printStackTrace();
+                callback.onFailure(call, e);
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                // Handle success
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected response code: " + response);
+                }
+                // Handle successful upload
+                System.out.println("File uploaded successfully.");// This is the URL of the uploaded file
+                callback.onResponse(call, response);
+            }
+        });
     }
 
     private static byte[] getBytesFromUri(Uri uri, Context context, String mediaType) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            if (mediaType.startsWith("image")){
-
-            }
             byte[] buffer = new byte[4096];
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
@@ -213,7 +183,7 @@ public class AzureStorageManager {
         return outputStream.toByteArray();
     }
 
-    private static File getImageFileFromUri(Uri uri, Context c, boolean profilePic) throws IOException{
+    private static File getImageFileFromUri(Uri uri, Context c, boolean profilePic) throws IOException {
         int requiredSize;
         if (profilePic)
             // max size 400x400
@@ -238,7 +208,7 @@ public class AzureStorageManager {
         BitmapFactory.Options o2 = new BitmapFactory.Options();
         o2.inSampleSize = scale;
         Bitmap bmp = BitmapFactory.decodeStream(c.getContentResolver().openInputStream(uri), null, o2);
-        if (profilePic){
+        if (profilePic) {
             Bitmap croppedBmp;
             if (bmp.getWidth() >= bmp.getHeight()) {
                 croppedBmp = Bitmap.createBitmap(bmp, bmp.getWidth() / 2 - bmp.getHeight() / 2, 0, bmp.getHeight(), bmp.getHeight());
@@ -254,7 +224,8 @@ public class AzureStorageManager {
         fos.close();
         return tempfile;
     }
-    private static File getProfilePicFileFromUri(Uri uri, Context c) throws IOException{
+
+    private static File getProfilePicFileFromUri(Uri uri, Context c) throws IOException {
         int requiredSize = 500;
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         BitmapFactory.Options o = new BitmapFactory.Options();
@@ -285,7 +256,7 @@ public class AzureStorageManager {
         return tempfile;
     }
 
-    private static String getFileNameFromUri(Uri uri,Context context) {
+    private static String getFileNameFromUri(Uri uri, Context context) {
         String[] projection = {MediaStore.Video.Media.DISPLAY_NAME};
         try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {
             if (cursor != null && cursor.moveToFirst()) {
@@ -297,6 +268,7 @@ public class AzureStorageManager {
         }
         return null;
     }
+
     private static String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex != -1) {
@@ -304,6 +276,7 @@ public class AzureStorageManager {
         }
         return "";
     }
+
     public static String getBaseUrl(String url) {
         int index = url.indexOf("?");
         if (index != -1) {
