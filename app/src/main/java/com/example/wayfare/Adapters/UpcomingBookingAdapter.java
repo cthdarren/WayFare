@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.wayfare.AlternateRecyclerViewInterface;
 import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Models.BookingItemModel;
 import com.example.wayfare.Models.ListingItemModel;
@@ -36,9 +37,9 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
     private final List<BookingItemModel> upcomingBookingItemModels;
     private final Context context;
 
-    private RecyclerViewInterface recyclerViewInterface;
+    private AlternateRecyclerViewInterface recyclerViewInterface;
 
-    public UpcomingBookingAdapter(Context context, List<BookingItemModel> upcomingBookingItemModels, RecyclerViewInterface recyclerViewInterface) {
+    public UpcomingBookingAdapter(Context context, List<BookingItemModel> upcomingBookingItemModels, AlternateRecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.upcomingBookingItemModels = upcomingBookingItemModels;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -96,7 +97,7 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
         private LinearLayout wayfarerDetailsWrapper;
 
 
-        public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public ViewHolder(@NonNull View itemView, AlternateRecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.thumbnail);
             wayfarerDetailsWrapper = itemView.findViewById(R.id.wayfarerDetailsWrapper);
@@ -107,17 +108,17 @@ public class UpcomingBookingAdapter extends RecyclerView.Adapter<UpcomingBooking
             bookingLocation = itemView.findViewById(R.id.bookingLocation);
             dateOfBooking = itemView.findViewById(R.id.dateOfBooking);
 
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (recyclerViewInterface != null) {
-//                        int pos = getBindingAdapterPosition();
-//                        if (pos != RecyclerView.NO_POSITION) {
-//                            recyclerViewInterface.onItemClick(pos);
-//                        }
-//                    }
-//                }
-//            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recyclerViewInterface != null) {
+                        int pos = getBindingAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onAlternateItemClick(pos);
+                        }
+                    }
+                }
+            });
         }
     }
 

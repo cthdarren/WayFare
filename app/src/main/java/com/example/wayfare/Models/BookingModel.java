@@ -4,6 +4,7 @@ package com.example.wayfare.Models;
 
 
 public class BookingModel {
+    private final String id;
 
     private final TourListModel listing;
     private final String userId;
@@ -16,7 +17,8 @@ public class BookingModel {
     private final ReturnedUser user;
     private final boolean reviewed;
 
-    public BookingModel(TourListModel listing, String userId, TourListModel.TimeRange bookingDuration, String dateBooked, Double bookingPrice, int pax, String remarks, String status, ReturnedUser user, boolean reviewed) {
+    public BookingModel(String id, TourListModel listing, String userId, TourListModel.TimeRange bookingDuration, String dateBooked, Double bookingPrice, int pax, String remarks, String status, ReturnedUser user, boolean reviewed) {
+        this.id = id;
         this.listing = listing;
         this.userId = userId;
         this.bookingDuration = bookingDuration;
@@ -68,6 +70,10 @@ public class BookingModel {
 
     public boolean getReviewed() {
         return reviewed;
+    }
+
+    public String getId() {
+        return id;
     }
 }
 

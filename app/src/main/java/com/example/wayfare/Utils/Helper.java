@@ -163,11 +163,13 @@ public class Helper {
     }
 
     public static String convert24to12(int hour) {
-        String timeSuffix = "PM";
+        String timeSuffix = " PM";
         if (hour < 12)
-            timeSuffix = "AM";
+            timeSuffix = " AM";
         if (hour > 12)
             return hour - 12 + timeSuffix;
+        if(hour == 0)
+            hour = 12;
 
         return hour + timeSuffix;
     }

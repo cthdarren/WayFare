@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/md_theme_background"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    tools:context=".Fragment.ViewBookingFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:elevation="1dp"
+        android:paddingHorizontal="@dimen/outer_padding"
+        android:background="@color/md_theme_background"
+        android:layout_height="50dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="bottom"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="15dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/arrow_back"
+                />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="Your booking details"
+                android:textSize="@dimen/font_lg"
+                />
+        </LinearLayout>
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="10dp"
+        android:paddingHorizontal="@dimen/outer_padding"
+        android:clipChildren="false"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listing_image_carousel"
+            android:layout_width="match_parent"
+            app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
+            android:orientation="horizontal"
+            android:clipToPadding="false"
+            android:layout_marginStart="-30dp"
+            android:layout_marginEnd="-30dp"
+            android:layout_height="400dp"
+            app:carousel_alignment="center"
+            android:clipChildren="false"
+            />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/bookingTitle"
+            android:layout_width="match_parent"
+            android:layout_marginTop="40dp"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_lg"
+            android:textStyle="bold"
+            android:text="Title"/>
+        <TextView
+            android:id="@+id/with_string"
+            android:layout_width="match_parent"
+            android:text="with username"
+            android:textSize="@dimen/font_xs"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/md_theme_outlineVariant"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_md"
+            android:text="Your meeting details"/>
+        <TextView
+            android:id="@+id/booking_meeting_details"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:textSize="@dimen/font_sm"
+            android:text="placeholder address and time"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/md_theme_outlineVariant"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Your remarks"
+            android:textSize="@dimen/font_md"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/booking_remarks"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:textSize="@dimen/font_sm"
+            android:layout_height="wrap_content"
+            android:text="Remarks"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/md_theme_outlineVariant"/>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_marginTop="30dp"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/wayfarer_card"
+                android:layout_width="match_parent"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="30dp"
+                android:paddingTop="20dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_md"
+                android:textStyle="bold"
+                android:text="Meet your WayFarer"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="30dp"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            app:strokeColor="@color/transparent"
+                            app:cardCornerRadius="50dp">
+                            <ImageView
+                                android:id="@+id/wayfarer_pic"
+                                android:layout_width="50dp"
+                                android:src="@drawable/default_avatar"
+                                android:layout_height="50dp"/>
+
+                        </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:id="@+id/wayfarer_name"
+                            android:layout_width="wrap_content"
+                            android:paddingStart="10dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textSize="@dimen/font_sm"
+                            android:text="username"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical"
+                        android:layout_height="match_parent"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:id="@+id/years_on_wayfare"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:textSize="@dimen/font_sm"
+                            android:text="6 Years on WayFare"
+                            />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:id="@+id/wayfarer_verified"
+                            android:layout_height="wrap_content">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="10dp"
+                            android:src="@drawable/verified"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="Verified"
+                            android:layout_height="wrap_content"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:textStyle="bold"
+            android:textSize="@dimen/font_md"
+            android:layout_marginTop="40dp"
+            android:paddingBottom="20dp"
+            android:layout_width="match_parent"
+            android:text="Getting there"
+            android:layout_height="wrap_content"/>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Total amount paid"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_md"/>
+        <TextView
+            android:id="@+id/booking_price_total"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:textSize="@dimen/font_sm"
+            android:text="Total amount paid"
+            android:layout_height="wrap_content"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/md_theme_outlineVariant"/>
+        <Button
+            android:id="@+id/cancel_booking"
+            android:layout_width="match_parent"
+            android:layout_marginVertical="40dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel booking"
+            android:backgroundTint="@color/md_theme_error"/>
+
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

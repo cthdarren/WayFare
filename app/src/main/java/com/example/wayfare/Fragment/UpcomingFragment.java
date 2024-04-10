@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.wayfare.Adapters.PastBookingAdapter;
 import com.example.wayfare.Adapters.UpcomingBookingAdapter;
+import com.example.wayfare.AlternateRecyclerViewInterface;
 import com.example.wayfare.Models.BookingItemModel;
 import com.example.wayfare.Models.BookingModel;
 import com.example.wayfare.Models.ResponseModel;
@@ -34,7 +35,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpcomingFragment extends Fragment implements RecyclerViewInterface {
+public class UpcomingFragment extends Fragment implements RecyclerViewInterface, AlternateRecyclerViewInterface {
 
     Button bookmarksBtn;
     Button goToToursButton;
@@ -56,7 +57,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                 thumbnailUrl = "";
             else
                 thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
-            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getListing().getId(), booking.getReviewed());
+            BookingItemModel toAdd = new BookingItemModel(booking.getId(), booking.getListing().getId(), thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getListing().getId(), booking.getReviewed());
             upcomingBookings.add(toAdd);
         }
     }
@@ -68,7 +69,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
                 thumbnailUrl = "";
             else
                 thumbnailUrl = booking.getListing().getThumbnailUrls()[0];
-            BookingItemModel toAdd = new BookingItemModel(thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getListing().getId(), booking.getReviewed());
+            BookingItemModel toAdd = new BookingItemModel(booking.getId(), booking.getListing().getId(), thumbnailUrl, booking.getListing().getTitle(), booking.getListing().getRegion(), booking.getBookingDuration().getStartTime(), booking.getDateBooked(), booking.getUser().getPictureUrl(), booking.getUser().getUsername(), booking.getListing().getId(), booking.getReviewed());
             pastBookings.add(toAdd);
         }
     }
@@ -184,5 +185,12 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface 
         args.putString("listingId", pastBookings.get(position).listingUrl);
         args.putString("wayfarer", pastBookings.get(position).wayfarerUsername);
         Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateReviewFragment());
+    }
+
+    @Override
+    public void onAlternateItemClick(int position) {
+        Bundle args = new Bundle();
+        args.putString("bookingId", upcomingBookings.get(position).id);
+        Helper.goToFragmentSlideInRightArgs(args,getParentFragmentManager(), R.id.container, new ViewBookingFragment());
     }
 }
