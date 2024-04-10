@@ -57,7 +57,7 @@ public class ViewBookingFragment extends Fragment implements OnMapReadyCallback 
     RecyclerView listing_image_carousel;
     BookingModel currentBooking;
     ImageView back_btn;
-    TextView booking_title, booking_meeting_details, booking_remarks, booking_price_total, wayfarer_name, years_on_wayfare, with_string;
+    TextView booking_title, booking_meeting_details, booking_remarks, booking_price_total, wayfarer_name, years_on_wayfare, with_string, booking_time;
     ImageView wayfarer_pic;
     Button cancel_booking;
     LinearLayout verified, wayfarer_card;
@@ -81,6 +81,7 @@ public class ViewBookingFragment extends Fragment implements OnMapReadyCallback 
         booking_title = view.findViewById(R.id.bookingTitle);
         with_string = view.findViewById(R.id.with_string);
         booking_meeting_details = view.findViewById(R.id.booking_meeting_details);
+        booking_time = view.findViewById(R.id.booking_time);
         booking_remarks = view.findViewById(R.id.booking_remarks);
         booking_price_total = view.findViewById(R.id.booking_price_total);
         wayfarer_name = view.findViewById(R.id.wayfarer_name);
@@ -172,9 +173,10 @@ public class ViewBookingFragment extends Fragment implements OnMapReadyCallback 
 
                         booking_title.setText(currentBooking.getListing().getTitle());
                         with_string.setText("with " + currentBooking.getUser().getUsername());
-                        Helper.convert24to12(currentBooking.getBookingDuration().getStartTime());
+                        String timeOfBooking = Helper.convert24to12(currentBooking.getBookingDuration().getStartTime());
 
                         booking_meeting_details.setText(String.format("%s ,%s", address, currentBooking.getListing().getRegion()));
+                        booking_time.setText(String.format("%s",timeOfBooking));
                         booking_remarks.setText(currentBooking.getRemarks());
                         booking_price_total.setText(HtmlCompat.fromHtml(String.format("Total price: <u>%s%.2f × %d %s = <b>%s%.2f<b><u>", localCurrency, localIndivPrice, totalPax, paxString, localCurrency, localTotalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
 
