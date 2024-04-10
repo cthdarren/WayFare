@@ -167,7 +167,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
         }
         if (view.getId() == R.id.btnUploadBlob2){
             loadingLayout.setVisibility(View.VISIBLE);
-            AzureStorageManager.uploadBlob(this, videoUri, new Callback() {
+            AzureStorageManager.uploadBlob(this, videoUri, false, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     // Handle failure

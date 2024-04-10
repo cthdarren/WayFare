@@ -130,7 +130,7 @@ public class CreateListingFragment6 extends Fragment implements RecyclerViewInte
     public void massUploadUriList(Callback callback){
         CountDownLatch latch = new CountDownLatch(uriList.size());
         for (Uri uri: uriList){
-        AzureStorageManager.uploadBlob(getContext(), uri, new Callback() {
+        AzureStorageManager.uploadBlob(getContext(), uri, false, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 callback.onFailure(call, e);

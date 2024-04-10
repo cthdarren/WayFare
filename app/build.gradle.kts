@@ -33,12 +33,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
+            buildConfigField("String", "API_URL", "\"http://api.tingtangwalawalabingbang.com\"")
             signingConfig = signingConfigs.getByName("debug")
         }
         debug {
 //            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
-            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
+            buildConfigField("String", "API_URL", "\"http://api.tingtangwalawalabingbang.com\"")
         }
     }
     compileOptions {

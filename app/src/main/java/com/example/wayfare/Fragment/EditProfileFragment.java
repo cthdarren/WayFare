@@ -278,7 +278,7 @@ public class EditProfileFragment extends Fragment {
         });
     }
     public void uploadPicture(AuthService.ResponseListener callback){
-        AzureStorageManager.uploadBlob(getContext(), pictureUri, new Callback() {
+        AzureStorageManager.uploadBlob(getContext(), pictureUri, true, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 callback.onError("Failed to upload picture to server");

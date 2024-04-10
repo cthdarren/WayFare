@@ -93,7 +93,7 @@ public class SignUp5Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 continue_button.setEnabled(false);
-                AzureStorageManager.uploadBlob(getContext(), pictureUri, new Callback() {
+                AzureStorageManager.uploadBlob(getContext(), pictureUri, true, new Callback() {
                     @Override
                     public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
