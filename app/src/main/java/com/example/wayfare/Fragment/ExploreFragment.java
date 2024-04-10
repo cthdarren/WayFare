@@ -198,7 +198,6 @@ public class ExploreFragment extends Fragment {
             public void onViewDetachedFromWindow(View view) {
 //                Log.i("position", viewPager2.getVerticalScrollbarPosition() + "");
                 shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
-
             }
         });
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {

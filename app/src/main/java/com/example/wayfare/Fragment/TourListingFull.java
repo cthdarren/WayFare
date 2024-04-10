@@ -172,7 +172,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 // datepicker
                 MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText("Select date")
-                        .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
+                        .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
 //                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                         .setCalendarConstraints(constraintsBuilder)
                         .build();

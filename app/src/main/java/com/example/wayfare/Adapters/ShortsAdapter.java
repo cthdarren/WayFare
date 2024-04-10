@@ -1,8 +1,6 @@
 package com.example.wayfare.Adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.VideoView;
 import android.widget.ImageView;
 
 import androidx.cardview.widget.CardView;
@@ -97,7 +94,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public void onViewDetachedFromWindow(ShortsViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         Log.d("ShortsAdapter", "onViewDetachedFromWindow called for position: " );
-        holder.pauseVideo();
+        holder.stopVideo();
         isPlaying = false;
     }
 
