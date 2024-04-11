@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Player;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.SimpleExoPlayer;
@@ -202,7 +203,21 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 listingTitle.setText(shortsData.getListing().getTitle());
             }
             // Create a media item representing the video
-            MediaItem mediaItem = MediaItem.fromUri(shortsUri);
+            // Create a MediaItem builder
+            MediaItem.Builder mediaItemBuilder = new MediaItem.Builder();
+
+            mediaItemBuilder.setUri(shortsUri);
+
+            if (shortsData.getShortsUrl().endsWith(".mp4")) {
+                // Set MIME type to mp4 if extension is present
+                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
+            } else {
+                // Set MIME type to DASH for URIs without .mpd extension
+                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
+            }
+
+            MediaItem mediaItem = mediaItemBuilder.build();
+//            MediaItem mediaItem = MediaItem.fromUri(shortsUri);
             if (exoPlayer != null) exoPlayer.release();
             exoPlayer = new ExoPlayer.Builder(videoView.getContext()).build();
             videoView.setPlayer(exoPlayer);
