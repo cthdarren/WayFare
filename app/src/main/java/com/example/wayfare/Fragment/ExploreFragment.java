@@ -162,6 +162,7 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                int currentItem = shortsViewPager.getCurrentItem();
                 shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
                 shortsAdapter.playVideo(position);
                 //Log.e("Selected_Page", String.valueOf(shortsAdapter.getCurrentPosition()));
