@@ -5,6 +5,7 @@ import com.example.wayfare.Utils.Helper;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class BookingItemModel {
     public final String id;
@@ -44,7 +45,7 @@ public class BookingItemModel {
 
         this.timeOfBooking = String.valueOf(startTimeOfBooking) + timePostfix;
 
-        timeToBooking = Helper.getDifferenceInTimeString(Instant.parse(dateOfBooking), Instant.now());
+        timeToBooking = Helper.getDifferenceInTimeString(Instant.parse(dateOfBooking).plus(8, ChronoUnit.HOURS), Instant.now());
     }
 }
 
