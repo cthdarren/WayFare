@@ -207,6 +207,6 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().getWindow().setSoftInputMode(NO);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
     }
 }
