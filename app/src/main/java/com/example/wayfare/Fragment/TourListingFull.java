@@ -47,6 +47,7 @@ import com.example.wayfare.timingOnItemClickedInterface;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -71,6 +72,7 @@ import okhttp3.RequestBody;
 public class TourListingFull extends Fragment implements tourListing_RecyclerViewInterface{
     private RecyclerView recyclerView;
     public TourListingFull(){};
+    ProfileModel profileInfo;
     String[] timingArray;
     timingAdapter newTimingAdapter;
     String dateChosen = null;
@@ -85,6 +87,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     TextView username;
     ImageView profile_pic;
     String profileId;
+    LinearLayout guideInfo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -111,6 +114,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         progBar = view.findViewById(R.id.settingsProgBar);
         progBar.setVisibility(View.VISIBLE);
         profile_pic = view.findViewById(R.id.user_profile_picture);
+        guideInfo = view.findViewById(R.id.userCard);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -219,6 +223,18 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 datePicker.show(activity.getSupportFragmentManager(), "tag");
             }
         });
+
+        guideInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle username = new Bundle();
+                username.putString("username", profileInfo.getUsername());
+                ProfileFragment pf = new ProfileFragment();
+                pf.setArguments(username);
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, pf);
+            }
+        });
+
         return view;
     }
 
@@ -241,7 +257,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             @Override
             public void onResponse(ResponseModel json) {
                 if (json.success) {
-                    ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
+                    profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
 
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
