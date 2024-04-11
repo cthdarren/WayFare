@@ -93,7 +93,7 @@ public class SignUpFragment extends Fragment {
 
     private void checkUserNameAndEmail() {
         String json = String.format("{\"username\":\"%s\", \"email\":\"%s\"}", username.getText(), email.getText());
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
         new AuthService(getContext()).getResponse("/api/v1/auth/checknewuseremail", false, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {

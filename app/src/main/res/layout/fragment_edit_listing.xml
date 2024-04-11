@@ -25,18 +25,28 @@
             <ImageView
                 android:id="@+id/back_btn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingEnd="15dp"
-                android:scaleType="fitStart"
+                android:paddingTop="5dp"
+                android:scaleType="center"
                 android:src="@drawable/arrow_back" />
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:paddingStart="20dp"
                 android:text="Listing Editor"
                 android:textSize="@dimen/font_lg" />
+            <Button
+                android:id="@+id/edit_listing_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                />
         </LinearLayout>
     </LinearLayout>
 
@@ -78,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:background="@color/transparent"
-                        android:maxLines="1"
+                        android:inputType="textMultiLine"
                         android:text="listing title"
                         android:textSize="@dimen/font_md" />
                 </LinearLayout>
@@ -348,6 +358,7 @@
                         android:id="@+id/edit_listing_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:layout_marginTop="10dp"
                         android:background="@color/transparent"
                         android:text="US$ 20"

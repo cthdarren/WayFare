@@ -216,4 +216,27 @@ public class Helper {
         }
         return result;
     }
+
+    public static String categoryNameToEnum(String name){
+        switch (name){
+            case "Art and Culture":
+                return "ART_AND_CULTURE";
+            case "Entertainment":
+                return "ENTERTAINMENT";
+            case "Sports":
+                return "SPORTS";
+            case "Food and Drink":
+                return "FOOD_AND_DRINK";
+            case "Tours":
+                return "TOURS";
+            case "Sightseeing":
+                return "SIGHTSEEING";
+            case "Wellness":
+                return "WELLNESS";
+            case "Nature and Outdoors":
+                return "NATURE_AND_OUTDOORS";
+            default:
+                return null;
+        }
+    }
 }

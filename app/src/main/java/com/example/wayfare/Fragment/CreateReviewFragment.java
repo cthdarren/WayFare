@@ -80,7 +80,7 @@ public class CreateReviewFragment extends Fragment {
                 if (!(description.getText().length() < 1 | title.getText().length() < 1)) {
                     String json = String.format("""
                             {"title":"%s", "score":%d,"reviewContent":"%s","listingId":"%s"} """, title.getText().toString(), rating, description.getText().toString(), listingId);
-                    RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                     RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                     new AuthService(getContext()).getResponse("/review/create", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                         @Override
                         public void onError(String message) {

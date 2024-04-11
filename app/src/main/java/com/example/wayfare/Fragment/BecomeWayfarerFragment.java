@@ -70,7 +70,7 @@ public class BecomeWayfarerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String json = String.format("{\"password\": \"%s\"}", passwordField.getText());
-                RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                 new AuthService(getContext()).getResponse("/wayfarersignup", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                     @Override
                     public void onError(String message) {

@@ -101,7 +101,7 @@ public class VerifyOtpFragment extends Fragment {
                 String json = String.format("""
                         {"otp" : "%s"}
                         """,otpText.getText().toString());
-                RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                 new AuthService(getContext()).getResponse("/verifyotp", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                     @Override
                     public void onError(String message) {

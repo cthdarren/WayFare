@@ -69,7 +69,7 @@ public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.ViewHo
                 String json = String.format("""
                             {"listingId": "%s"}
                             """, bookmarkItemModels.get(position).listingId);
-                RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                 new AuthService(context).getResponse(apiurl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                     @Override
                     public void onError(String message) {

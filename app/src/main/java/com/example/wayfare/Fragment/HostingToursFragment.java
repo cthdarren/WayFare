@@ -35,7 +35,7 @@ import java.util.ArrayList;
 public class HostingToursFragment extends Fragment  implements tourListing_RecyclerViewInterface {
     RecyclerView yourListingRecycler;
     UserViewModel userViewModel;
-    ProgressBar progressBar;
+    ProgressBar progressBar, globalProgressBar;
     LinearLayout nolistingsmessage;
     Button createListingMessageBtn;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
@@ -49,6 +49,7 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
         View view = inflater.inflate(R.layout.hosting_fragment_tours, container, false);
         ImageView createListingBtn = view.findViewById(R.id.createListingButton);
         progressBar = view.findViewById(R.id.yourListingsProgBar);
+        globalProgressBar = getActivity().findViewById(R.id.progressBar);
         nolistingsmessage = view.findViewById(R.id.nolistingsmessage);
         createListingMessageBtn = view.findViewById(R.id.createListingmessagebutton);
 
@@ -124,6 +125,7 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
 
     @Override
     public void onItemClick(int position) {
+        globalProgressBar.setVisibility(View.VISIBLE);
         Bundle args = new Bundle();
         args.putString("listingId", tourListModels.get(position).getId());
         Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new EditListingFragment());

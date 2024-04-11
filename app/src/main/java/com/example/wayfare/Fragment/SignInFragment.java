@@ -102,7 +102,7 @@ public class SignInFragment extends Fragment{
     public void login() throws IOException {
         final OkHttpClient client = new OkHttpClient();
         String json = String.format("{\"username\":\"%s\", \"password\":\"%s\"}", username.getText(), password.getText());
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
         Request request = new Request.Builder().url(BuildConfig.API_URL + "/api/v1/auth/login")
                 .post(body)
                 .build();

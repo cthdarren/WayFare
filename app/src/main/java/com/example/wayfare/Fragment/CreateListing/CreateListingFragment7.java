@@ -73,9 +73,8 @@ public class CreateListingFragment7 extends Fragment {
         localPrice = view.findViewById(R.id.usdPrice);
         Currency currency = Currency.getInstance(new AuthHelper(getContext()).getSharedPrefsCurrencyName());
         String currencyPrefix = currency.getSymbol();
-        localPrice.setText(currencyPrefix);
         continue_button.setEnabled(false);
-
+        localPrice.setText(currencyPrefix);
         localPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -136,7 +135,7 @@ public class CreateListingFragment7 extends Fragment {
                 String json = String.format("{\"title\": \"%s\", \"description\": \"%s\", \"thumbnailUrls\": %s, \"category\": \"%s\", \"location\": {\"y\": %s,\"x\": %s}, \"timeRangeList\": %s, \"price\": %s, \"maxPax\": %s, \"minPax\": %s }",
                         title, description, new Gson().toJson(thumbnailUrls), category, locationY, locationX, timeSlotItemModelList.toString(), usdPrice, maxPax, minPax);
 
-                RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                 new AuthService(getContext()).getResponse("/wayfarer/listing/create", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                     @Override
                     public void onError(String message) {

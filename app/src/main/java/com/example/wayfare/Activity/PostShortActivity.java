@@ -199,7 +199,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
                     // TODO Complete JSON string
                     String json = String.format("{\"description\": \"%s\", \"shortsUrl\": \"%s\", \"datePosted\": \"%s\"}",
                             descriptionText,urlOfBlob,formattedDate);
-                    RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+                     RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                     new AuthService(PostShortActivity.this).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                         @Override
                         public void onError(String message) {

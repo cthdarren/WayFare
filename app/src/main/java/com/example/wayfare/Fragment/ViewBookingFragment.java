@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 
@@ -186,7 +187,8 @@ public class ViewBookingFragment extends Fragment implements OnMapReadyCallback 
                         booking_meeting_details.setText(String.format("%s ,%s", address, currentBooking.getListing().getRegion()));
                         booking_time.setText(String.format("%s",timeOfBooking));
                         booking_remarks.setText(currentBooking.getRemarks());
-                        booking_price_total.setText(HtmlCompat.fromHtml(String.format("Total price: <u>%s%.2f × %d %s = <b>%s%.2f<b><u>", localCurrency, localIndivPrice, totalPax, paxString, localCurrency, localTotalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                        String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
+                        booking_price_total.setText(HtmlCompat.fromHtml(String.format("Total price: <u>%s%.2f × %d %s = <b>%s%.2f<b><u>", currencyPrefix, localIndivPrice, totalPax, paxString, localCurrency, localTotalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
 
                         wayfarer_name.setText(currentBooking.getUser().getUsername());
                         years_on_wayfare.setText(wayfareYearString);

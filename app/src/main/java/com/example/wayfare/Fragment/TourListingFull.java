@@ -307,7 +307,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     public void createBookmark(){
         String listingId = getArguments().getString("listingId");
         String json = String.format("{\"listingId\":\"%s\"}", listingId);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
         new AuthService(getContext()).getResponse("/bookmark", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
