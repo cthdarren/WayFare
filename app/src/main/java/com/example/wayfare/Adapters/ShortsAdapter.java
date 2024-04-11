@@ -81,7 +81,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public void playVideo(int position) {
         shortsViewHolderList.get(position).playVideo();
     }
-
     public void stopAllVideo() {
         for(ShortsAdapter.ShortsViewHolder holder:shortsViewHolderList) {
             holder.stopVideo();
@@ -232,25 +231,16 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             exoPlayer.addListener(new ExoPlayer.Listener() {
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
-                    int bindingAdapterPosition = getBindingAdapterPosition();
-                    int currPos = getCurrentPosition();
-                    if (!isFragmentAttached() || bindingAdapterPosition!=currPos) {
-                        // Loading is complete, release resources
-                        exoPlayer.stop();
-                        exoPlayer.release();
-                    }
                     if (isPlaying) {
                         videoProgressBar.setVisibility(View.GONE);
                     }
                 }
                 @Override
                 public void onPlaybackStateChanged(int playbackState) {
-                    if (playbackState == ExoPlayer.STATE_READY) {
-//                        if (!isFragmentAttached()) {
-//                            // Loading is complete, release resources
-//                            exoPlayer.stop();
-//                            exoPlayer.release();
-//                        }
+                    if (playbackState == ExoPlayer.STATE_READY && !isFragmentAttached()) {
+                        // Loading is complete, release resources
+                        exoPlayer.stop();
+                        exoPlayer.release();
                     }
                 }
             });

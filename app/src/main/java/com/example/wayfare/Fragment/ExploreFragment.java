@@ -162,7 +162,6 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                int currentItem = shortsViewPager.getCurrentItem();
                 shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
                 shortsAdapter.playVideo(position);
                 //Log.e("Selected_Page", String.valueOf(shortsAdapter.getCurrentPosition()));
@@ -198,7 +197,7 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onViewDetachedFromWindow(View view) {
 //                Log.i("position", viewPager2.getVerticalScrollbarPosition() + "");
-                shortsAdapter.stopAllVideo();
+//                shortsAdapter.stopAllVideo();
             }
         });
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -307,7 +306,6 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        shortsAdapter.stopAllVideo();
     }
 
     @Override
@@ -318,7 +316,6 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        shortsAdapter.stopAllVideo();
     }
 
     @Override
