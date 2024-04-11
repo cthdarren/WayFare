@@ -127,15 +127,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/route_to_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:background="?attr/selectableItemBackground"
                         android:paddingHorizontal="20dp"
                         android:paddingVertical="36dp">
@@ -292,7 +292,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="WayFarer since"
+                                android:text="WayFarer Since"
                                 android:textSize="@dimen/font_xs"
                                 />
 
