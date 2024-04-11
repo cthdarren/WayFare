@@ -113,9 +113,10 @@ public class EditProfileFragment extends Fragment {
         bio = view.findViewById(R.id.about_me);
 
         bio.setText(userData.getAboutMe());
-
-        if (!Objects.equals(userData.getPictureUrl(), "") & userData.getPictureUrl() != null)
-            profile_picture.setImageURI(Uri.parse(userData.getPictureUrl()));
+        languages.setText(String.join(",",userData.getLanguagesSpoken()));
+        Glide.with(getContext()).load(userData.getPictureUrl().split("\\?")[0])
+                .centerCrop()
+                .into(profile_picture);
 
         final String[] listItems = Helper.languages.toArray(new String[0]);
         final boolean[] checkedItems = new boolean[listItems.length];
@@ -125,8 +126,12 @@ public class EditProfileFragment extends Fragment {
         if (userData.getLanguagesSpoken() != null) {
             for (String language : userData.getLanguagesSpoken()) {
                 for (int i = 0; i < listItems.length; i++) {
-                    if (Objects.equals(language, listItems[i])) {
+                    String listItem = listItems[i];
+                    if (listItem.charAt(listItem.length() - 1) == ' ')
+                        listItem= listItem.substring(0, listItem.length() - 1);
+                    if (Objects.equals(language, listItem)) {
                         checkedItems[i] = true;
+                        break;
                     }
                 }
             }
@@ -189,7 +194,7 @@ public class EditProfileFragment extends Fragment {
                                     test.add(currentItem);
                                 }
                             }
-                            languages.setText(String.join(", ", test));
+                            languages.setText(String.join(",", test));
                         })
                         .setNegativeButton("Cancel", (dialog, which) -> {
                         })

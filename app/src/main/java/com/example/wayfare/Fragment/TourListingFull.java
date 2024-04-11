@@ -290,10 +290,8 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
 
             int startingIndex = position * 2;
             if (!timeList.isEmpty()){
-                timeList.subList(startingIndex, startingIndex+1);
-
-                intent.putExtra("startTime", timeList.get(0));
-                intent.putExtra("endTime", timeList.get(1));
+                intent.putExtra("startTime", timeList.get(startingIndex));
+                intent.putExtra("endTime", timeList.get(startingIndex+1));
             }
 
             String timing = timingArray[position];

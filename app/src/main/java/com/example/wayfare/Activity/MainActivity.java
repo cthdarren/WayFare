@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private UserViewModel viewModel;
     private ProgressBar progBar;
     private BottomNavigationView navbar;
-
+    private  ExploreFragment exploreFragment;
     private boolean loggedIn;
     private boolean backing = false;
 
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         android.content.Context applicationContext = getApplicationContext();
         ApplicationInfo applicationInfo;
         Bundle bundle;
+        exploreFragment = new ExploreFragment();
         try {
 
             applicationInfo = applicationContext.getPackageManager().getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);

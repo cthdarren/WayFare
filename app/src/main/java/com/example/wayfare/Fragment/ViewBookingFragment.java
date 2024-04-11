@@ -137,6 +137,14 @@ public class ViewBookingFragment extends Fragment implements OnMapReadyCallback 
                                     @Override
                                     public void onResponse(ResponseModel json) {
                                         makeToast("Booking successfully cancelled");
+                                        getActivity().runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                getParentFragmentManager().popBackStack();
+                                                getParentFragmentManager().popBackStack();
+                                                Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new UpcomingFragment());
+                                            }
+                                        });
                                     }
                                 });
                             }

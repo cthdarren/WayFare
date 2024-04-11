@@ -168,9 +168,9 @@ public class ConfirmBooking extends AppCompatActivity {
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
-        String json = String.format("{\"bookingDuration\":{\"startTime\":%s, \"endTime\":%s}, \"dateBooked\":\"%s\", \"bookingPrice\":%s, \"pax\":%s, \"remarks\":\"%s\"}", timeSlot.getStartTime(), timeSlot.getEndTime(), date.toInstant(), Double.valueOf(price), pax, remark);
+        String json = String.format("{\"listingId\":\"%s\", \"bookingDuration\":{\"startTime\":%s, \"endTime\":%s}, \"dateBooked\":\"%s\", \"bookingPrice\":%s, \"pax\":%s, \"remarks\":\"%s\"}",listingId, timeSlot.getStartTime(), timeSlot.getEndTime(), date.toInstant(), Double.valueOf(price), pax, remark);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        new AuthService(this).getResponse("/booking/create/" + listingId, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+        new AuthService(this).getResponse("/booking/create/", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 makeToast(message);

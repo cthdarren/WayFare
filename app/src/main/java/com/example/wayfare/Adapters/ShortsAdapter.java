@@ -16,7 +16,9 @@ import android.widget.Toast;
 import android.widget.ImageView;
 
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Player;
 import androidx.media3.common.MediaItem;
 import androidx.media3.exoplayer.SimpleExoPlayer;
@@ -38,15 +40,17 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     List<ShortsObject> shortsDataList;
     private int currentPosition;
     private FragmentManager fragmentManager;
+    private Fragment exploreFragment;
     int numberOfClick = 0;
     float volume;
     boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
-    public ShortsAdapter(List<ShortsObject> shortsDataList,Context context,FragmentManager fragmentManager) {
+    public ShortsAdapter(List<ShortsObject> shortsDataList, Context context, FragmentManager fragmentManager, Fragment exploreFragment) {
         this.shortsDataList = shortsDataList;
         this.context = context;
         this.fragmentManager = fragmentManager;
+        this.exploreFragment = exploreFragment;
         currentPosition = 0;
         shortsViewHolderList = new ArrayList<>();
     }
@@ -94,8 +98,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public void onViewDetachedFromWindow(ShortsViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         Log.d("ShortsAdapter", "onViewDetachedFromWindow called for position: " );
-        holder.stopVideo();
+        if (holder.exoPlayer != null) {
+            holder.stopVideo();
+        }
         isPlaying = false;
+    }
+    private boolean isFragmentAttached() {
+        return exploreFragment != null && exploreFragment.isAdded() && !exploreFragment.isDetached() && !exploreFragment.isRemoving();
     }
 
     public int getCurrentPosition() {
@@ -140,14 +149,14 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             }
         }
         public void pauseVideo() {
-            if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+            if (exoPlayer.getPlaybackState() == Player.STATE_READY && exoPlayer!=null) {
                 exoPlayer.setPlayWhenReady(false);
                 appearImage(R.drawable.ic_baseline_play_arrow_24);
             }
         }
         public void stopVideo() {
             isPaused = true;
-            if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+            if (exoPlayer != null && exoPlayer.getPlaybackState() == Player.STATE_READY) {
                 exoPlayer.setPlayWhenReady(false);
                 exoPlayer.stop();
                 exoPlayer.seekTo(0);
@@ -194,11 +203,25 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 listingTitle.setText(shortsData.getListing().getTitle());
             }
             // Create a media item representing the video
-            MediaItem mediaItem = MediaItem.fromUri(shortsUri);
+            // Create a MediaItem builder
+            MediaItem.Builder mediaItemBuilder = new MediaItem.Builder();
+
+            mediaItemBuilder.setUri(shortsUri);
+
+            if (shortsData.getShortsUrl().endsWith(".mp4")) {
+                // Set MIME type to mp4 if extension is present
+                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
+            } else {
+                // Set MIME type to DASH for URIs without .mpd extension
+                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
+            }
+
+            MediaItem mediaItem = mediaItemBuilder.build();
+//            MediaItem mediaItem = MediaItem.fromUri(shortsUri);
             if (exoPlayer != null) exoPlayer.release();
             exoPlayer = new ExoPlayer.Builder(videoView.getContext()).build();
             videoView.setPlayer(exoPlayer);
-            exoPlayer.addMediaItem(mediaItem);
+            exoPlayer.setMediaItem(mediaItem);
             exoPlayer.setRepeatMode(exoPlayer.REPEAT_MODE_ONE);
             exoPlayer.prepare();
             pauseVideo();
@@ -210,6 +233,14 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 public void onIsPlayingChanged(boolean isPlaying) {
                     if (isPlaying) {
                         videoProgressBar.setVisibility(View.GONE);
+                    }
+                }
+                @Override
+                public void onPlaybackStateChanged(int playbackState) {
+                    if (playbackState == ExoPlayer.STATE_READY && !isFragmentAttached()) {
+                        // Loading is complete, release resources
+                        exoPlayer.stop();
+                        exoPlayer.release();
                     }
                 }
             });
