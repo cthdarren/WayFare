@@ -105,6 +105,9 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     MaterialTextView tvPrice;
     Double localPrice;
     List<String> urlList = new ArrayList<>();
+    ImageView categoryicon;
+    TextView categoryname;
+    Button report;
     public void setupThumbnails(List<String> thumbnailUrls){
         for (String url: thumbnailUrls){
             urlList.add(url);
@@ -133,12 +136,22 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         reviewCount_user = view.findViewById(R.id.num_reviews);
         ratings = view.findViewById(R.id.rating);
         years_on_wayfare = view.findViewById(R.id.years_on_wayfare);
+        categoryicon = view.findViewById(R.id.categoryicon);
+        categoryname = view.findViewById(R.id.categoryname);
 
         username = view.findViewById(R.id.user_greeting);
         progBar = view.findViewById(R.id.settingsProgBar);
         progBar.setVisibility(View.VISIBLE);
         profile_pic = view.findViewById(R.id.user_profile_picture);
         guideInfo = view.findViewById(R.id.userCard);
+        report = view.findViewById(R.id.report);
+
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "A report has been sent to our moderating team. Thank you.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Bundle args = getArguments();
         if (args != null) {
@@ -153,6 +166,35 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 tvReviewCount.setText(reviewCountFormat);
             }
 
+            categoryname.setText(Helper.enumToCategoryName(args.getString("category")));
+            switch (categoryname.getText().toString()) {
+                case "Art and Culture":
+                    categoryicon.setImageResource(R.drawable.arts);
+                    break;
+                case "Entertainment":
+                    categoryicon.setImageResource(R.drawable.entertainment);
+                    break;
+                case "Sports":
+                    categoryicon.setImageResource(R.drawable.sports);
+                    break;
+                case "Food and Drink":
+                    categoryicon.setImageResource(R.drawable.food);
+                    break;
+                case "Tours":
+                    categoryicon.setImageResource(R.drawable.tours);
+                    break;
+                case "Sightseeing":
+                    categoryicon.setImageResource(R.drawable.sightseeing);
+                    break;
+                case "Wellness":
+                    categoryicon.setImageResource(R.drawable.wellness);
+                    break;
+                case "Nature and Outdoors":
+                    categoryicon.setImageResource(R.drawable.nature);
+                    break;
+                default:
+                    break;
+            }
             tvLocation.setText(args.getString("location"));
 
             String localCurrency = new AuthHelper(getContext()).getSharedPrefsCurrencyName();
