@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.SnapHelper;
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Adapters.ProfileListingAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
+import com.example.wayfare.AlternateRecyclerViewInterface;
 import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
@@ -51,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ProfileFragment extends Fragment implements RecyclerViewInterface {
+public class ProfileFragment extends Fragment implements RecyclerViewInterface, AlternateRecyclerViewInterface {
 
     String profileUsername;
     UserViewModel userViewModel;
@@ -76,6 +77,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView languagesSpoken;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
     List<ListingItemModel> listingItemModels = new ArrayList<>();
+    ProfileModel profileInfo;
 
 
     public ProfileFragment() {
@@ -83,7 +85,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
     public void setupReviewModels(List<ReviewModel> reviewList) {
         for (ReviewModel review : reviewList) {
-            ReviewItemModel toAdd = new ReviewItemModel(review.getTitle(), review.getUser().getPictureUrl(), review.getUser().getFirstName(), review.getReviewContent(), review.getDateCreated(), review.getDateModified());
+            ReviewItemModel toAdd = new ReviewItemModel(review.getTitle(),review.getUser().getUsername(), review.getUser().getPictureUrl(), review.getUser().getFirstName(), review.getReviewContent(), review.getDateCreated(), review.getDateModified());
             reviewItemModels.add(toAdd);
         }
     }
@@ -188,7 +190,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                 @Override
                 public void onResponse(ResponseModel json) {
                     if (json.success) {
-                        ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
+                        profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -231,7 +233,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                 setUpListingModels(profileInfo.getTours());
 
                                 reviewRecycler = view.findViewById(R.id.review_carousel);
-                                reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
+                                reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels, ProfileFragment.this));
 
                                 SnapHelper snapHelper = new LinearSnapHelper();
                                 snapHelper.attachToRecyclerView(reviewRecycler);
@@ -261,8 +263,36 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         super.onDestroy();
     }
 
+    //For listings clicked
     @Override
     public void onItemClick(int position) {
-        // TODO if you decide to make it onclickable it's here otherwise can take out
+        Bundle args = new Bundle();
+        Bundle data = new Bundle();
+        data.putString("title", profileInfo.getTours().get(position).getTitle());
+        data.putString("location", profileInfo.getTours().get(position).getRegion());
+        data.putString("rating", String.valueOf(profileInfo.getTours().get(position).getRating()));
+        data.putString("price", String.valueOf(profileInfo.getTours().get(position).getPrice()));
+        data.putString("thumbnail", profileInfo.getTours().get(position).getThumbnailUrls()[0]);
+        data.putString("description", profileInfo.getTours().get(position).getDescription());
+        data.putString("reviewCount", String.valueOf(profileInfo.getTours().get(position).getReviewCount()));
+        data.putString("listingId", profileInfo.getTours().get(position).getId());
+        data.putInt("minPax", profileInfo.getTours().get(position).getMinPax());
+        data.putInt("maxPax", profileInfo.getTours().get(position).getMaxPax());
+        data.putString("userId", profileInfo.getTours().get(position).getUserId());
+        data.putString("category", profileInfo.getTours().get(position).getCategory());
+        data.putParcelableArrayList("timeRangeList", new ArrayList<>(profileInfo.getTours().get(position).getTimeRangeList()));
+
+        TourListingFull tourListingFullFragment = new TourListingFull();
+        tourListingFullFragment.setArguments(data);
+
+        Helper.goToFragmentSlideInRightArgs(data, getParentFragmentManager(), R.id.container, tourListingFullFragment);
+    }
+
+    //For reviews clicked
+    @Override
+    public void onAlternateItemClick(int position) {
+        Bundle args = new Bundle();
+        args.putString("username", reviewItemModels.get(position).username);
+        Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new ProfileFragment());
     }
 }
