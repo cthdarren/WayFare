@@ -6,6 +6,7 @@ import static com.google.android.material.datepicker.MaterialDatePicker.thisMont
 import static com.google.android.material.datepicker.MaterialDatePicker.todayInUtcMilliseconds;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,7 +56,7 @@ public class SearchMenuFragment extends Fragment {
     Button searchButton;
     TextView numPax;
     String startDateString, endDateString;
-    Button dateRangeSelect;
+    Button dateRangeSelect, kmdistanceBtn;
     Long startDate, endDate;
     ImageView minusPax, addPax, cancelButton;
     int numPaxInt = 1;
@@ -72,6 +73,8 @@ public class SearchMenuFragment extends Fragment {
         dateRangeSelect = view.findViewById(R.id.dateRangeSelect);
         searchButton = view.findViewById(R.id.searchBtn);
         cancelButton = view.findViewById(R.id.searchCancel);
+        kmdistanceBtn = view.findViewById(R.id.kmdistanceBtn);
+
         numPax = view.findViewById(R.id.numPax);
         minusPax = view.findViewById(R.id.minusPax);
         addPax = view.findViewById(R.id.addPax);
@@ -159,6 +162,24 @@ public class SearchMenuFragment extends Fragment {
 
         numPax.setText(String.valueOf(numPaxInt));
 
+        final int[] checkedItem = {0};
+        final String[] listItems = new String[]{"Anywhere", "5km", "10km", "50km", "100km", "200km", "500km", "1000km", "2000km", "5000km"};
+        kmdistanceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        .setTitle("Search radius")
+                        .setSingleChoiceItems(listItems, checkedItem[0], (dialog, which) -> {
+                            checkedItem[0] = which;
+                            kmdistanceBtn.setText(listItems[which]);
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                        });
+                AlertDialog languagesDialog = builder.create();
+                languagesDialog.show();
+            }
+        });
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,6 +189,11 @@ public class SearchMenuFragment extends Fragment {
                     args.putDouble("latitude", latLngAddress.latitude);
                     args.putDouble("longitude", latLngAddress.longitude);
                 }
+                if (kmdistanceBtn.getText().toString().equals("Anywhere"))
+                    args.putInt("kmdistance", 20050);
+                else
+                    args.putInt("kmdistance", Integer.parseInt(kmdistanceBtn.getText().toString().split("km")[0]));
+
                 args.putLong("startDate", startDate);
                 args.putLong("endDate", endDate);
                 args.putInt("numPax", numPaxInt);

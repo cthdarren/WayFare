@@ -70,17 +70,17 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
             latitude = args.getDouble("latitude", 0);
             longitude = args.getDouble("longitude", 0);
             kmdistance = args.getInt("kmdistance", 100);
-            numberPax = args.getInt("numberPax", 1);
+            numberPax = args.getInt("numPax", 1);
             date = args.getString("date", "Any day");
-            String paxString = "people";
+            String paxString = " people";
             if (numberPax == 1)
-                paxString = "person";
-            searchParams.setText(String.format("%s | %s | %s", region, date, paxString));
+                paxString = " person";
+            searchParams.setText(String.format("%s | %s | %s", region, date, numberPax + paxString));
         }
         else{
             latitude = 0.0;
             longitude = 0.0;
-            kmdistance = 50000;
+            kmdistance = 20050;
             numberPax = 1;
         }
         searchBar.setOnClickListener(new View.OnClickListener() {
