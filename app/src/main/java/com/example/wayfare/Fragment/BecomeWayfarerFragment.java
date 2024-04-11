@@ -3,6 +3,7 @@ package com.example.wayfare.Fragment;
 import static android.view.View.GONE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.wayfare.Activity.WayfarerActivity;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthHelper;
@@ -84,11 +86,15 @@ public class BecomeWayfarerFragment extends Fragment {
                     public void onResponse(ResponseModel json) {
                         if (json.success){
                             // ROUTE TO CREATE LISTING SCREEN
+                            Intent intent = new Intent(getActivity(), WayfarerActivity.class);
+                            getActivity().startActivity(intent);
+                            getActivity().finish();
                         }
                         else{
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+
                                     Toast.makeText(getContext(), json.data.getAsString(), Toast.LENGTH_SHORT).show();
                                 }
                             });

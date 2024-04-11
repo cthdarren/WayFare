@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp">
 
@@ -81,6 +82,31 @@
                 android:textColor="@drawable/radio_text_color" />
         </RadioGroup>
 
+        <LinearLayout
+            android:id="@+id/noBookingsMessage"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/wellness"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:textSize="@dimen/font_md"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:text="It seems like it's a rest day today!"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/font_sm"
+                android:text="You don't have any bookings today"/>
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hostRecyclerView"
             android:layout_width="match_parent"

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.PictureUrlItemModel;
 import com.example.wayfare.Models.TimeSlotItemModel;
 import com.example.wayfare.R;
@@ -41,7 +42,11 @@ public class ListingPicturesAdapter extends RecyclerView.Adapter<ListingPictures
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.picture.setImageURI(uriItemModels.get(position));
+        holder.picture.setAdjustViewBounds(true);
+        Glide.with(context)
+                .load(uriItemModels.get(position))
+                .override(300, 300)
+                .into(holder.picture);
     }
 
     @Override

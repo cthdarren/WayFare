@@ -106,7 +106,8 @@ public class ConfirmBooking extends AppCompatActivity {
         tvDateChosen.setText(dateChosen);
 
         Glide.with(this)
-                .load(thumbnail)
+                .load(thumbnail.split("\\?")[0])
+                .sizeMultiplier(0.5f)
                 .into(ivThumbnail);
 
 
@@ -122,6 +123,8 @@ public class ConfirmBooking extends AppCompatActivity {
                 if (counterValue[0] < maxPax) {
                     counterValue[0]++;
                     counter.setText(String.valueOf(counterValue[0]));
+                } else {
+                    Toast.makeText(ConfirmBooking.this, "Max number of persons reached", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -131,6 +134,8 @@ public class ConfirmBooking extends AppCompatActivity {
                 if (counterValue[0] > minPax) {
                     counterValue[0]--;
                     counter.setText(String.valueOf(counterValue[0]));
+                } else {
+                    Toast.makeText(ConfirmBooking.this, "Min number of persons reached", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -163,9 +168,9 @@ public class ConfirmBooking extends AppCompatActivity {
     public void createBooking(){
         Log.d("BUTTONS", "User tapped the confirm button");
         //TourListing listing, String userId, TimeRange bookingDuration, Date dateBooked, Double bookingPrice, int pax, String remarks
-        String json = String.format("{\"title\":\"%s\", \"listingId\":\"%s\", \"bookingDuration\":{\"startTime\":\"%s\", \"endTime\":\"%s\"}, \"dateBooked\":\"%s\", \"bookingPrice\":\"%s\", \"pax\":\"%s\", \"remarks\":\"%s\"}", title, listingId, timeSlot.getStartTime(), timeSlot.getEndTime(), date.toInstant(), Double.valueOf(price), pax, remark);
+        String json = String.format("{\"listingId\":\"%s\", \"bookingDuration\":{\"startTime\":%s, \"endTime\":%s}, \"dateBooked\":\"%s\", \"bookingPrice\":%s, \"pax\":%s, \"remarks\":\"%s\"}",listingId, timeSlot.getStartTime(), timeSlot.getEndTime(), date.toInstant(), Double.valueOf(price), pax, remark);
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
-        new AuthService(this).getResponse("/booking/create/" + listingId, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+        new AuthService(this).getResponse("/booking/create", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 makeToast(message);

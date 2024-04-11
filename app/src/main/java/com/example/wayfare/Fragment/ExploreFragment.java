@@ -1,8 +1,10 @@
 package com.example.wayfare.Fragment;
 
 import com.example.wayfare.Activity.MainActivity;
+import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.Models.UserModel;
-
+import com.example.wayfare.Models.ResponseModel;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +14,10 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -29,12 +34,23 @@ import com.example.wayfare.Models.ShortsObject;
 import com.example.wayfare.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
 import androidx.activity.OnBackPressedCallback;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class ExploreFragment extends Fragment {
     private boolean loggedIn;
@@ -65,60 +81,77 @@ public class ExploreFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_explore, container, false);
+        return rootView;
+    }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        List<ShortsObject> shortsObjectList = getShortsObjects();
+        OkHttpClient tokenClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(BuildConfig.API_URL + "/api/v1/shorts")
+                .get()
+                .build();
+        tokenClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // Handle failure
+                e.printStackTrace();
+            }
 
-        List<ShortsObject> shortsObjectList = new ArrayList<>();
-        ShortsObject shortsObject1 = new ShortsObject();
-        shortsObject1.setUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
-        shortsObject1.setTitle("Singapore!");
-        shortsObject1.setDescription("Singapore Tours #sg #local");
-        shortsObjectList.add(shortsObject1);
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                // Handle success
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected response code: " + response);
+                }
+                String responseBody = response.body().string();
+                Gson gson = new Gson();
+                ResponseModel responseModel = gson.fromJson(responseBody,ResponseModel.class);
+                if (responseModel != null && responseModel.success) {
+                    JsonArray allShortsInfo = responseModel.data.getAsJsonArray();
+                    shortsObjectList.clear();
+                    for (JsonElement shorts : allShortsInfo){
+                        String eachString = shorts.toString();
+                        ShortsObject testing = new Gson().fromJson(eachString, ShortsObject.class);
+                        shortsObjectList.add(testing);
+                    }
+                    Collections.sort(shortsObjectList, new Comparator<ShortsObject>() {
+                        @Override
+                        public int compare(ShortsObject o1, ShortsObject o2) {
+                            // Compare dates in descending order
+                            return o2.getDatePosted().compareTo(o1.getDatePosted());
+                        }
+                    });
+                    if (getActivity() != null) {
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                shortsAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
 
-        ShortsObject shortsObject2 = new ShortsObject();
-        shortsObject2.setUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
-        shortsObject2.setTitle("Overrated Cities?!");
-        shortsObject2.setDescription("#dontgo #cities");
-        shortsObjectList.add(shortsObject2);
+                } else {
+                    System.out.println("API response indicates failure.");
+                }
+            }
+        });
 
-        ShortsObject shortsObject3 = new ShortsObject();
-        shortsObject3.setUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
-        shortsObject3.setTitle("Lorem");
-        shortsObject3.setDescription("GreyNibba");
-        shortsObjectList.add(shortsObject3);
-        ShortsObject shortsObject4 = new ShortsObject();
-        shortsObject4.setUrl("https://static.videezy.com/system/resources/previews/000/054/979/original/Fire_HD.mp4");
-        shortsObject4.setTitle("10 best places SG");
-        shortsObject4.setDescription("#must go");
-        shortsObjectList.add(shortsObject4);
-        ShortsObject shortsObject5 = new ShortsObject();
-        shortsObject5.setUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
-        shortsObject5.setTitle("Lorem");
-        shortsObject5.setDescription("GeyNibba");
-        shortsObjectList.add(shortsObject5);
-        ShortsObject shortsObject6 = new ShortsObject();
-        shortsObject6.setUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
-        shortsObject6.setTitle("yyyy");
-        shortsObject6.setDescription("yyyy");
-        shortsObjectList.add(shortsObject6);
-        ShortsObject shortsObject7 = new ShortsObject();
-        shortsObject7.setUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
-        shortsObject7.setTitle("xxxx");
-        shortsObject7.setDescription("xxxx");
-        shortsObjectList.add(shortsObject7);
         //get user stuff
-        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
-            loggedIn = true;
-        } else {
-            loggedIn = false;
-        }
-        if (loggedIn) {
-            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-            UserModel userData = userViewModel.getUserProfileData();
-        }
-        shortsViewPager = rootView.findViewById(R.id.shortsViewPager);
+//        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
+//            loggedIn = true;
+//        } else {
+//            loggedIn = false;
+//        }
+//        if (loggedIn) {
+//            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+//            UserModel userData = userViewModel.getUserProfileData();
+//        }
+        shortsViewPager = view.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        shortsAdapter = new ShortsAdapter(shortsObjectList, context);
+        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),this);
         shortsViewPager.setAdapter(shortsAdapter);
-
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -158,14 +191,13 @@ public class ExploreFragment extends Fragment {
         shortsViewPager.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
             @Override
             public void onViewAttachedToWindow(View view) {
-
+                onStart();
             }
 
             @Override
             public void onViewDetachedFromWindow(View view) {
 //                Log.i("position", viewPager2.getVerticalScrollbarPosition() + "");
-                shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
-
+//                shortsAdapter.stopAllVideo();
             }
         });
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -221,7 +253,49 @@ public class ExploreFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
-        return rootView;
+    }
+
+    @NonNull
+    private static List<ShortsObject> getShortsObjects() {
+        List<ShortsObject> shortsObjectList = new ArrayList<>();
+//        ShortsObject shortsObject1 = new ShortsObject();
+//        shortsObject1.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
+//        shortsObject1.setUserName("Singapore!");
+//        shortsObject1.setDescription("Singapore Tours #sg #local");
+//        shortsObjectList.add(shortsObject1);
+//
+//        ShortsObject shortsObject2 = new ShortsObject();
+//        shortsObject2.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
+//        shortsObject2.setUserName("Overrated Cities?!");
+//        shortsObject2.setDescription("#dontgo #cities");
+//        shortsObjectList.add(shortsObject2);
+//
+//        ShortsObject shortsObject3 = new ShortsObject();
+//        shortsObject3.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
+//        shortsObject3.setUserName("Lorem");
+//        shortsObject3.setDescription("GreyNibba");
+//        shortsObjectList.add(shortsObject3);
+//        ShortsObject shortsObject4 = new ShortsObject();
+//        shortsObject4.setShortsUrl("https://static.videezy.com/system/resources/previews/000/054/979/original/Fire_HD.mp4");
+//        shortsObject4.setUserName("10 best places SG");
+//        shortsObject4.setDescription("#must go");
+//        shortsObjectList.add(shortsObject4);
+//        ShortsObject shortsObject5 = new ShortsObject();
+//        shortsObject5.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
+//        shortsObject5.setUserName("Lorem");
+//        shortsObject5.setDescription("GeyNibba");
+//        shortsObjectList.add(shortsObject5);
+//        ShortsObject shortsObject6 = new ShortsObject();
+//        shortsObject6.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
+//        shortsObject6.setUserName("yyyy");
+//        shortsObject6.setDescription("yyyy");
+//        shortsObjectList.add(shortsObject6);
+//        ShortsObject shortsObject7 = new ShortsObject();
+//        shortsObject7.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
+//        shortsObject7.setUserName("xxxx");
+//        shortsObject7.setDescription("xxxx");
+//        shortsObjectList.add(shortsObject7);
+        return shortsObjectList;
     }
 
     @Override
@@ -232,14 +306,22 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        pauseVideo();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //continueVideo();
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        shortsAdapter.stopAllVideo();
     }
 
     public void pauseVideo() {

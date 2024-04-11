@@ -47,6 +47,7 @@
                 <ImageView
                     android:id="@+id/review_user_pic"
                     android:layout_width="48dp"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/account_circle"
                     android:layout_height="48dp"
                      />
@@ -61,7 +62,7 @@
 
                 <TextView
                     android:id="@+id/review_username"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="bottom"
@@ -70,7 +71,7 @@
 
                 <TextView
                     android:id="@+id/review_date"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="top"

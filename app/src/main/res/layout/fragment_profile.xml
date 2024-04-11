@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,8 +7,24 @@
     android:background="@color/md_theme_background"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:paddingHorizontal="@dimen/outer_padding"
     tools:context=".Fragment.ProfileFragment">
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/profileProgBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="180dp"
+        android:background="@color/md_theme_background"
+        android:elevation="10dp"
+        android:outlineProvider="none"
+        />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/outer_padding"
+        android:layout_height="match_parent">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,20 +34,35 @@
         android:paddingBottom="40dp"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/profile_back"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingTop="20dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
             android:paddingEnd="15dp"
             android:scaleType="fitStart"
             android:src="@drawable/arrow_back"
             app:tint="@color/md_theme_onSurface" />
-
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/edit_profile_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:text="Edit"/>
+        </LinearLayout>
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp">
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -63,9 +94,9 @@
                     android:layout_gravity="center_vertical"
                     android:textStyle="bold"
                     android:gravity="center"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="15dp"
-                    android:text="Darren Chan"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="20dp"
+                    android:text="-"
                     android:textSize="@dimen/font_lg" />
 
                 <LinearLayout
@@ -188,7 +219,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:src="@drawable/no_avatar"/>
+                android:src="@drawable/languages"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -202,7 +233,7 @@
                 android:layout_weight="1"
                 android:textSize="@dimen/font_sm"
                 android:layout_height="match_parent"
-                android:text="English"/>
+                android:text="-"/>
         </LinearLayout>
         <TextView
             android:layout_width="match_parent"
@@ -340,3 +371,4 @@
 
 
 </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

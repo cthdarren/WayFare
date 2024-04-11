@@ -14,6 +14,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -59,6 +61,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
         searchBar = view.findViewById(R.id.clickSearchBar);
+        searchParams = view.findViewById(R.id.searchParams);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
@@ -145,7 +148,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         data.putString("reviewCount", String.valueOf(tourListModels.get(position).getReviewCount()));
         data.putString("listingId", tourListModels.get(position).getId());
         data.putInt("minPax", tourListModels.get(position).getMinPax());
-        data.putInt("maxPax", tourListModels.get(position).getMinPax());
+        data.putInt("maxPax", tourListModels.get(position).getMaxPax());
         data.putString("userId", tourListModels.get(position).getUserId());
         data.putString("category", tourListModels.get(position).getCategory());
         data.putParcelableArrayList("timeRangeList", (ArrayList<? extends Parcelable>) tourListModels.get(position).getTimeRangeList());

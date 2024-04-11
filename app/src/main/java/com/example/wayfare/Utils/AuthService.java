@@ -83,7 +83,6 @@ public class AuthService {
                 else{
                     responseListener.onError("Server Error");
                 }
-                // sharedpref store
             }
         });
     }

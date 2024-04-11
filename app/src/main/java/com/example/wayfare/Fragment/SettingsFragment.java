@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.Activity.WayfarerActivity;
 import com.example.wayfare.Activity.settings.AccessibilitySettingsActivity;
@@ -48,8 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class SettingsFragment extends Fragment implements RecyclerViewInterface {
 
@@ -71,6 +70,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
 
         settingItemModels = Arrays.asList(
                 new SettingItemModel("General", context.getDrawable(R.drawable.settings_icon), GeneralSettingsActivity.class),
+                new SettingItemModel("Account Settings", context.getDrawable(R.drawable.icon_selection_account), new AccountSettingsFragment()),
                 new SettingItemModel("Privacy", context.getDrawable(R.drawable.privacy), PrivacySettingsActivity.class),
                 new SettingItemModel("Accessibility", context.getDrawable(R.drawable.accessibility), AccessibilitySettingsActivity.class),
                 new SettingItemModel("Notifications", context.getDrawable(R.drawable.notifications), NotificationSettingsActivity.class),
@@ -89,8 +89,6 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        progBar = getActivity().findViewById(R.id.progressBar);
-        progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
 
         logoutBtn = view.findViewById(R.id.logoutBtn);
@@ -108,9 +106,7 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
                 username.putString("username", userViewModel.getUserProfileData().getUsername());
                 ProfileFragment pf = new ProfileFragment();
                 pf.setArguments(username);
-                Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, pf);
-                progBar.setVisibility(View.VISIBLE);
-//                navBar.setVisibility(View.GONE);
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, pf);
             }
         });
 
@@ -193,41 +189,23 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         settingsRecyclerView.setAdapter(adapter);
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
-        if (!Objects.equals(picUrl, "") & picUrl != null) {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Looper uiLooper = Looper.getMainLooper();
-            final Handler handler = new Handler(uiLooper);
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        URL url = new URL(picUrl);
-                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                user_profile_pic.setImageBitmap(image);
-                                progBar.setVisibility(View.GONE);
+        Glide.with(SettingsFragment.this)
+                .load(picUrl.split("\\?")[0])
+                .centerCrop()
+                .sizeMultiplier(0.6f)
+                .into(user_profile_pic);
 
-                            }
-                        });
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        progBar.setVisibility(View.GONE);
-                    }
-                }
-            });
-        }
-        else{
-            user_profile_pic.setBackgroundResource(R.drawable.default_avatar);
-            progBar.setVisibility(View.GONE);
-        }
     }
 
     @Override
     public void onItemClick(int position) {
 //        Helper.goToFullScreenFragmentFromBottom(getParentFragmentManager(), new AccessibilitySettingsFragment());
-        Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
-        startActivity(intent);
+        if (settingItemModels.get(position).activity != null) {
+            Intent intent = new Intent(getActivity(), settingItemModels.get(position).activity);
+            startActivity(intent);
+        }
+        if (settingItemModels.get(position).fragment != null){
+            Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, settingItemModels.get(position).fragment);
+        }
     }
 }

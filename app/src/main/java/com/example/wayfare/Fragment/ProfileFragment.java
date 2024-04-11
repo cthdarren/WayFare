@@ -26,8 +26,10 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Adapters.ProfileListingAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
+import com.example.wayfare.AlternateRecyclerViewInterface;
 import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
@@ -49,10 +51,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class ProfileFragment extends Fragment implements RecyclerViewInterface {
+public class ProfileFragment extends Fragment implements RecyclerViewInterface, AlternateRecyclerViewInterface {
 
     String profileUsername;
     UserViewModel userViewModel;
@@ -68,7 +68,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView review_title;
     RecyclerView reviewRecycler;
     RecyclerView listingRecycler;
-    Button show_all_reviews_button;
+    Button show_all_reviews_button, edit_profile_button;
     LinearLayout review_segment;
     LinearLayout listings_wrapper;
     TextView listings_wrapper_header;
@@ -77,6 +77,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     TextView languagesSpoken;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
     List<ListingItemModel> listingItemModels = new ArrayList<>();
+    ProfileModel profileInfo;
 
 
     public ProfileFragment() {
@@ -84,7 +85,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
 
     public void setupReviewModels(List<ReviewModel> reviewList) {
         for (ReviewModel review : reviewList) {
-            ReviewItemModel toAdd = new ReviewItemModel(review.getTitle(), review.getUser().getPictureUrl(), review.getUser().getFirstName(), review.getReviewContent(), review.getDateCreated(), review.getDateModified());
+            ReviewItemModel toAdd = new ReviewItemModel(review.getTitle(),review.getUser().getUsername(), review.getUser().getPictureUrl(), review.getUser().getFirstName(), review.getReviewContent(), review.getDateCreated(), review.getDateModified());
             reviewItemModels.add(toAdd);
         }
     }
@@ -108,11 +109,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         // Inflate the layout for this fragment
         profileUsername = getArguments().getString("username");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-
         backButton = view.findViewById(R.id.profile_back);
-        progBar = getActivity().findViewById(R.id.progressBar);
-        progBar.setVisibility(View.VISIBLE);
-        navBar = getActivity().findViewById(R.id.bottomNavigationView);
         hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
 
         profile_pic = view.findViewById(R.id.profile_picture);
@@ -129,11 +126,22 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         listings_wrapper_header = view.findViewById(R.id.listing_wrapper_header);
         confirmed_info_header = view.findViewById(R.id.confirmed_info_header);
         verification_truege = view.findViewById(R.id.verification_truege);
+        edit_profile_button = view.findViewById(R.id.edit_profile_btn);
+
+        progBar = view.findViewById(R.id.profileProgBar);
+        progBar.setVisibility(View.VISIBLE);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getParentFragmentManager().popBackStack();
+            }
+        });
+
+        edit_profile_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new EditProfileFragment());
             }
         });
 
@@ -145,12 +153,20 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
         super.onViewCreated(view, savedInstanceState);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         UserModel userData = userViewModel.getUserProfileData();
+        if (Objects.equals(profileUsername, userData.getUsername()))
+            edit_profile_button.setVisibility(View.VISIBLE);
+        else
+            edit_profile_button.setVisibility(GONE);
 
         if (userData.isVerified())
             verification_truege.setImageResource(R.drawable.done);
 
         if (Objects.equals(userData.getRole(), "ROLE_USER"))
             listings_wrapper.setVisibility(GONE);
+
+        if (userData.getAboutMe().length() == 0) {
+            about_me.setVisibility(GONE);
+        }
 
         listingRecycler = view.findViewById(R.id.listing_carousel);
         listingRecycler.setAdapter(new ProfileListingAdapter(getContext(), listingItemModels, this));
@@ -174,46 +190,15 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                 @Override
                 public void onResponse(ResponseModel json) {
                     if (json.success) {
-                        ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
-
-                        ExecutorService executor = Executors.newSingleThreadExecutor();
-                        Looper uiLooper = Looper.getMainLooper();
-                        final Handler handler = new Handler(uiLooper);
-                        executor.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Bitmap image;
-                                    if (profileInfo.getPictureUrl() == null | Objects.equals(profileInfo.getPictureUrl(), ""))
-                                        image = null;
-                                    else {
-                                        URL url = new URL(profileInfo.getPictureUrl());
-                                        image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                    }
-                                    handler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (image != null)
-                                                profile_pic.setImageBitmap(image);
-                                        }
-                                    });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getContext(), "Unexpected Error", Toast.LENGTH_SHORT).show();
-                                            getParentFragmentManager().popBackStack();
-                                            progBar.setVisibility(GONE);
-                                        }
-                                    });
-                                }
-                            }
-                        });
+                        profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Glide.with(ProfileFragment.this)
+                                        .load(profileInfo.getPictureUrl().split("\\?")[0])
+                                        .centerCrop()
+                                        .into(profile_pic);
 
                                 full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
                                 reviewCount.setText(profileInfo.getReviewCount().toString());
@@ -248,12 +233,12 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                                 setUpListingModels(profileInfo.getTours());
 
                                 reviewRecycler = view.findViewById(R.id.review_carousel);
-                                reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels));
+                                reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels, ProfileFragment.this));
 
                                 SnapHelper snapHelper = new LinearSnapHelper();
                                 snapHelper.attachToRecyclerView(reviewRecycler);
 
-                                listingRecycler.getAdapter().notifyDataSetChanged();
+                                listingRecycler.getAdapter().notifyItemRangeInserted(0, listingItemModels.size());
 
                                 progBar.setVisibility(GONE);
                             }
@@ -261,8 +246,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
                     }
                 }
             });
-        }
-        else{
+        } else {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -277,11 +261,38 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        navBar.setVisibility(View.VISIBLE);
     }
 
+    //For listings clicked
     @Override
     public void onItemClick(int position) {
-        // TODO if you decide to make it onclickable it's here otherwise can take out
+        Bundle args = new Bundle();
+        Bundle data = new Bundle();
+        data.putString("title", profileInfo.getTours().get(position).getTitle());
+        data.putString("location", profileInfo.getTours().get(position).getRegion());
+        data.putString("rating", String.valueOf(profileInfo.getTours().get(position).getRating()));
+        data.putString("price", String.valueOf(profileInfo.getTours().get(position).getPrice()));
+        data.putString("thumbnail", profileInfo.getTours().get(position).getThumbnailUrls()[0]);
+        data.putString("description", profileInfo.getTours().get(position).getDescription());
+        data.putString("reviewCount", String.valueOf(profileInfo.getTours().get(position).getReviewCount()));
+        data.putString("listingId", profileInfo.getTours().get(position).getId());
+        data.putInt("minPax", profileInfo.getTours().get(position).getMinPax());
+        data.putInt("maxPax", profileInfo.getTours().get(position).getMaxPax());
+        data.putString("userId", profileInfo.getTours().get(position).getUserId());
+        data.putString("category", profileInfo.getTours().get(position).getCategory());
+        data.putParcelableArrayList("timeRangeList", new ArrayList<>(profileInfo.getTours().get(position).getTimeRangeList()));
+
+        TourListingFull tourListingFullFragment = new TourListingFull();
+        tourListingFullFragment.setArguments(data);
+
+        Helper.goToFragmentSlideInRightArgs(data, getParentFragmentManager(), R.id.container, tourListingFullFragment);
+    }
+
+    //For reviews clicked
+    @Override
+    public void onAlternateItemClick(int position) {
+        Bundle args = new Bundle();
+        args.putString("username", reviewItemModels.get(position).username);
+        Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new ProfileFragment());
     }
 }

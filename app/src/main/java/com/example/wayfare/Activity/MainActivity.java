@@ -1,5 +1,6 @@
 package com.example.wayfare.Activity;
 
+import static com.example.wayfare.Utils.Helper.goToLogin;
 import static com.google.maps.android.Context.getApplicationContext;
 
 import androidx.activity.EdgeToEdge;
@@ -13,11 +14,15 @@ import androidx.fragment.app.FragmentOnAttachListener;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.UiModeManager;
 import android.content.Intent;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
+
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+
+import android.content.res.Configuration;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -26,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.wayfare.Fragment.AddShortsFragment;
+import com.example.wayfare.Fragment.CreateListing.CreateListingFragment;
 import com.example.wayfare.Fragment.CreateListing.CreateListingFragment2;
 import com.example.wayfare.Fragment.MapFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
@@ -49,6 +55,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
+import com.google.maps.android.Context;
 
 import java.util.List;
 import java.util.Objects;
@@ -60,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private UserViewModel viewModel;
     private ProgressBar progBar;
     private BottomNavigationView navbar;
-
+    private  ExploreFragment exploreFragment;
     private boolean loggedIn;
     private boolean backing = false;
 
@@ -69,14 +76,24 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        android.content.Context applicationContext = getApplicationContext();
+        ApplicationInfo applicationInfo;
+        Bundle bundle;
+        exploreFragment = new ExploreFragment();
+        try {
 
-
+            applicationInfo = applicationContext.getPackageManager().getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
+            bundle = applicationInfo.metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         if (!Places.isInitialized()) {
-            Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+            Places.initialize(applicationContext, bundle.getString("com.google.android.geo.API_KEY"));
         }
 
         //PlacesClient placesClient = Places.createClient(this);
         super.onCreate(savedInstanceState);
+
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
@@ -88,11 +105,7 @@ public class MainActivity extends AppCompatActivity {
         View view = (View) binding.getRoot();
 
         setContentView(view);
-        if (new AuthHelper(getApplicationContext()).getSharedPrefsValue("WAYFARER_VIEW").equals("TRUE")){
-            Intent intent = new Intent(MainActivity.this, WayfarerActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
         // Makes it such that when a user reclicks the navbar it doesn't refresh
         navbar = findViewById(R.id.bottomNavigationView);
         navbar.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
@@ -145,7 +158,13 @@ public class MainActivity extends AppCompatActivity {
             progBar.setVisibility(View.GONE);
         }
 
-        Helper.getExchangeRate();
+        if (loggedIn)
+            if (new AuthHelper(getApplicationContext()).getSharedPrefsValue("WAYFARER_VIEW").equals("TRUE")){
+                Intent intent = new Intent(MainActivity.this, WayfarerActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        Helper.getExchangeRate(getApplicationContext());
 
         View decorView = getWindow().getDecorView();
         if (getSupportFragmentManager().getBackStackEntryCount() == 0)
@@ -165,9 +184,17 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.tours) {
                 replaceFragment(new ToursFragment());
             } else if (item.getItemId() == R.id.addShorts) {
-                Intent intent = new Intent(MainActivity.this, AddShorts.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
+                if (loggedIn) {
+                    Intent intent = new Intent(MainActivity.this, AddShorts.class);
+                    Bundle bundle2 = new Bundle();
+                    String userName = viewModel.getUserProfileData().getUsername();
+                    bundle2.putString("userName", userName);
+                    intent.putExtras(bundle2);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
+                } else{
+                    goToLogin(getSupportFragmentManager());
+                }
             } else if (item.getItemId() == R.id.account) {
                 if (loggedIn) {
                     replaceFragment(new SettingsFragment());
@@ -266,6 +293,23 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    @Override
+    public void onNightModeChanged(int mode) {
+        super.onNightModeChanged(mode);
+
+        // Handle night mode change here
+        switch (mode) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                // Night mode is activated
+                // Update UI or perform any necessary actions
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                // Night mode is deactivated
+                // Update UI or perform any necessary actions
+                break;
+            // Handle other possible night mode states if needed
+        }
+    }
 
 
 }

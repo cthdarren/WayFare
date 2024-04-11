@@ -23,12 +23,14 @@
             android:gravity="center_vertical"
             android:paddingBottom="20dp"
             android:layout_height="wrap_content">
-             <ImageView
-        android:id="@+id/register_exit"
+              <ImageView
+        android:id="@+id/back_btn"
+        android:paddingEnd="15dp"
+
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/cross"
-        android:scaleType="fitStart"
+        android:layout_height="match_parent"
+        android:src="@drawable/arrow_back"
+        android:scaleType="center"
          />
             <LinearLayout
                 android:layout_width="0dp"

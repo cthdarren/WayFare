@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tourEndTime"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/md_theme_background"
     android:orientation="vertical"
-    android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/outer_padding"
     tools:context=".Fragment.SignInFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,73 +17,79 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:layout_height="wrap_content">
-    <ImageView
-        android:id="@+id/register_exit"
-        android:paddingEnd="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/arrow_back"
-        android:scaleType="fitStart"
-         />
+            android:orientation="horizontal"
+            android:paddingBottom="20dp">
+
+
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingEnd="15dp"
+                android:scaleType="center"
+                android:src="@drawable/arrow_back" />
+
             <LinearLayout
                 android:layout_width="0dp"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_height="wrap_content">
+                android:orientation="horizontal">
+
                 <View
-                     android:layout_height="match_parent"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    />
-        <Button
-            android:id="@+id/continue_button"
-            android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/continue_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/chevron_right"
+                    android:drawableTint="@color/md_theme_background"
+                    android:text="Continue"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Continue"
-            android:drawableEnd="@drawable/chevron_right"
-            android:drawableTint="@color/md_theme_background"
-            tools:ignore="MissingConstraints" />
-        </LinearLayout></LinearLayout>
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Now, set your price"
-        android:textSize="@dimen/font_2xl"
-         />
-       <TextView
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:paddingTop="10dp"
-           android:paddingBottom="30dp"
-           android:text="Prices can be changed again at a later date"/>
+            android:text="Now, set your price"
+            android:textSize="@dimen/font_2xl" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="30dp"
+            android:text="Prices can be changed again at a later date" />
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            app:suffixTextAppearance="@style/TextAppearance.AppCompat.Large"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:suffixTextAppearance="@style/TextAppearance.AppCompat.Large">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usdPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:gravity="center"
                 android:background="@color/transparent"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="15"
                 android:paddingVertical="20dp"
                 android:text="US$"
-                android:textSize="@dimen/font_2xl"
-                android:maxLength="15"
-                />
+                android:textSize="@dimen/font_2xl" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Prices are set per tour participant"/>
+                android:text="Prices are set per tour participant" />
         </com.google.android.material.textfield.TextInputLayout>
 
 

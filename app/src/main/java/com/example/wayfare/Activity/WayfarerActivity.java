@@ -1,6 +1,8 @@
 package com.example.wayfare.Activity;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -31,6 +33,7 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.example.wayfare.databinding.ActivityMainBinding;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.gson.Gson;
@@ -47,14 +50,32 @@ public class WayfarerActivity extends AppCompatActivity {
     private boolean backing = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        android.content.Context applicationContext = getApplicationContext();
+        ApplicationInfo applicationInfo;
+        Bundle bundle;
+        try {
+
+            applicationInfo = applicationContext.getPackageManager().getApplicationInfo(applicationContext.getPackageName(), PackageManager.GET_META_DATA);
+            bundle = applicationInfo.metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        if (!Places.isInitialized()) {
+            //Places.initialize(getApplicationContext(), "AIzaSyCNmU-849bB_xLG90P8LtPjvkTXmqTHJVA");
+            Places.initialize(applicationContext, bundle.getString("com.google.android.geo.API_KEY"));
+        }
+
+
+        super.onCreate(savedInstanceState);
+        // Hide the status bar.
         if (new AuthHelper(getApplicationContext()).sharedPreferences.getString("Theme", "").equals("DARK")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        super.onCreate(savedInstanceState);
-        // Hide the status bar.
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_wayfarer);
 
 
@@ -85,6 +106,12 @@ public class WayfarerActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 viewModel.updateUserData(new Gson().fromJson(json.data, UserModel.class));
+                                if (!Objects.equals(viewModel.getUserProfileData().getRole(), "ROLE_WAYFARER")){
+                                    Intent intent = new Intent(WayfarerActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+
                                 if (getSupportFragmentManager().getBackStackEntryCount() == 0)
                                     replaceFragment(new TodayFragment());
                                 progBar.setVisibility(View.GONE);
@@ -108,7 +135,8 @@ public class WayfarerActivity extends AppCompatActivity {
             finish();
         }
 
-        Helper.getExchangeRate();
+        Helper.getExchangeRate(getApplicationContext());
+
         BottomNavigationView bottomNav = findViewById(R.id.bottomHostingNav);
 
         bottomNav.setOnItemSelectedListener(item -> {
@@ -144,7 +172,8 @@ public class WayfarerActivity extends AppCompatActivity {
                 if (
                         // if curr == one of the objects on the navbar, means you're routing to another fragment on the navbar
                         Objects.equals(curr, "com.example.wayfare.Fragment.SettingsFragment") |
-                        Objects.equals(curr, "com.example.wayfare.Fragment.TodayFragment")
+                        Objects.equals(curr, "com.example.wayfare.Fragment.TodayFragment") |
+                Objects.equals(curr, "com.example.wayfare.Fragment.CalendarFragment")
                 ){
                     if (prev != null) {
                         switch (prev) {

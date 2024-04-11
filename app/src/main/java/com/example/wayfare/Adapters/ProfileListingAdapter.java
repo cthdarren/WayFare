@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
@@ -23,8 +24,6 @@ import com.example.wayfare.RecyclerViewInterface;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAdapter.ViewHolder> {
 
@@ -60,29 +59,11 @@ public class ProfileListingAdapter extends RecyclerView.Adapter<ProfileListingAd
             holder.listingRating.setTextSize(14);
         }
 
-
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Looper uiLooper = Looper.getMainLooper();
-        final Handler handler = new Handler(uiLooper);
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String picUrl = listingItemModels.get(position).thumbnailUrl;
-                    URL url = new URL(picUrl);
-                    Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            holder.listingThumbnail.setImageBitmap(image);
-                        }
-                    });
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        Glide.with(context)
+                .load(listingItemModels.get(position).thumbnailUrl.split("\\?")[0])
+                .sizeMultiplier(0.5f)
+                .centerCrop()
+                .into(holder.listingThumbnail);
     }
 
     @Override

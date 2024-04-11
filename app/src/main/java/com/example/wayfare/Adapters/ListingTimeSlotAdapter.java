@@ -15,6 +15,7 @@ import com.example.wayfare.Models.CategoryItemModel;
 import com.example.wayfare.Models.TimeSlotItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
+import com.example.wayfare.Utils.Helper;
 import com.google.android.material.card.MaterialCardView;
 
 import java.sql.Time;
@@ -49,14 +50,8 @@ public class ListingTimeSlotAdapter extends RecyclerView.Adapter<ListingTimeSlot
         String endTimeString;
         String duration;
         duration = String.valueOf(endTime - startTime);
-        if (startTime >= 12)
-            startTimeString = String.valueOf(startTime-12) + "pm";
-        else
-            startTimeString = String.valueOf(startTime) + "am";
-        if (endTime >= 12)
-            endTimeString = String.valueOf(endTime-12) + "pm";
-        else
-            endTimeString = String.valueOf(endTime) + "am";
+        startTimeString = Helper.convert24to12(startTime);
+        endTimeString = Helper.convert24to12(endTime);
 
         holder.timeSlot.setText(String.format("%s - %s, (%s hours)",startTimeString, endTimeString, duration));
     }

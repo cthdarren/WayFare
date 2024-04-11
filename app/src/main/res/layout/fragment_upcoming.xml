@@ -3,6 +3,8 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
@@ -12,6 +14,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:iconSize="30dp"
-            app:icon="@drawable/icon_selection_bookmarks" />
+            app:iconTint="@color/md_theme_onSurface"
+            app:icon="@drawable/listing_bookmark_outlined" />
 
     </LinearLayout>
 
@@ -89,10 +94,15 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:visibility="gone"
         android:id="@+id/upcomingBookingsCarousel"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingEnd="30dp"
+        android:layout_marginEnd="-20dp"
+        android:paddingStart="30dp"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/upcoming_booking_item"/>
@@ -105,6 +115,7 @@
 
 
         <TextView
+            android:id="@+id/pastBookingsHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="20dp"

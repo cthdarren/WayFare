@@ -45,14 +45,14 @@ public class CreateListingFragment1 extends Fragment implements HostListingsRecy
 
     public void setupCategoryModels(Context context) {
         categoryItemModels = Arrays.asList(
-                new CategoryItemModel("Art and Culture", "ART_AND_CULTURE", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Entertainment", "ENTERTAINMENT", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Food and Drink","FOOD_AND_DRINK", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Sports","SPORTS", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Tours", "TOURS", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Sightseeing", "SIGHTSEEING", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Wellness", "WELLNESS", context.getDrawable(R.drawable.settings_icon)),
-                new CategoryItemModel("Nature and Outdoors", "NATURE_AND_OUTDOORS", context.getDrawable(R.drawable.settings_icon))
+                new CategoryItemModel("Art and Culture", "ART_AND_CULTURE", context.getDrawable(R.drawable.arts)),
+                new CategoryItemModel("Entertainment", "ENTERTAINMENT", context.getDrawable(R.drawable.entertainment)),
+                new CategoryItemModel("Food and Drink","FOOD_AND_DRINK", context.getDrawable(R.drawable.food)),
+                new CategoryItemModel("Sports","SPORTS", context.getDrawable(R.drawable.sports)),
+                new CategoryItemModel("Tours", "TOURS", context.getDrawable(R.drawable.tours)),
+                new CategoryItemModel("Sightseeing", "SIGHTSEEING", context.getDrawable(R.drawable.sightseeing)),
+                new CategoryItemModel("Wellness", "WELLNESS", context.getDrawable(R.drawable.wellness)),
+                new CategoryItemModel("Nature and Outdoors", "NATURE_AND_OUTDOORS", context.getDrawable(R.drawable.nature))
         );
     }
     public CreateListingFragment1() {

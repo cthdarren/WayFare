@@ -33,14 +33,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "EXCHANGE_RATE_API_KEY", "\"146eca710f9e57af8848cb4f\"")
-            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
+            buildConfigField("String", "API_URL", "\"http://api.tingtangwalawalabingbang.com\"")
             signingConfig = signingConfigs.getByName("debug")
         }
         debug {
 //            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080\"")
-            buildConfigField("String", "API_URL", "\"http://143.198.223.202\"")
-            buildConfigField("String", "EXCHANGE_RATE_API_KEY", "\"146eca710f9e57af8848cb4f\"")
+            buildConfigField("String", "API_URL", "\"http://api.tingtangwalawalabingbang.com\"")
         }
     }
     compileOptions {
@@ -50,12 +48,14 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        dataBinding = true
     }
 }
 
 dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.libraries.places:places:3.4.0")
+    implementation("id.zelory:compressor:3.0.1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     implementation ("com.android.volley:volley:1.2.1")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -98,4 +98,5 @@ dependencies {
     implementation("com.azure:azure-security-keyvault-secrets")
     implementation("com.google.maps:google-maps-services:2.2.0")
     implementation("org.slf4j:slf4j-simple:1.7.25")
+    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
 }

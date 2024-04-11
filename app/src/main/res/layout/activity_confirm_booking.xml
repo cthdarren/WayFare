@@ -10,20 +10,17 @@
         android:id="@+id/materialToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:title=""
         app:navigationIcon="@drawable/baseline_arrow_back_24"
-        app:navigationIconTint="@color/black">
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat"
             android:text="Confirm and book"
-            android:textColor="@color/black"
             android:textSize="18dp"
             android:layout_gravity="center"/>
 
@@ -33,7 +30,6 @@
         android:id="@+id/firstCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
@@ -74,7 +70,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:fontFamily="@font/montserrat"
                 android:inputType="textMultiLine"
                 android:text="Chinatown Tour"
                 android:textSize="20dp"
@@ -89,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/montserrat"
                 android:text="City/Town, Country"
                 android:textSize="16dp"
                 app:layout_constraintStart_toEndOf="@+id/imageCardView"
@@ -101,7 +95,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="@font/montserrat"
                 android:text="$65/hour"
                 android:textSize="16dp"
                 app:layout_constraintStart_toEndOf="@+id/imageCardView"
@@ -114,7 +107,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:drawableStart="@drawable/baseline_star_24"
-                android:fontFamily="@font/montserrat"
                 android:text="4.88"
                 android:textSize="16dp"
                 app:layout_constraintStart_toEndOf="@+id/imageCardView"
@@ -125,7 +117,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
-                android:fontFamily="@font/montserrat"
                 android:text="(58)"
                 android:textColor="@color/md_theme_outlineVariant_mediumContrast"
                 android:textSize="16dp"
@@ -143,8 +134,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/firstCardView"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/white">
-
+>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -155,7 +145,6 @@
                 android:layout_height="wrap_content"
                 android:text="Your tour"
                 android:textSize="24dp"
-                android:fontFamily="@font/montserrat"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -166,7 +155,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Date"
-                android:fontFamily="@font/montserrat"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/header"
                 android:layout_marginTop="8dp"
@@ -179,7 +167,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"
-                android:fontFamily="@font/montserrat"
                 android:text="18 Aug 2024"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -191,7 +178,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="9AM - 12PM"
-                android:fontFamily="@font/montserrat"
                 app:layout_constraintTop_toTopOf="@+id/dateformat"
                 app:layout_constraintStart_toEndOf="@+id/dateformat"
                 android:layout_marginStart="8dp"/>
@@ -219,7 +205,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:fontFamily="@font/montserrat"
                 android:text="No. of guests"
                 android:textSize="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -229,7 +214,6 @@
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/increment"
                 android:contentDescription="increment"
-                android:backgroundTint="@color/white"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginEnd="16dp"
@@ -245,7 +229,6 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:textSize="18dp"
-                android:fontFamily="@font/montserrat"
                 android:text="1"
                 app:layout_constraintEnd_toStartOf="@+id/increment"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -253,7 +236,6 @@
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/decrement"
                 android:contentDescription="decrement"
-                android:backgroundTint="@color/white"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginEnd="16dp"
@@ -271,8 +253,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/thirdCardView"
         android:layout_marginTop="16dp"
-        android:backgroundTint="@color/white">
-
+>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -283,7 +264,6 @@
                 android:layout_height="wrap_content"
                 android:text="Add a note for your guide (optional)"
                 android:textSize="18dp"
-                android:fontFamily="@font/montserrat"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -296,7 +276,6 @@
                 android:inputType="textMultiLine"
                 android:hint="I hope you can include some information about the food culture!"
                 android:textSize="16dp"
-                android:fontFamily="@font/montserrat"
                 app:layout_constraintTop_toBottomOf="@+id/header2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -322,6 +301,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="Confirm Booking"
-        android:fontFamily="@font/montserrat"/>
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -45,7 +45,7 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
     int numberPax, kmdistance;
     Long startDate, endDate;
     String region, date;
-    ArrayList<TourListModel> tourListModels = new ArrayList<>();
+    ArrayList<TourListModel> tourListModels;
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
     public AfterSearchToursFragment(){}
@@ -56,7 +56,7 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
         Bundle args = getArguments();
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
-
+        tourListModels = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_tours, container, false);
         recyclerView = view.findViewById(R.id.myRecyclerView);
         searchParams = view.findViewById(R.id.searchParams);
@@ -66,9 +66,12 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
         // Wait for the setup to complete
         if (args != null){
             region = args.getString("region", "Anywhere");
+            if (Objects.equals(region, "Anywhere"))
+                kmdistance = args.getInt("kmdistance", 500000);
+            else
+                kmdistance = args.getInt("kmdistance", 100);
             latitude = args.getDouble("latitude", 0);
             longitude = args.getDouble("longitude", 0);
-            kmdistance = args.getInt("kmdistance", 100);
             numberPax = args.getInt("numPax", 1);
             startDate = args.getLong("startDate", MaterialDatePicker.todayInUtcMilliseconds());
             endDate = args.getLong("endDate", MaterialDatePicker.todayInUtcMilliseconds());
@@ -137,7 +140,7 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        recyclerView.getAdapter().notifyDataSetChanged();
+                        recyclerView.getAdapter().notifyItemRangeInserted(0, tourListModels.size());
                         progBar.setVisibility(View.GONE);
                     }
                 });
