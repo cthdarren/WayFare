@@ -150,7 +150,7 @@ public class ExploreFragment extends Fragment {
 //        }
         shortsViewPager = view.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager());
+        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),this);
         shortsViewPager.setAdapter(shortsAdapter);
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -197,7 +197,7 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onViewDetachedFromWindow(View view) {
 //                Log.i("position", viewPager2.getVerticalScrollbarPosition() + "");
-                shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
+//                shortsAdapter.stopAllVideo();
             }
         });
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
@@ -306,14 +306,22 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        pauseVideo();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //continueVideo();
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        shortsAdapter.stopAllVideo();
     }
 
     public void pauseVideo() {
