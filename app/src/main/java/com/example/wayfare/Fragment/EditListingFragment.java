@@ -170,6 +170,30 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
             }
         });
 
+        delete_listing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestBody body = RequestBody.create("",null);
+                new AuthService(getContext()).getResponse("/wayfarer/listing/delete/" + currentListing.getId(), true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        makeToast(message);
+                    }
+
+                    @Override
+                    public void onResponse(ResponseModel json) {
+                        if (json.success) {
+                            makeToast("Successfully Deleted Listing");
+                            getParentFragmentManager().popBackStack();
+                            getParentFragmentManager().popBackStack();
+                            Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new HostingToursFragment());
+                        }
+                        else
+                            makeToast(json.data.getAsString());
+                    }
+                });
+            }
+        });
 
         minusMinPax.setOnClickListener(new View.OnClickListener() {
             @Override
