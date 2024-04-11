@@ -32,20 +32,24 @@ public class BookingItemModel {
         this.listingUrl = listingUrl;
         this.reviewed = reviewed;
         String timePostfix = "am";
-
-        if (startTimeOfBooking > 12) {
-            timePostfix = "pm";
-            startTimeOfBooking = startTimeOfBooking-12;
-        }
+        String localBookingTime;
 
         if (startTimeOfBooking == 0)
-            startTimeOfBooking = 12;
+            localBookingTime = "12am";
+
+        else if (startTimeOfBooking > 12) {
+            timePostfix = "pm";
+            localBookingTime = String.valueOf(startTimeOfBooking - 12) + timePostfix;
+        }
+        else
+            localBookingTime = String.valueOf(startTimeOfBooking ) + timePostfix;
+
+        this.timeOfBooking = localBookingTime;
 
         this.dateOfBooking = LocalDate.parse(dateOfBooking.substring(0,10)).format( DateTimeFormatter.ofPattern("dd MMM YYYY"));
 
-        this.timeOfBooking = String.valueOf(startTimeOfBooking) + timePostfix;
 
-        timeToBooking = Helper.getDifferenceInTimeString(Instant.parse(dateOfBooking).plus(8, ChronoUnit.HOURS), Instant.now());
+        timeToBooking = Helper.getDifferenceInTimeString(Instant.parse(dateOfBooking).plus(startTimeOfBooking-8, ChronoUnit.HOURS), Instant.now());
     }
 }
 
