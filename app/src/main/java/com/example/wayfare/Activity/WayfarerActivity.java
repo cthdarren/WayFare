@@ -75,6 +75,7 @@ public class WayfarerActivity extends AppCompatActivity {
         else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_wayfarer);
 
 

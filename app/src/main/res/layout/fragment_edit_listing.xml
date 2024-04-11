@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/md_theme_background"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    tools:context=".Fragment.ViewBookingFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/md_theme_background"
+        android:elevation="1dp"
+        android:paddingHorizontal="@dimen/outer_padding">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom">
+
+            <ImageView
+                android:id="@+id/back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="15dp"
+                android:scaleType="fitStart"
+                android:src="@drawable/arrow_back" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:text="Listing Editor"
+                android:textSize="@dimen/font_lg" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/outer_padding"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="60dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Title"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edit_listing_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/transparent"
+                        android:maxLines="1"
+                        android:text="listing title"
+                        android:textSize="@dimen/font_md" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Description"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edit_listing_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/transparent"
+                        android:inputType="textMultiLine"
+                        android:text="description"
+                        android:textSize="@dimen/font_sm" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:id="@+id/category_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Category"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/edit_listing_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/transparent"
+                        android:text="Category"
+                        android:textSize="@dimen/font_sm" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:text="Number of people"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/edit_listing_min_pax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:background="@color/transparent"
+                        android:text="Min. number: "
+                        android:textSize="@dimen/font_sm" />
+                    <ImageView
+                        android:id="@+id/minusMinPax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:src="@drawable/baseline_remove_24"/>
+                    <TextView
+                        android:id="@+id/minPax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="@dimen/font_md"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="20dp"
+                        android:text="1"/>
+
+                    <ImageView
+                        android:id="@+id/addMinPax"
+                        android:layout_width="wrap_content"
+                        android:paddingHorizontal="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/baseline_add_24"/>
+                    </LinearLayout>
+                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                         android:layout_marginTop="20dp"
+                        android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:background="@color/transparent"
+                        android:text="Min. number: "
+                        android:textSize="@dimen/font_sm" />
+                    <ImageView
+                        android:id="@+id/minusMaxPax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingHorizontal="10dp"
+                        android:src="@drawable/baseline_remove_24"/>
+                    <TextView
+                        android:id="@+id/maxPax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="@dimen/font_md"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="20dp"
+                        android:text="1"/>
+
+                    <ImageView
+                        android:id="@+id/addMaxPax"
+                        android:layout_width="wrap_content"
+                        android:paddingHorizontal="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/baseline_add_24"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dp"
+                        android:layout_weight="1"
+                        android:text="Available time slots"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold" />
+                        <Button
+                            android:id="@+id/add_time_slot"
+                            android:layout_width="wrap_content"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_height="wrap_content"
+                            android:text="Add"/>
+                    </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/time_slot_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="2"
+
+                        tools:listitem="@layout/hosting_timeslot_list_item">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Location"
+                        android:layout_marginBottom="20dp"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold" />
+
+                    <fragment
+                        android:id="@+id/addressAutocomplete"
+                        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                    <fragment
+                        android:id="@+id/confirmMap"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp" />
+
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textSize="@dimen/font_sm"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/edit_listing_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/transparent"
+                        android:text="US$ 20"
+                        android:textSize="@dimen/font_sm" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/delete_listing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="40dp"
+                android:backgroundTint="@color/md_theme_error"
+                android:text="Delete listing" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

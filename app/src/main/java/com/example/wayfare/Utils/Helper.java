@@ -19,6 +19,8 @@ import com.example.wayfare.Fragment.SignInFragment;
 import com.example.wayfare.Models.ConversionRatesModel;
 import com.example.wayfare.Models.CurrencyResponseModel;
 import com.example.wayfare.Models.ResponseModel;
+import com.example.wayfare.Models.TimeSlotItemModel;
+import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.google.gson.Gson;
 
@@ -206,5 +208,12 @@ public class Helper {
             }
         });
 
+    }
+    public static List<TimeSlotItemModel> convertTimeRange(List<TourListModel.TimeRange> timeRangeList){
+        List<TimeSlotItemModel> result = new ArrayList<>();
+        for (TourListModel.TimeRange tr: timeRangeList){
+            result.add(new TimeSlotItemModel(tr.startTime, tr.endTime));
+        }
+        return result;
     }
 }

@@ -124,6 +124,8 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
 
     @Override
     public void onItemClick(int position) {
-
+        Bundle args = new Bundle();
+        args.putString("listingId", tourListModels.get(position).getId());
+        Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new EditListingFragment());
     }
 }

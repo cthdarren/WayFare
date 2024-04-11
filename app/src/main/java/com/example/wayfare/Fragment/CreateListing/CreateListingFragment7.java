@@ -1,5 +1,7 @@
 package com.example.wayfare.Fragment.CreateListing;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -100,7 +103,14 @@ public class CreateListingFragment7 extends Fragment {
         continue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                localPrice.clearFocus();
+                try {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    View curr = getActivity().getCurrentFocus();
+                    curr.clearFocus();
+                    inputMethodManager.hideSoftInputFromWindow(curr.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                catch (NullPointerException ignored){}
+
                 Double usdPrice = Helper.exchangeToUsd(
                         Integer.parseInt(localPrice.getText().toString().substring(currencyPrefix.length())),
                         new AuthHelper((getContext())).getSharedPrefsCurrencyName()
