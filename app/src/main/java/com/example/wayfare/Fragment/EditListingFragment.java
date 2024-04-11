@@ -313,11 +313,15 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
             @Override
             public void onClick(View v) {
                 Gson gsonparser = new Gson();
+                Double usdPrice = Helper.exchangeToUsd(
+                        Integer.parseInt(edit_listing_price.getText().toString().substring(currencyPrefix.length())),
+                        new AuthHelper((getContext())).getSharedPrefsCurrencyName()
+                );
                 @SuppressLint("DefaultLocale") String json = String.format("""
                                 {"title": "%s", "description": "%s", "thumbnailUrls": %s,"category": "%s", "location": {"x":%f, "y":%f}, "timeRangeList": %s, "price": "%.2f", "maxPax": %d, "minPax": %d}""",
                         edit_listing_title.getText().toString(), edit_listing_description.getText().toString(), gsonparser.toJson(currentListing.getThumbnailUrls()),
                         Helper.categoryNameToEnum(edit_listing_category.getText().toString()), latLngAddress.longitude, latLngAddress.latitude,
-                        gsonparser.toJson(timeSlotList), Double.valueOf(edit_listing_price.getText().toString().substring(currencyPrefix.length())),
+                        gsonparser.toJson(timeSlotList), usdPrice,
                         Integer.parseInt(maxPax.getText().toString()),
                         Integer.parseInt(minPax.getText().toString()));
                 RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));

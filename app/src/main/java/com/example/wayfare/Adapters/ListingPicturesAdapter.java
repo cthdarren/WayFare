@@ -46,6 +46,7 @@ public class ListingPicturesAdapter extends RecyclerView.Adapter<ListingPictures
         Glide.with(context)
                 .load(uriItemModels.get(position))
                 .override(300, 300)
+                .centerCrop()
                 .into(holder.picture);
     }
 
