@@ -10,9 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="30dp"
+        android:padding="@dimen/outer_padding"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/outer_padding">
+        >
 
         <TextView
             android:layout_width="wrap_content"
