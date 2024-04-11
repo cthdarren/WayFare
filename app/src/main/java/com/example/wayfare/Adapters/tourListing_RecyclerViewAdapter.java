@@ -53,7 +53,7 @@ public class tourListing_RecyclerViewAdapter extends RecyclerView.Adapter<tourLi
         Double localPrice = Helper.exchangeToLocal(tourListModels.get(position).getPrice(), localCurrency);
         String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
         holder.tvPrice.setText(Html.fromHtml(String.format("<u><b>%s %.2f</b> per person</u>", currencyPrefix, localPrice), Html.FROM_HTML_MODE_LEGACY));
-        if (tourListModels.get(position).getRating() == 0)
+        if (tourListModels.get(position).getReviewCount() == 0)
             holder.tvRating.setText("No reviews yet");
         else
             holder.tvRating.setText(String.format("%s (%d)", String.valueOf(tourListModels.get(position).getRating()), tourListModels.get(position).getReviewCount()));
