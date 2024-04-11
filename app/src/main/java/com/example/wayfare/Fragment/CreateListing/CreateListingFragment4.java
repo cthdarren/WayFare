@@ -81,12 +81,7 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
                     @Override
                     public void onClick(View v) {
                         int hour = startTimePicker.getHour();
-                        if (hour >= 12){
-                            startTimeString.setText(String.format("%d pm", hour-12));
-                        }
-                        else
-                            startTimeString.setText(String.format("%d am", hour));
-
+                        startTimeString.setText(Helper.convert24to12(hour));
                         toAddStart = hour;
                     }
                 }
@@ -96,12 +91,7 @@ public class CreateListingFragment4 extends Fragment implements RecyclerViewInte
             @Override
             public void onClick(View v) {
                 int hour = endTimePicker.getHour();
-                if (hour >= 12){
-                    endTimeString.setText(String.format("%d pm", hour-12));
-                }
-                else
-                    endTimeString.setText(String.format("%d am", hour));
-
+                endTimeString.setText(Helper.convert24to12(hour));
                 toAddEnd = hour;
             }
         });

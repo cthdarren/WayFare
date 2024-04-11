@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
     RecyclerView yourListingRecycler;
     UserViewModel userViewModel;
     ProgressBar progressBar;
+    LinearLayout nolistingsmessage;
+    Button createListingMessageBtn;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
 
     public HostingToursFragment(){}
@@ -45,6 +49,8 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
         View view = inflater.inflate(R.layout.hosting_fragment_tours, container, false);
         ImageView createListingBtn = view.findViewById(R.id.createListingButton);
         progressBar = view.findViewById(R.id.yourListingsProgBar);
+        nolistingsmessage = view.findViewById(R.id.nolistingsmessage);
+        createListingMessageBtn = view.findViewById(R.id.createListingmessagebutton);
 
         yourListingRecycler = view.findViewById(R.id.yourListingsRecycler);
         yourListingRecycler.setAdapter(new YourListingsAdapter(getContext(),tourListModels, this));
@@ -58,6 +64,12 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
             }
         });
 
+        createListingMessageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, new CreateListingFragment());
+            }
+        });
 
         return view;
     }
@@ -80,6 +92,14 @@ public class HostingToursFragment extends Fragment  implements tourListing_Recyc
                         @Override
                         public void run() {
                             yourListingRecycler.getAdapter().notifyItemRangeChanged(0, tourListModels.size());
+                            if (tourListModels.size() == 0) {
+                                nolistingsmessage.setVisibility(View.VISIBLE);
+                                yourListingRecycler.setVisibility(View.GONE);
+                            }
+                            else {
+                                nolistingsmessage.setVisibility(View.GONE);
+                                yourListingRecycler.setVisibility(View.VISIBLE);
+                            }
                             progressBar.setVisibility(View.GONE);
                         }
                     });

@@ -89,8 +89,6 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
-        progBar = view.findViewById(R.id.settingsProgBar);
-        progBar.setVisibility(View.VISIBLE);
         navBar = getActivity().findViewById(R.id.bottomNavigationView);
 
         logoutBtn = view.findViewById(R.id.logoutBtn);
@@ -192,10 +190,11 @@ public class SettingsFragment extends Fragment implements RecyclerViewInterface 
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         Glide.with(SettingsFragment.this)
-                .load(picUrl)
+                .load(picUrl.split("\\?")[0])
                 .centerCrop()
                 .sizeMultiplier(0.6f)
                 .into(user_profile_pic);
+
     }
 
     @Override

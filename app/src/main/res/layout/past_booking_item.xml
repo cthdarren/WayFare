@@ -24,6 +24,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="100dp"
+            app:strokeColor="@color/transparent"
             android:layout_height="100dp">
             <ImageView
                 android:id="@+id/pastListingThumbnail"

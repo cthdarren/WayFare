@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class BookingItemModel {
+    public final String id;
+    public final String listingId;
     public final String thumbnailUrl;
     public final String title;
     public final String location;
@@ -18,7 +20,9 @@ public class BookingItemModel {
     public final String listingUrl;
     public final boolean reviewed;
 
-    public BookingItemModel(String thumbnailUrl, String title, String location, int startTimeOfBooking, String dateOfBooking, String wayfarerPicUrl, String wayfarerUsername, String listingUrl, boolean reviewed) {
+    public BookingItemModel(String id, String listingId, String thumbnailUrl, String title, String location, int startTimeOfBooking, String dateOfBooking, String wayfarerPicUrl, String wayfarerUsername, String listingUrl, boolean reviewed) {
+        this.id = id;
+        this.listingId = listingId;
         this.thumbnailUrl = thumbnailUrl;
         this.title = title;
         this.location = location;

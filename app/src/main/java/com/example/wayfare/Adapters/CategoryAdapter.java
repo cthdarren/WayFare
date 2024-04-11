@@ -43,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.categoryName.setText(categoryItemModels.get(position).name);
         holder.categoryIcon.setImageDrawable(categoryItemModels.get(position).icon);
         if (categoryItemModels.get(position).selected == true){
-            holder.categoryCard.setStrokeColor(context.getColor(R.color.black));
+            holder.categoryCard.setStrokeColor(context.getColor(R.color.md_theme_onSurface));
         }
         else
             holder.categoryCard.setStrokeColor(context.getColor(R.color.md_theme_outlineVariant));
