@@ -1,5 +1,7 @@
 package com.example.wayfare.Fragment;
 
+import static android.view.View.GONE;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,13 +28,16 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.ConfirmBooking;
+import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
+import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
@@ -46,9 +53,11 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.Gson;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -69,6 +78,13 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     ArrayList<Integer> timeList = new ArrayList<>();
     Date date;
     String listingId;
+    TextView ratings;
+    TextView reviewCount_user;
+    TextView years_on_wayfare;
+    ProgressBar progBar;
+    TextView username;
+    ImageView profile_pic;
+    String profileId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,6 +103,14 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         button = view.findViewById(R.id.bookButton);
         MaterialButton buttonDatePicker = view.findViewById(R.id.datePickerButton);
         MaterialCheckBox bookmarkCheckbox = view.findViewById(R.id.bookmarkCheckbox);
+        reviewCount_user = view.findViewById(R.id.num_reviews);
+        ratings = view.findViewById(R.id.rating);
+        years_on_wayfare = view.findViewById(R.id.years_on_wayfare);
+
+        username = view.findViewById(R.id.user_greeting);
+        progBar = view.findViewById(R.id.settingsProgBar);
+        progBar.setVisibility(View.VISIBLE);
+        profile_pic = view.findViewById(R.id.user_profile_picture);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -96,7 +120,6 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 tvRating.setText("No reviews yet");
                 tvReviewCount.setText(" •");
             } else {
-                Log.d("NUMC", args.getString("rating"));
                 tvRating.setText(args.getString("rating"));
                 String reviewCountFormat = "(" + args.getString("reviewCount") + ")" + " •";
                 tvReviewCount.setText(reviewCountFormat);
@@ -127,6 +150,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 timeList.add(endTimeInt);
             }
             listingId = args.getString("listingId");
+            profileId = args.getString("userId");
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         newTimingAdapter = new timingAdapter(getContext(), timingArray, this);
@@ -196,6 +220,57 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             }
         });
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        new AuthService(getContext()).getResponse("/api/v1/profileid/" + profileId, true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                        getParentFragmentManager().popBackStack();
+                        progBar.setVisibility(GONE);
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                if (json.success) {
+                    ProfileModel profileInfo = new Gson().fromJson(json.data, ProfileModel.class);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Glide.with(TourListingFull.this)
+                                    .load(profileInfo.getPictureUrl().split("\\?")[0])
+                                    .centerCrop()
+                                    .into(profile_pic);
+
+                            username.setText(profileInfo.getFirstName());
+                            int years = LocalDate.now().getYear() - LocalDate.parse(profileInfo.getDateCreated().substring(0, 10)).getYear();
+                            if (years < 1) {
+                                years_on_wayfare.setText("First year");
+                                years_on_wayfare.setTextSize(16);
+                            } else {
+                                years_on_wayfare.setText(String.valueOf(years));
+                            }
+                            if (profileInfo.getReviewCount() == 0) {
+                                ratings.setText("-");
+                            } else {
+                                ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
+                                reviewCount_user.setText(profileInfo.getReviewCount().toString());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
     @Override
