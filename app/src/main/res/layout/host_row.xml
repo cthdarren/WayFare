@@ -101,6 +101,26 @@
                     android:text="12:00 - 17:00" />
             </TableRow>
 
+            <TableRow
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_remark" />
+
+                <TextView
+                    android:id="@+id/hostRemarks"
+                    android:layout_marginLeft="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remarks" />
+            </TableRow>
+
         </TableLayout>
 
     </androidx.cardview.widget.CardView>
