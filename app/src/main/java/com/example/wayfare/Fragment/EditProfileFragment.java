@@ -194,7 +194,7 @@ public class EditProfileFragment extends Fragment {
                                     test.add(currentItem);
                                 }
                             }
-                            languages.setText(String.join(", ", test));
+                            languages.setText(String.join(",", test));
                         })
                         .setNegativeButton("Cancel", (dialog, which) -> {
                         })
