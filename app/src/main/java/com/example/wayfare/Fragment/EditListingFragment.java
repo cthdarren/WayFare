@@ -101,7 +101,7 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
                              Bundle savedInstanceState) {
         globalProgressBar = getActivity().findViewById(R.id.progressBar);
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         currencyName = new AuthHelper(getContext()).getSharedPrefsCurrencyName();
         currencyPrefix = Currency.getInstance(currencyName).getSymbol();
 
@@ -314,13 +314,23 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
             public void onClick(View v) {
                 Gson gsonparser = new Gson();
                 Double usdPrice = Helper.exchangeToUsd(
-                        Integer.parseInt(edit_listing_price.getText().toString().substring(currencyPrefix.length())),
+                        Double.valueOf(edit_listing_price.getText().toString().substring(currencyPrefix.length())).intValue(),
                         new AuthHelper((getContext())).getSharedPrefsCurrencyName()
                 );
+                Double longitude;
+                Double latitude;
+                if (latLngAddress == null) {
+                    longitude = currentListing.getLocation().getX();
+                    latitude = currentListing.getLocation().getY();
+                }
+                else {
+                    longitude = latLngAddress.longitude;
+                    latitude = latLngAddress.latitude;
+                }
                 @SuppressLint("DefaultLocale") String json = String.format("""
                                 {"title": "%s", "description": "%s", "thumbnailUrls": %s,"category": "%s", "location": {"x":%f, "y":%f}, "timeRangeList": %s, "price": "%.2f", "maxPax": %d, "minPax": %d}""",
                         edit_listing_title.getText().toString(), edit_listing_description.getText().toString(), gsonparser.toJson(currentListing.getThumbnailUrls()),
-                        Helper.categoryNameToEnum(edit_listing_category.getText().toString()), latLngAddress.longitude, latLngAddress.latitude,
+                        Helper.categoryNameToEnum(edit_listing_category.getText().toString()), longitude, latitude,
                         gsonparser.toJson(timeSlotList), usdPrice,
                         Integer.parseInt(maxPax.getText().toString()),
                         Integer.parseInt(minPax.getText().toString()));
@@ -376,7 +386,6 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         globalProgressBar.setVisibility(View.GONE);
     }
 
