@@ -114,7 +114,8 @@ public class EditProfileFragment extends Fragment {
 
         bio.setText(userData.getAboutMe());
         languages.setText(String.join(",",userData.getLanguagesSpoken()));
-        Glide.with(getContext()).load(userData.getPictureUrl().split("\\?")[0])
+
+        Glide.with(EditProfileFragment.this).load(userData.getPictureUrl().split("\\?")[0])
                 .centerCrop()
                 .into(profile_picture);
 
