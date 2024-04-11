@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -77,6 +78,7 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         currencyName = new AuthHelper(getContext()).getSharedPrefsCurrencyName();
         // Inflate the layout for this fragment
         listingId = getArguments().getString("listingId");
@@ -164,12 +166,19 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
             @Override
             public void onResponse(ResponseModel json) {
                 TourListModel listing = new Gson().fromJson(json.data, TourListModel.class);
-                edit_listing_title.setText(listing.getTitle());
-                edit_listing_description.setText(listing.getDescription());
-                double localPrice = Helper.exchangeToLocal(listing.getPrice(),currencyName);
-                edit_listing_price.setText(String.format("%.2f",localPrice));
-                timeSlotList = Helper.convertTimeRange(listing.getTimeRangeList());
-                time_slot_recycler.getAdapter().notifyDataSetChanged();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        edit_listing_title.setText(listing.getTitle());
+                        edit_listing_description.setText(listing.getDescription());
+                        double localPrice = Helper.exchangeToLocal(listing.getPrice(),currencyName);
+                        edit_listing_price.setText(String.format("%.2f",localPrice));
+                        for (TourListModel.TimeRange tr: listing.getTimeRangeList()){
+                            timeSlotList.add(new TimeSlotItemModel(tr.startTime, tr.endTime));
+                        }
+                        time_slot_recycler.getAdapter().notifyDataSetChanged();
+                    }
+                });
             }
         });
 
@@ -193,5 +202,11 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
     @Override
     public void onItemClick(int position) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().getWindow().setSoftInputMode(NO);
     }
 }
