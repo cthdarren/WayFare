@@ -3,6 +3,7 @@ package com.example.wayfare.Fragment;
 import static android.view.View.GONE;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -34,13 +36,17 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.ConfirmBooking;
+import com.example.wayfare.Adapters.ListingPicturesAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
+import com.example.wayfare.Adapters.ViewBookingAdapter;
 import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.RecyclerViewInterface;
+import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.timingOnItemClickedInterface;
@@ -48,6 +54,9 @@ import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.carousel.CarouselLayoutManager;
+import com.google.android.material.carousel.CarouselSnapHelper;
+import com.google.android.material.carousel.FullScreenCarouselStrategy;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -58,9 +67,13 @@ import com.google.gson.Gson;
 
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -88,6 +101,17 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     ImageView profile_pic;
     String profileId;
     LinearLayout guideInfo;
+    RecyclerView listing_image_carousel;
+    MaterialTextView tvPrice;
+    Double localPrice;
+    List<String> urlList = new ArrayList<>();
+    public void setupThumbnails(List<String> thumbnailUrls){
+        for (String url: thumbnailUrls){
+            urlList.add(url);
+        }
+        listing_image_carousel.getAdapter().notifyDataSetChanged();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,9 +122,9 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
 
         MaterialTextView tvTitle = view.findViewById(R.id.materialTextView);
         MaterialTextView tvLocation = view.findViewById(R.id.location);
-        MaterialTextView tvPrice = view.findViewById(R.id.materialTextView4);
+        tvPrice = view.findViewById(R.id.materialTextView4);
         MaterialTextView tvRating = view.findViewById(R.id.materialTextView2);
-        ImageView tvImage = view.findViewById(R.id.imageView2);
+        listing_image_carousel= view.findViewById(R.id.listing_image_carousel);
         MaterialTextView tvDescription = view.findViewById(R.id.description);
         MaterialTextView tvReviewCount = view.findViewById(R.id.reviewCount);
         button = view.findViewById(R.id.bookButton);
@@ -131,12 +155,18 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
 
             tvLocation.setText(args.getString("location"));
 
-            String priceFormat = "$" + args.getString("price") + " / person";
-            tvPrice.setText(priceFormat);
+            String localCurrency = new AuthHelper(getContext()).getSharedPrefsCurrencyName();
+            String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
+            localPrice = Helper.exchangeToLocal(Double.parseDouble(args.getString("price")), localCurrency);
+            tvPrice.setText(Html.fromHtml(String.format("<u><b>%s %.2f</b> per person</u>", currencyPrefix, localPrice), Html.FROM_HTML_MODE_LEGACY));
 
-            Glide.with(requireContext())
-                    .load(args.getString("thumbnail").split("\\?")[0]) // Load the first URL from the array
-                    .into(tvImage); // Set the image to the ImageView
+            listing_image_carousel.setAdapter(new ViewBookingAdapter(getContext(), urlList));
+            listing_image_carousel.setLayoutManager(new CarouselLayoutManager(new FullScreenCarouselStrategy()));
+            SnapHelper snapHelper = new CarouselSnapHelper();
+            snapHelper.attachToRecyclerView(listing_image_carousel);
+
+            setupThumbnails(Arrays.asList(args.getStringArray("thumbnailUrls")));
+
             tvDescription.setText(args.getString("description"));
 
             ArrayList<TourListModel.TimeRange> timeRangeList = args.getParcelableArrayList("timeRangeList");
@@ -217,6 +247,8 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                         dateChosen = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date(selection));
                         buttonDatePicker.setText(dateChosen);
                         newTimingAdapter.isButtonEnabled = true;
+
+                        newTimingAdapter.dateChosen = Instant.ofEpochMilli(selection);
                         newTimingAdapter.notifyDataSetChanged();
                     }
                 });
@@ -297,8 +329,10 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             intent.putExtra("listingId", getArguments().getString("listingId"));
             intent.putExtra("rating", getArguments().getString("rating"));
             intent.putExtra("location", getArguments().getString("location"));
+            intent.putExtra("priceString", tvPrice.getText().toString());
             intent.putExtra("price", getArguments().getString("price"));
-            intent.putExtra("thumbnail", getArguments().getString("thumbnail"));
+            intent.putExtra("thumbnail", getArguments().getStringArray("thumbnailUrls")[0]);
+            intent.putExtra("localprice", localPrice);
             intent.putExtra("description", getArguments().getString("description"));
             intent.putExtra("reviewCount", getArguments().getString("reviewCount"));
             intent.putExtra("minPax", getArguments().getInt("minPax"));

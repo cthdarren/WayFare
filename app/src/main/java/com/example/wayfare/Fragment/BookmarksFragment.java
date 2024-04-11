@@ -123,7 +123,7 @@ public class BookmarksFragment extends Fragment implements RecyclerViewInterface
         data.putString("location", listingDetails.getRegion());
         data.putString("rating", String.valueOf(listingDetails.getRating()));
         data.putString("price", String.valueOf(listingDetails.getPrice()));
-        data.putString("thumbnail", listingDetails.getThumbnailUrls()[0]);
+        data.putStringArray("thumbnailUrls", listingDetails.getThumbnailUrls());
         data.putString("description", listingDetails.getDescription());
         data.putString("reviewCount", String.valueOf(listingDetails.getReviewCount()));
         data.putString("listingId", listingDetails.getId());

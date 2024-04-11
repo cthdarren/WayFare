@@ -1,9 +1,12 @@
 package com.example.wayfare.Activity;
 
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.text.HtmlCompat;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +24,7 @@ import com.example.wayfare.Fragment.SignUp2Fragment;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -28,7 +32,9 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 
+import java.util.Currency;
 import java.util.Date;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -50,7 +56,9 @@ public class ConfirmBooking extends AppCompatActivity {
     Date date;
     String remark;
     int pax, minPax, maxPax;
-    String listingId;
+    String listingId, currencyPrefix, priceString;
+    Double localPrice, totalPrice;
+    TextView totalPriceString;
 
     TourListModel.TimeRange timeSlot;
 
@@ -65,6 +73,8 @@ public class ConfirmBooking extends AppCompatActivity {
         getSupportActionBar().setTitle("");
 
         Bundle extras = getIntent().getExtras();
+        String localCurrency = new AuthHelper(getApplicationContext()).getSharedPrefsCurrencyName();
+        currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
 
         if (extras != null) {
             // Retrieve the data
@@ -72,12 +82,14 @@ public class ConfirmBooking extends AppCompatActivity {
             rating = extras.getString("rating");
             location = extras.getString("location");
             price = extras.getString("price");
+            priceString = extras.getString("priceString");
             thumbnail = extras.getString("thumbnail");
             reviewCount = extras.getString("reviewCount");
             timing = extras.getString("timing");
             dateChosen = extras.getString("dateChosen");
             startTime = extras.getInt("startTime");
             endTime = extras.getInt("endTime");
+            localPrice = extras.getDouble("localprice");
             long timeInMillis = extras.getLong("date_key");
             date = new Date(timeInMillis);
             listingId = extras.getString("listingId");
@@ -96,14 +108,27 @@ public class ConfirmBooking extends AppCompatActivity {
         MaterialTextView tvTiming = findViewById(R.id.timing);
         MaterialTextView tvDateChosen = findViewById(R.id.dateformat);
         AppCompatEditText tvRemarks = findViewById(R.id.remarks);
+        totalPriceString = findViewById(R.id.totalprice);
 
         tvTitle.setText(title);
-        tvRating.setText(rating);
+        if (Objects.equals(reviewCount, "0"))
+            tvRating.setText("No reviews yet");
+        else
+            tvRating.setText(rating);
         tvLocation.setText(location);
-        tvPrice.setText(price);
+        tvPrice.setText(priceString);
         tvReviewCount.setText(reviewCount);
         tvTiming.setText(timing);
         tvDateChosen.setText(dateChosen);
+
+        double totalPrice = localPrice * minPax;
+        String paxString = "people";
+        if ( minPax == 1)
+            paxString = "person";
+        String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
+        totalPriceString.setText(HtmlCompat.fromHtml(String.format("<u>%s%.2f × %d %s = <b>%s%.2f<b><u>", currencyPrefix, localPrice, minPax, paxString, currencyPrefix, totalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
+
+
 
         Glide.with(this)
                 .load(thumbnail.split("\\?")[0])
@@ -123,6 +148,13 @@ public class ConfirmBooking extends AppCompatActivity {
                 if (counterValue[0] < maxPax) {
                     counterValue[0]++;
                     counter.setText(String.valueOf(counterValue[0]));
+                    double totalPrice = localPrice * counterValue[0];
+                    String paxString = "people";
+                    if ( counterValue[0] == 1)
+                        paxString = "person";
+                    String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
+                    totalPriceString.setText(HtmlCompat.fromHtml(String.format("<u>%s%.2f × %d %s = <b>%s%.2f<b><u>", currencyPrefix, localPrice, counterValue[0], paxString, currencyPrefix, totalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
+
                 } else {
                     Toast.makeText(ConfirmBooking.this, "Max number of persons reached", Toast.LENGTH_SHORT).show();
                 }
@@ -134,6 +166,12 @@ public class ConfirmBooking extends AppCompatActivity {
                 if (counterValue[0] > minPax) {
                     counterValue[0]--;
                     counter.setText(String.valueOf(counterValue[0]));
+                    double totalPrice = localPrice * counterValue[0];
+                    String paxString = "people";
+                    if ( counterValue[0] == 1)
+                        paxString = "person";
+                    String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
+                    totalPriceString.setText(HtmlCompat.fromHtml(String.format("<u>%s%.2f × %d %s = <b>%s%.2f<b><u>", currencyPrefix, localPrice, counterValue[0], paxString, currencyPrefix, totalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
                 } else {
                     Toast.makeText(ConfirmBooking.this, "Min number of persons reached", Toast.LENGTH_SHORT).show();
                 }
@@ -190,7 +228,6 @@ public class ConfirmBooking extends AppCompatActivity {
                     ConfirmBooking.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            getSupportFragmentManager().popBackStack();
                             finish();
                         }
                     });

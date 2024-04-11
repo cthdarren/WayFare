@@ -31,16 +31,18 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/imageView2"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listing_image_carousel"
                 android:layout_width="match_parent"
-                android:layout_height="325dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/guide1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="360dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                app:carousel_alignment="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
+               />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/materialTextView"
@@ -53,7 +55,7 @@
                 android:textSize="24dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintTop_toBottomOf="@+id/listing_image_carousel" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/location"
@@ -85,7 +87,7 @@
                 android:layout_marginEnd="16dp"
                 android:button="@drawable/selector_bookmark_item"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                app:layout_constraintTop_toBottomOf="@+id/listing_image_carousel" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/materialTextView2"

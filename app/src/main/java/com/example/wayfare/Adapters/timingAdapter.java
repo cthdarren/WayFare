@@ -14,9 +14,18 @@ import com.example.wayfare.R;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.button.MaterialButton;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
 public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHolder>{
     Context context;
     String[] tourTimings;
+    public Instant dateChosen;
     public boolean isButtonEnabled = false;
     private final tourListing_RecyclerViewInterface tourListing_recyclerViewInterface;
 
@@ -38,7 +47,21 @@ public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull timingAdapter.MyViewHolder holder, int position) {
         holder.tvTiming.setText(tourTimings[position]);
-        holder.bind(isButtonEnabled);
+        int timeInHours;
+        int toAdd = 0;
+        String[] startTimeDetails = tourTimings[position].split("-")[0].strip().split(" ");
+        if (Objects.equals(startTimeDetails[1], "PM")) {
+            toAdd = 12;
+        }
+        else
+            if (Objects.equals(startTimeDetails[0], "12"))
+                startTimeDetails[0] = "0";
+
+        timeInHours = Integer.parseInt(startTimeDetails[0])+toAdd;
+        if (dateChosen != null) {
+            if (Instant.now().isBefore(dateChosen.plus(timeInHours - 8, ChronoUnit.HOURS)))
+                holder.bind(isButtonEnabled);
+        }
     }
 
     @Override

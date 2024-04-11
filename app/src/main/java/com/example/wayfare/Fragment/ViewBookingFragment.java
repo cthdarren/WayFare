@@ -188,7 +188,7 @@ public class ViewBookingFragment extends Fragment implements OnMapReadyCallback 
                         booking_time.setText(String.format("%s",timeOfBooking));
                         booking_remarks.setText(currentBooking.getRemarks());
                         String currencyPrefix = Currency.getInstance(localCurrency).getSymbol();
-                        booking_price_total.setText(HtmlCompat.fromHtml(String.format("Total price: <u>%s%.2f × %d %s = <b>%s%.2f<b><u>", currencyPrefix, localIndivPrice, totalPax, paxString, localCurrency, localTotalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
+                        booking_price_total.setText(HtmlCompat.fromHtml(String.format("Total price: <u>%s%.2f × %d %s = <b>%s%.2f<b><u>", currencyPrefix, localIndivPrice, totalPax, paxString, currencyPrefix, localTotalPrice), HtmlCompat.FROM_HTML_MODE_LEGACY));
 
                         wayfarer_name.setText(currentBooking.getUser().getUsername());
                         years_on_wayfare.setText(wayfareYearString);

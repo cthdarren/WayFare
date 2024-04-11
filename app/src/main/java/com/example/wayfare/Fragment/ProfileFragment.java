@@ -272,7 +272,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         data.putString("location", profileInfo.getTours().get(position).getRegion());
         data.putString("rating", String.valueOf(profileInfo.getTours().get(position).getRating()));
         data.putString("price", String.valueOf(profileInfo.getTours().get(position).getPrice()));
-        data.putString("thumbnail", profileInfo.getTours().get(position).getThumbnailUrls()[0]);
+        data.putStringArray("thumbnailUrls", profileInfo.getTours().get(position).getThumbnailUrls());
         data.putString("description", profileInfo.getTours().get(position).getDescription());
         data.putString("reviewCount", String.valueOf(profileInfo.getTours().get(position).getReviewCount()));
         data.putString("listingId", profileInfo.getTours().get(position).getId());
