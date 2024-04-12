@@ -132,8 +132,8 @@ public class CreateListingFragment7 extends Fragment {
 
                 final OkHttpClient client = new OkHttpClient();
                 // TODO Complete JSON string
-                String json = String.format("{\"title\": \"%s\", \"description\": \"%s\", \"thumbnailUrls\": %s, \"category\": \"%s\", \"location\": {\"y\": %s,\"x\": %s}, \"timeRangeList\": %s, \"price\": %s, \"maxPax\": %s, \"minPax\": %s }",
-                        title, description, new Gson().toJson(thumbnailUrls), category, locationY, locationX, timeSlotItemModelList.toString(), usdPrice, maxPax, minPax);
+                String json = String.format("{\"title\": \"%s\", \"description\": %s, \"thumbnailUrls\": %s, \"category\": \"%s\", \"location\": {\"y\": %s,\"x\": %s}, \"timeRangeList\": %s, \"price\": %s, \"maxPax\": %s, \"minPax\": %s }",
+                        title, new Gson().toJson(description), new Gson().toJson(thumbnailUrls), category, locationY, locationX, timeSlotItemModelList.toString(), usdPrice, maxPax, minPax);
 
                  RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                 new AuthService(getContext()).getResponse("/wayfarer/listing/create", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {

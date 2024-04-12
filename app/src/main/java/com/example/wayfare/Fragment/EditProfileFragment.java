@@ -232,7 +232,7 @@ public class EditProfileFragment extends Fragment {
     }
     public void sendRequest(){
         String json = String.format("""
-                            {"pictureUrl":"%s","aboutMe":"%s", "languagesSpoken":%s}""", pictureUrl, bio.getText().toString(), new Gson().toJson(languages.getText().toString().split(",")));
+                            {"pictureUrl":"%s","aboutMe":%s, "languagesSpoken":%s}""", pictureUrl, new Gson().toJson(bio.getText().toString()), new Gson().toJson(languages.getText().toString().split(",")));
         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
         new AuthService(getContext()).getResponse("/profile/edit", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override

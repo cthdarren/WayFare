@@ -19,6 +19,7 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
 import java.util.Objects;
 
@@ -81,7 +82,7 @@ public class CreateReviewFragment extends Fragment {
 
                 if (!(description.getText().length() < 1 | title.getText().length() < 1)) {
                     String json = String.format("""
-                            {"title":"%s", "score":%d,"reviewContent":"%s","listingId":"%s", "bookingId":"%s"} """, title.getText().toString(), rating, description.getText().toString(), listingId, bookingId);
+                            {"title":"%s", "score":%d,"reviewContent":%s,"listingId":"%s", "bookingId":"%s"} """, title.getText().toString(), rating, new Gson().toJson(description.getText().toString()), listingId, bookingId);
                      RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                     new AuthService(getContext()).getResponse("/review/create", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                         @Override

@@ -352,8 +352,8 @@ public class EditListingFragment extends Fragment implements RecyclerViewInterfa
                     latitude = latLngAddress.latitude;
                 }
                 @SuppressLint("DefaultLocale") String json = String.format("""
-                                {"title": "%s", "description": "%s", "thumbnailUrls": %s,"category": "%s", "location": {"x":%f, "y":%f}, "timeRangeList": %s, "price": "%.2f", "maxPax": %d, "minPax": %d}""",
-                        edit_listing_title.getText().toString(), edit_listing_description.getText().toString(), gsonparser.toJson(currentListing.getThumbnailUrls()),
+                                {"title": "%s", "description": %s, "thumbnailUrls": %s,"category": "%s", "location": {"x":%f, "y":%f}, "timeRangeList": %s, "price": "%.2f", "maxPax": %d, "minPax": %d}""",
+                        edit_listing_title.getText().toString(), gsonparser.toJson(edit_listing_description.getText().toString()), gsonparser.toJson(currentListing.getThumbnailUrls()),
                         Helper.categoryNameToEnum(edit_listing_category.getText().toString()), longitude, latitude,
                         gsonparser.toJson(timeSlotList), usdPrice,
                         Integer.parseInt(maxPax.getText().toString()),
