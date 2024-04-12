@@ -146,7 +146,7 @@
                 <TextView
                     android:id="@+id/shortsDescription"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:fontFamily="@font/montserrat_medium"
                     android:shadowDx="0"
                     android:shadowDy="0"

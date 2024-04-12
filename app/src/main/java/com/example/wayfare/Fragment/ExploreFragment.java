@@ -156,16 +156,36 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                if (positionOffset == 0 && positionOffsetPixels == 0) {
+                        int prevPosition = shortsAdapter.getCurrentPosition();
+                        int currPosition = position;
+                        if(prevPosition==currPosition){
+                            if(prevPosition==0){
+                                shortsAdapter.playVideo(position);
+                            }else if(prevPosition==shortsObjectList.size()-1){
+                                Toast.makeText(requireContext(), "End of Journeys", Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                            shortsAdapter.stopVideo(prevPosition);
+                            Log.d("ViewHolderPosition", "stopping: " + shortsAdapter.getCurrentPosition());
+                            shortsAdapter.updateCurrentPosition(currPosition);
+                            shortsAdapter.playVideo(currPosition);
+                            Log.d("ViewHolderPosition", "playing: " + position);
+                        }
+                    //Log.e("Selected_Page", String.valueOf(shortsAdapter.getCurrentPosition()));
+
+                }
 
             }
 
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
-                shortsAdapter.playVideo(position);
-                //Log.e("Selected_Page", String.valueOf(shortsAdapter.getCurrentPosition()));
-                shortsAdapter.updateCurrentPosition(position);
+//                shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
+//                shortsAdapter.playVideo(position);
+//                //Log.e("Selected_Page", String.valueOf(shortsAdapter.getCurrentPosition()));
+//                shortsAdapter.updateCurrentPosition(position);
+//                shortsAdapter.initiaLizeVideo(position);
             }
 
             @Override
@@ -306,6 +326,7 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        shortsAdapter.pauseVideo(shortsAdapter.getCurrentPosition());
     }
 
     @Override
@@ -316,6 +337,7 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        shortsAdapter.stopAllVideo();
     }
 
     @Override
