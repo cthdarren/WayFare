@@ -222,16 +222,28 @@ public class AzureStorageManager {
         return tempfile;
     }
     private static String getFileNameFromUri(Uri uri, Context context) {
-        String[] projection = {MediaStore.Video.Media.DISPLAY_NAME};
-        try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
-                return cursor.getString(columnIndex);
+        String scheme = uri.getScheme();
+        if ("file".equals(scheme)) {
+            // If the URI scheme is "file", extract the file name from the URI
+            String filePath = uri.getPath();
+            if (filePath != null) {
+                File file = new File(filePath);
+                return file.getName();
+            } else {
+                return null;
             }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        }else {
+            String[] projection = {MediaStore.Video.Media.DISPLAY_NAME};
+            try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
+                    return cursor.getString(columnIndex);
+                }
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
-        return null;
     }
 
     private static String getFileExtension(String fileName) {

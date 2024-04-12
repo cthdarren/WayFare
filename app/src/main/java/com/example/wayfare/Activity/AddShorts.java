@@ -271,19 +271,15 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
     }
     void startUploadingActivity(Uri videoUri) {
         captureLiveStatus.setValue("");
-        String dashOutputPath = convertVideoToDASH(getRealPathFromURI(videoUri));
-        if (dashOutputPath != null) {
-            // Conversion successful, proceed with new activity
-            Intent i = new Intent(this, PreviewShortsActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("userName", userName);
-            bundle.putString("videoUri", dashOutputPath); // Use DASH output path
-            i.putExtras(bundle);
-            startActivity(i);
-        } else {
-            // Conversion failed, handle error (show toast, log error)
-            Toast.makeText(this, "Error converting video", Toast.LENGTH_SHORT).show();
-        }
+//        String dashOutputPath = convertVideoToDASH(getRealPathFromURI(videoUri));
+        // Conversion successful, proceed with new activity
+        Intent i = new Intent(this,
+                PreviewShortsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("userName", userName);
+        bundle.putString("videoUri", videoUri.toString());
+        i.putExtras(bundle);
+        startActivity(i);
     }
     private String convertVideoToDASH(String inputVideoPath) {
         String outputFilePath = getOutputFilePathForDASH(); // Generate unique output path
@@ -291,14 +287,15 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         // FFmpeg command building (example, customize based on your needs)
         String[] command = new String[]{
                 "-i", inputVideoPath, // Input file (from Uri)
+                "-map", "v",  // Map the first video stream by default
                 "-c:v", "libx264", // Specify video codec (H.264)
-                "-preset", "medium", // Use ultrafast preset for faster encoding
-                "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
-                "-maxrate", "2M",
-                "-bufsize","3.5M",
+                "-preset", "fast", // Use ultrafast preset for faster encoding
+                "-crf", "16", // Constant rate factor for quality (lower values mean better quality but larger file size)
                 "-c:a", "aac", // Audio codec
-                "- b:a", "128k",
                 "-strict", "experimental",
+                "-b:v", "6M",  // Set video bitrate (adjust based on your needs)
+                "-maxrate:v", "5M",  // Set maximum bitrate (optional)
+                "-bufsize:v", "5M",  // Set buffer size (optional)
                 outputFilePath // Output DASH file path
         };
 

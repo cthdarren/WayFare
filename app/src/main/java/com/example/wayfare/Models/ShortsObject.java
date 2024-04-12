@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class ShortsObject {
     //    private String id;
-    private String shortsUrl;
+    private String shortsUrl,id;
     private String userId;
     private String userName;
     private String description;
@@ -14,8 +14,8 @@ public class ShortsObject {
     private ArrayList<String> likes;
     private Date datePosted;
     public ShortsObject(){}
-
-    public ShortsObject(String shortsUrl, String userName,String userId, String description, Date datePosted, TourListModel listing,ArrayList<String> likes) {
+    public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, Date datePosted, TourListModel listing, ArrayList<String> likes) {
+        this.id = id;
         this.shortsUrl = shortsUrl;
         this.userId = userId;
         this.userName = userName;
@@ -25,9 +25,9 @@ public class ShortsObject {
         this.datePosted = datePosted;
     }
 
-//    public String getId() {
-//        return id;
-//    }
+    public String getId() {
+        return id;
+    }
 //
 //    public void setId(String id) {
 //        this.id = id;
@@ -75,6 +75,16 @@ public class ShortsObject {
 
     public ArrayList<String> getLikes() {
         return likes;
+    }
+    public void addLike(String like) {
+        if (!this.likes.contains(like)) {
+            this.likes.add(like);
+        }
+    }
+    public void removeLike(String like) {
+        if (this.likes != null) {
+            this.likes.remove(like);
+        }
     }
 
     public void setLikes(ArrayList<String> likes) {

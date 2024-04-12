@@ -20,6 +20,7 @@ import androidx.annotation.OptIn;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Player;
 import androidx.media3.common.MediaItem;
@@ -33,16 +34,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.Fragment.TourListingFull;
+import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.ShortsObject;
 import com.example.wayfare.Models.TourListModel;
+import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
+import com.example.wayfare.ViewModel.UserViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsViewHolder> {
     List<ShortsObject> shortsDataList;
+    UserViewModel userViewModel;
     private int currentPosition;
     private FragmentManager fragmentManager;
     private Fragment exploreFragment;
@@ -51,6 +60,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
+    UserModel userData;
     public ShortsAdapter(List<ShortsObject> shortsDataList, Context context, FragmentManager fragmentManager, Fragment exploreFragment) {
         this.shortsDataList = shortsDataList;
         this.context = context;
@@ -64,6 +74,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     @Override
     public ShortsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_explore, parent, false);
+        userViewModel = new ViewModelProvider(exploreFragment.getActivity()).get(UserViewModel.class);
+        userData = userViewModel.getUserProfileData();
         return new ShortsViewHolder(view);
     }
 
@@ -132,7 +144,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     public class ShortsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private PlayerView videoView;
         private ExoPlayer exoPlayer;
-        private TextView shortsDescription, shortsTitle, listingTitle;
+        private TextView shortsDescription, shortsTitle, listingTitle,tvComment, tvFavorites;
         private CardView listingCard;
         private ImageView imvAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
         private ProgressBar videoProgressBar;
@@ -144,6 +156,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             videoView = itemView.findViewById(R.id.videoView);
             shortsDescription = itemView.findViewById(R.id.shortsDescription);
             shortsTitle = itemView.findViewById(R.id.shortsTitle);
+            tvComment = itemView.findViewById(R.id.tvComment);
+            tvFavorites = itemView.findViewById(R.id.tvFavorites);
             videoProgressBar = itemView.findViewById(R.id.progressBar);
             videoProgressBar.setVisibility(View.GONE);
             imvVolume = itemView.findViewById(R.id.imvVolume);
@@ -155,6 +169,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
             listingTitle.setOnClickListener(this);
+            tvFavorites.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
@@ -238,6 +253,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             Uri shortsUri = Uri.parse(shortsData.getShortsUrl());
             shortsDescription.setText(shortsData.getDescription());
             shortsTitle.setText(shortsData.getUserName());
+            tvFavorites.setText(String.valueOf(shortsDataList.get(getCurrentPosition()).getLikes().size()));
+            if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userData.getUsername())) {
+                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
+            }
+            else{
+                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
+            }
             if (shortsData.getListing()!=null){
                 listingCard.setVisibility(View.VISIBLE);
                 listingTitle.setText(shortsData.getListing().getTitle());
@@ -247,13 +269,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             MediaItem.Builder mediaItemBuilder = new MediaItem.Builder();
             mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
             mediaItemBuilder.setUri(shortsUri);
-//            if (shortsData.getShortsUrl().endsWith(".mp4")) {
-//                // Set MIME type to mp4 if extension is present
-//                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
-//            } else {
-//                // Set MIME type to DASH for URIs without .mpd extension
-//                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
-//            }
+            if (shortsData.getShortsUrl().endsWith(".mp4")) {
+                // Set MIME type to mp4 if extension is present
+                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
+            } else {
+                // Set MIME type to DASH for URIs without .mpd extension
+                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
+            }
 //
            MediaItem mediaItem = mediaItemBuilder.build();
 //            MediaItem mediaItem = MediaItem.fromUri(shortsUri);
@@ -293,6 +315,49 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             });
 
         }
+        private void setFillLiked(boolean isLiked) {
+            if(isLiked) {
+                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
+                String username = userData.getUsername();
+                String apiUrl = "/shorts/liked/" + shortsDataList.get(getCurrentPosition()).getId();
+                RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
+                new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                    @Override
+                    public void onError(String message) {
+//                        unsuccessfullScreen();
+                    }
+                    @Override
+                    public void onResponse(ResponseModel json) {
+                        if (json.success) {
+                            shortsDataList.get(getCurrentPosition()).addLike(username);
+                            int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
+                            tvFavorites.setText(String.valueOf(totalLikes));
+                        }
+                    }
+                });
+            }
+            else {
+                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
+                String username = userData.getUsername();
+                String apiUrl = "/shorts/unliked/" + shortsDataList.get(getCurrentPosition()).getId();
+                RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
+                new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                    @Override
+                    public void onError(String message) {
+//                        unsuccessfullScreen();
+                    }
+
+                    @Override
+                    public void onResponse(ResponseModel json) {
+                        if (json.success) {
+                            shortsDataList.get(getCurrentPosition()).removeLike(username);
+                            int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
+                            tvFavorites.setText(String.valueOf(totalLikes));
+                        }
+                    }
+                });
+            }
+        }
 
         public void onClick(View view) {
             if (view.getId() == videoView.getId()) {
@@ -315,14 +380,20 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                                     imvAppear.setVisibility(View.INVISIBLE);
                                 }
                             }
-//                        else if (numberOfClick == 2) {
-//                            handleTymClick(view);
-//                            imvAppear.setVisibility(View.GONE);
-//                            appearImage(R.drawable.ic_fill_favorite);
-//                        }
+                        else if (numberOfClick == 2) {
+                            appearImage(R.drawable.ic_fill_favorite);
+                            setFillLiked(true);
+                        }
                             numberOfClick = 0;
                         }
                     }, 250);
+                }
+            }
+            if (view.getId() == tvFavorites.getId()){
+                if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userData.getUsername())) {
+                    setFillLiked(false);}
+                else{
+                    setFillLiked(true);
                 }
             }
             if (view.getId() == imvVolume.getId()) {
@@ -350,12 +421,11 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 int pos = getCurrentPosition();
                 TourListModel currListing = shortsDataList.get(pos).getListing();
                 Bundle data = new Bundle();
-
                 data.putString("title", currListing.getTitle());
                 data.putString("location", currListing.getRegion());
                 data.putString("rating", String.valueOf(currListing.getRating()));
                 data.putString("price", String.valueOf(currListing.getPrice()));
-                data.putString("thumbnail", currListing.getThumbnailUrls()[0]);
+                data.putStringArray("thumbnailUrls", currListing.getThumbnailUrls());
                 data.putString("description", currListing.getDescription());
                 data.putString("reviewCount", String.valueOf(currListing.getReviewCount()));
                 data.putString("listingId", currListing.getId());

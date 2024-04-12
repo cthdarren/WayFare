@@ -3,6 +3,7 @@ package com.example.wayfare.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -43,18 +44,19 @@ public class PreviewShortsActivity extends AppCompatActivity implements View.OnC
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         String videoPath= bundle.getString("videoUri");
+        Log.d("URLLLL",videoPath);
         userName= bundle.getString("userName");
         videoUri = Uri.parse(videoPath);
         MediaItem.Builder mediaItemBuilder = new MediaItem.Builder();
         mediaItemBuilder.setUri(videoUri);
-            if (videoPath.endsWith(".mp4")) {
-                // Set MIME type to mp4 if extension is present
-                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
-            } else {
-                // Set MIME type to DASH for URIs without .mpd extension
-                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
-            }
-//
+//        mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
+//            if (videoPath.endsWith(".mp4")) {
+//                // Set MIME type to mp4 if extension is present
+//                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
+//            } else {
+//                // Set MIME type to DASH for URIs without .mpd extension
+//                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
+//            }
         MediaItem mediaItem = mediaItemBuilder.build();
         playerView = findViewById(R.id.preview_player);
         exoPlayer = new ExoPlayer.Builder(this).build();

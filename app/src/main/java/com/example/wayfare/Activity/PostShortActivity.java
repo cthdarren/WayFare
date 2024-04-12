@@ -1,5 +1,8 @@
 package com.example.wayfare.Activity;
 import android.content.ContentResolver;
+
+import com.arthenica.mobileffmpeg.Config;
+import com.arthenica.mobileffmpeg.FFmpeg;
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.Adapters.PreviewListingsAdapter;
 import com.example.wayfare.Adapters.YourListingsAdapter;
@@ -13,6 +16,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -74,6 +78,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -86,6 +91,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 public class PostShortActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS";
     ImageView btnBack;
     Button btnUpload;
     Uri videoUri;
@@ -99,6 +105,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
     UserViewModel userViewModel;
     String userName;
     PreviewListingsAdapter previewListingsAdapter;
+    String dashPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +161,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
         recycleListingsPreview = findViewById(R.id.recycleListingsPreview);
         recycleListingsPreview.setAdapter(previewListingsAdapter);
         recycleListingsPreview.setLayoutManager(new LinearLayoutManager(PostShortActivity.this));
+        convertVideoToDASHAsync(getRealPathFromURI(videoUri));
 
     }
 
@@ -163,90 +171,66 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
             finish();
             //overridePendingTransition(R.anim.slide_right_to_left, R.anim.slide_out_bottom);
         }
-        if (view.getId() == R.id.btnUploadBlob2){
+        if (view.getId() == R.id.btnUploadBlob2) {
             loadingLayout.setVisibility(View.VISIBLE);
-            AzureStorageManager.uploadBlob(this, videoUri, false, new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
-                    // Handle failure
-                    e.printStackTrace();
-                    unsuccessfullScreen();
-                    // Perform any error handling logic, such as showing an error message to the user
-                }
-
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    // Handle success
-                    if (!response.isSuccessful()) {
+            if (dashPath != null) {
+                File file = new File(dashPath);
+                Uri dashUri = Uri.fromFile(file);
+                AzureStorageManager.uploadBlob(this, dashUri, false, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        // Handle failure
+                        e.printStackTrace();
                         unsuccessfullScreen();
-                        throw new IOException("Unexpected response code: " + response);
+                        // Perform any error handling logic, such as showing an error message to the user
                     }
-                    // Handle successful upload
-                    String url = response.request().url().toString();
-                    String urlOfBlob = AzureStorageManager.getBaseUrl(url); //URL of uploaded file
-                    Log.d("Upload", "File uploaded successfully. URL: " + url);
-                    int selectedPosition = previewListingsAdapter.getSelectedPosition();
-                    String apiUrl = "/shorts/create";
-                    if (selectedPosition!=-1) {
-                        String tourListingID = tourListModels.get(selectedPosition).getId();
-                        apiUrl = apiUrl+"/"+tourListingID;
-                    }
-                    String descriptionText = descriptionEditText.getText().toString();
-                    Date currentDate = new Date();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                    String formattedDate = dateFormat.format(currentDate);
-                    final OkHttpClient client = new OkHttpClient();
-                    // TODO Complete JSON string
-                    String json = String.format("{\"description\": \"%s\", \"shortsUrl\": \"%s\", \"datePosted\": \"%s\"}",
-                            descriptionText,urlOfBlob,formattedDate);
-                     RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
-                    new AuthService(PostShortActivity.this).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
-                        @Override
-                        public void onError(String message) {
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        // Handle success
+                        if (!response.isSuccessful()) {
                             unsuccessfullScreen();
+                            throw new IOException("Unexpected response code: " + response);
                         }
-                        @Override
-                        public void onResponse(ResponseModel json){
-                            if (!response.isSuccessful()) {
+                        // Handle successful upload
+                        String url = response.request().url().toString();
+                        String urlOfBlob = AzureStorageManager.getBaseUrl(url); //URL of uploaded file
+                        Log.d("Upload", "File uploaded successfully. URL: " + url);
+                        int selectedPosition = previewListingsAdapter.getSelectedPosition();
+                        String apiUrl = "/shorts/create";
+                        if (selectedPosition != -1) {
+                            String tourListingID = tourListModels.get(selectedPosition).getId();
+                            apiUrl = apiUrl + "/" + tourListingID;
+                        }
+                        String descriptionText = descriptionEditText.getText().toString();
+                        Date currentDate = new Date();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                        String formattedDate = dateFormat.format(currentDate);
+                        final OkHttpClient client = new OkHttpClient();
+                        // TODO Complete JSON string
+                        String json = String.format("{\"description\": \"%s\", \"shortsUrl\": \"%s\", \"datePosted\": \"%s\"}",
+                                descriptionText, urlOfBlob, formattedDate);
+                        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+                        new AuthService(PostShortActivity.this).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                            @Override
+                            public void onError(String message) {
                                 unsuccessfullScreen();
                             }
-                            successfullScreen();
-                        }
-                    });
 
-                }
-            });
+                            @Override
+                            public void onResponse(ResponseModel json) {
+                                if (!response.isSuccessful()) {
+                                    unsuccessfullScreen();
+                                }
+                                successfullScreen();
+                            }
+                        });
 
-        }
-    }
-    public String createServiceSASContainer(BlobContainerClient containerClient) {
-        // Create a SAS token that's valid for 1 day, as an example
-        OffsetDateTime expiryTime = OffsetDateTime.now().plusDays(1);
-
-        // Assign read permissions to the SAS token
-        BlobContainerSasPermission sasPermission = new BlobContainerSasPermission()
-                .setReadPermission(true)
-                .setWritePermission(true)  // Add write permission
-                .setAddPermission(true);   // Add upload permission
-
-        BlobServiceSasSignatureValues sasSignatureValues = new BlobServiceSasSignatureValues(expiryTime, sasPermission)
-                .setStartTime(OffsetDateTime.now().minusMinutes(5));
-
-        String sasToken = containerClient.generateSas(sasSignatureValues);
-        return sasToken;
-    }
-    private String getFileNameFromUri(Uri uri) {
-        String[] projection = {MediaStore.Video.Media.DISPLAY_NAME};
-        try (Cursor cursor = getContentResolver().query(uri, projection, null, null, null)) {
-            if (cursor != null && cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME);
-                return cursor.getString(columnIndex);
+                    }
+                });
+             }
             }
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
         }
-        return null;
-    }
     private void successfullScreen(){
         runOnUiThread(new Runnable() {
             @Override
@@ -274,61 +258,95 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
-    public void uploadFile(Uri videoUri,String sasToken,String accountName,String containerName,Callback callback){
-        String fileName = getFileNameFromUri(videoUri);
-        OkHttpClient client = new OkHttpClient();
-        String url = String.format("https://%s.blob.core.windows.net/%s/%s", accountName, containerName, fileName);
-        final String toReturnUrl = url;
-        if (sasToken != null && !sasToken.isEmpty()) {
-            url += "?" + sasToken;
+    private String convertVideoToDASH(String inputVideoPath) {
+        String outputFilePath = getOutputFilePathForDASH(); // Generate unique output path
+
+        // FFmpeg command building (example, customize based on your needs)
+        String[] command = new String[]{
+                "-i", inputVideoPath, // Input file (from Uri)
+                "-c:v", "libx264", // Specify video codec (H.264)
+                "-preset", "veryfast", // Use ultrafast preset for faster encoding
+                "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
+                "-c:a", "aac", // Audio codec
+                "-strict", "experimental",
+                "-b:v", "3M",  // Set video bitrate (adjust based on your needs)
+                outputFilePath // Output DASH file path
+        };
+        int rc = FFmpeg.execute(command);
+
+        if (rc == Config.RETURN_CODE_SUCCESS) {
+            return outputFilePath; // Conversion successful, return output path
+        } else {
+            Log.e("FFmpeg", "FFmpeg command failed with return code: " + rc);
+            return null; // Conversion failed, return null
         }
-        // Convert video content to byte array
-        byte[] videoBytes;
-        try {
-            videoBytes = getBytesFromUri(videoUri);
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading video content: " + e.getMessage(), e);
-        }
-        // Open an InputStream from the Uri
-        RequestBody requestBody = RequestBody.create(MediaType.parse("video/mp4"), videoBytes);
-        Request request = new Request.Builder()
-                .url(url)
-                .put(requestBody)
-                .addHeader("x-ms-blob-type", "BlockBlob")
-                .build();
-        // Execute the request
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // Handle failure
-                e.printStackTrace();
-                callback.onFailure(call, e);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                // Handle success
-                if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected response code: " + response);
-                }
-                // Handle successful upload
-                System.out.println("File uploaded successfully.");// This is the URL of the uploaded file
-                callback.onResponse(call, response);
-            }
-        });
-
-
     }
-    private byte[] getBytesFromUri(Uri uri) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
+    private String getOutputFilePathForDASH() {
+        // Get internal storage directory
+        File storageDir = getFilesDir();
+        String name = "Wayfare-Shorts-" +
+                new SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+                        .format(System.currentTimeMillis()) + ".mp4";
+        File outputFile = new File(storageDir, name);
+        return outputFile.getAbsolutePath();
+    }
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] projection = { MediaStore.Video.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, projection, null, null, null);
+        if (cursor == null) {
+            // Query failed, return null
+            return null;
         }
-        return outputStream.toByteArray();
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+        cursor.moveToFirst();
+        String realPath = cursor.getString(columnIndex);
+        cursor.close();
+        return realPath;
+    }
+    private void convertVideoToDASHAsync(final String inputVideoPath) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Generate unique output path for DASH file
+                final String outputFilePath = getOutputFilePathForDASH();
+
+                // FFmpeg command building
+                String[] command = new String[]{
+                        "-i", inputVideoPath, // Input file
+                        "-map", "v",  // Map the first video stream by default
+                        "-c:v", "libx264", // Specify video codec (H.264)
+                        "-preset", "veryfast", // Use ultrafast preset for faster encoding
+                        "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
+                        "-c:a", "aac", // Audio codec
+                        "-strict", "experimental",
+                        "-b:v", "3M",  // Set video bitrate (adjust based on your needs)
+                        "-movflags", "+faststart",
+                        outputFilePath // Output DASH file path
+                };
+
+                // Execute FFmpeg command
+                int rc = FFmpeg.execute(command);
+
+                // Handle the result of the conversion
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (rc == Config.RETURN_CODE_SUCCESS) {
+                            // Conversion successful, do something with the output file path
+                            // For example, start playback with ExoPlayer
+                            dashPath = outputFilePath;
+                            if(loadingLayout.getVisibility()==View.VISIBLE){
+                                btnUpload.performClick();
+                            }
+                        } else {
+                            // Conversion failed, handle the error
+                            // For example, show an error message to the user
+                            Toast.makeText(getApplicationContext(), "Video conversion failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }).start();
     }
     public void makeToast(String msg) {
 
