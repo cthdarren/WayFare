@@ -11,8 +11,8 @@
         android:id="@+id/hosting_calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/calendar"
-        android:title="Calendar" />
+        android:icon="@drawable/icon_selection_upcoming"
+        android:title="Previous" />
     <item
         android:id="@+id/hosting_tour"
         android:layout_width="wrap_content"

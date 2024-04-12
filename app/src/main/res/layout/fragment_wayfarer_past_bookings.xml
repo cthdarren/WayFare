@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    tools:context=".Fragment.UpcomingFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingBottom="30dp"
+        android:paddingHorizontal="@dimen/outer_padding">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Previous Companions"
+            android:textSize="@dimen/font_xl"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/noBookingsMessage"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:visibility="gone"
+        android:paddingHorizontal="30dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:padding="15dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="25dp"
+                    android:src="@drawable/upcoming"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:textSize="@dimen/font_sm"
+                    android:text="It appears that you don't have any past bookings... yet!"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:paddingBottom="10dp"
+                    android:textSize="@dimen/font_xs"
+                    android:layout_height="wrap_content"
+                    android:text="Maybe someone will book a tour with you soon!"/>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/outer_padding">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/pastBookingList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/past_booking_item"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:nestedScrollingEnabled="false"/>
+
+    </LinearLayout>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
