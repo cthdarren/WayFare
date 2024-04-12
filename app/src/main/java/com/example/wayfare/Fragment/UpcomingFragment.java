@@ -184,6 +184,7 @@ public class UpcomingFragment extends Fragment implements RecyclerViewInterface,
         Bundle args = new Bundle();
         args.putString("listingId", pastBookings.get(position).listingUrl);
         args.putString("wayfarer", pastBookings.get(position).wayfarerUsername);
+        args.putString("bookingId", pastBookings.get(position).id);
         Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new CreateReviewFragment());
     }
 

@@ -35,6 +35,7 @@ public class CreateReviewFragment extends Fragment {
     int rating;
     String wayfarer;
     String listingId = "";
+    String bookingId = "";
     public CreateReviewFragment(){}
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +46,7 @@ public class CreateReviewFragment extends Fragment {
         if (getArguments() != null) {
             listingId = getArguments().getString("listingId", "");
             wayfarer = getArguments().getString("wayfarer", "");
+            bookingId = getArguments().getString("bookingId", "");
         }
         if (Objects.equals(listingId, "")){
             getParentFragmentManager().popBackStack();
@@ -79,7 +81,7 @@ public class CreateReviewFragment extends Fragment {
 
                 if (!(description.getText().length() < 1 | title.getText().length() < 1)) {
                     String json = String.format("""
-                            {"title":"%s", "score":%d,"reviewContent":"%s","listingId":"%s"} """, title.getText().toString(), rating, description.getText().toString(), listingId);
+                            {"title":"%s", "score":%d,"reviewContent":"%s","listingId":"%s", "bookingId":"%s"} """, title.getText().toString(), rating, description.getText().toString(), listingId, bookingId);
                      RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
                     new AuthService(getContext()).getResponse("/review/create", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
                         @Override
