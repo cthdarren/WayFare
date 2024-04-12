@@ -292,9 +292,12 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         String[] command = new String[]{
                 "-i", inputVideoPath, // Input file (from Uri)
                 "-c:v", "libx264", // Specify video codec (H.264)
-                "-preset", "ultrafast", // Use ultrafast preset for faster encoding
-                "-crf", "10", // Constant rate factor for quality (lower values mean better quality but larger file size)
+                "-preset", "medium", // Use ultrafast preset for faster encoding
+                "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
+                "-maxrate", "2M",
+                "-bufsize","3.5M",
                 "-c:a", "aac", // Audio codec
+                "- b:a", "128k",
                 "-strict", "experimental",
                 outputFilePath // Output DASH file path
         };
