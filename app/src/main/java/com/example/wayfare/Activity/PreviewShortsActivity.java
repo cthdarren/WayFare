@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.MimeTypes;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.SimpleExoPlayer;
 import androidx.media3.ui.PlayerView;
@@ -44,10 +45,21 @@ public class PreviewShortsActivity extends AppCompatActivity implements View.OnC
         String videoPath= bundle.getString("videoUri");
         userName= bundle.getString("userName");
         videoUri = Uri.parse(videoPath);
+        MediaItem.Builder mediaItemBuilder = new MediaItem.Builder();
+        mediaItemBuilder.setUri(videoUri);
+            if (videoPath.endsWith(".mp4")) {
+                // Set MIME type to mp4 if extension is present
+                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
+            } else {
+                // Set MIME type to DASH for URIs without .mpd extension
+                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
+            }
+//
+        MediaItem mediaItem = mediaItemBuilder.build();
         playerView = findViewById(R.id.preview_player);
         exoPlayer = new ExoPlayer.Builder(this).build();
         playerView.setPlayer(exoPlayer);
-        exoPlayer.setMediaItem(buildMediaItem(videoUri));
+        exoPlayer.setMediaItem(mediaItem);
         exoPlayer.setPlayWhenReady(true);
         exoPlayer.prepare();
     }

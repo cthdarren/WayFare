@@ -99,4 +99,5 @@ dependencies {
     implementation("com.google.maps:google-maps-services:2.2.0")
     implementation("org.slf4j:slf4j-simple:1.7.25")
     implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
+    implementation("com.arthenica:mobile-ffmpeg-full-gpl:4.4")
 }

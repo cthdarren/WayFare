@@ -9,6 +9,9 @@ import android.graphics.Color;
 import android.provider.MediaStore;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import com.arthenica.mobileffmpeg.Config;
+import com.arthenica.mobileffmpeg.FFmpeg;
 import com.example.wayfare.R;
 
 import androidx.camera.core.AspectRatio;
@@ -268,13 +271,61 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
     }
     void startUploadingActivity(Uri videoUri) {
         captureLiveStatus.setValue("");
-        Intent i = new Intent(this,
-                PreviewShortsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("userName", userName);
-        bundle.putString("videoUri", videoUri.toString());
-        i.putExtras(bundle);
-        startActivity(i);
+        String dashOutputPath = convertVideoToDASH(getRealPathFromURI(videoUri));
+        if (dashOutputPath != null) {
+            // Conversion successful, proceed with new activity
+            Intent i = new Intent(this, PreviewShortsActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("userName", userName);
+            bundle.putString("videoUri", dashOutputPath); // Use DASH output path
+            i.putExtras(bundle);
+            startActivity(i);
+        } else {
+            // Conversion failed, handle error (show toast, log error)
+            Toast.makeText(this, "Error converting video", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private String convertVideoToDASH(String inputVideoPath) {
+        String outputFilePath = getOutputFilePathForDASH(); // Generate unique output path
+
+        // FFmpeg command building (example, customize based on your needs)
+        String[] command = new String[]{
+                "-i", inputVideoPath, // Input file (from Uri)
+                "-c:v", "libx264", // Specify video codec (H.264)
+                "-preset", "ultrafast", // Use ultrafast preset for faster encoding
+                "-crf", "10", // Constant rate factor for quality (lower values mean better quality but larger file size)
+                "-c:a", "aac", // Audio codec
+                "-strict", "experimental",
+                outputFilePath // Output DASH file path
+        };
+
+        int rc = FFmpeg.execute(command);
+
+        if (rc == Config.RETURN_CODE_SUCCESS) {
+            return outputFilePath; // Conversion successful, return output path
+        } else {
+            Log.e("FFmpeg", "FFmpeg command failed with return code: " + rc);
+            return null; // Conversion failed, return null
+        }
+    }
+    private String getOutputFilePathForDASH() {
+        // Get internal storage directory
+        File storageDir = getFilesDir();
+        File outputFile = new File(storageDir, "cached_output.mpd");
+        return outputFile.getAbsolutePath();
+    }
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] projection = { MediaStore.Video.Media.DATA };
+        Cursor cursor = getContentResolver().query(contentUri, projection, null, null, null);
+        if (cursor == null) {
+            // Query failed, return null
+            return null;
+        }
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+        cursor.moveToFirst();
+        String realPath = cursor.getString(columnIndex);
+        cursor.close();
+        return realPath;
     }
     private long getVideoDuration(Uri videoUri) {
         String[] filePathColumn = { MediaStore.Video.Media.DURATION };
@@ -390,7 +441,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         try {
             currentRecording = videoCapture.getOutput()
                     .prepareRecording(AddShorts.this, mediaStoreOutput)
-                   // .withAudioEnabled() // Use setAudioEnabled() for Java
+                   // .withAudioEnabled()
                     .start(ContextCompat.getMainExecutor(AddShorts.this), videoRecordEvent -> {
                         RecordingStats stats = videoRecordEvent.getRecordingStats();
                         long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
