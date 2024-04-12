@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
     RecyclerView reviewRecycler;
     RecyclerView listingRecycler;
     Button show_all_reviews_button, edit_profile_button;
-    LinearLayout review_segment;
+    LinearLayout review_segment, ratingBox, reviewBox, ratingDivider, reviewCountDivider;
     LinearLayout listings_wrapper;
     TextView listings_wrapper_header;
     TextView confirmed_info_header;
@@ -116,6 +116,10 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         full_name = view.findViewById(R.id.full_name);
         languagesSpoken = view.findViewById(R.id.languages_spoken);
         review_segment = view.findViewById(R.id.review_segment);
+        ratingBox = view.findViewById(R.id.ratingBox);
+        reviewBox = view.findViewById(R.id.reviewBox);
+        ratingDivider = view.findViewById(R.id.ratingDivider);
+        reviewCountDivider = view.findViewById(R.id.reviewCountDivider);
         review_title = view.findViewById(R.id.review_title);
         reviewCount = view.findViewById(R.id.num_reviews);
         ratings = view.findViewById(R.id.rating);
@@ -158,15 +162,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         else
             edit_profile_button.setVisibility(GONE);
 
-        if (userData.isVerified())
-            verification_truege.setImageResource(R.drawable.done);
-
-        if (Objects.equals(userData.getRole(), "ROLE_USER"))
-            listings_wrapper.setVisibility(GONE);
-
-        if (userData.getAboutMe().length() == 0) {
-            about_me.setVisibility(GONE);
-        }
 
         listingRecycler = view.findViewById(R.id.listing_carousel);
         listingRecycler.setAdapter(new ProfileListingAdapter(getContext(), listingItemModels, this));
@@ -220,18 +215,41 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                                 } else {
                                     years_on_wayfare.setText(String.valueOf(years));
                                 }
-                                about_me.setText(profileInfo.getAboutMe());
-                                show_all_reviews_button.setText(String.format("Show all %d reviews", profileInfo.getReviewCount()));
-                                if (profileInfo.getReviewCount() == 0) {
-                                    review_segment.setVisibility(GONE);
-                                    ratings.setText("-");
-                                } else {
-                                    ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
+
+
+                                if (profileInfo.isVerified())
+                                    verification_truege.setImageResource(R.drawable.done);
+
+                                if (Objects.equals(profileInfo.getRole(), "ROLE_USER"))
+                                    listings_wrapper.setVisibility(GONE);
+
+                                if (profileInfo.getAboutMe().isEmpty()) {
+                                    about_me.setVisibility(GONE);
                                 }
+                                about_me.setText(profileInfo.getAboutMe());
 
                                 setupReviewModels(profileInfo.getReviews());
                                 setUpListingModels(profileInfo.getTours());
 
+                                show_all_reviews_button.setText(String.format("Show all %d reviews", reviewItemModels.size()));
+
+                                if (reviewItemModels.isEmpty()){
+                                    review_segment.setVisibility(GONE);
+                                    ratingBox.setVisibility(GONE);
+                                    ratingDivider.setVisibility(GONE);
+                                    reviewBox.setVisibility(GONE);
+                                    reviewCountDivider.setVisibility(GONE);
+                                }
+                                // means he is wayfarer but has not reviews because he has only reviews from other wayfarers
+                                else if (profileInfo.getReviewCount() == 0) {
+                                    review_title.setText("Reviews from WayFarers");
+                                    ratingBox.setVisibility(GONE);
+                                    ratingDivider.setVisibility(GONE);
+                                    reviewCount.setText(String.valueOf(reviewItemModels.size()));
+
+                                } else {
+                                    ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
+                                }
                                 reviewRecycler = view.findViewById(R.id.review_carousel);
                                 reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels, ProfileFragment.this));
 

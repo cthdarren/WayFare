@@ -70,18 +70,20 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
             latitude = args.getDouble("latitude", 0);
             longitude = args.getDouble("longitude", 0);
             kmdistance = args.getInt("kmdistance", 100);
-            numberPax = args.getInt("numPax", 1);
+            numberPax = args.getInt("numPax", 0);
             date = args.getString("date", "Any day");
-            String paxString = " people";
-            if (numberPax == 1)
-                paxString = " person";
-            searchParams.setText(String.format("%s | %s | %s", region, date, numberPax + paxString));
+            String paxString = numberPax + " people";
+            if (numberPax < 1)
+                paxString = "Anybody";
+            else if (numberPax == 1)
+                paxString = numberPax + " person";
+            searchParams.setText(String.format("%s | %s | %s", region, date, paxString));
         }
         else{
             latitude = 0.0;
             longitude = 0.0;
             kmdistance = 20050;
-            numberPax = 1;
+            numberPax = 0;
         }
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +104,12 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     }
 
     public void setupTourListings(){
-        new AuthService(getContext()).getResponse(String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d&numberPax=%d",latitude, longitude, kmdistance, numberPax), false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+        String apiUrl;
+        if (numberPax != 0)
+            apiUrl = String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d&numberPax=%d",latitude, longitude, kmdistance, numberPax);
+        else
+            apiUrl = String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d",latitude, longitude, kmdistance);
+        new AuthService(getContext()).getResponse(apiUrl, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 getActivity().runOnUiThread(new Runnable() {

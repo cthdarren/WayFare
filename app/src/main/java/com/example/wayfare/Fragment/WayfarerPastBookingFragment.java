@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.wayfare.Adapters.PastBookingAdapter;
+import com.example.wayfare.Adapters.WayfarerPastBoookingAdapter;
 import com.example.wayfare.Models.BookingItemModel;
 import com.example.wayfare.Models.BookingModel;
 import com.example.wayfare.Models.ResponseModel;
@@ -68,7 +69,7 @@ public class WayfarerPastBookingFragment extends Fragment implements RecyclerVie
         pastBookingItemModels = new ArrayList<>();
         pastBookingsList = view.findViewById(R.id.pastBookingList);
         noBookingsMessage = view.findViewById(R.id.noBookingsMessage);
-        pastBookingsList.setAdapter(new PastBookingAdapter(getContext(), pastBookingItemModels, this));
+        pastBookingsList.setAdapter(new WayfarerPastBoookingAdapter(getContext(), pastBookingItemModels, this));
 
         new AuthService(getContext()).getResponse("/wayfarer/pastbookings", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
@@ -79,8 +80,7 @@ public class WayfarerPastBookingFragment extends Fragment implements RecyclerVie
             @Override
             public void onResponse(ResponseModel json) {
                 if (json.success) {
-                    Type listType = new TypeToken<List<BookingModel>>() {
-                    }.getType();
+                    Type listType = new TypeToken<List<BookingModel>>() {}.getType();
                     List<BookingModel> bookingModelList = new Gson().fromJson(json.data, listType);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override

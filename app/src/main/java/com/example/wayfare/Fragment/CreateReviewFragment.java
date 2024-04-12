@@ -70,6 +70,8 @@ public class CreateReviewFragment extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                submit.setEnabled(false);
+                cancel.setEnabled(false);
                 if (title.getText().length() < 1)
                     titleWrapper.setError("Title cannot be empty");
                 else
@@ -88,12 +90,33 @@ public class CreateReviewFragment extends Fragment {
                         @Override
                         public void onError(String message) {
                             makeToast(message);
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    submit.setEnabled(true);
+                                    cancel.setEnabled(true);
+                                }
+                            });
                         }
 
                         @Override
                         public void onResponse(ResponseModel json) {
-                            makeToast(json.data.getAsString());
-                            getParentFragmentManager().popBackStack();
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    submit.setEnabled(true);
+                                    cancel.setEnabled(true);
+                                    makeToast(json.data.getAsString());
+                                    getParentFragmentManager().popBackStack();
+                                    if (getParentFragmentManager().getBackStackEntryAt(getParentFragmentManager().getBackStackEntryCount() - 2).getName().contains("Upcoming")) {
+                                        getParentFragmentManager().popBackStack();
+                                        Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new UpcomingFragment());
+                                    } else if (getParentFragmentManager().getBackStackEntryAt(getParentFragmentManager().getBackStackEntryCount() - 2).getName().contains("Wayfarer")){
+                                        getParentFragmentManager().popBackStack();
+                                        Helper.goToFragment(getParentFragmentManager(), R.id.flFragment, new WayfarerPastBookingFragment());
+                                    }
+                                }
+                            });
                         }
                     });
                 }

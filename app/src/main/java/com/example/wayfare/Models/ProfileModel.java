@@ -16,8 +16,9 @@ public class ProfileModel {
     private final List<ReviewModel> reviews;
     private final List<TourListModel> tours;
     private final String dateCreated;
+    private final boolean verified;
 
-    public ProfileModel(String username, String firstName, String lastName, String aboutMe, String pictureUrl, List<String> badges, List<String> languagesSpoken, Double avgScore, Integer reviewCount, String role, List<ReviewModel> reviews, List<TourListModel> tours, String dateCreated) {
+    public ProfileModel(String username, String firstName, String lastName, String aboutMe, String pictureUrl, List<String> badges, List<String> languagesSpoken, Double avgScore, Integer reviewCount, String role, List<ReviewModel> reviews, List<TourListModel> tours, String dateCreated, boolean verified) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -31,6 +32,7 @@ public class ProfileModel {
         this.reviews = reviews;
         this.tours = tours;
         this.dateCreated = dateCreated;
+        this.verified = verified;
     }
 
     public String getUsername() {
@@ -83,5 +85,9 @@ public class ProfileModel {
 
     public List<String> getLanguagesSpoken() {
         return languagesSpoken;
+    }
+
+    public boolean isVerified() {
+        return verified;
     }
 }
