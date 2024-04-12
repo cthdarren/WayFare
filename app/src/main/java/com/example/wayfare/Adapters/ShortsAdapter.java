@@ -60,22 +60,21 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
-    UserModel userData;
-    public ShortsAdapter(List<ShortsObject> shortsDataList, Context context, FragmentManager fragmentManager, Fragment exploreFragment) {
+    String userName;
+    public ShortsAdapter(List<ShortsObject> shortsDataList, Context context, FragmentManager fragmentManager, Fragment exploreFragment,String userName) {
         this.shortsDataList = shortsDataList;
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.exploreFragment = exploreFragment;
         currentPosition = 0;
         shortsViewHolderList = new ArrayList<>();
+        this.userName = userName;
     }
 
     @NonNull
     @Override
     public ShortsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_explore, parent, false);
-        userViewModel = new ViewModelProvider(exploreFragment.getActivity()).get(UserViewModel.class);
-        userData = userViewModel.getUserProfileData();
         return new ShortsViewHolder(view);
     }
 
@@ -254,11 +253,12 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             shortsDescription.setText(shortsData.getDescription());
             shortsTitle.setText(shortsData.getUserName());
             tvFavorites.setText(String.valueOf(shortsDataList.get(getCurrentPosition()).getLikes().size()));
-            if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userData.getUsername())) {
-                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
-            }
-            else{
-                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
+            if (userName!=null){
+                if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userName)){
+                    tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
+                }else{
+                    tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
+                }
             }
             if (shortsData.getListing()!=null){
                 listingCard.setVisibility(View.VISIBLE);
@@ -316,47 +316,47 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 
         }
         private void setFillLiked(boolean isLiked) {
-            if(isLiked) {
-                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
-                String username = userData.getUsername();
-                String apiUrl = "/shorts/liked/" + shortsDataList.get(getCurrentPosition()).getId();
-                RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
-                new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
-                    @Override
-                    public void onError(String message) {
+            if (userName != null) {
+                if (isLiked) {
+                    tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
+                    String apiUrl = "/shorts/liked/" + shortsDataList.get(getCurrentPosition()).getId();
+                    RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
+                    new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                        @Override
+                        public void onError(String message) {
 //                        unsuccessfullScreen();
-                    }
-                    @Override
-                    public void onResponse(ResponseModel json) {
-                        if (json.success) {
-                            shortsDataList.get(getCurrentPosition()).addLike(username);
-                            int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
-                            tvFavorites.setText(String.valueOf(totalLikes));
                         }
-                    }
-                });
-            }
-            else {
-                tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
-                String username = userData.getUsername();
-                String apiUrl = "/shorts/unliked/" + shortsDataList.get(getCurrentPosition()).getId();
-                RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
-                new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
-                    @Override
-                    public void onError(String message) {
-//                        unsuccessfullScreen();
-                    }
 
-                    @Override
-                    public void onResponse(ResponseModel json) {
-                        if (json.success) {
-                            shortsDataList.get(getCurrentPosition()).removeLike(username);
-                            int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
-                            tvFavorites.setText(String.valueOf(totalLikes));
+                        @Override
+                        public void onResponse(ResponseModel json) {
+                            if (json.success) {
+                                shortsDataList.get(getCurrentPosition()).addLike(userName);
+                                int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
+                                tvFavorites.setText(String.valueOf(totalLikes));
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                } else {
+                    tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
+                    String apiUrl = "/shorts/unliked/" + shortsDataList.get(getCurrentPosition()).getId();
+                    RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
+                    new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                        @Override
+                        public void onError(String message) {
+//                        unsuccessfullScreen();
+                        }
+
+                        @Override
+                        public void onResponse(ResponseModel json) {
+                            if (json.success) {
+                                shortsDataList.get(getCurrentPosition()).removeLike(userName);
+                                int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
+                                tvFavorites.setText(String.valueOf(totalLikes));
+                            }
+                        }
+                    });
+                }
+            }else{Toast.makeText(exploreFragment.requireContext(), "Please sign in", Toast.LENGTH_SHORT).show();}
         }
 
         public void onClick(View view) {
@@ -390,7 +390,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 }
             }
             if (view.getId() == tvFavorites.getId()){
-                if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userData.getUsername())) {
+                if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userName)){
                     setFillLiked(false);}
                 else{
                     setFillLiked(true);

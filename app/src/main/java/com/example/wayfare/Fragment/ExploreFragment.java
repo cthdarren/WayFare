@@ -148,9 +148,17 @@ public class ExploreFragment extends Fragment {
 //            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 //            UserModel userData = userViewModel.getUserProfileData();
 //        }
+        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
+        UserModel userData = userViewModel.getUserProfileData();
+        String userName;
+        if(userData == null){
+            userName = null;
+        }else{
+            userName = userData.getUsername();
+        }
         shortsViewPager = view.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),this);
+        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),this,userName);
         shortsViewPager.setAdapter(shortsAdapter);
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
