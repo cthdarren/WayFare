@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.bumptech.glide.Glide;
+import com.example.wayfare.Adapters.ProfileJourneysAdapter;
 import com.example.wayfare.Adapters.ProfileListingAdapter;
 import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.AlternateRecyclerViewInterface;
@@ -39,6 +40,7 @@ import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
+import com.example.wayfare.TertiaryRecyclerViewInterface;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
@@ -52,7 +54,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ProfileFragment extends Fragment implements RecyclerViewInterface, AlternateRecyclerViewInterface {
+public class ProfileFragment extends Fragment implements RecyclerViewInterface, AlternateRecyclerViewInterface, TertiaryRecyclerViewInterface {
 
     String profileUsername;
     UserViewModel userViewModel;
@@ -68,21 +70,29 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
     TextView review_title;
     RecyclerView reviewRecycler;
     RecyclerView listingRecycler;
+    RecyclerView journeyRecycler;
     Button show_all_reviews_button, edit_profile_button;
     LinearLayout review_segment, ratingBox, reviewBox, ratingDivider, reviewCountDivider;
-    LinearLayout listings_wrapper;
+    LinearLayout listings_wrapper, journeys_wrapper;
     TextView listings_wrapper_header;
     TextView confirmed_info_header;
     ImageView verification_truege;
     TextView languagesSpoken;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
     List<ListingItemModel> listingItemModels = new ArrayList<>();
+    List<String> journeyThumbnailUrls = new ArrayList<>();
     ProfileModel profileInfo;
 
 
     public ProfileFragment() {
     }
 
+    public void setupJourneyThumnails(List<String> journeyThumbnails) {
+        for (String thumbnailUrl: journeyThumbnails) {
+            journeyThumbnailUrls.add(thumbnailUrl);
+        }
+
+    }
     public void setupReviewModels(List<ReviewModel> reviewList) {
         for (ReviewModel review : reviewList) {
             ReviewItemModel toAdd = new ReviewItemModel(review.getTitle(),review.getUser().getUsername(), review.getUser().getPictureUrl(), review.getUser().getFirstName(), review.getReviewContent(), review.getDateCreated(), review.getDateModified());
@@ -111,6 +121,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         backButton = view.findViewById(R.id.profile_back);
         hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
+        journeyRecycler = view.findViewById(R.id.journeys_carousel);
 
         profile_pic = view.findViewById(R.id.profile_picture);
         full_name = view.findViewById(R.id.full_name);
@@ -127,10 +138,13 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         about_me = view.findViewById(R.id.about_me);
         show_all_reviews_button = view.findViewById(R.id.show_all_review_button);
         listings_wrapper = view.findViewById(R.id.listings_wrapper);
+        journeys_wrapper = view.findViewById(R.id.journeys_wrapper);
         listings_wrapper_header = view.findViewById(R.id.listing_wrapper_header);
         confirmed_info_header = view.findViewById(R.id.confirmed_info_header);
         verification_truege = view.findViewById(R.id.verification_truege);
         edit_profile_button = view.findViewById(R.id.edit_profile_btn);
+
+        journeyRecycler.setAdapter(new ProfileJourneysAdapter(getContext(), journeyThumbnailUrls, this));
 
         progBar = view.findViewById(R.id.profileProgBar);
         progBar.setVisibility(View.VISIBLE);
@@ -201,6 +215,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                                 review_title.setText(profileInfo.getFirstName() + "'s reviews");
                                 listings_wrapper_header.setText(profileInfo.getFirstName() + "'s listings");
                                 confirmed_info_header.setText(profileInfo.getFirstName() + "'s confirmed information");
+
                                 int numratings = profileInfo.getReviewCount();
                                 if (numratings == 0) {
                                     ratings.setText("No ratings yet");
@@ -230,6 +245,16 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
 
                                 setupReviewModels(profileInfo.getReviews());
                                 setUpListingModels(profileInfo.getTours());
+
+                                // TODO GANGESH MODIFY THIS ACCORDINGLY
+                                // setupJourneyThumnails(profileInfo.getJourneys());
+                                if (journeyThumbnailUrls.size() == 0){
+                                    journeys_wrapper.setVisibility(GONE);
+                                }
+                                else{
+                                    journeys_wrapper.setVisibility(View.VISIBLE);
+                                    journeyRecycler.getAdapter().notifyItemRangeInserted(0,journeyThumbnailUrls.size());
+                                }
 
                                 show_all_reviews_button.setText(String.format("Show all %d reviews", reviewItemModels.size()));
 
@@ -312,5 +337,14 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         Bundle args = new Bundle();
         args.putString("username", reviewItemModels.get(position).username);
         Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new ProfileFragment());
+    }
+
+    @Override
+    public void onTertiaryItemClick(int position) {
+        Bundle args = new Bundle();
+        args.putString("journeyUrl", journeyThumbnailUrls.get(position));
+        getParentFragmentManager().popBackStack(); //get out of profile screen first
+        // go to where ever
+        Helper.goToFragmentArgs(args, getParentFragmentManager(), R.id.flFragment, new ExploreFragment());
     }
 }
