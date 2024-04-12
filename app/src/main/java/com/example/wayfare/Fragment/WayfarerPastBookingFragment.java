@@ -5,32 +5,22 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
-import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
-import com.example.wayfare.ViewModel.UserViewModel;
 
 import java.util.Calendar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CalendarFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class CalendarFragment extends Fragment {
+public class WayfarerPastBookingFragment extends Fragment {
 
     private CalendarView calendarView;
 
 
-    public CalendarFragment() {
+    public WayfarerPastBookingFragment() {
         // Required empty public constructor
     }
 

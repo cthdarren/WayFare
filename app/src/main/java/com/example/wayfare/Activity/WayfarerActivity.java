@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -20,8 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.wayfare.Fragment.CalendarFragment;
-import com.example.wayfare.Fragment.CreateListing.CreateListingFragment;
+import com.example.wayfare.Fragment.WayfarerPastBookingFragment;
 import com.example.wayfare.Fragment.HostingToursFragment;
 import com.example.wayfare.Fragment.SettingsFragment;
 import com.example.wayfare.Fragment.TodayFragment;
@@ -32,7 +29,6 @@ import com.example.wayfare.Utils.AuthHelper;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
-import com.example.wayfare.databinding.ActivityMainBinding;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -148,7 +144,7 @@ public class WayfarerActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.hosting_account) {
                     replaceFragment(new SettingsFragment());
                 }else if(item.getItemId() == R.id.hosting_calendar){
-                    replaceFragment(new CalendarFragment());
+                    replaceFragment(new WayfarerPastBookingFragment());
                 }
             }
             backing = false;
