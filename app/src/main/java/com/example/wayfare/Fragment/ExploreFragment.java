@@ -138,7 +138,7 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        //get user stuff
+//        get user stuff
 //        if (new AuthHelper(requireActivity().getApplicationContext()).isLoggedIn()) {
 //            loggedIn = true;
 //        } else {
@@ -148,7 +148,7 @@ public class ExploreFragment extends Fragment {
 //            userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
 //            UserModel userData = userViewModel.getUserProfileData();
 //        }
-        userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
+        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         UserModel userData = userViewModel.getUserProfileData();
         String userName;
         if(userData == null){

@@ -268,6 +268,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
                 "-preset", "veryfast", // Use ultrafast preset for faster encoding
                 "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
                 "-c:a", "aac", // Audio codec
+                "-c:a", "copy",
                 "-strict", "experimental",
                 "-b:v", "3M",  // Set video bitrate (adjust based on your needs)
                 outputFilePath // Output DASH file path
@@ -313,12 +314,10 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
                 // FFmpeg command building
                 String[] command = new String[]{
                         "-i", inputVideoPath, // Input file
-                        "-map", "v",  // Map the first video stream by default
                         "-c:v", "libx264", // Specify video codec (H.264)
                         "-preset", "veryfast", // Use ultrafast preset for faster encoding
                         "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
                         "-c:a", "aac", // Audio codec
-                        "-strict", "experimental",
                         "-b:v", "3M",  // Set video bitrate (adjust based on your needs)
                         "-movflags", "+faststart",
                         outputFilePath // Output DASH file path
