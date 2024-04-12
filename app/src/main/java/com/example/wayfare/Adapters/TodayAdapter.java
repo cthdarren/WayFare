@@ -17,6 +17,7 @@ import com.example.wayfare.Activity.WayfarerActivity;
 import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Models.BookingModel;
 import com.example.wayfare.R;
+import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.Helper;
 import com.google.android.material.tabs.TabLayout;
 
@@ -24,16 +25,19 @@ import java.util.List;
 
 public class TodayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<BookingModel> bookings;
+    List<BookingModel> bookings;
+    private RecyclerViewInterface recyclerViewInterface;
 
-    public TodayAdapter(List<BookingModel> bookings) {
+    public TodayAdapter(List<BookingModel> bookings, RecyclerViewInterface recyclerViewInterface) {
         this.bookings = bookings;
+        this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.host_row, parent, false);
-        return new BookingViewHolder(itemView);
+
+        return new BookingViewHolder(itemView, recyclerViewInterface);
     }
 
     @Override
@@ -54,6 +58,7 @@ public class TodayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else{
             viewHolder.tourRemarks.setText(booking.getRemarks());
         }
+
     }
 
     @Override
@@ -76,7 +81,7 @@ public class TodayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public TableRow remarksRow;
         // ... Similarly add references for all ImageViews and TextViews
 
-        public BookingViewHolder(View itemView) {
+        public BookingViewHolder(View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             tourBooker = (TextView) itemView.findViewById(R.id.hostName);
             tourName = (TextView) itemView.findViewById(R.id.hostTourName);
@@ -86,6 +91,19 @@ public class TodayAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             remarksImage = (ImageView) itemView.findViewById(R.id.remarksImage);
             remarksRow = (TableRow) itemView.findViewById(R.id.remarksRow);
             // ... Similarly initialize all view references
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recyclerViewInterface != null) {
+                        int pos = getBindingAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
+
         }
     }
     public String TimeDisplay(BookingModel booking){

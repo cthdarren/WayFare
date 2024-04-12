@@ -25,6 +25,7 @@ import com.example.wayfare.Models.BookingModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
+import com.example.wayfare.RecyclerViewInterface;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class TodayFragment extends Fragment {
+public class TodayFragment extends Fragment implements RecyclerViewInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +54,7 @@ public class TodayFragment extends Fragment {
     private ArrayList<BookingModel> bookingModelsToday;
     private ArrayList<BookingModel> bookingModelsWeek;
     private ArrayList<BookingModel> bookingModelsMonth;
+    private ArrayList<BookingModel> currentBookingModels;
 
     private TodayAdapter todayAdapter;
     private TodayAdapter weekAdapter;
@@ -83,18 +85,20 @@ public class TodayFragment extends Fragment {
 
         setUpBookingModels();
 
-        todayAdapter = new TodayAdapter(bookingModelsToday);
-        weekAdapter = new TodayAdapter(bookingModelsWeek);
-        monthAdapter = new TodayAdapter(bookingModelsMonth);
+        todayAdapter = new TodayAdapter(bookingModelsToday, this);
+        weekAdapter = new TodayAdapter(bookingModelsWeek, this);
+        monthAdapter = new TodayAdapter(bookingModelsMonth, this);
 
 
         recyclerView = view.findViewById(R.id.hostRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));  // Assuming vertical list
         recyclerView.setAdapter(todayAdapter);
+        currentBookingModels = bookingModelsToday;
 
 
         return view;
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
@@ -108,10 +112,9 @@ public class TodayFragment extends Fragment {
         RadioButton radioButton3 = view.findViewById(R.id.radioButton3);
 
 
-        setRadioButtonListener(radioButton1,todayAdapter);
-        setRadioButtonListener(radioButton2,weekAdapter);
-        setRadioButtonListener(radioButton3,monthAdapter);
-
+        setRadioButtonListener(radioButton1, todayAdapter);
+        setRadioButtonListener(radioButton2, weekAdapter);
+        setRadioButtonListener(radioButton3, monthAdapter);
 
 
     }
@@ -138,9 +141,9 @@ public class TodayFragment extends Fragment {
                         JsonArray dayArray = dataObject.getAsJsonArray("day");
                         JsonArray weekArray = dataObject.getAsJsonArray("week");
                         JsonArray monthArray = dataObject.getAsJsonArray("month");
-                        setBookingLists(dayArray,bookingModelsToday);
-                        setBookingLists(weekArray,bookingModelsWeek);
-                        setBookingLists(monthArray,bookingModelsMonth);
+                        setBookingLists(dayArray, bookingModelsToday);
+                        setBookingLists(weekArray, bookingModelsWeek);
+                        setBookingLists(monthArray, bookingModelsMonth);
                     }
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -159,25 +162,29 @@ public class TodayFragment extends Fragment {
         });
     }
 
-    public void setRadioButtonListener(RadioButton radioButton, TodayAdapter adapter){
+    public void setRadioButtonListener(RadioButton radioButton, TodayAdapter adapter) {
         radioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (adapter == todayAdapter){
-                    if (bookingModelsToday.size() == 0)
-                        noBookingMessage.setVisibility(View.VISIBLE);
-                    else
-                        noBookingMessage.setVisibility(View.GONE);
+                if (adapter == todayAdapter) {
+                    currentBookingModels = bookingModelsToday;
+                } else if (adapter.equals(weekAdapter)) {
+                    currentBookingModels = bookingModelsWeek;
+                } else {
+                    currentBookingModels = bookingModelsMonth;
                 }
-                else{
+
+                if (currentBookingModels.size() == 0)
+                    noBookingMessage.setVisibility(View.VISIBLE);
+                else
                     noBookingMessage.setVisibility(View.GONE);
-                }
+
                 recyclerView.setAdapter(adapter);
             }
         });
     }
 
-    public void setBookingLists(JsonArray dataArray, ArrayList<BookingModel> bookingModelList){
+    public void setBookingLists(JsonArray dataArray, ArrayList<BookingModel> bookingModelList) {
         for (JsonElement listing : dataArray) {
             String eachString = listing.toString();
             BookingModel listingModel = new Gson().fromJson(eachString, BookingModel.class);
@@ -186,5 +193,10 @@ public class TodayFragment extends Fragment {
     }
 
 
-
+    @Override
+    public void onItemClick(int position) {
+        Bundle args = new Bundle();
+        args.putString("bookingId",currentBookingModels.get(position).getId());
+        Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new WayfarerViewBookingFragment());
+    }
 }

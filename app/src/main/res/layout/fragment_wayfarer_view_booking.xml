@@ -101,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="30dp"
-                android:text="Your meeting details"
+                android:text="Meeting details"
                 android:textSize="@dimen/font_md"
                 android:textStyle="bold" />
 
@@ -155,7 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="30dp"
-                android:text="Your remarks"
+                android:text="Booking remarks"
                 android:textSize="@dimen/font_md"
                 android:textStyle="bold" />
 
@@ -193,7 +193,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        android:text="Meet your WayFarer"
+                        android:text="Your tour participant"
                         android:textSize="@dimen/font_md"
                         android:textStyle="bold" />
 
