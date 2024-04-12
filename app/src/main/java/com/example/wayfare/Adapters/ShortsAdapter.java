@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView;
 
+import androidx.annotation.OptIn;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Player;
 import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.SimpleExoPlayer;
+import androidx.media3.ui.AspectRatioFrameLayout;
 import androidx.media3.ui.PlayerView;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wayfare.Fragment.TourListingFull;
@@ -64,22 +69,36 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 
     @Override
     public void onBindViewHolder(@NonNull ShortsViewHolder holder, int position) {
-        holder.setShortsData(shortsDataList.get(position));
-        shortsViewHolderList.add(position, holder);
+            // ViewHolder is bound to the wrong position, rebind it to the correct position
+        if(position >= shortsViewHolderList.size()) {
+                holder.setShortsData(shortsDataList.get(position));
+                shortsViewHolderList.add(position, holder);
+            }
+        Log.d("ViewHolderPosition", "bindcalled: " + position);
+    }
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
     public void updateCurrentPosition(int pos) {
         currentPosition = pos;
     }
     public void pauseVideo(int position) {
-        if (shortsViewHolderList.size() > 0)
-            shortsViewHolderList.get(position).pauseVideo();
-    }
-    public void updateShortsData(List<ShortsObject> newList) {
-        shortsDataList.addAll(newList);
-        notifyDataSetChanged();
+        if(position < shortsViewHolderList.size()) {
+            shortsViewHolderList.get(position).pauseVideoNoImg();
+            isPlaying = false;
+        }
+
     }
     public void playVideo(int position) {
-        shortsViewHolderList.get(position).playVideo();
+        if(position < shortsViewHolderList.size()) {
+            shortsViewHolderList.get(position).playVideo();
+        }
+    }
+    public void stopVideo(int position){
+        if(position < shortsViewHolderList.size()) {
+            shortsViewHolderList.get(position).stopVideo();
+        }
     }
     public void stopAllVideo() {
         for(ShortsAdapter.ShortsViewHolder holder:shortsViewHolderList) {
@@ -88,20 +107,15 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     }
 
     public void onViewAttachedToWindow(ShortsViewHolder holder) {
-        if(isPlaying == false) {
-            holder.playVideo();
-            isPlaying = true;
-        }
+//        holder.playVideo();
     }
 
     @Override
     public void onViewDetachedFromWindow(ShortsViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
         Log.d("ShortsAdapter", "onViewDetachedFromWindow called for position: " );
-        if (holder.exoPlayer != null) {
-            holder.stopVideo();
-        }
-        isPlaying = false;
+//            holder.pauseVideo();
+//        isPlaying = false;
     }
     private boolean isFragmentAttached() {
         return exploreFragment != null && exploreFragment.isAdded() && !exploreFragment.isDetached() && !exploreFragment.isRemoving();
@@ -122,45 +136,71 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         private CardView listingCard;
         private ImageView imvAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
         private ProgressBar videoProgressBar;
+        private MediaItem mediaItem;
         boolean isPaused = false;
 
-        public ShortsViewHolder(@NonNull View itemView) {
+        @OptIn(markerClass = UnstableApi.class) public ShortsViewHolder(@NonNull View itemView) {
             super(itemView);
             videoView = itemView.findViewById(R.id.videoView);
             shortsDescription = itemView.findViewById(R.id.shortsDescription);
             shortsTitle = itemView.findViewById(R.id.shortsTitle);
             videoProgressBar = itemView.findViewById(R.id.progressBar);
+            videoProgressBar.setVisibility(View.GONE);
             imvVolume = itemView.findViewById(R.id.imvVolume);
             imvAppear = itemView.findViewById(R.id.imv_appear);
             listingTitle = itemView.findViewById(R.id.listingTitle);
             listingCard = itemView.findViewById(R.id.listingCard);
+            videoView.setShowBuffering(PlayerView.SHOW_BUFFERING_WHEN_PLAYING);
+            videoView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
             listingTitle.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
-            if (!exoPlayer.isPlaying()) {
-                exoPlayer.play();
-            }
-            if (exoPlayer.getPlaybackState() == Player.STATE_READY
-                    || exoPlayer.getPlaybackState() == Player.STATE_IDLE) {
+            if (exoPlayer!=null) {
+                Log.d("ViewHolderPosition", "playbackstate" + exoPlayer.getPlaybackState());
+                if (!exoPlayer.isPlaying()) {
+                    exoPlayer.play();
+                }
+                if (exoPlayer.getPlaybackState() == Player.STATE_READY || exoPlayer.getPlaybackState() == Player.STATE_IDLE){
+                    exoPlayer.setPlayWhenReady(true);
+                }
+                if(exoPlayer.getPlaybackState() == Player.STATE_IDLE) {
+                }
+            }else{
+                Log.d("ViewHolderPosition", "exo is null"+getCurrentPosition());
+                videoProgressBar.setVisibility(View.VISIBLE);
+                setShortsData(shortsDataList.get(getCurrentPosition()));
                 exoPlayer.setPlayWhenReady(true);
+                Log.d("ViewHolderPosition", "restarting" + getCurrentPosition());
             }
+            isPaused = false;
         }
         public void pauseVideo() {
-            if (exoPlayer.getPlaybackState() == Player.STATE_READY && exoPlayer!=null) {
-                exoPlayer.setPlayWhenReady(false);
-                appearImage(R.drawable.ic_baseline_play_arrow_24);
+            if(exoPlayer!=null) {
+                if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                    exoPlayer.setPlayWhenReady(false);
+                    appearImage(R.drawable.ic_baseline_play_arrow_24);
+                }
+            }
+        }
+        public void pauseVideoNoImg() {
+            if(exoPlayer!=null) {
+                if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                    exoPlayer.setPlayWhenReady(false);
+                }
             }
         }
         public void stopVideo() {
             isPaused = true;
-            if (exoPlayer != null && exoPlayer.getPlaybackState() == Player.STATE_READY) {
-                exoPlayer.setPlayWhenReady(false);
-                exoPlayer.stop();
-                exoPlayer.seekTo(0);
-                exoPlayer.release();
+            if (exoPlayer != null) {
+                if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                    exoPlayer.setPlayWhenReady(false);
+                    exoPlayer.stop();
+                    exoPlayer.release();
+                    exoPlayer = null;
+                }
             }
         }
         public void appearImage(int src) {
@@ -202,23 +242,25 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 listingCard.setVisibility(View.VISIBLE);
                 listingTitle.setText(shortsData.getListing().getTitle());
             }
-            // Create a media item representing the video
-            // Create a MediaItem builder
+//             Create a media item representing the video
+//             Create a MediaItem builder
             MediaItem.Builder mediaItemBuilder = new MediaItem.Builder();
-
+            mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
             mediaItemBuilder.setUri(shortsUri);
-
-            if (shortsData.getShortsUrl().endsWith(".mp4")) {
-                // Set MIME type to mp4 if extension is present
-                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
-            } else {
-                // Set MIME type to DASH for URIs without .mpd extension
-                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
-            }
-
-            MediaItem mediaItem = mediaItemBuilder.build();
+//            if (shortsData.getShortsUrl().endsWith(".mp4")) {
+//                // Set MIME type to mp4 if extension is present
+//                mediaItemBuilder.setMimeType(MimeTypes.VIDEO_MP4);
+//            } else {
+//                // Set MIME type to DASH for URIs without .mpd extension
+//                mediaItemBuilder.setMimeType(MimeTypes.APPLICATION_MPD);
+//            }
+//
+           MediaItem mediaItem = mediaItemBuilder.build();
 //            MediaItem mediaItem = MediaItem.fromUri(shortsUri);
-            if (exoPlayer != null) exoPlayer.release();
+            if (exoPlayer != null){
+                exoPlayer.release();
+                exoPlayer = null;
+            }
             exoPlayer = new ExoPlayer.Builder(videoView.getContext()).build();
             videoView.setPlayer(exoPlayer);
             exoPlayer.setMediaItem(mediaItem);
@@ -226,21 +268,26 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             exoPlayer.prepare();
             pauseVideo();
             isPaused = true;
-
-            // Hide progress bar when playback starts
+//
+//            // Hide progress bar when playback starts
             exoPlayer.addListener(new ExoPlayer.Listener() {
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
                     if (isPlaying) {
+
                         videoProgressBar.setVisibility(View.GONE);
                     }
                 }
                 @Override
                 public void onPlaybackStateChanged(int playbackState) {
-                    if (playbackState == ExoPlayer.STATE_READY && !isFragmentAttached()) {
-                        // Loading is complete, release resources
-                        exoPlayer.stop();
-                        exoPlayer.release();
+                    if (playbackState == ExoPlayer.STATE_READY){
+                        Log.d("ViewHolderPosition", String.format("Curr:%s Layout:%s",getCurrentPosition(),getBindingAdapterPosition()));
+                        if (!isFragmentAttached() && exoPlayer != null) {
+                            // Loading is complete, release resources
+                            exoPlayer.stop();
+                            exoPlayer.release();
+                            exoPlayer = null;
+                        }
                     }
                 }
             });
@@ -249,50 +296,56 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 
         public void onClick(View view) {
             if (view.getId() == videoView.getId()) {
-                numberOfClick = numberOfClick + 1;
-                float currentVolume = exoPlayer.getVolume();
-                boolean isMuted = (currentVolume == 0);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (numberOfClick == 1) {
-                            if (isPlaying) {
-                                pauseVideo();
-                                isPlaying = false;
-                                //appearImage(R.drawable.ic_baseline_play_arrow_24);
-                            } else {
-                                playVideo();
-                                isPlaying = true;
-                                imvAppear.setVisibility(View.INVISIBLE);
+                if (exoPlayer != null) {
+                    numberOfClick = numberOfClick + 1;
+                    float currentVolume = exoPlayer.getVolume();
+                    boolean isMuted = (currentVolume == 0);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (numberOfClick == 1) {
+                                if (exoPlayer.isPlaying()) {
+                                    pauseVideo();
+                                    isPlaying = false;
+                                    //appearImage(R.drawable.ic_baseline_play_arrow_24);
+                                } else {
+                                    playVideo();
+                                    isPlaying = true;
+                                    imvAppear.setVisibility(View.INVISIBLE);
+                                }
                             }
-                        }
 //                        else if (numberOfClick == 2) {
 //                            handleTymClick(view);
 //                            imvAppear.setVisibility(View.GONE);
 //                            appearImage(R.drawable.ic_fill_favorite);
 //                        }
-                        numberOfClick = 0;
-                    }
-                }, 250);
+                            numberOfClick = 0;
+                        }
+                    }, 250);
+                }
             }
             if (view.getId() == imvVolume.getId()) {
-                float currentVolume = exoPlayer.getVolume();
-                boolean isMuted = (currentVolume == 0);
-                if (isMuted) {
-                    exoPlayer.setVolume(volume);
-                    imvVolume.setImageResource(R.drawable.ic_baseline_volume_up_24);
-                    appearImage(R.drawable.ic_baseline_volume_up_24);
-                } else {
-                    volume = exoPlayer.getVolume();
-                    exoPlayer.setVolume(0);
-                    imvVolume.setImageResource(R.drawable.ic_baseline_volume_off_24);
-                    appearImage(R.drawable.ic_baseline_volume_off_24);
+                if(exoPlayer!=null) {
+                    float currentVolume = exoPlayer.getVolume();
+                    boolean isMuted = (currentVolume == 0);
+                    if (isMuted) {
+                        exoPlayer.setVolume(volume);
+                        imvVolume.setImageResource(R.drawable.ic_baseline_volume_up_24);
+                        appearImage(R.drawable.ic_baseline_volume_up_24);
+                    } else {
+                        volume = exoPlayer.getVolume();
+                        exoPlayer.setVolume(0);
+                        imvVolume.setImageResource(R.drawable.ic_baseline_volume_off_24);
+                        appearImage(R.drawable.ic_baseline_volume_off_24);
+                    }
                 }
             }
             if(view.getId() == listingTitle.getId()){
-                if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
-                    exoPlayer.setPlayWhenReady(false);
+                if(exoPlayer!=null) {
+                    if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                        exoPlayer.setPlayWhenReady(false);
+                    }
                 }
                 int pos = getCurrentPosition();
                 TourListModel currListing = shortsDataList.get(pos).getListing();
