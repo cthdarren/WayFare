@@ -8,17 +8,21 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ShortsObject  {
     //    private String id;
     private String shortsUrl,id;
     private String userId;
     private String userName;
+    private String posterPictureUrl;
     private String description;
     private String thumbnailUrl;
     private TourListModel listing;
     private ArrayList<String> likes;
     private Date datePosted;
+    private List<Comment> comments;
+
     public ShortsObject(){}
     public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, String thumbnailUrl, Date datePosted, TourListModel listing, ArrayList<String> likes) {
         this.id = id;
