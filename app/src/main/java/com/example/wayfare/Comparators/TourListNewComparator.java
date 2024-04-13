@@ -7,6 +7,6 @@ import java.util.Comparator;
 public class TourListNewComparator implements Comparator<TourListModel> {
     @Override
     public int compare(TourListModel o1, TourListModel o2) {
-        return o1.getDateCreatedInstant().compareTo(o2.getDateCreatedInstant());
+        return o2.getDateCreatedInstant().compareTo(o1.getDateCreatedInstant());
     }
 }
