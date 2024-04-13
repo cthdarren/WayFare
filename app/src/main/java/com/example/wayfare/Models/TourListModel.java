@@ -1,16 +1,11 @@
 package com.example.wayfare.Models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
-
-import java.sql.Time;
+import java.time.Instant;
 import java.util.List;
 
 // we are creating variables thats gonna hold all the data that represents one of our items
 public class TourListModel {
-    public TourListModel(String title, String id, String description, String[] thumbnailUrls, String category, Location tourListingLocation, String region, double price, int minPax, int maxPax, double rating, int reviewCount, String userId, List<TimeRange> timeRangeList) {
+    public TourListModel(String title, String id, String description, String[] thumbnailUrls, String category, Location tourListingLocation, String region, double price, int minPax, int maxPax, double rating, int reviewCount, String userId, List<TimeRange> timeRangeList, String dateCreated) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -25,6 +20,7 @@ public class TourListModel {
         this.reviewCount = reviewCount;
         this.userId = userId;
         this.timeRangeList = timeRangeList;
+        this.dateCreated = dateCreated;
     }
 
     public String getId() {
@@ -79,6 +75,10 @@ public class TourListModel {
         return timeRangeList;
     }
 
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
     private String title;
     private String id;
     private String description;
@@ -93,7 +93,16 @@ public class TourListModel {
     private int reviewCount;
     private String userId;
     private List<TimeRange> timeRangeList;
+    private final String dateCreated;
+    private Instant dateCreatedInstant;
 
+    public void setDateCreatedInstant(Instant value) {
+        dateCreatedInstant = value;
+    }
+
+    public Instant getDateCreatedInstant() {
+        return dateCreatedInstant;
+    }
 
     public static class TimeRange extends TimeSlotItemModel {
         public int getStartTime() {

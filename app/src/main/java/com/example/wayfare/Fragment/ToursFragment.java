@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,28 +12,27 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
+import com.example.wayfare.Comparators.TourListHotComparator;
+import com.example.wayfare.Comparators.TourListNewComparator;
+import com.example.wayfare.Comparators.TourListTrendingComparator;
 import com.example.wayfare.Models.ResponseModel;
-import com.example.wayfare.Models.TimeSlotItemModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
@@ -46,6 +43,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     Double latitude, longitude;
     int numberPax, kmdistance;
     String region, date;
+    TabLayout tabLayout;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
@@ -62,6 +60,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         recyclerView = view.findViewById(R.id.myRecyclerView);
         searchBar = view.findViewById(R.id.clickSearchBar);
         searchParams = view.findViewById(R.id.searchParams);
+        tabLayout = view.findViewById(R.id.tabLayout);
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
@@ -95,8 +94,47 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this));
 
         setupTourListings();
+
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch(tab.getPosition()){
+                    case 0:
+                        // Hot Tab
+                        tourListModels.sort(new TourListHotComparator());
+                        recyclerView.getAdapter().notifyItemRangeChanged(0, tourListModels.size());
+                        break;
+                    case 1:
+                        // Trending Tab
+                        tourListModels.sort(new TourListTrendingComparator());
+                        recyclerView.getAdapter().notifyItemRangeChanged(0, tourListModels.size());
+                        break;
+                    case 2:
+                        // New Tab
+                        tourListModels.sort(new TourListNewComparator());
+                        recyclerView.getAdapter().notifyItemRangeChanged(0, tourListModels.size());
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                System.out.println(tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // Do nothing
+            }
+        });
+
         return view;
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -127,6 +165,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
                     for (JsonElement listing : listingArray) {
                         String eachString = listing.toString();
                         TourListModel listingModel = new Gson().fromJson(eachString, TourListModel.class);
+                        listingModel.setDateCreatedInstant(Instant.parse(listingModel.getDateCreated()));
                         tourListModels.add(listingModel);
                     }
 

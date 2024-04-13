@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="top"
-                        android:text="Chinatown Tour"
+                        android:text="Chinatown Tour asdfkjasdlkfjlkasjdfklasj;dlfasdfasdfasd"
                         android:textSize="@dimen/font_md"
                         android:textStyle="bold" />
 

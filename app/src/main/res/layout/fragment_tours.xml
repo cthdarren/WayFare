@@ -72,8 +72,8 @@
                 android:background="@drawable/tab_background"
                 app:tabMode="fixed"
                 app:tabGravity="fill"
-                app:tabPaddingStart="8dp"
-                app:tabPaddingEnd="8dp"
+                app:tabPaddingStart="2dp"
+                app:tabPaddingEnd="2dp"
                 app:tabIndicatorGravity="bottom"
                 app:tabIndicatorFullWidth="false"
                 android:layout_marginTop="15dp"
@@ -81,18 +81,22 @@
                 app:tabRippleColor="@android:color/transparent">
 
                 <com.google.android.material.tabs.TabItem
+                    android:id="@+id/hot_tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:icon="@drawable/baseline_whatshot_24"
+                    android:text="Hot"/>
+
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/trending_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:icon="@drawable/baseline_trending_up_24"
                     android:text="Trending"/>
 
                 <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:icon="@drawable/baseline_whatshot_24"
-                    android:text="Hot"/>
-
-                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/new_tab"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:icon="@drawable/baseline_bolt_24"
