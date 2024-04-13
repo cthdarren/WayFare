@@ -79,11 +79,13 @@ public class EditProfileFragment extends Fragment {
         @Override
         public void onActivityResult(Uri o) {
             pictureUri = o;
-            Glide.with(EditProfileFragment.this)
-                    .load(pictureUri)
-                    .centerCrop()
-                    .into(profile_picture);
-            pictureChanged = true;
+            if (pictureUri != null) {
+                Glide.with(EditProfileFragment.this)
+                        .load(pictureUri)
+                        .centerCrop()
+                        .into(profile_picture);
+                pictureChanged = true;
+            }
         }
     });
 
@@ -115,9 +117,12 @@ public class EditProfileFragment extends Fragment {
         bio.setText(userData.getAboutMe());
         languages.setText(String.join(",",userData.getLanguagesSpoken()));
 
-        Glide.with(EditProfileFragment.this).load(userData.getPictureUrl().split("\\?")[0])
-                .centerCrop()
-                .into(profile_picture);
+        if(userData.getPictureUrl() != null | !Objects.equals(userData.getPictureUrl(), "")) {
+            Glide.with(EditProfileFragment.this)
+                    .load(userData.getPictureUrl().split("\\?")[0])
+                    .centerCrop()
+                    .into(profile_picture);
+        }
 
         final String[] listItems = Helper.languages.toArray(new String[0]);
         final boolean[] checkedItems = new boolean[listItems.length];
@@ -207,11 +212,6 @@ public class EditProfileFragment extends Fragment {
                 languagesDialog.show();
             }
         });
-
-        Glide.with(EditProfileFragment.this)
-                .load(userData.getPictureUrl().split("\\?"))
-                .centerCrop()
-                .into(profile_picture);
 
         return view;
     }
