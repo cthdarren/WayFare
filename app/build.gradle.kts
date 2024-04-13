@@ -98,6 +98,9 @@ dependencies {
     implementation("com.azure:azure-security-keyvault-secrets")
     implementation("com.google.maps:google-maps-services:2.2.0")
     implementation("org.slf4j:slf4j-simple:1.7.25")
-    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
+//    implementation("androidx.media3:media3-exoplayer-dash:1.3.1")
     implementation("com.arthenica:mobile-ffmpeg-full-gpl:4.4")
+    implementation("com.intuit.sdp:sdp-android:1.0.6")
+    implementation("com.intuit.ssp:ssp-android:1.0.6")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }

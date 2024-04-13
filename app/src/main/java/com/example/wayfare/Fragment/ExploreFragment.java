@@ -158,7 +158,7 @@ public class ExploreFragment extends Fragment {
         }
         shortsViewPager = view.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),this,userName);
+        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),ExploreFragment.this,userName);
         shortsViewPager.setAdapter(shortsAdapter);
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -281,6 +281,18 @@ public class ExploreFragment extends Fragment {
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
+    }
+    public void disableShortsViewPagerScroll() {
+        if (shortsViewPager != null) {
+            shortsViewPager.setUserInputEnabled(false);
+        }
+    }
+
+    // Method to enable scrolling in shortsViewPager
+    public void enableShortsViewPagerScroll() {
+        if (shortsViewPager != null) {
+            shortsViewPager.setUserInputEnabled(true);
+        }
     }
 
     @NonNull

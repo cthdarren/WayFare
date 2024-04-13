@@ -104,4 +104,13 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">4%</item>
     </style>
+    <style name="topCornered" parent="">
+        <item name="cornerSizeTopLeft">@dimen/_6sdp</item>
+        <item name="cornerSizeTopRight">@dimen/_6sdp</item>
+    </style>
+
+    <style name="bottomCornered" parent="">
+        <item name="cornerSizeBottomLeft">@dimen/_6sdp</item>
+        <item name="cornerSizeBottomRight">@dimen/_6sdp</item>
+    </style>
 </resources>
