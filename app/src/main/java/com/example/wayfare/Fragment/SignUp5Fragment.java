@@ -93,38 +93,46 @@ public class SignUp5Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 continue_button.setEnabled(false);
-                AzureStorageManager.uploadBlob(getContext(), pictureUri, true, new Callback() {
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                makeToast("Failed to upload picture to server");
-                                continue_button.setEnabled(false);
-                            }
-                        });
+                if (pictureUri == null){
+                    try {
+                        register();
+                    } catch (IOException e) {
+                        makeToast("Failed to create account");
+                        continue_button.setEnabled(true);
                     }
+                }
+                else {
+                    AzureStorageManager.uploadBlob(getContext(), pictureUri, true, new Callback() {
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
 
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                continue_button.setEnabled(true);
-                                pictureUrl = response.request().url().toString();
-                                Bundle args = new Bundle();
-                                args.putAll(getArguments());
-                                try {
-                                    register();
-                                } catch (IOException e) {
-                                    makeToast("Unexpected Error");
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    makeToast("Failed to upload picture to server");
+                                    continue_button.setEnabled(true);
                                 }
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
 
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    pictureUrl = response.request().url().toString();
+                                    Bundle args = new Bundle();
+                                    args.putAll(getArguments());
+                                    try {
+                                        register();
+                                    } catch (IOException e) {
+                                        makeToast("Unexpected Error");
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
         open_gallery.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +183,12 @@ public class SignUp5Fragment extends Fragment {
                                 Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
                                 e.printStackTrace();
                             }
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    continue_button.setEnabled(true);
+                                }
+                            });
                         }
 
                         @Override
@@ -190,7 +204,7 @@ public class SignUp5Fragment extends Fragment {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-
+                                            continue_button.setEnabled(true);
                                             Bundle args = getArguments();
                                             SignUpSuccessFragment fragment = new SignUpSuccessFragment();
                                             fragment.setArguments(args);
