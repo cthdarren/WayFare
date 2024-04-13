@@ -19,6 +19,7 @@ import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Comparators.TourListHotComparator;
 import com.example.wayfare.Comparators.TourListNewComparator;
 import com.example.wayfare.Comparators.TourListTrendingComparator;
+import com.example.wayfare.Models.BookmarkModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
@@ -27,12 +28,15 @@ import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
+import java.lang.reflect.Type;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ToursFragment extends Fragment implements tourListing_RecyclerViewInterface {
@@ -90,11 +94,19 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
                 Helper.goToFullScreenFragmentFromTop(getParentFragmentManager(), new SearchMenuFragment());
             }
         });
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this));
+        new AuthService(getContext()).getResponse("/getbookmarks", true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                setupBookmarks(new ArrayList<>());
+            }
 
-        setupTourListings();
-
+            @Override
+            public void onResponse(ResponseModel json) {
+                Type listType = new TypeToken<ArrayList<BookmarkModel>>(){}.getType();
+                List<BookmarkModel> bookmarks = new Gson().fromJson(json.data, listType);
+                setupBookmarks(bookmarks);
+            }
+        });
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -181,6 +193,21 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         });
     }
 
+    public void setupBookmarks(List<BookmarkModel> bookmarkModels){
+        List<String> bookmarkedListingIds = new ArrayList<>();
+        for (BookmarkModel bookmark: bookmarkModels){
+            bookmarkedListingIds.add(bookmark.listing.getId());
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(new tourListing_RecyclerViewAdapter(getContext(), tourListModels, bookmarkedListingIds, ToursFragment.this));
+                setupTourListings();
+            }
+        });
+
+    }
     @Override
     public void onItemClick(int position) {
         Bundle data = new Bundle();
