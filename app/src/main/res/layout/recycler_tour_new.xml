@@ -79,8 +79,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="top"
-                        android:text="Chinatown Tour asdfkjasdlkfjlkasjdfklasj;dlfasdfasdfasd"
-                        android:textSize="@dimen/font_md"
+                        android:inputType="textMultiLine"
+                        android:maxLines="2"
+                        android:text="Chinatown Tour adfasdfasdfasdfasdfkjasdlkfjlkasjdfklasj;dlfasdfasdfasd"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -92,7 +94,7 @@
                         android:drawablePadding="5dp"
                         android:layout_marginLeft="25dp"
                         android:text="4.88"
-                        android:textSize="@dimen/font_sm" />
+                        android:textSize="17sp" />
                 </LinearLayout>
 
                 <com.google.android.material.textview.MaterialTextView
