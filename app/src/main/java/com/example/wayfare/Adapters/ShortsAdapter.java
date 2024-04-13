@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.OptIn;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.TourListingFull;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.ShortsObject;
@@ -54,14 +57,15 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     UserViewModel userViewModel;
     private int currentPosition;
     private FragmentManager fragmentManager;
-    private Fragment exploreFragment;
+//    private Fragment exploreFragment;
+    private ExploreFragment exploreFragment;
     int numberOfClick = 0;
     float volume;
     boolean isPlaying = false;
     private Context context;
     private List<ShortsViewHolder> shortsViewHolderList;
     String userName;
-    public ShortsAdapter(List<ShortsObject> shortsDataList, Context context, FragmentManager fragmentManager, Fragment exploreFragment,String userName) {
+    public ShortsAdapter(List<ShortsObject> shortsDataList, Context context, FragmentManager fragmentManager, ExploreFragment exploreFragment,String userName) {
         this.shortsDataList = shortsDataList;
         this.context = context;
         this.fragmentManager = fragmentManager;
@@ -141,6 +145,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     }
     public int getViewsCount() {return shortsViewHolderList.size();}
     public class ShortsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private MotionLayout motionLayout;
         private PlayerView videoView;
         private ExoPlayer exoPlayer;
         private TextView shortsDescription, shortsTitle, listingTitle,tvComment, tvFavorites;
@@ -148,10 +153,12 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         private ImageView imvAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
         private ProgressBar videoProgressBar;
         private MediaItem mediaItem;
+        private ImageView imvCloseComment;
         boolean isPaused = false;
 
         @OptIn(markerClass = UnstableApi.class) public ShortsViewHolder(@NonNull View itemView) {
             super(itemView);
+            motionLayout = itemView.findViewById(R.id.exploreLayout);
             videoView = itemView.findViewById(R.id.videoView);
             shortsDescription = itemView.findViewById(R.id.shortsDescription);
             shortsTitle = itemView.findViewById(R.id.shortsTitle);
@@ -161,6 +168,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             videoProgressBar.setVisibility(View.GONE);
             imvVolume = itemView.findViewById(R.id.imvVolume);
             imvAppear = itemView.findViewById(R.id.imv_appear);
+            imvCloseComment = itemView.findViewById(R.id.exit_comment_section_btn);
             listingTitle = itemView.findViewById(R.id.listingTitle);
             listingCard = itemView.findViewById(R.id.listingCard);
             videoView.setShowBuffering(PlayerView.SHOW_BUFFERING_WHEN_PLAYING);
@@ -169,6 +177,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             imvVolume.setOnClickListener(this);
             listingTitle.setOnClickListener(this);
             tvFavorites.setOnClickListener(this);
+            tvComment.setOnClickListener(this);
+            imvCloseComment.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
@@ -395,6 +405,16 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 else{
                     setFillLiked(true);
                 }
+            }
+            if (view.getId() == R.id.tvComment) {
+                // Trigger transition when tvComment is clicked
+                motionLayout.transitionToEnd();
+                exploreFragment.disableShortsViewPagerScroll();
+            }
+            if (view.getId() == R.id.exit_comment_section_btn) {
+                // Exit transition when exit_comment_section_btn is clicked
+                motionLayout.transitionToStart();
+                exploreFragment.enableShortsViewPagerScroll();
             }
             if (view.getId() == imvVolume.getId()) {
                 if(exoPlayer!=null) {

@@ -74,7 +74,7 @@ public class SingularJourneyFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.item_explore, container, false);
 
-        parentLayout = view.findViewById(R.id.parentLayout);
+        parentLayout = view.findViewById(R.id.exploreLayout);
         videoView = view.findViewById(R.id.videoView);
         shortsDescription = view.findViewById(R.id.shortsDescription);
         shortsTitle = view.findViewById(R.id.shortsTitle);
