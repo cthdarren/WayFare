@@ -252,9 +252,9 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             Uri shortsUri = Uri.parse(shortsData.getShortsUrl());
             shortsDescription.setText(shortsData.getDescription());
             shortsTitle.setText(shortsData.getUserName());
-            tvFavorites.setText(String.valueOf(shortsDataList.get(getCurrentPosition()).getLikes().size()));
+            tvFavorites.setText(String.valueOf(shortsData.getLikes().size()));
             if (userName!=null){
-                if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userName)){
+                if(shortsData.getLikes().contains(userName)){
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
                 }else{
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
@@ -319,6 +319,9 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             if (userName != null) {
                 if (isLiked) {
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_fill_favorite, 0, 0);
+                    shortsDataList.get(getCurrentPosition()).addLike(userName);
+                    int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
+                    tvFavorites.setText(String.valueOf(totalLikes));
                     String apiUrl = "/shorts/liked/" + shortsDataList.get(getCurrentPosition()).getId();
                     RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
                     new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
@@ -330,14 +333,14 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                         @Override
                         public void onResponse(ResponseModel json) {
                             if (json.success) {
-                                shortsDataList.get(getCurrentPosition()).addLike(userName);
-                                int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
-                                tvFavorites.setText(String.valueOf(totalLikes));
                             }
                         }
                     });
                 } else {
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
+                    shortsDataList.get(getCurrentPosition()).removeLike(userName);
+                    int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
+                    tvFavorites.setText(String.valueOf(totalLikes));
                     String apiUrl = "/shorts/unliked/" + shortsDataList.get(getCurrentPosition()).getId();
                     RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
                     new AuthService(exploreFragment.getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
@@ -349,9 +352,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                         @Override
                         public void onResponse(ResponseModel json) {
                             if (json.success) {
-                                shortsDataList.get(getCurrentPosition()).removeLike(userName);
-                                int totalLikes = shortsDataList.get(getCurrentPosition()).getLikes().size();
-                                tvFavorites.setText(String.valueOf(totalLikes));
                             }
                         }
                     });
