@@ -352,7 +352,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                             if (profileInfo.getReviewCount() == 0) {
                                 ratings.setText("-");
                             } else {
-                                ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
+                                ratings.setText(String.format("%.2f★", profileInfo.getAvgScore()));
                                 reviewCount_user.setText(profileInfo.getReviewCount().toString());
                             }
                         }
