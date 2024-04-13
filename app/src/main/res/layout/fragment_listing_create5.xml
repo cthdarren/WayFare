@@ -66,13 +66,15 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:hint="Title"
-            app:helperText="Add an attractive title to your listing!">
+            app:helperText="Add an attractive title to your listing! (Max. 50 chars)">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/listingTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1" />
+                android:inputType="textMultiLine"
+                android:maxLength="50"
+                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
