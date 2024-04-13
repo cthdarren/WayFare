@@ -36,6 +36,7 @@ import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
 import com.example.wayfare.Models.ReviewItemModel;
 import com.example.wayfare.Models.ReviewModel;
+import com.example.wayfare.Models.ShortsObject;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
@@ -45,14 +46,17 @@ import com.example.wayfare.Utils.AuthService;
 import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.ViewModel.UserViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
 
 public class ProfileFragment extends Fragment implements RecyclerViewInterface, AlternateRecyclerViewInterface, TertiaryRecyclerViewInterface {
 
@@ -80,16 +84,17 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
     TextView languagesSpoken;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
     List<ListingItemModel> listingItemModels = new ArrayList<>();
-    List<String> journeyThumbnailUrls = new ArrayList<>();
+    List<String> journeyThumbnailUrls;
+    List<ShortsObject> journeyList;
     ProfileModel profileInfo;
 
 
     public ProfileFragment() {
     }
 
-    public void setupJourneyThumnails(List<String> journeyThumbnails) {
-        for (String thumbnailUrl: journeyThumbnails) {
-            journeyThumbnailUrls.add(thumbnailUrl);
+    public void setupJourneyThumnails(List<ShortsObject> journeys) {
+        for (ShortsObject journey: journeys) {
+            journeyThumbnailUrls.add(journey.getThumbnailUrl());
         }
 
     }
@@ -118,6 +123,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         profileUsername = getArguments().getString("username");
+        journeyThumbnailUrls = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         backButton = view.findViewById(R.id.profile_back);
         hostingBar = getActivity().findViewById(R.id.bottomHostingNav);
@@ -182,7 +188,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(reviewRecycler);
         if (profileUsername != null) {
-
+            CountDownLatch latch = new CountDownLatch(2);
             new AuthService(getContext()).getResponse("/api/v1/profile/" + profileUsername, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
                 @Override
                 public void onError(String message) {
@@ -246,16 +252,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                                 setupReviewModels(profileInfo.getReviews());
                                 setUpListingModels(profileInfo.getTours());
 
-                                // TODO GANGESH MODIFY THIS ACCORDINGLY
-                                // setupJourneyThumnails(profileInfo.getJourneys());
-                                if (journeyThumbnailUrls.size() == 0){
-                                    journeys_wrapper.setVisibility(GONE);
-                                }
-                                else{
-                                    journeys_wrapper.setVisibility(View.VISIBLE);
-                                    journeyRecycler.getAdapter().notifyItemRangeInserted(0,journeyThumbnailUrls.size());
-                                }
-
                                 show_all_reviews_button.setText(String.format("Show all %d reviews", reviewItemModels.size()));
 
                                 if (reviewItemModels.isEmpty()){
@@ -283,12 +279,42 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
 
                                 listingRecycler.getAdapter().notifyItemRangeInserted(0, listingItemModels.size());
 
-                                progBar.setVisibility(GONE);
+                                latch.countDown();
+                                if (latch.getCount() == 0)
+                                    progBar.setVisibility(GONE);
                             }
                         });
                     }
                 }
             });
+
+        new AuthService(getContext()).getResponse("/api/v1/profileshorts/" + profileUsername, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Failed to get Journeys" + message, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                Type listType = new TypeToken<List<ShortsObject>>(){}.getType();
+                journeyList = new Gson().fromJson(json.data, listType);
+                setupJourneyThumnails(journeyList);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        journeyRecycler.getAdapter().notifyItemRangeChanged(0, journeyList.size());
+                        latch.countDown();
+                        if (latch.getCount() == 0)
+                            progBar.setVisibility(GONE);
+                    }
+                });
+            }
+        });
         } else {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -342,9 +368,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
     @Override
     public void onTertiaryItemClick(int position) {
         Bundle args = new Bundle();
-        args.putString("journeyUrl", journeyThumbnailUrls.get(position));
-        getParentFragmentManager().popBackStack(); //get out of profile screen first
-        // go to where ever
-        Helper.goToFragmentArgs(args, getParentFragmentManager(), R.id.flFragment, new ExploreFragment());
+        args.putString("journeyId", journeyList.get(position).getId());
+        Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new SingularJourneyFragment());
     }
 }

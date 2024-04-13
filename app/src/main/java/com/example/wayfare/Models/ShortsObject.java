@@ -1,25 +1,32 @@
 package com.example.wayfare.Models;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ShortsObject {
+public class ShortsObject  {
     //    private String id;
     private String shortsUrl,id;
     private String userId;
     private String userName;
     private String description;
+    private String thumbnailUrl;
     private TourListModel listing;
     private ArrayList<String> likes;
     private Date datePosted;
     public ShortsObject(){}
-    public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, Date datePosted, TourListModel listing, ArrayList<String> likes) {
+    public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, String thumbnailUrl, Date datePosted, TourListModel listing, ArrayList<String> likes) {
         this.id = id;
         this.shortsUrl = shortsUrl;
         this.userId = userId;
         this.userName = userName;
         this.description = description;
+        this.thumbnailUrl = thumbnailUrl;
         this.listing = listing;
         this.likes = likes;
         this.datePosted = datePosted;
@@ -97,5 +104,9 @@ public class ShortsObject {
 
     public void setDatePosted(Date datePosted) {
         this.datePosted = datePosted;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 }

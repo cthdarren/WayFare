@@ -6,14 +6,29 @@
     android:clickable="false"
     android:focusable="false"
     app:rippleColor="@color/transparent"
+    android:paddingTop="10dp"
     android:layout_marginEnd="0dp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:paddingEnd="10dp"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_play_arrow_24"/>
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp">
+       >
 
         <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -39,6 +54,6 @@
 
 
         </LinearLayout>
-
     </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

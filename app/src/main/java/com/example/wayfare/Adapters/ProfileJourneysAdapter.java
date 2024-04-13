@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.wayfare.Models.ListingItemModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
+import com.example.wayfare.TertiaryRecyclerViewInterface;
 
 import java.util.List;
 
@@ -24,9 +25,9 @@ public class ProfileJourneysAdapter extends RecyclerView.Adapter<ProfileJourneys
     private final List<String> journeyThumnails;
     private final Context context;
 
-    private RecyclerViewInterface recyclerViewInterface;
+    private TertiaryRecyclerViewInterface recyclerViewInterface;
 
-    public ProfileJourneysAdapter(Context context, List<String> journeyThumnails, RecyclerViewInterface recyclerViewInterface) {
+    public ProfileJourneysAdapter(Context context, List<String> journeyThumnails, TertiaryRecyclerViewInterface recyclerViewInterface) {
         this.context = context;
         this.journeyThumnails = journeyThumnails;
         this.recyclerViewInterface = recyclerViewInterface;
@@ -35,18 +36,20 @@ public class ProfileJourneysAdapter extends RecyclerView.Adapter<ProfileJourneys
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.preview_listing_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_profile_journeys, parent, false);
         ViewHolder holder = new ViewHolder(view, recyclerViewInterface);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        if (journeyThumnails.get(position) != null){
         Glide.with(context)
                 .load(journeyThumnails.get(position).split("\\?")[0])
                 .sizeMultiplier(0.5f)
                 .centerCrop()
                 .into(holder.journeyThumbnail);
+        }
     }
 
     @Override
@@ -59,7 +62,7 @@ public class ProfileJourneysAdapter extends RecyclerView.Adapter<ProfileJourneys
         private ImageView journeyThumbnail;
 
 
-        public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public ViewHolder(@NonNull View itemView, TertiaryRecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             journeyThumbnail= itemView.findViewById(R.id.journey_thumbnail);
 
@@ -69,7 +72,7 @@ public class ProfileJourneysAdapter extends RecyclerView.Adapter<ProfileJourneys
                     if (recyclerViewInterface != null) {
                         int pos = getBindingAdapterPosition();
                         if (pos != RecyclerView.NO_POSITION) {
-                            recyclerViewInterface.onItemClick(pos);
+                            recyclerViewInterface.onTertiaryItemClick(pos);
                         }
                     }
                 }

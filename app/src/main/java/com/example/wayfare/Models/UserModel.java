@@ -1,9 +1,9 @@
 package com.example.wayfare.Models;
 
-import java.time.Instant;
 import java.util.List;
 
 public class UserModel {
+    private String id;
     private String username;
     private String firstName;
     private String lastName;
@@ -17,7 +17,8 @@ public class UserModel {
     private List<String> badges;
     private String role;
 
-    public UserModel(String username, String firstName, String lastName, String email, String phoneNumber, boolean isVerified, String dateCreated, String pictureUrl, String aboutMe, List<String> badges, String role) {
+    public UserModel(String id, String username, String firstName, String lastName, String email, String phoneNumber, boolean isVerified, String dateCreated, String pictureUrl, String aboutMe, List<String> badges, String role) {
+        this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -107,5 +108,9 @@ public class UserModel {
 
     public void setAboutMe(String aboutMe) {
         this.aboutMe = aboutMe;
+    }
+
+    public String getId() {
+        return id;
     }
 }
