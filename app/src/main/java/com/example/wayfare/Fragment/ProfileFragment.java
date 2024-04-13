@@ -273,7 +273,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                                     reviewCount.setText(String.valueOf(reviewItemModels.size()));
 
                                 } else {
-                                    ratings.setText(String.valueOf(profileInfo.getAvgScore()) + "★");
+                                    ratings.setText(String.format("%.2f★", profileInfo.getAvgScore()));
                                 }
                                 reviewRecycler = view.findViewById(R.id.review_carousel);
                                 reviewRecycler.setAdapter(new ReviewAdapter(getContext(), reviewItemModels, ProfileFragment.this));

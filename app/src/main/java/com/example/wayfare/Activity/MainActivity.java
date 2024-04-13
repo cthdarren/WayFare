@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
                             loggedIn = false;
-                            progBar.setVisibility(View.GONE);
+                            loadFragments();
                         }
                     });
                 }
@@ -143,19 +143,19 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 viewModel.updateUserData(new Gson().fromJson(json.data, UserModel.class));
-                                progBar.setVisibility(View.GONE);
+                                loadFragments();
                             }
                         });
                     } else {
                         Toast.makeText(MainActivity.this, json.data.getAsString(), Toast.LENGTH_SHORT).show();
                         loggedIn = false;
-                        progBar.setVisibility(View.GONE);
+                        loadFragments();
                     }
                 }
             });
         } else {
             loggedIn = false;
-            progBar.setVisibility(View.GONE);
+            loadFragments();
         }
 
         if (loggedIn)
@@ -165,10 +165,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         Helper.getExchangeRate(getApplicationContext());
-
-        View decorView = getWindow().getDecorView();
-        if (getSupportFragmentManager().getBackStackEntryCount() == 0)
-            replaceFragment(new ExploreFragment());
 
         //binding.bottomNavigationView.setBackground(null);
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -292,6 +288,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void loadFragments(){
+        if (!isFinishing() & !isDestroyed()) {
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                replaceFragment(new ExploreFragment());
+                progBar.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @Override
     public void onNightModeChanged(int mode) {
