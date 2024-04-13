@@ -67,6 +67,7 @@ import com.google.gson.JsonObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -106,6 +107,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
     String userName;
     PreviewListingsAdapter previewListingsAdapter;
     String dashPath;
+    String thumbnailPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +131,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
         retriever.setDataSource(this,videoUri);
         Bitmap bitmap = retriever.getFrameAtTime();
         imgShort.setImageBitmap(bitmap);
+        thumbnailPath = saveBitmapAsImage(bitmap);
         try {
             retriever.release();
         } catch (IOException e) {
@@ -176,6 +179,8 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
             if (dashPath != null) {
                 File file = new File(dashPath);
                 Uri dashUri = Uri.fromFile(file);
+                File thumbnailFile = new File(thumbnailPath);
+                Uri thumbnailUri = Uri.fromFile(thumbnailFile);
                 AzureStorageManager.uploadBlob(this, dashUri, false, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -194,38 +199,54 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
                         }
                         // Handle successful upload
                         String url = response.request().url().toString();
-                        String urlOfBlob = AzureStorageManager.getBaseUrl(url); //URL of uploaded file
+                        String urlOfVidBlob = AzureStorageManager.getBaseUrl(url); //URL of uploaded file
                         Log.d("Upload", "File uploaded successfully. URL: " + url);
-                        int selectedPosition = previewListingsAdapter.getSelectedPosition();
-                        String apiUrl = "/shorts/create";
-                        if (selectedPosition != -1) {
-                            String tourListingID = tourListModels.get(selectedPosition).getId();
-                            apiUrl = apiUrl + "/" + tourListingID;
-                        }
-                        String descriptionText = descriptionEditText.getText().toString();
-                        Date currentDate = new Date();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                        String formattedDate = dateFormat.format(currentDate);
-                        final OkHttpClient client = new OkHttpClient();
-                        // TODO Complete JSON string
-                        String json = String.format("{\"description\": \"%s\", \"shortsUrl\": \"%s\", \"datePosted\": \"%s\"}",
-                                descriptionText, urlOfBlob, formattedDate);
-                        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
-                        new AuthService(PostShortActivity.this).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                        AzureStorageManager.uploadBlob(PostShortActivity.this, thumbnailUri, false, new Callback() {
                             @Override
-                            public void onError(String message) {
-                                unsuccessfullScreen();
+                            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                                e.printStackTrace();
                             }
 
                             @Override
-                            public void onResponse(ResponseModel json) {
+                            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                                 if (!response.isSuccessful()) {
                                     unsuccessfullScreen();
+                                    throw new IOException("Unexpected response code: " + response);
                                 }
-                                successfullScreen();
+                                String url = response.request().url().toString();
+                                String urlOfPiclob = AzureStorageManager.getBaseUrl(url); //URL of uploaded file
+                                Log.d("Upload", "Pic uploaded successfully. URL: " + url);
+                                int selectedPosition = previewListingsAdapter.getSelectedPosition();
+                                String apiUrl = "/shorts/create";
+                                if (selectedPosition != -1) {
+                                    String tourListingID = tourListModels.get(selectedPosition).getId();
+                                    apiUrl = apiUrl + "/" + tourListingID;
+                                }
+                                String descriptionText = descriptionEditText.getText().toString();
+                                Date currentDate = new Date();
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                                String formattedDate = dateFormat.format(currentDate);
+                                final OkHttpClient client = new OkHttpClient();
+                                // TODO Complete JSON string
+                                String json = String.format("{\"description\": \"%s\", \"shortsUrl\": \"%s\", \"datePosted\": \"%s\",\"thumbnailUrl\": \"%s\"}",
+                                        descriptionText, urlOfVidBlob, formattedDate,urlOfPiclob);
+                                RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+                                new AuthService(PostShortActivity.this).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                                    @Override
+                                    public void onError(String message) {
+                                        unsuccessfullScreen();
+                                    }
+
+                                    @Override
+                                    public void onResponse(ResponseModel json) {
+                                        if (!response.isSuccessful()) {
+                                            unsuccessfullScreen();
+                                        }
+                                        successfullScreen();
+                                    }
+                                });
                             }
                         });
-
                     }
                 });
              }
@@ -346,6 +367,34 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
                 });
             }
         }).start();
+    }
+    private String saveBitmapAsImage(Bitmap bitmap) {
+        // Get internal storage directory
+        File storageDir = getFilesDir();
+
+        // Generate a unique file name for the image
+        String name = "Wayfare-Shorts-" +
+                new SimpleDateFormat(FILENAME_FORMAT, Locale.US)
+                        .format(System.currentTimeMillis()) + ".jpg";
+
+        // Create a File object with the specified file name in the internal storage directory
+        File outputFile = new File(storageDir, name);
+
+        try {
+            // Open a FileOutputStream for the file path
+            FileOutputStream fos = new FileOutputStream(outputFile);
+            // Compress the Bitmap into the FileOutputStream as a JPEG image with 100% quality
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            // Close the FileOutputStream
+            fos.close();
+            // Image is saved successfully, return the absolute path of the created image file
+            return outputFile.getAbsolutePath();
+        } catch (IOException e) {
+            // Error occurred while saving the image
+            e.printStackTrace();
+            Log.e("Bitmap", "Error saving bitmap as image: " + e.getMessage());
+            return null; // Return null to indicate failure
+        }
     }
     public void makeToast(String msg) {
 
