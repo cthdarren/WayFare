@@ -211,11 +211,11 @@ public class ConfirmBooking extends AppCompatActivity {
         new AuthService(this).getResponse("/booking/create", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
-                makeToast(message);
+                makeToast("Please log in before making a booking");
                 ConfirmBooking.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        Helper.goToLogin(getSupportFragmentManager());
                     }
                 });
             }

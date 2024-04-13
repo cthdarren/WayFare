@@ -292,8 +292,8 @@ public class MainActivity extends AppCompatActivity {
         if (!isFinishing() & !isDestroyed()) {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 replaceFragment(new ExploreFragment());
-                progBar.setVisibility(View.GONE);
             }
+            progBar.setVisibility(View.GONE);
         }
     }
 
