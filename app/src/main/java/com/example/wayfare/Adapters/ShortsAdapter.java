@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -440,6 +441,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             if (view.getId() == videoView.getId()) {
                 if (motionLayout.getProgress() == 1.0f) {
                     // If motionLayout is in the end state, transition it to start
+                    InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
                     motionLayout.transitionToStart();
                     exploreFragment.enableShortsViewPagerScroll();
                 } else {
@@ -478,7 +481,26 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     setFillLiked(true);
                 }
             }
+            if(view.getId() == comment_text.getId()){
+                final Handler handler = new Handler();
+                comment_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                comment_text.requestFocus();
+                                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.showSoftInput(comment_text, InputMethodManager.SHOW_IMPLICIT);
+                                imm.restartInput(comment_text);
+                            }
+                        }, 100);
+                    }
+                });
+            }
             if (view.getId() == send_comment_btn.getId()) {
+                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
                 String commentText = comment_text.getText().toString();
                 if (userData == null) {
                     goToLogin(fragmentManager);
@@ -540,6 +562,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             }
             if (view.getId() == R.id.exit_comment_section_btn) {
                 // Exit transition when exit_comment_section_btn is clicked
+                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
                 motionLayout.transitionToStart();
                 exploreFragment.enableShortsViewPagerScroll();
             }
