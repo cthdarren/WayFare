@@ -4,6 +4,7 @@ import static com.example.wayfare.Utils.Helper.convertDateToShortDate;
 import static com.example.wayfare.Utils.Helper.goToLogin;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,9 +13,12 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,6 +48,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.PostShortActivity;
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Fragment.CommentFragment;
 import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Fragment.TourListingFull;
@@ -337,9 +342,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
                 }
             }
-            commentsAdapter = new CommentsAdapter(context,shortsData.getComments(),shortsData.getUserName(),fragmentManager);
-            recycleViewComments.setAdapter(commentsAdapter);
-            recycleViewComments.setLayoutManager(new LinearLayoutManager(context));
+
             if (shortsData.getListing()!=null){
                 listingCard.setVisibility(View.VISIBLE);
                 listingTitle.setText(shortsData.getListing().getTitle());
@@ -493,66 +496,67 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             if(view.getId() == comment_text.getId()){
             }
             if (view.getId() == send_comment_btn.getId()) {
-                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
-                String commentText = comment_text.getText().toString();
-                if (userData == null) {
-                    goToLogin(fragmentManager);
-                } else {
-                    if (commentText.strip().isEmpty()) {
-                        Toast.makeText(context, "Empty Comment!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        String apiUrl = "/shorts/comment";
-                        String journeyId = shortsDataList.get(getCurrentPosition()).getId();
-                        String json = String.format("{\"journeyId\": \"%s\", \"comment\": \"%s\"}",
-                                journeyId, commentText);
-                        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
-                        new AuthService(context).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
-                            @Override
-                            public void onError(String message) {
-//                        unsuccessfullScreen();
-                            }
-
-                            @Override
-                            public void onResponse(ResponseModel json) {
-                                if (json.success) {
-
-                                    exploreFragment.requireActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            comment_text.setText("");
-                                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                                            Date currentDate = new Date();
-                                            String formattedDate = dateFormat.format(currentDate);
-                                            Comment commentToAdd = new Comment("", journeyId, userData.getId(), commentText, formattedDate, userData);
-                                            shortsDataList.get(getCurrentPosition()).addComment(commentToAdd);
-                                            Collections.sort(shortsDataList.get(getCurrentPosition()).getComments(), new Comparator<Comment>() {
-                                                @Override
-                                                public int compare(Comment o1, Comment o2) {
-                                                    // Compare dates in descending order
-                                                    return o2.getDateCreated().compareTo(o1.getDateCreated());
-                                                }
-                                            });
-                                            commentsAdapter.notifyDataSetChanged();
-                                            int num_comments = shortsDataList.get(getCurrentPosition()).getComments().size();
-                                            tvComment.setText(String.valueOf(num_comments));
-                                            if (num_comments == 0)
-                                                total_comments.setText("Be the first comment!");
-                                            else {
-                                                total_comments.setText(String.valueOf(num_comments) + " comments");
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                }
+//                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
+//                String commentText = comment_text.getText().toString();
+//                if (userData == null) {
+//                    goToLogin(fragmentManager);
+//                } else {
+//                    if (commentText.strip().isEmpty()) {
+//                        Toast.makeText(context, "Empty Comment!", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        String apiUrl = "/shorts/comment";
+//                        String journeyId = shortsDataList.get(getCurrentPosition()).getId();
+//                        String json = String.format("{\"journeyId\": \"%s\", \"comment\": \"%s\"}",
+//                                journeyId, commentText);
+//                        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+//                        new AuthService(context).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+//                            @Override
+//                            public void onError(String message) {
+////                        unsuccessfullScreen();
+//                            }
+//
+//                            @Override
+//                            public void onResponse(ResponseModel json) {
+//                                if (json.success) {
+//
+//                                    exploreFragment.requireActivity().runOnUiThread(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            comment_text.setText("");
+//                                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+//                                            Date currentDate = new Date();
+//                                            String formattedDate = dateFormat.format(currentDate);
+//                                            Comment commentToAdd = new Comment("", journeyId, userData.getId(), commentText, formattedDate, userData);
+//                                            shortsDataList.get(getCurrentPosition()).addComment(commentToAdd);
+//                                            Collections.sort(shortsDataList.get(getCurrentPosition()).getComments(), new Comparator<Comment>() {
+//                                                @Override
+//                                                public int compare(Comment o1, Comment o2) {
+//                                                    // Compare dates in descending order
+//                                                    return o2.getDateCreated().compareTo(o1.getDateCreated());
+//                                                }
+//                                            });
+//                                            commentsAdapter.notifyDataSetChanged();
+//                                            int num_comments = shortsDataList.get(getCurrentPosition()).getComments().size();
+//                                            tvComment.setText(String.valueOf(num_comments));
+//                                            if (num_comments == 0)
+//                                                total_comments.setText("Be the first comment!");
+//                                            else {
+//                                                total_comments.setText(String.valueOf(num_comments) + " comments");
+//                                            }
+//                                        }
+//                                    });
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
             }
             if (view.getId() == R.id.tvComment) {
-                // Trigger transition when tvComment is clicked
-                motionLayout.transitionToEnd();
-                exploreFragment.disableShortsViewPagerScroll();
+                Helper.goToFullScreenFragmentFromBottom(exploreFragment.getParentFragmentManager(), new CommentFragment());
+
+//                motionLayout.transitionToEnd();
+//                exploreFragment.disableShortsViewPagerScroll();
             }
             if (view.getId() == R.id.exit_comment_section_btn) {
                 // Exit transition when exit_comment_section_btn is clicked

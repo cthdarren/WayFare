@@ -377,15 +377,15 @@
                 app:srcCompat="@drawable/ic_send"
                 android:contentDescription="Send Comment" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/comment_recyclerview"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/_14sdp"
-                app:layout_constraintBottom_toTopOf="@+id/comment_divider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/total_comments" />
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/comment_recyclerview"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginTop="@dimen/_14sdp"-->
+<!--                app:layout_constraintBottom_toTopOf="@+id/comment_divider"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/total_comments" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
