@@ -39,7 +39,7 @@ public class PreviewListingsAdapter extends RecyclerView.Adapter<PreviewListings
     @Override
     public void onBindViewHolder(@NonNull PreviewListingsAdapter.PreviewListingsViewHolder holder, int position) {
         Glide.with(context)
-                .load(tourListModels.get(position).getThumbnailUrls()[0]) // Load the first URL from the array
+                .load(tourListModels.get(position).getThumbnailUrls()[0].split("\\?")[0]) // Load the first URL from the array
                 .into(holder.listingImage);
         holder.listingTitle.setText(tourListModels.get(position).getTitle());
         holder.listingLoc.setText(tourListModels.get(position).getRegion());
