@@ -145,6 +145,14 @@ public class WayfarerActivity extends AppCompatActivity {
                     replaceFragment(new SettingsFragment());
                 }else if(item.getItemId() == R.id.hosting_calendar){
                     replaceFragment(new WayfarerPastBookingFragment());
+                } else if(item.getItemId() == R.id.hosting_create_journey){
+                    Intent intent = new Intent(this, AddShorts.class);
+                    Bundle bundle2 = new Bundle();
+                    String userName = viewModel.getUserProfileData().getUsername();
+                    bundle2.putString("userName", userName);
+                    intent.putExtras(bundle2);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_right_to_left, R.anim.fade_in);
                 }
             }
             backing = false;

@@ -14,6 +14,12 @@
         android:icon="@drawable/icon_selection_upcoming"
         android:title="Previous" />
     <item
+        android:id="@+id/hosting_create_journey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/baseline_add_circle_outline_24"
+        android:title="Create" />
+    <item
         android:id="@+id/hosting_tour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
