@@ -483,9 +483,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             }
             if(view.getId() == comment_text.getId()){
                 final Handler handler = new Handler();
-                comment_text.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -495,8 +492,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                                 imm.restartInput(comment_text);
                             }
                         }, 100);
-                    }
-                });
             }
             if (view.getId() == send_comment_btn.getId()) {
                 InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
