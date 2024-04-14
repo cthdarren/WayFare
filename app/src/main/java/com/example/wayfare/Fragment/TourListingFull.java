@@ -261,16 +261,44 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 .setValidator(DateValidatorPointForward.now())
                 .build();
 
-        bookmarkCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        new AuthService(getContext()).getResponse("/isbookmarked/" + listingId, true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    createBookmark();
-                } else {
-                    // do nothing for now
-                }
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        bookmarkCheckbox.setChecked(json.data.getAsBoolean());
+                        bookmarkCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                String json = String.format("{\"listingId\":\"%s\"}", listingId);
+                                RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+                                String apiUrl;
+                                if (bookmarkCheckbox.isChecked())
+                                    apiUrl = "/bookmark";
+                                else
+                                    apiUrl = "/unbookmark";
+                                new AuthService(getContext()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                                    @Override
+                                    public void onError(String message) {
+                                    }
+
+                                    @Override
+                                    public void onResponse(ResponseModel json) {
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             }
         });
+
 
         buttonDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -396,26 +424,6 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             Log.d("Do nothing", String.valueOf(position));
         }
     }
-    public void createBookmark(){
-        String listingId = getArguments().getString("listingId");
-        String json = String.format("{\"listingId\":\"%s\"}", listingId);
-         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
-        new AuthService(getContext()).getResponse("/bookmark", true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
-            @Override
-            public void onError(String message) {
-                makeToast(message);
-            }
-
-            @Override
-            public void onResponse(ResponseModel json) {
-                if (json.success){
-                    Log.d("JSON", "onResponse: success");
-                    makeToast(json.data.getAsString());
-                }
-                else{
-                    makeToast(json.data.getAsString());
-                }
-            }
 
             public void makeToast(String msg) {
 
@@ -430,6 +438,4 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                     }
                 });
             }
-        });
-    }
 }
