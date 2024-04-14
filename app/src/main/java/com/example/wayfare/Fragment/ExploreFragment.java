@@ -2,6 +2,7 @@ package com.example.wayfare.Fragment;
 
 import com.example.wayfare.Activity.MainActivity;
 import com.example.wayfare.BuildConfig;
+import com.example.wayfare.Models.Comment;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.Models.ResponseModel;
@@ -114,6 +115,13 @@ public class ExploreFragment extends Fragment {
                     for (JsonElement shorts : allShortsInfo){
                         String eachString = shorts.toString();
                         ShortsObject testing = new Gson().fromJson(eachString, ShortsObject.class);
+                        Collections.sort(testing.getComments(), new Comparator<Comment>() {
+                            @Override
+                            public int compare(Comment o1, Comment o2) {
+                                // Compare dates in descending order
+                                return o2.getDateCreated().compareTo(o1.getDateCreated());
+                            }
+                        });
                         shortsObjectList.add(testing);
                     }
                     Collections.sort(shortsObjectList, new Comparator<ShortsObject>() {
@@ -158,7 +166,7 @@ public class ExploreFragment extends Fragment {
         }
         shortsViewPager = view.findViewById(R.id.shortsViewPager);
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),ExploreFragment.this,userName);
+        shortsAdapter = new ShortsAdapter(shortsObjectList, context,getParentFragmentManager(),ExploreFragment.this,userData);
         shortsViewPager.setAdapter(shortsAdapter);
         shortsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override

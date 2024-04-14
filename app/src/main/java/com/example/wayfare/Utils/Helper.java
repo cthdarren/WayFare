@@ -31,9 +31,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -259,6 +263,36 @@ public class Helper {
                 return "Nature and Outdoors";
             default:
                 return null;
+        }
+    }
+    public static String convertStringToShortDate(String oldDateString) {
+        try {
+            // Parse the old date string to Date object
+            DateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            Date oldDate = oldDateFormat.parse(oldDateString);
+
+            // Create a new date format
+            DateFormat newDateFormat = new SimpleDateFormat("dd-MM");
+
+            // Format the date to the new format
+            return newDateFormat.format(oldDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Return the original string if parsing fails
+            return oldDateString;
+        }
+    }
+    public static String convertDateToShortDate(Date oldDate) {
+        try {
+            // Create a new date format
+            DateFormat newDateFormat = new SimpleDateFormat("dd-MM");
+
+            // Format the date to the new format
+            return newDateFormat.format(oldDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Return the original string if parsing fails
+            return "";
         }
     }
 }

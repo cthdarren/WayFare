@@ -30,6 +30,14 @@
     android:layout_height="wrap_content"
     android:background="#FFF"
     android:paddingBottom="15dp">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/person_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
     <androidx.cardview.widget.CardView
         android:id="@+id/comment_avatar_card"
         android:layout_width="30dp"
@@ -56,9 +64,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/comment_avatar_card"
-        app:layout_constraintTop_toTopOf="@+id/comment_avatar_card"
+        android:textColor="@color/md_theme_onSurface"
+        app:layout_constraintStart_toEndOf="@+id/person_image"
+        app:layout_constraintTop_toTopOf="@+id/person_image"
         tools:text="thedesilad" />
+    <TextView
+        android:id="@+id/comment_date"
+        android:textColor="@color/md_theme_outline"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/person_username"
+        app:layout_constraintTop_toTopOf="@+id/person_username"
+        tools:text="dd-mm-yyyy" />
 
     <TextView
         android:id="@+id/person_comment"

@@ -21,10 +21,15 @@ public class ShortsObject  {
     private TourListModel listing;
     private ArrayList<String> likes;
     private Date datePosted;
-    private List<Comment> comments;
+    private ArrayList<Comment> comments;
 
     public ShortsObject(){}
-    public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, String thumbnailUrl, Date datePosted, TourListModel listing, ArrayList<String> likes) {
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, String thumbnailUrl, Date datePosted, TourListModel listing, ArrayList<String> likes, String posterPictureUrl, ArrayList<Comment> comments) {
         this.id = id;
         this.shortsUrl = shortsUrl;
         this.userId = userId;
@@ -34,6 +39,8 @@ public class ShortsObject  {
         this.listing = listing;
         this.likes = likes;
         this.datePosted = datePosted;
+        this.comments = comments;
+        this.posterPictureUrl = posterPictureUrl;
     }
 
     public String getId() {
@@ -112,5 +119,17 @@ public class ShortsObject  {
 
     public String getThumbnailUrl() {
         return thumbnailUrl;
+    }
+    public String getPosterPictureUrl() {
+        return posterPictureUrl;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+    public void addComment(Comment comment) {
+        if (!this.comments.contains(comment)) {
+            this.comments.add(comment);
+        }
     }
 }
