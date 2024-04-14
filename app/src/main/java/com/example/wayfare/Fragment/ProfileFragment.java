@@ -150,6 +150,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         verification_truege = view.findViewById(R.id.verification_truege);
         edit_profile_button = view.findViewById(R.id.edit_profile_btn);
 
+
         journeyRecycler.setAdapter(new ProfileJourneysAdapter(getContext(), journeyThumbnailUrls, this));
 
         progBar = view.findViewById(R.id.profileProgBar);

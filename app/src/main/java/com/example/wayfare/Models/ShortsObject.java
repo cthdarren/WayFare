@@ -20,7 +20,7 @@ public class ShortsObject  {
     private String thumbnailUrl;
     private TourListModel listing;
     private ArrayList<String> likes;
-    private Date datePosted;
+    private String datePosted;
     private ArrayList<Comment> comments;
 
     public ShortsObject(){}
@@ -29,7 +29,7 @@ public class ShortsObject  {
         this.comments = comments;
     }
 
-    public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, String thumbnailUrl, Date datePosted, TourListModel listing, ArrayList<String> likes, String posterPictureUrl, ArrayList<Comment> comments) {
+    public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, String thumbnailUrl, String datePosted, TourListModel listing, ArrayList<String> likes, String posterPictureUrl, ArrayList<Comment> comments) {
         this.id = id;
         this.shortsUrl = shortsUrl;
         this.userId = userId;
@@ -109,11 +109,11 @@ public class ShortsObject  {
         this.likes = likes;
     }
 
-    public Date getDatePosted() {
+    public String getDatePosted() {
         return datePosted;
     }
 
-    public void setDatePosted(Date datePosted) {
+    public void setDatePosted(String datePosted) {
         this.datePosted = datePosted;
     }
 

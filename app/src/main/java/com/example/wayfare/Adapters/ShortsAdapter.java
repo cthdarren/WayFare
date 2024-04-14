@@ -1,6 +1,6 @@
 package com.example.wayfare.Adapters;
 import static com.example.wayfare.Utils.AzureStorageManager.getBaseUrl;
-import static com.example.wayfare.Utils.Helper.convertDateToShortDate;
+import static com.example.wayfare.Utils.Helper.convertStringToShortDate;
 import static com.example.wayfare.Utils.Helper.goToLogin;
 
 import android.annotation.SuppressLint;
@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -62,6 +64,7 @@ import com.google.gson.JsonElement;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -163,7 +166,21 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 //        isPlaying = false;
     }
     private boolean isFragmentAttached() {
-        return exploreFragment != null && exploreFragment.isAdded() && !exploreFragment.isDetached() && !exploreFragment.isRemoving();
+        if (exploreFragment == null || exploreFragment.getActivity() == null) {
+            return false; // Fragment or its activity is null
+        }
+
+        Window window = exploreFragment.getActivity().getWindow();
+        int flags = window.getAttributes().flags;
+        boolean activityVisible = (flags & WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED) != 0
+                || (flags & WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD) != 0
+                || (flags & WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON) != 0
+                || (flags & WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) != 0
+                || (flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS) != 0
+                || (flags & WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION) != 0
+                || window.getDecorView().getWindowVisibility() == View.VISIBLE;
+
+        return exploreFragment.isAdded() && !exploreFragment.isDetached() && !exploreFragment.isRemoving() && activityVisible;
     }
 
     public int getCurrentPosition() {
@@ -317,8 +334,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                         .override(30, 30) // Set the dimensions to 30dp by 30dp
                         .into(imvShortsAvatar);
             }
-            Date datePosted = shortsData.getDatePosted();
-            String shortDate = convertDateToShortDate(datePosted);
+            String datePosted = shortsData.getDatePosted();
+            String shortDate = convertStringToShortDate(datePosted);
             shorts_date_posted.setText(shortDate);
             Uri shortsUri = Uri.parse(shortsData.getShortsUrl());
             shortsDescription.setText(shortsData.getDescription());
@@ -532,7 +549,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                             }
                         });
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                        Date currentDate = new Date();
+                        Date currentDate = Date.from(Instant.now());
                         String formattedDate = dateFormat.format(currentDate);
                         Comment commentToAdd = new Comment("", journeyId, userData.getId(), commentText, formattedDate, userData);
                         shortsDataList.get(getCurrentPosition()).addComment(commentToAdd);

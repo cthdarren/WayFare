@@ -33,6 +33,7 @@
         android:layout_marginTop="12dp"
         android:background="@color/transparent"
         android:drawableTop="@drawable/arrow_back"
+        android:tint="@color/md_theme_onPrimary"
         android:onClick="onClick"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

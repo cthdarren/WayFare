@@ -41,6 +41,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -267,15 +268,19 @@ public class Helper {
     }
     public static String convertStringToShortDate(String oldDateString) {
         try {
-            // Parse the old date string to Date object
-            DateFormat oldDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-            Date oldDate = oldDateFormat.parse(oldDateString);
+            // Parse the old date string
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+            Date date = sdf.parse(oldDateString);
+
+            // Set the timezone to UTC
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             // Create a new date format
-            DateFormat newDateFormat = new SimpleDateFormat("dd-MM");
+            SimpleDateFormat newSdf = new SimpleDateFormat("dd-MM");
+            newSdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             // Format the date to the new format
-            return newDateFormat.format(oldDate);
+            return newSdf.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
             // Return the original string if parsing fails

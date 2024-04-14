@@ -54,7 +54,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+        <ImageView
+            android:id="@+id/imvBackSingle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="18dp"
+            android:layout_gravity="start"
+            android:padding="6dp"
+            app:tint="@color/md_theme_onPrimary"
+            android:src="@drawable/arrow_back"
+            android:visibility="gone"
+            android:clickable="true"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
         <ImageView
             android:id="@+id/imvVolume"
             android:layout_width="40dp"
@@ -302,7 +317,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_200sdp"
         app:shapeAppearance="@style/topCornered"
-        app:cardBackgroundColor="@android:color/white"
+        android:backgroundTint="@color/md_theme_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -328,11 +343,12 @@
                 android:id="@+id/exit_comment_section_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
                 android:padding="@dimen/_8sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_round_close"
+                android:background="@color/md_theme_background"
+                app:tint="@color/md_theme_onSurface"
                 android:contentDescription="Close" />
 
             <View
@@ -353,7 +369,6 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:padding="@dimen/_12sdp"
-                android:background="@android:color/white"
                 android:hint="Add comment..."
                 android:ems="10"
                 android:inputType="textLongMessage"
@@ -367,10 +382,10 @@
 
             <ImageButton
                 android:id="@+id/send_comment_btn"
+                android:background="@color/md_theme_background"
                 android:layout_width="@dimen/_24sdp"
                 android:layout_height="@dimen/_24sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
-                android:background="@android:color/white"
                 android:padding="@dimen/_8sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -14,6 +14,7 @@ import com.arthenica.mobileffmpeg.Config;
 import com.arthenica.mobileffmpeg.FFmpeg;
 import com.example.wayfare.R;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.Camera;
 import androidx.camera.core.FocusMeteringResult;
@@ -139,6 +140,29 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
         btnContinue.setOnClickListener(this);
         btnStopRecord.setOnClickListener(this);
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                // Create an Intent to launch the MainActivity
+                Intent intent = new Intent(AddShorts.this, MainActivity.class);
+
+                // Add any extra data if needed
+                // intent.putExtra("key", value);
+
+                // Start the MainActivity
+                startActivity(intent);
+
+                // Finish the current activity
+                finish();
+
+                // Apply custom transition animation
+                overridePendingTransition(R.anim.slide_right_to_left, R.anim.slide_out_bottom);
+            }
+        };
+
+        // Add the callback to the onBackPressedDispatcher
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
         // Get Camera TextureView
 
         animRotate = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -249,10 +273,24 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
 
         }
         if (view.getId() == R.id.button_close) {
+            Intent intent = new Intent(AddShorts.this, MainActivity.class);
+
+            // Add any extra data if needed
+            // intent.putExtra("key", value);
+
+            // Start the MainActivity
+            startActivity(intent);
+
+            // Finish the current AddShorts Activity
             finish();
+
+            // Apply custom transition animation
             overridePendingTransition(R.anim.slide_right_to_left, R.anim.slide_out_bottom);
         }
     }
+
+
+    // Create an OnBackPressedCallback
     private void checkStoragePermissionAndPickVideo() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_MEDIA_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {

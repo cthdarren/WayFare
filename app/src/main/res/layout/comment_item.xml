@@ -28,7 +28,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFF"
+    android:backgroundTint="@color/md_theme_background"
     android:paddingBottom="15dp">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/comment_avatar"
@@ -71,15 +71,23 @@
         app:layout_constraintStart_toEndOf="@+id/comment_date"
         app:layout_constraintTop_toTopOf="@+id/comment_date" />
 
-    <TextView
-        android:id="@+id/person_comment"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:fontFamily="@font/roboto"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/like_icon_image"
         app:layout_constraintStart_toStartOf="@+id/person_username"
-        app:layout_constraintTop_toBottomOf="@+id/person_username"
-        tools:text="straight to work" />
+        app:layout_constraintTop_toBottomOf="@+id/person_username">
+
+        <TextView
+            android:id="@+id/person_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="5"
+            android:scrollbars="vertical"
+            tools:text="straight to work" />
+    </ScrollView>
 
     <ImageView
         android:id="@+id/like_icon_image"
@@ -94,6 +102,7 @@
         android:id="@+id/likes_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:textColor="#6A6767"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/like_icon_image"
