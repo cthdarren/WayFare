@@ -271,7 +271,9 @@ public class ExploreFragment extends Fragment {
                 else{
                     if (doubleBackToExitPressedOnce) {
                         // Exit the app
-                        shortsAdapter.stopAllVideo();
+                        if(shortsAdapter!=null) {
+                            shortsAdapter.stopAllVideo();
+                        }
                         requireActivity().finish();
                     } else {
 //                        moveToNextScroll();
@@ -367,13 +369,17 @@ public class ExploreFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        shortsAdapter.stopAllVideo();
+        if(shortsAdapter!=null) {
+            shortsAdapter.stopAllVideo();
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        shortsAdapter.stopAllVideo();
+        if(shortsAdapter!=null) {
+            shortsAdapter.stopAllVideo();
+        }
     }
 
     public void pauseVideo() {
