@@ -446,8 +446,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             if (view.getId() == videoView.getId()) {
                 if (motionLayout.getProgress() == 1.0f) {
                     // If motionLayout is in the end state, transition it to start
-//                    InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                    imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
+                    InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
                     motionLayout.transitionToStart();
                     exploreFragment.enableShortsViewPagerScroll();
                 } else {
@@ -480,6 +480,11 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 }
             }
             if(view.getId() == imvShortsAvatar.getId()){
+                    if(exoPlayer!=null) {
+                        if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                            exoPlayer.setPlayWhenReady(false);
+                        }
+                    }
                     Bundle username = new Bundle();
                     username.putString("username", shortsDataList.get(getCurrentPosition()).getUserName());
                     ProfileFragment pf = new ProfileFragment();
@@ -499,8 +504,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 //                imm.showSoftInput(comment_text, InputMethodManager.SHOW_IMPLICIT);
 //            }
             if (view.getId() == send_comment_btn.getId()) {
-//                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
+                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
                 String commentText = comment_text.getText().toString();
                 if (userData == null) {
                     goToLogin(fragmentManager);
@@ -570,8 +575,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             }
             if (view.getId() == R.id.exit_comment_section_btn) {
                 // Exit transition when exit_comment_section_btn is clicked
-//                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
+                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(comment_text.getWindowToken(), 0);
                 recycleViewComments.setAdapter(null);
                 Glide.get(context).clearMemory();
                 motionLayout.transitionToStart();
