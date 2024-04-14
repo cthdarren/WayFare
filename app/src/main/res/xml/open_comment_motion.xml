@@ -6,10 +6,7 @@
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@+id/start"
         motion:duration="250"
-        motion:motionInterpolator="linear">
-    <OnSwipe
-            motion:dragDirection="dragLeft"
-            motion:touchAnchorSide="left"/>
+        motion:motionInterpolator="easeInOut">
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

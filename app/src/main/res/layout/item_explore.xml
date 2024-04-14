@@ -347,15 +347,12 @@
 
             <EditText
                 android:id="@+id/comment_text"
-                android:focusableInTouchMode="true"
-                android:windowSoftInputMode="adjustPan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:padding="@dimen/_12sdp"
                 android:background="@android:color/white"
-                android:fontFamily="@font/montserrat_medium"
                 android:hint="Add comment..."
                 android:ems="10"
                 android:inputType="textLongMessage"

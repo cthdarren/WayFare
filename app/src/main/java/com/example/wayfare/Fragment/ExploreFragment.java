@@ -274,7 +274,7 @@ public class ExploreFragment extends Fragment {
                         shortsAdapter.stopAllVideo();
                         requireActivity().finish();
                     } else {
-                        moveToNextScroll();
+//                        moveToNextScroll();
                         // Show toast message
                         Toast.makeText(requireContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
                         // Set the flag

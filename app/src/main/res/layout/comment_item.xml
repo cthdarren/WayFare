@@ -31,33 +31,13 @@
     android:background="#FFF"
     android:paddingBottom="15dp">
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/person_image"
+        android:id="@+id/comment_avatar"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginStart="14dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <androidx.cardview.widget.CardView
-        android:id="@+id/comment_avatar_card"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="10dp"
-        app:cardCornerRadius="50dp"
-        android:clickable="true">
-
-        <ImageView
-            android:id="@+id/comment_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:scaleType="centerCrop"
-            android:src="@drawable/default_avatar" />
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/person_username"
@@ -66,8 +46,8 @@
         android:layout_marginStart="16dp"
         android:textSize="12sp"
         android:textColor="@color/md_theme_onSurface"
-        app:layout_constraintStart_toEndOf="@+id/person_image"
-        app:layout_constraintTop_toTopOf="@+id/person_image"
+        app:layout_constraintStart_toEndOf="@+id/comment_avatar"
+        app:layout_constraintTop_toTopOf="@+id/comment_avatar"
         tools:text="thedesilad" />
     <TextView
         android:id="@+id/comment_date"
