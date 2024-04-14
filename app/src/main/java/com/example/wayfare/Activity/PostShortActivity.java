@@ -292,7 +292,7 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
                 "-c:a", "copy",
                 "-strict", "experimental",
                 "-b:v", "3M",  // Set video bitrate (adjust based on your needs)
-                outputFilePath // Output DASH file path
+                outputFilePath
         };
         int rc = FFmpeg.execute(command);
 

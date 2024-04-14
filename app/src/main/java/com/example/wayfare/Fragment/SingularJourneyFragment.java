@@ -11,13 +11,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,6 +47,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.arthenica.mobileffmpeg.Config;
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Adapters.CommentsAdapter;
 import com.example.wayfare.Adapters.ShortsAdapter;
@@ -64,6 +69,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -84,12 +90,14 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
     private ExoPlayer exoPlayer;
     private TextView shortsDescription, shortsTitle, listingTitle,tvComment, tvFavorites,total_comments,shorts_date_posted;
     private CardView listingCard,imvShortsAvatarCard;
-    private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvBackSingle;
+    private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvBackSingle,closeDeleteJourneyButton;
     private ProgressBar videoProgressBar;
     private MediaItem mediaItem;
     private ImageButton imvCloseComment;
+    private Button delete_journey;
     private ImageButton send_comment_btn;
     private EditText comment_text;
+    private CardView to_delete_short_bar;
     boolean isPaused = false;
     CommentsAdapter commentsAdapter;
     RecyclerView recycleViewComments;
@@ -129,12 +137,16 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
         videoProgressBar = view.findViewById(R.id.progressBar);
         imvVolume = view.findViewById(R.id.imvVolume);
         imvAppear = view.findViewById(R.id.imv_appear);
+        imvMore = view.findViewById(R.id.imvMore);
         imvShortsAvatar = view.findViewById(R.id.imvShortsAvatar);
         imvShortsAvatarCard = view.findViewById(R.id.imvShortsAvatarCard);
         imvCloseComment = view.findViewById(R.id.exit_comment_section_btn);
         listingTitle = view.findViewById(R.id.listingTitle);
         listingCard = view.findViewById(R.id.listingCard);
         imvBackSingle = view.findViewById(R.id.imvBackSingle);
+        to_delete_short_bar = view.findViewById(R.id.to_delete_short_bar);
+        delete_journey = to_delete_short_bar.findViewById(R.id.delete_journey);
+        closeDeleteJourneyButton = to_delete_short_bar.findViewById(R.id.closeDeleteJourneyButton);
         imvBackSingle.setVisibility(View.VISIBLE);
         videoView.setOnClickListener(this);
         imvVolume.setOnClickListener(this);
@@ -147,6 +159,10 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
         imvShortsAvatar.setOnClickListener(this);
         imvShortsAvatarCard.setOnClickListener(this);
         imvBackSingle.setOnClickListener(this);
+        imvMore.setOnClickListener(this);
+        delete_journey.setOnClickListener(this);
+        closeDeleteJourneyButton.setOnClickListener(this);
+
 
         new AuthService(getContext()).getResponse("/api/v1/short/" + journeyId, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
@@ -465,6 +481,50 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
             ProfileFragment pf = new ProfileFragment();
             pf.setArguments(username);
             Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, pf);
+        }
+        if(view.getId() == imvMore.getId()){
+              if(Objects.equals(userData.getUsername(),singleJourney.getUserName())) {
+//            Animation slideUpAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
+                  to_delete_short_bar.setVisibility(View.VISIBLE);
+              }else{
+                  makeToast("Function not available");
+              }
+//            to_delete_short_bar.startAnimation(slideUpAnimation);
+        }
+        if(view.getId()==closeDeleteJourneyButton.getId()){
+//            Animation slideDownAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_bottom);
+            to_delete_short_bar.setVisibility(View.GONE);
+//            to_delete_short_bar.startAnimation(slideDownAnimation);
+        }
+        if(view.getId()==delete_journey.getId()){
+            String apiUrl = "/short/delete/" + singleJourney.getId();
+            RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
+            new AuthService(requireActivity()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                @Override
+                public void onError(String message) {
+                        makeToast(message);
+
+                }
+
+                @Override
+                public void onResponse(ResponseModel json) {
+                    if (json.success) {
+                        makeToast("Journey Deleted");
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                                // Set custom animations for exit and pop exit
+                                transaction.setCustomAnimations(R.anim.slide_left_to_right,R.anim.slide_out_right_to_left);
+                                // Remove the current fragment
+                                transaction.remove(SingularJourneyFragment.this).commit();
+
+                            }
+                        });
+
+                    }
+                }
+            });
         }
         if (view.getId() == tvFavorites.getId()){
             if(singleJourney.getLikes().contains(userName)){

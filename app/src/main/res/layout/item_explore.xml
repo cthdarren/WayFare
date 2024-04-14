@@ -26,6 +26,52 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal">
+            <androidx.cardview.widget.CardView
+                android:visibility="gone"
+                android:id="@+id/to_delete_short_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true">
+                <ImageView
+                    android:id="@+id/closeDeleteJourneyButton"
+                    android:elevation="@dimen/_18sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:src="@drawable/ic_close"
+                    app:tint="@color/md_theme_onPrimaryContainer"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/md_theme_background"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="60dp"
+                    android:layout_alignParentBottom="true">
+
+                    <!-- Close ImageView -->
+
+                    <!-- Button inside the ConstraintLayout -->
+
+                    <Button
+                        android:id="@+id/delete_journey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:layout_margin="@dimen/_14sdp"
+                        android:backgroundTint="@color/md_theme_error"
+                        android:text="Delete Journey"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
             <ImageView
                 android:id="@+id/imv_appear"
@@ -382,16 +428,16 @@
 
             <ImageButton
                 android:id="@+id/send_comment_btn"
-                android:background="@color/md_theme_background"
-                android:layout_width="@dimen/_24sdp"
-                android:layout_height="@dimen/_24sdp"
+                android:layout_width="33dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="@dimen/_12sdp"
+                android:background="@color/md_theme_background"
+                android:contentDescription="Send Comment"
                 android:padding="@dimen/_8sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comment_divider"
-                app:srcCompat="@drawable/ic_send"
-                android:contentDescription="Send Comment" />
+                app:srcCompat="@drawable/ic_send" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comment_recyclerview"
@@ -404,5 +450,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/total_comments" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
+
+        <!-- ConstraintLayout for your content -->
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
