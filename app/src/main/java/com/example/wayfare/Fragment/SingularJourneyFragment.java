@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.OptIn;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MediaItem;
@@ -60,7 +61,7 @@ public class SingularJourneyFragment extends Fragment {
     private ProgressBar videoProgressBar;
     private MediaItem mediaItem;
     boolean isPaused = false;
-    RelativeLayout parentLayout;
+    MotionLayout parentLayout;
 
 
     public SingularJourneyFragment(){}
