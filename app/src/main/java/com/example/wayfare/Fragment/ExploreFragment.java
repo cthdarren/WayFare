@@ -243,6 +243,7 @@ public class ExploreFragment extends Fragment {
                     getParentFragmentManager().popBackStack();
                     String prev = getParentFragmentManager().getBackStackEntryAt(getParentFragmentManager().getBackStackEntryCount()-2).getName();
                     int idToGo;
+                    boolean back = true;
                     switch (prev){
                         case "com.example.wayfare.Fragment.SettingsFragment":
                             idToGo = R.id.account;
@@ -261,9 +262,10 @@ public class ExploreFragment extends Fragment {
                             break;
                         default:
                             idToGo = R.id.explore;
+                            back = false;
                             break;
                     }
-                    ((MainActivity) getActivity()).setBacking(true);
+                    ((MainActivity) getActivity()).setBacking(back);
                     bottomNavigationView.setSelectedItemId(idToGo);
                 }
                 else{
