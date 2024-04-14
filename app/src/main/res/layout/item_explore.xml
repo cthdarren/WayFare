@@ -344,6 +344,8 @@
 
             <EditText
                 android:id="@+id/comment_text"
+                android:focusableInTouchMode="true"
+                android:windowSoftInputMode="adjustPan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
@@ -368,7 +370,7 @@
                 android:layout_height="@dimen/_24sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:background="@android:color/white"
-                android:padding="@dimen/_6sdp"
+                android:padding="@dimen/_8sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comment_divider"
