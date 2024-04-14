@@ -3,22 +3,27 @@ import static com.example.wayfare.Utils.Helper.convertStringToShortDate;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Models.Comment;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.Models.UserModel;
 import com.example.wayfare.R;
+import com.example.wayfare.Utils.Helper;
 import com.example.wayfare.tourListing_RecyclerViewInterface;
 
 import java.util.ArrayList;
@@ -26,11 +31,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     ArrayList<Comment> commentsList;
     Context context;
     String userNameAuthor;
+    FragmentManager fragmentManager;
     private int selectedPosition = RecyclerView.NO_POSITION;
-    public CommentsAdapter(Context context, ArrayList<Comment> commentsList,String userNameAuthor){
+    public CommentsAdapter(Context context, ArrayList<Comment> commentsList, String userNameAuthor, FragmentManager fragmentManager){
         this.context = context;
         this.commentsList = commentsList;
         this.userNameAuthor = userNameAuthor;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -52,6 +59,18 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         }
         holder.person_comment.setText(commentsList.get(position).getCommentContent());
         holder.comment_date.setText(convertStringToShortDate(commentsList.get(position).getDateCreated()));
+        holder.comment_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    Bundle username = new Bundle();
+                    username.putString("username", commentsList.get(position).user.getUsername());
+                    ProfileFragment pf = new ProfileFragment();
+                    pf.setArguments(username);
+                    Helper.goToFragmentSlideInRight((fragmentManager), R.id.container, pf);
+
+            }
+        });
     }
 
     @Override

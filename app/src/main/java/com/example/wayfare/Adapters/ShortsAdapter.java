@@ -45,6 +45,7 @@ import com.bumptech.glide.Glide;
 import com.example.wayfare.Activity.PostShortActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Fragment.ExploreFragment;
+import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Fragment.TourListingFull;
 import com.example.wayfare.Models.Comment;
 import com.example.wayfare.Models.ResponseModel;
@@ -227,6 +228,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             imvCloseComment.setOnClickListener(this);
             send_comment_btn.setOnClickListener(this);
             comment_text.setOnClickListener(this);
+            imvShortsAvatar.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
@@ -335,7 +337,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
                 }
             }
-            commentsAdapter = new CommentsAdapter(context,shortsData.getComments(),shortsData.getUserName());
+            commentsAdapter = new CommentsAdapter(context,shortsData.getComments(),shortsData.getUserName(),fragmentManager);
             recycleViewComments.setAdapter(commentsAdapter);
             recycleViewComments.setLayoutManager(new LinearLayoutManager(context));
             if (shortsData.getListing()!=null){
@@ -474,6 +476,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     }
                 }
             }
+            if(view.getId() == imvShortsAvatar.getId()){
+                    Bundle username = new Bundle();
+                    username.putString("username", shortsDataList.get(getCurrentPosition()).getUserName());
+                    ProfileFragment pf = new ProfileFragment();
+                    pf.setArguments(username);
+                    Helper.goToFragmentSlideInRight(fragmentManager, R.id.container, pf);
+            }
             if (view.getId() == tvFavorites.getId()){
                 if(shortsDataList.get(getCurrentPosition()).getLikes().contains(userName)){
                     setFillLiked(false);}
@@ -482,16 +491,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 }
             }
             if(view.getId() == comment_text.getId()){
-                final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                comment_text.requestFocus();
-                                InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                imm.showSoftInput(comment_text, InputMethodManager.SHOW_IMPLICIT);
-                                imm.restartInput(comment_text);
-                            }
-                        }, 100);
             }
             if (view.getId() == send_comment_btn.getId()) {
                 InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
