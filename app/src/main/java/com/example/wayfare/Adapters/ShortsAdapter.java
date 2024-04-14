@@ -150,7 +150,9 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     }
     public void stopAllVideo() {
         for(ShortsAdapter.ShortsViewHolder holder:shortsViewHolderList) {
-            holder.stopVideo();
+            if(holder!=null){
+                holder.stopVideo();
+            }
         }
     }
 
