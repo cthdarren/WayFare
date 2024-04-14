@@ -334,7 +334,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
                 }
             }
-            commentsAdapter = new CommentsAdapter(context,shortsData.getComments());
+            commentsAdapter = new CommentsAdapter(context,shortsData.getComments(),shortsData.getUserName());
             recycleViewComments.setAdapter(commentsAdapter);
             recycleViewComments.setLayoutManager(new LinearLayoutManager(context));
             if (shortsData.getListing()!=null){

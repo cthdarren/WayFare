@@ -78,6 +78,17 @@
         app:layout_constraintStart_toEndOf="@+id/person_username"
         app:layout_constraintTop_toTopOf="@+id/person_username"
         tools:text="dd-mm-yyyy" />
+    <TextView
+        android:id="@+id/commentsAuthor"
+        android:text="Author"
+        android:layout_marginLeft="10dp"
+        android:visibility="invisible"
+        android:textColor="@color/md_theme_outline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/comment_date"
+        app:layout_constraintTop_toTopOf="@+id/comment_date" />
 
     <TextView
         android:id="@+id/person_comment"
