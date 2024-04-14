@@ -47,7 +47,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:elevation="10dp"
-        app:cardCornerRadius="50dp">
+        app:cardCornerRadius="50dp"
+        android:clickable="true">
 
         <ImageView
             android:id="@+id/comment_avatar"

@@ -59,7 +59,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         }
         holder.person_comment.setText(commentsList.get(position).getCommentContent());
         holder.comment_date.setText(convertStringToShortDate(commentsList.get(position).getDateCreated()));
-        holder.comment_avatar.setOnClickListener(new View.OnClickListener() {
+        holder.comment_avatar_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -80,10 +80,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     public class CommentsViewHolder extends RecyclerView.ViewHolder{
         ImageView comment_avatar;
         TextView userName,person_comment,comment_date,commentsAuthor;
+        CardView comment_avatar_card;
 
         public CommentsViewHolder(@NonNull View itemView) {
             super(itemView);
             comment_avatar = itemView.findViewById(R.id.comment_avatar);
+            comment_avatar_card = itemView.findViewById(R.id.comment_avatar_card);
             userName = itemView.findViewById(R.id.person_username);
             person_comment = itemView.findViewById(R.id.person_comment);
             comment_date = itemView.findViewById(R.id.comment_date);

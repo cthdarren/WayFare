@@ -179,7 +179,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         private PlayerView videoView;
         private ExoPlayer exoPlayer;
         private TextView shortsDescription, shortsTitle, listingTitle,tvComment, tvFavorites,total_comments,shorts_date_posted;
-        private CardView listingCard;
+        private CardView listingCard,imvShortsAvatarCard;
         private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
         private ProgressBar videoProgressBar;
         private MediaItem mediaItem;
@@ -190,7 +190,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         CommentsAdapter commentsAdapter;
         RecyclerView recycleViewComments;
 
-        @OptIn(markerClass = UnstableApi.class) public ShortsViewHolder(@NonNull View itemView) {
+        public ShortsViewHolder(@NonNull View itemView) {
             super(itemView);
             comment_text = itemView.findViewById(R.id.comment_text);
             if (userData==null) {
@@ -215,11 +215,10 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             imvVolume = itemView.findViewById(R.id.imvVolume);
             imvAppear = itemView.findViewById(R.id.imv_appear);
             imvShortsAvatar = itemView.findViewById(R.id.imvShortsAvatar);
+            imvShortsAvatarCard = itemView.findViewById(R.id.imvShortsAvatarCard);
             imvCloseComment = itemView.findViewById(R.id.exit_comment_section_btn);
             listingTitle = itemView.findViewById(R.id.listingTitle);
             listingCard = itemView.findViewById(R.id.listingCard);
-            videoView.setShowBuffering(PlayerView.SHOW_BUFFERING_WHEN_PLAYING);
-            videoView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
             listingTitle.setOnClickListener(this);
@@ -229,6 +228,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             send_comment_btn.setOnClickListener(this);
             comment_text.setOnClickListener(this);
             imvShortsAvatar.setOnClickListener(this);
+            imvShortsAvatarCard.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
@@ -315,7 +315,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                         .into(imvShortsAvatar);
             }
             Date datePosted = shortsData.getDatePosted();
-
             String shortDate = convertDateToShortDate(datePosted);
             shorts_date_posted.setText(shortDate);
             Uri shortsUri = Uri.parse(shortsData.getShortsUrl());
@@ -337,13 +336,14 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     tvFavorites.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_favorite, 0, 0);
                 }
             }
+            recycleViewComments.setAdapter(null);
             commentsAdapter = new CommentsAdapter(context,shortsData.getComments(),shortsData.getUserName(),fragmentManager);
             recycleViewComments.setAdapter(commentsAdapter);
             recycleViewComments.setLayoutManager(new LinearLayoutManager(context));
             if (shortsData.getListing()!=null){
                 listingCard.setVisibility(View.VISIBLE);
                 listingTitle.setText(shortsData.getListing().getTitle());
-            }
+            }else{listingCard.setVisibility(View.GONE);}
 //             Create a media item representing the video
 //             Create a MediaItem builder
             MediaItem.Builder mediaItemBuilder = new MediaItem.Builder();
@@ -491,6 +491,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 }
             }
             if(view.getId() == comment_text.getId()){
+
             }
             if (view.getId() == send_comment_btn.getId()) {
                 InputMethodManager imm = (InputMethodManager) exploreFragment.requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
