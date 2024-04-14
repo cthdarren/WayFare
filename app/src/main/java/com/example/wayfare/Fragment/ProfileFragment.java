@@ -177,8 +177,12 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         super.onViewCreated(view, savedInstanceState);
         userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         UserModel userData = userViewModel.getUserProfileData();
-        if (Objects.equals(profileUsername, userData.getUsername()))
-            edit_profile_button.setVisibility(View.VISIBLE);
+        if (userData != null) {
+            if (Objects.equals(profileUsername, userData.getUsername()))
+                edit_profile_button.setVisibility(View.VISIBLE);
+            else
+                edit_profile_button.setVisibility(GONE);
+        }
         else
             edit_profile_button.setVisibility(GONE);
 
