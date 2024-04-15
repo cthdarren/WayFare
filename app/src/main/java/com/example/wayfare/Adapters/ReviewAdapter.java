@@ -68,6 +68,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
                 .load(reviewItemModels.get(position).picUrl.split("\\?")[0])
                 .sizeMultiplier(0.5f)
                 .centerCrop()
+                .placeholder(R.drawable.default_avatar)
                 .into(holder.review_user_pic);
     }
 
