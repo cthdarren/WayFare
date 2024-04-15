@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Fragment.ProfileFragment;
+import com.example.wayfare.Fragment.SingularJourneyFragment;
 import com.example.wayfare.Models.Comment;
 import com.example.wayfare.Models.ShortsObject;
 import com.example.wayfare.Models.TourListModel;
@@ -32,16 +33,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>{
+    private ShortsAdapter.ShortsViewHolder shortsView;
     ArrayList<Comment> commentsList;
     Context context;
     String userNameAuthor;
     FragmentManager fragmentManager;
+    SingularJourneyFragment singularJourneyFragment;
     private int selectedPosition = RecyclerView.NO_POSITION;
-    public CommentsAdapter(Context context, ArrayList<Comment> commentsList, String userNameAuthor, FragmentManager fragmentManager){
+    public CommentsAdapter(Context context, ArrayList<Comment> commentsList, String userNameAuthor, FragmentManager fragmentManager, ShortsAdapter.ShortsViewHolder shortsView, SingularJourneyFragment singularJourneyFragment){
         this.context = context;
         this.commentsList = commentsList;
         this.userNameAuthor = userNameAuthor;
         this.fragmentManager = fragmentManager;
+        this.shortsView = shortsView;
+        this.singularJourneyFragment = singularJourneyFragment;
     }
 
     @NonNull
@@ -88,7 +93,12 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
             comment_avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    if(singularJourneyFragment!=null){
+                        singularJourneyFragment.pauseVideo();
+                    }
+                    if(shortsView!=null){
+                        shortsView.pauseVideo();
+                    }
                     Bundle username = new Bundle();
                     username.putString("username", comment.user.getUsername());
                     ProfileFragment pf = new ProfileFragment();

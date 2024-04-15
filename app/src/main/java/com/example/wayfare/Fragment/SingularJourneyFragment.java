@@ -601,7 +601,7 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
         }
         if (view.getId() == R.id.tvComment) {
             // Trigger transition when tvComment is clicked
-            commentsAdapter = new CommentsAdapter(getContext(),singleJourney.getComments(),singleJourney.getUserName(),getParentFragmentManager());
+            commentsAdapter = new CommentsAdapter(getContext(),singleJourney.getComments(),singleJourney.getUserName(),getParentFragmentManager(),null,this);
             recycleViewComments.setAdapter(commentsAdapter);
             recycleViewComments.setLayoutManager(new LinearLayoutManager(getContext()));
             motionLayout.transitionToEnd();

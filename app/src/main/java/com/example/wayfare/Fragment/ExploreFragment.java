@@ -310,43 +310,6 @@ public class ExploreFragment extends Fragment {
     @NonNull
     private static List<ShortsObject> getShortsObjects() {
         List<ShortsObject> shortsObjectList = new ArrayList<>();
-//        ShortsObject shortsObject1 = new ShortsObject();
-//        shortsObject1.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
-//        shortsObject1.setUserName("Singapore!");
-//        shortsObject1.setDescription("Singapore Tours #sg #local");
-//        shortsObjectList.add(shortsObject1);
-//
-//        ShortsObject shortsObject2 = new ShortsObject();
-//        shortsObject2.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
-//        shortsObject2.setUserName("Overrated Cities?!");
-//        shortsObject2.setDescription("#dontgo #cities");
-//        shortsObjectList.add(shortsObject2);
-//
-//        ShortsObject shortsObject3 = new ShortsObject();
-//        shortsObject3.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
-//        shortsObject3.setUserName("Lorem");
-//        shortsObject3.setDescription("GreyNibba");
-//        shortsObjectList.add(shortsObject3);
-//        ShortsObject shortsObject4 = new ShortsObject();
-//        shortsObject4.setShortsUrl("https://static.videezy.com/system/resources/previews/000/054/979/original/Fire_HD.mp4");
-//        shortsObject4.setUserName("10 best places SG");
-//        shortsObject4.setDescription("#must go");
-//        shortsObjectList.add(shortsObject4);
-//        ShortsObject shortsObject5 = new ShortsObject();
-//        shortsObject5.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video2.mp4");
-//        shortsObject5.setUserName("Lorem");
-//        shortsObject5.setDescription("GeyNibba");
-//        shortsObjectList.add(shortsObject5);
-//        ShortsObject shortsObject6 = new ShortsObject();
-//        shortsObject6.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video3.mp4");
-//        shortsObject6.setUserName("yyyy");
-//        shortsObject6.setDescription("yyyy");
-//        shortsObjectList.add(shortsObject6);
-//        ShortsObject shortsObject7 = new ShortsObject();
-//        shortsObject7.setShortsUrl("https://wayfareshorts.blob.core.windows.net/test/video1.mp4");
-//        shortsObject7.setUserName("xxxx");
-//        shortsObject7.setDescription("xxxx");
-//        shortsObjectList.add(shortsObject7);
         return shortsObjectList;
     }
 

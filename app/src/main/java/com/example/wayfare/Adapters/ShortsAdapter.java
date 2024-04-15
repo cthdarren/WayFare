@@ -679,7 +679,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             if (view.getId() == R.id.tvComment) {
                 // Trigger transition when tvComment is clicked
                 ShortsObject shortsData = shortsDataList.get(getCurrentPosition());
-                commentsAdapter = new CommentsAdapter(context,shortsData.getComments(),shortsData.getUserName(),fragmentManager);
+                commentsAdapter = new CommentsAdapter(context,shortsData.getComments(),shortsData.getUserName(),fragmentManager,this,null);
                 recycleViewComments.setAdapter(commentsAdapter);
                 recycleViewComments.setLayoutManager(new LinearLayoutManager(context));
                 motionLayout.transitionToEnd();
