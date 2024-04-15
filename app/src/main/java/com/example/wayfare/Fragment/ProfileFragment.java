@@ -218,6 +218,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                                 Glide.with(ProfileFragment.this)
                                         .load(profileInfo.getPictureUrl().split("\\?")[0])
                                         .centerCrop()
+                                        .placeholder(R.drawable.default_avatar)
                                         .into(profile_pic);
 
                                 full_name.setText(profileInfo.getFirstName() + " " + profileInfo.getLastName());
