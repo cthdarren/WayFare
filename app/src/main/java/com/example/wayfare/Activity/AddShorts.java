@@ -484,7 +484,7 @@ public class AddShorts extends AppCompatActivity implements View.OnClickListener
                         RecordingStats stats = videoRecordEvent.getRecordingStats();
                         long time = TimeUnit.NANOSECONDS.toSeconds(stats.getRecordedDurationNanos());
                         String text = String.format(time + "s/60s");
-                        if (time > 10) {
+                        if (time >= 60) {
                             stopRecording();
                         } else {
                             captureLiveStatus.setValue(text);
