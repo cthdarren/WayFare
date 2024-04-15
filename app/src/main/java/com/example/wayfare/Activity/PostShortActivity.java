@@ -22,7 +22,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -118,6 +120,23 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
         btnUpload = findViewById(R.id.btnUploadBlob2);
         loadingLayout = findViewById(R.id.loading_layout);
         descriptionEditText = findViewById(R.id.description_text);
+
+        descriptionEditText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // Check if the Enter key is pressed
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                    // Update the layout params to allow the EditText to expand
+                    ViewGroup.LayoutParams layoutParams = descriptionEditText.getLayoutParams();
+                    layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    descriptionEditText.setLayoutParams(layoutParams);
+                }
+                return false; // Return false to allow normal event handling
+            }
+        });
+
+
+
         listingExistsText = findViewById(R.id.listingExists);
         btnBack.setOnClickListener(this);
         btnUpload.setOnClickListener(this);
@@ -285,13 +304,12 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
         // FFmpeg command building (example, customize based on your needs)
         String[] command = new String[]{
                 "-i", inputVideoPath, // Input file (from Uri)
-                "-c:v", "libx264", // Specify video codec (H.264)
-                "-preset", "veryfast", // Use ultrafast preset for faster encoding
-                "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
-                "-c:a", "aac", // Audio codec
-                "-c:a", "copy",
-                "-strict", "experimental",
-                "-b:v", "3M",  // Set video bitrate (adjust based on your needs)
+                "-c:v", "libx264",        // Video codec (remains the same)
+                "-preset", "fast",      // Encoding preset (changed for better balance)
+                "-crf", "23",// Constant Rate Factor (adjusted for quality)
+                "-b:a", "128k",            // Audio bitrate (added for control)
+                "-vf", "scale=1280:720",   // Resize filter (exact 1280x720 resolution)
+                "-movflags", "+faststart", // Optimization flag (improves seeking)
                 outputFilePath
         };
         int rc = FFmpeg.execute(command);

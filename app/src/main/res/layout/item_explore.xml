@@ -108,7 +108,7 @@
             android:layout_marginStart="18dp"
             android:layout_gravity="start"
             android:padding="6dp"
-            app:tint="@color/md_theme_onPrimary"
+            app:tint="@color/white"
             android:src="@drawable/arrow_back"
             android:visibility="gone"
             android:clickable="true"/>
@@ -373,6 +373,17 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <ImageButton
+                android:id="@+id/reload_comment_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_8sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_reload_24"
+                android:background="@color/md_theme_background"
+                app:tint="@color/md_theme_onSurface"
+                android:contentDescription="Reload" />
 
             <TextView
                 android:id="@+id/total_comments"
@@ -415,6 +426,9 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:padding="@dimen/_12sdp"
+                android:lines="3"
+                android:maxLength="150"
+                android:maxLines="8"
                 android:hint="Add comment..."
                 android:ems="10"
                 android:inputType="textLongMessage"

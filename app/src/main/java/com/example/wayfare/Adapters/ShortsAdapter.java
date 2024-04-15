@@ -12,11 +12,14 @@ import android.os.Looper;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -118,10 +121,11 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
     @Override
     public void onBindViewHolder(@NonNull ShortsViewHolder holder, int position) {
             // ViewHolder is bound to the wrong position, rebind it to the correct position
+        holder.setShortsData(shortsDataList.get(position));
         if(position >= shortsViewHolderList.size()) {
-                holder.setShortsData(shortsDataList.get(position));
+//                holder.setShortsData(shortsDataList.get(position));
                 shortsViewHolderList.add(position, holder);
-            }
+        }
         Log.d("ViewHolderPosition", "bindcalled: " + position);
     }
     @Override
@@ -202,12 +206,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
         private ProgressBar videoProgressBar;
         private MediaItem mediaItem;
-        private ImageButton imvCloseComment;
+        private ImageButton imvCloseComment,reload_comment_btn;
         private ImageButton send_comment_btn;
         private EditText comment_text;
         boolean isPaused = false;
         CommentsAdapter commentsAdapter;
         RecyclerView recycleViewComments;
+        Animation animRotate;
 
         public ShortsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -219,8 +224,24 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 // Enable the EditText
                 comment_text.setEnabled(true);
             }
-            shorts_date_posted = itemView.findViewById(R.id.shorts_date_posted);
             send_comment_btn = itemView.findViewById(R.id.send_comment_btn);
+            comment_text.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // Check if the Enter key is pressed
+                    if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                        // Update the layout params to allow the EditText to expand
+                        ViewGroup.LayoutParams layoutParams = comment_text.getLayoutParams();
+                        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        comment_text.setLayoutParams(layoutParams);
+                        comment_text.clearFocus();
+
+                        return true; // Consume the Enter key event
+                    }
+                    return false; // Return false to allow normal event handling
+                }
+            });
+            shorts_date_posted = itemView.findViewById(R.id.shorts_date_posted);
             recycleViewComments = itemView.findViewById(R.id.comment_recyclerview);
             motionLayout = itemView.findViewById(R.id.exploreLayout);
             total_comments = itemView.findViewById(R.id.total_comments);
@@ -230,14 +251,15 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             tvComment = itemView.findViewById(R.id.tvComment);
             tvFavorites = itemView.findViewById(R.id.tvFavorites);
             videoProgressBar = itemView.findViewById(R.id.progressBar);
-            videoProgressBar.setVisibility(View.GONE);
             imvVolume = itemView.findViewById(R.id.imvVolume);
             imvAppear = itemView.findViewById(R.id.imv_appear);
             imvShortsAvatar = itemView.findViewById(R.id.imvShortsAvatar);
             imvShortsAvatarCard = itemView.findViewById(R.id.imvShortsAvatarCard);
             imvCloseComment = itemView.findViewById(R.id.exit_comment_section_btn);
+            reload_comment_btn = itemView.findViewById(R.id.reload_comment_btn);
             listingTitle = itemView.findViewById(R.id.listingTitle);
             listingCard = itemView.findViewById(R.id.listingCard);
+            reload_comment_btn.setOnClickListener(this);
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
             listingTitle.setOnClickListener(this);
@@ -248,6 +270,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 //            comment_text.setOnClickListener(this);
             imvShortsAvatar.setOnClickListener(this);
             imvShortsAvatarCard.setOnClickListener(this);
+            animRotate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.rotate);
         }
         public void playVideo() {
             disappearImage();
@@ -261,13 +284,14 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 }
                 if(exoPlayer.getPlaybackState() == Player.STATE_IDLE) {
                 }
-            }else{
-                Log.d("ViewHolderPosition", "exo is null"+getCurrentPosition());
-                videoProgressBar.setVisibility(View.VISIBLE);
-                setShortsData(shortsDataList.get(getCurrentPosition()));
-                exoPlayer.setPlayWhenReady(true);
-                Log.d("ViewHolderPosition", "restarting" + getCurrentPosition());
             }
+//            else{
+//                Log.d("ViewHolderPosition", "exo is null"+getCurrentPosition());
+//                videoProgressBar.setVisibility(View.VISIBLE);
+//                setShortsData(shortsDataList.get(getCurrentPosition()));
+//                exoPlayer.setPlayWhenReady(true);
+//                Log.d("ViewHolderPosition", "restarting" + getCurrentPosition());
+//            }
             isPaused = false;
         }
         public void pauseVideo() {
@@ -281,6 +305,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         public void pauseVideoNoImg() {
             if(exoPlayer!=null) {
                 if (exoPlayer.getPlaybackState() == Player.STATE_READY) {
+                    exoPlayer.seekTo(0);
                     exoPlayer.setPlayWhenReady(false);
                 }
             }
@@ -386,25 +411,21 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 exoPlayer = null;
             }
             exoPlayer = new ExoPlayer.Builder(videoView.getContext()).build();
-            videoView.setPlayer(exoPlayer);
-            exoPlayer.setMediaItem(mediaItem);
-            exoPlayer.setRepeatMode(exoPlayer.REPEAT_MODE_ONE);
-            exoPlayer.prepare();
-            pauseVideo();
-            isPaused = true;
-//
-//            // Hide progress bar when playback starts
             exoPlayer.addListener(new ExoPlayer.Listener() {
                 @Override
                 public void onIsPlayingChanged(boolean isPlaying) {
                     if (isPlaying) {
-
                         videoProgressBar.setVisibility(View.GONE);
+
                     }
                 }
                 @Override
                 public void onPlaybackStateChanged(int playbackState) {
+                    if (playbackState == ExoPlayer.STATE_BUFFERING || playbackState==ExoPlayer.STATE_IDLE){
+                        videoProgressBar.setVisibility(View.VISIBLE);
+                    }
                     if (playbackState == ExoPlayer.STATE_READY){
+                        videoProgressBar.setVisibility(View.GONE);
                         Log.d("ViewHolderPosition", String.format("Curr:%s Layout:%s",getCurrentPosition(),getBindingAdapterPosition()));
                         if (!isFragmentAttached() && exoPlayer != null) {
                             // Loading is complete, release resources
@@ -415,6 +436,15 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                     }
                 }
             });
+            videoView.setPlayer(exoPlayer);
+            exoPlayer.setMediaItem(mediaItem);
+            exoPlayer.setRepeatMode(exoPlayer.REPEAT_MODE_ONE);
+            exoPlayer.prepare();
+            pauseVideo();
+            isPaused = true;
+//
+//            // Hide progress bar when playback starts
+
 
         }
         private void setFillLiked(boolean isLiked) {
@@ -516,6 +546,69 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 else{
                     setFillLiked(true);
                 }
+            }
+            if(view.getId() == reload_comment_btn.getId()){
+                reload_comment_btn.startAnimation(animRotate);
+                OkHttpClient tokenClient = new OkHttpClient();
+                Request request = new Request.Builder()
+                        .url(BuildConfig.API_URL + "/api/v1/shorts/comment/"+shortsDataList.get(getCurrentPosition()).getId())
+                        .get()
+                        .build();
+                tokenClient.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        // Handle failure
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        // Handle success
+                        if (!response.isSuccessful()) {
+                            throw new IOException("Unexpected response code: " + response);
+                        }
+                        ArrayList<Comment> commentsList = new ArrayList<>();
+                        String responseBody = response.body().string();
+                        Gson gson = new Gson();
+                        ResponseModel responseModel = gson.fromJson(responseBody,ResponseModel.class);
+                        if (responseModel != null && responseModel.success) {
+                            JsonArray allComments = responseModel.data.getAsJsonArray();
+                            for (JsonElement comment : allComments){
+                                String eachString = comment.toString();
+                                Comment testing = new Gson().fromJson(eachString, Comment.class);
+                                commentsList.add(testing);
+                            }
+                            shortsDataList.get(getCurrentPosition()).setComments(commentsList);
+                            int num_comments = commentsList.size();
+                            String totalCommentsText;
+                            if (num_comments == 0) {
+                                totalCommentsText = "Be the first comment!";
+                            }
+                            else {
+                                totalCommentsText = String.format("%s comments",num_comments);
+                            }
+                            Collections.sort(shortsDataList.get(getCurrentPosition()).getComments(), new Comparator<Comment>() {
+                                @Override
+                                public int compare(Comment o1, Comment o2) {
+                                    // Compare dates in descending order
+                                    return o2.getDateCreated().compareTo(o1.getDateCreated());
+                                }
+                            });
+                            exploreFragment.requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    total_comments.setText(totalCommentsText);
+                                    commentsAdapter.notifyDataSetChanged();
+                                    tvComment.setText(String.valueOf(num_comments));
+
+                                }
+                            });
+
+                        } else {
+                            System.out.println("API response indicates failure.");
+                        }
+                    }
+                });
             }
 //            if(view.getId() == comment_text.getId()){
 //                comment_text.requestFocus();

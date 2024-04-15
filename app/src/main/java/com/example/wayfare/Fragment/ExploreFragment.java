@@ -182,7 +182,7 @@ public class ExploreFragment extends Fragment {
                                 Toast.makeText(requireContext(), "End of Journeys", Toast.LENGTH_SHORT).show();
                             }
                         }else {
-                            shortsAdapter.stopVideo(prevPosition);
+                            shortsAdapter.pauseVideo(prevPosition);
                             Log.d("ViewHolderPosition", "stopping: " + shortsAdapter.getCurrentPosition());
                             shortsAdapter.updateCurrentPosition(currPosition);
                             shortsAdapter.playVideo(currPosition);

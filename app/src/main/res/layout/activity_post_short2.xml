@@ -65,8 +65,8 @@
 
         <EditText
             android:id="@+id/description_text"
-            android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_width="0dp"
             android:layout_marginStart="@dimen/_4sdp"
             android:layout_marginEnd="@dimen/_18sdp"
             android:layout_marginBottom="@dimen/_2sdp"

@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,9 +26,6 @@ public class ShortsObject  {
 
     public ShortsObject(){}
 
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
 
     public ShortsObject(String id, String shortsUrl, String userName, String userId, String description, String thumbnailUrl, String datePosted, TourListModel listing, ArrayList<String> likes, String posterPictureUrl, ArrayList<Comment> comments) {
         this.id = id;
@@ -131,5 +129,10 @@ public class ShortsObject  {
         if (!this.comments.contains(comment)) {
             this.comments.add(comment);
         }
+    }
+    public void setComments(ArrayList<Comment> comments) {
+
+        this.comments.clear();
+        this.comments.addAll(comments);
     }
 }
