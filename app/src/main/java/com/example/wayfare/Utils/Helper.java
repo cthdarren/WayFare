@@ -276,7 +276,7 @@ public class Helper {
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             // Create a new date format
-            SimpleDateFormat newSdf = new SimpleDateFormat("dd-MM");
+            SimpleDateFormat newSdf = new SimpleDateFormat("dd MMM");
             newSdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             // Format the date to the new format
@@ -290,7 +290,7 @@ public class Helper {
     public static String convertDateToShortDate(Date oldDate) {
         try {
             // Create a new date format
-            DateFormat newDateFormat = new SimpleDateFormat("dd-MM");
+            DateFormat newDateFormat = new SimpleDateFormat("dd MMM");
 
             // Format the date to the new format
             return newDateFormat.format(oldDate);
