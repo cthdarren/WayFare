@@ -343,7 +343,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new AuthService(getContext()).getResponse("/api/v1/profileid/" + profileId, true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+        new AuthService(getContext()).getResponse("/api/v1/profileid/" + profileId, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 getActivity().runOnUiThread(new Runnable() {

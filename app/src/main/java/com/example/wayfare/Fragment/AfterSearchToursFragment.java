@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ctc.wstx.shaded.msv_core.reader.trex.ZeroOrMoreState;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
 import com.example.wayfare.Comparators.TourListHotComparator;
 import com.example.wayfare.Comparators.TourListNewComparator;
@@ -36,7 +37,12 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.http.GET;
@@ -48,9 +54,10 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
     ProgressBar progBar;
     MaterialCardView searchBar;
     Double latitude, longitude;
-    int numberPax, kmdistance;
+    Integer numberPax, kmdistance;
     String region, date;
     TabLayout tabLayout;
+    Long startDateLong, endDateLong;
     ArrayList<TourListModel> tourListModels = new ArrayList<>();
     //tourListing_RecyclerViewAdapter adapter = new tourListing_RecyclerViewAdapter(getContext(), tourListModels, this);
     // holding all models to send to adapter later on
@@ -72,24 +79,37 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
         if (args != null){
-            region = args.getString("region", "Anywhere");
-            latitude = args.getDouble("latitude", 0);
-            longitude = args.getDouble("longitude", 0);
-            kmdistance = args.getInt("kmdistance", 100);
-            numberPax = args.getInt("numPax", 0);
-            date = args.getString("date", "Any day");
+            region = args.getString("region");
+            latitude = args.getDouble("latitude", -1);
+            longitude = args.getDouble("longitude", -1);
+            kmdistance = args.getInt("kmdistance", -1);
+            numberPax = args.getInt("numPax", -1);
+            startDateLong = args.getLong("startDate", -1);
+            endDateLong = args.getLong("endDate", -1);
+
+            if (region == null)
+                region = "Anywhere";
+            else
+                region = region.substring(0,27) + "...";
+
+            if (startDateLong != -1 & endDateLong != -1){
+                if (startDateLong.equals(endDateLong)){
+                    date = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateLong), ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("d MMM"));
+                }
+                else
+                    date = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDateLong), ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("d MMM")) + " - " + LocalDateTime.ofInstant(Instant.ofEpochMilli(endDateLong), ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("d MMM"));;
+            }
+            else
+                date = "Anytime";
+
             String paxString = numberPax + " people";
-            if (numberPax < 1)
+            if (numberPax == -1){
                 paxString = "Anybody";
+            }
             else if (numberPax == 1)
                 paxString = numberPax + " person";
+
             searchParams.setText(String.format("%s | %s | %s", region, date, paxString));
-        }
-        else{
-            latitude = 0.0;
-            longitude = 0.0;
-            kmdistance = 20050;
-            numberPax = 0;
         }
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,12 +179,20 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
     }
 
     public void setupTourListings(){
-        String apiUrl;
-        if (numberPax != 0)
-            apiUrl = String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d&numberPax=%d",latitude, longitude, kmdistance, numberPax);
-        else
-            apiUrl = String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d",latitude, longitude, kmdistance);
-        new AuthService(getContext()).getResponse(apiUrl, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+        if (longitude == -1)
+            longitude = null;
+        if (latitude== -1)
+            latitude = null;
+        if (kmdistance == -1)
+            kmdistance = null;
+        if (numberPax == -1)
+            numberPax = null;
+        if (startDateLong == -1)
+            startDateLong = null;
+        if (endDateLong == -1)
+            endDateLong = null;
+
+        new AuthService(getContext()).getListingResponseParams(longitude, latitude,kmdistance,numberPax, startDateLong, endDateLong, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
                 getActivity().runOnUiThread(new Runnable() {

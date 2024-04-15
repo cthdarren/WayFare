@@ -124,7 +124,7 @@ public class Helper {
     public static void goToFullScreenFragmentFromTop(FragmentManager fm, Fragment fragment) {
         fm.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom, R.anim.slide_in_bottom, R.anim.slide_out_top)
-                .replace(R.id.container, fragment)
+                .add(R.id.container, fragment)
                 .addToBackStack(fragment.getClass().getName())
                 .setReorderingAllowed(true)
                 .commit();

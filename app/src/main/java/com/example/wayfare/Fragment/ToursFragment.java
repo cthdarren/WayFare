@@ -56,7 +56,6 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Bundle args = getArguments();
         super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
 
@@ -68,26 +67,8 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
         progBar = getActivity().findViewById(R.id.progressBar);
         progBar.setVisibility(View.VISIBLE);
         // Wait for the setup to complete
-        if (args != null){
-            region = args.getString("region", "Anywhere");
-            latitude = args.getDouble("latitude", 0);
-            longitude = args.getDouble("longitude", 0);
-            kmdistance = args.getInt("kmdistance", 100);
-            numberPax = args.getInt("numPax", 0);
-            date = args.getString("date", "Any day");
-            String paxString = numberPax + " people";
-            if (numberPax < 1)
-                paxString = "Anybody";
-            else if (numberPax == 1)
-                paxString = numberPax + " person";
-            searchParams.setText(String.format("%s | %s | %s", region, date, paxString));
-        }
-        else{
-            latitude = 0.0;
-            longitude = 0.0;
-            kmdistance = 20050;
-            numberPax = 0;
-        }
+
+        searchParams.setText(String.format("Anywhere | Anytime | Anybody" ));
         searchBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,13 +135,8 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
     }
 
     public void setupTourListings(){
-        String apiUrl;
-        if (numberPax != 0)
-            apiUrl = String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d&numberPax=%d",latitude, longitude, kmdistance, numberPax);
-        else
-            apiUrl = String.format("/api/v1/listing/search?latitude=%f&longitude=%f&kmdistance=%d",latitude, longitude, kmdistance);
-        new AuthService(getContext()).getResponse(apiUrl, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
-            @Override
+        new AuthService(getContext()).getListingResponseParams(null, null, null, null, null, null, new AuthService.ResponseListener() {
+        @Override
             public void onError(String message) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

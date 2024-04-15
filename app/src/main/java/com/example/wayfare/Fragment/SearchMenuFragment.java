@@ -59,7 +59,7 @@ public class SearchMenuFragment extends Fragment {
     Button dateRangeSelect, kmdistanceBtn;
     Long startDate, endDate;
     ImageView minusPax, addPax, cancelButton;
-    int numPaxInt = 1;
+    Integer numPaxInt = 0;
     String region = null;
     AutocompleteSupportFragment addressAutocomplete;
     public SearchMenuFragment(){}
@@ -80,10 +80,7 @@ public class SearchMenuFragment extends Fragment {
         addPax = view.findViewById(R.id.addPax);
 
         addressAutocomplete = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.addressAutocomplete);
-        addressAutocomplete.setLocationBias(RectangularBounds.newInstance(
-                new LatLng(-33.880490, 151.184363),
-                new LatLng(-33.858754, 151.229596)
-        ));
+
         addressAutocomplete.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG,
                 Place.Field.NAME,
                 Place.Field.ADDRESS,
@@ -108,11 +105,7 @@ public class SearchMenuFragment extends Fragment {
             }
         });
 
-        startDate = todayInUtcMilliseconds();
-        endDate = todayInUtcMilliseconds();
-        startDateString = LocalDateTime.ofInstant(Instant.ofEpochMilli(startDate), ZoneOffset.UTC).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
-        endDateString = LocalDateTime.ofInstant(Instant.ofEpochMilli(endDate), ZoneOffset.UTC).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
-        dateRangeSelect.setText(startDateString + " - " + endDateString);
+        dateRangeSelect.setText("Anytime");
 
         MaterialDatePicker dateRangePicker =
                 MaterialDatePicker.Builder.dateRangePicker()
@@ -160,7 +153,7 @@ public class SearchMenuFragment extends Fragment {
             }
         });
 
-        numPax.setText(String.valueOf(numPaxInt));
+        numPax.setText("-");
 
         final int[] checkedItem = {0};
         final String[] listItems = new String[]{"Anywhere", "5km", "10km", "50km", "100km", "200km", "500km", "1000km", "2000km", "5000km"};
@@ -188,17 +181,20 @@ public class SearchMenuFragment extends Fragment {
                 if (latLngAddress != null) {
                     args.putDouble("latitude", latLngAddress.latitude);
                     args.putDouble("longitude", latLngAddress.longitude);
+                    if (kmdistanceBtn.getText().toString().equals("Anywhere"))
+                        args.putInt("kmdistance", 20050);
+                    else
+                        args.putInt("kmdistance", Integer.parseInt(kmdistanceBtn.getText().toString().split("km")[0]));
+                    if (region != null)
+                        args.putString("region", region);
                 }
-                if (kmdistanceBtn.getText().toString().equals("Anywhere"))
-                    args.putInt("kmdistance", 20050);
-                else
-                    args.putInt("kmdistance", Integer.parseInt(kmdistanceBtn.getText().toString().split("km")[0]));
+                if (startDate != null & endDate != null){
+                    args.putLong("startDate", startDate);
+                    args.putLong("endDate", endDate);
+                }
+                if (!numPax.getText().toString().equals("-"))
+                    args.putInt("numPax", numPaxInt);
 
-                args.putLong("startDate", startDate);
-                args.putLong("endDate", endDate);
-                args.putInt("numPax", numPaxInt);
-                if (region != null)
-                    args.putString("region", region);
                 Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new AfterSearchToursFragment());
             }
         });

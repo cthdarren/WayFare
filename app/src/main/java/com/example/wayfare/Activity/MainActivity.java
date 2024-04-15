@@ -1,5 +1,6 @@
 package com.example.wayfare.Activity;
 
+import static com.example.wayfare.Utils.AuthHelper.JSON_DATA_KEY;
 import static com.example.wayfare.Utils.Helper.goToLogin;
 import static com.google.maps.android.Context.getApplicationContext;
 
@@ -129,8 +130,10 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                            if (message == "Server Error")
+                                Toast.makeText(MainActivity.this, "Session expired, please log in again", Toast.LENGTH_SHORT).show();
                             loggedIn = false;
+                            new AuthHelper(MainActivity.this).setSharedPrefsValue(JSON_DATA_KEY, "");
                             loadFragments();
                         }
                     });

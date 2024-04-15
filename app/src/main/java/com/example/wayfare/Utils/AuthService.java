@@ -15,9 +15,11 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.time.Instant;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -41,6 +43,54 @@ public class AuthService {
         void onResponse(ResponseModel json);
     }
 
+
+    public void getListingResponseParams(Double longitude, Double latitude, Integer kmdistance, Integer numPax, Long startDate, Long endDate, ResponseListener responseListener) {
+        final OkHttpClient client = new OkHttpClient();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(BuildConfig.API_URL + "/api/v1/listing/search").newBuilder();
+        if (longitude != null & latitude != null & kmdistance != null) {
+            urlBuilder.addQueryParameter("longitude", String.valueOf(longitude));
+            urlBuilder.addQueryParameter("latitude", String.valueOf(latitude));
+            urlBuilder.addQueryParameter("kmdistance", String.valueOf(kmdistance));
+        }
+        if (numPax != null){
+            urlBuilder.addQueryParameter("numberPax", String.valueOf(numPax));
+        }
+        if (startDate != null & endDate != null){
+            urlBuilder.addQueryParameter("startDate", String.valueOf(Instant.ofEpochMilli(startDate)));
+            urlBuilder.addQueryParameter("endDate", String.valueOf(Instant.ofEpochMilli(endDate)));
+        }
+        String listingUrl = urlBuilder.build().toString();
+
+        Request request = new Request.Builder()
+                .url(listingUrl)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (e instanceof SocketTimeoutException) {
+                    e.printStackTrace();
+                    responseListener.onError("Request Timed Out");
+                } else if (e instanceof SocketException) {
+                    Log.d("ERROR", "CHECK IF BACKEND SERVER IS RUNNING!");
+                    e.printStackTrace();
+                    responseListener.onError("Server Error");
+                }
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String serverResponse = response.body().string();
+
+                System.out.println(serverResponse);
+                if (response.networkResponse().code() == 200) {
+                    ResponseModel parsedResponse = new Gson().fromJson(serverResponse, ResponseModel.class);
+                    responseListener.onResponse(parsedResponse);
+                }
+                else{
+                    responseListener.onError("Server Error");
+                }
+            }
+        });
+    }
     public void getResponse(String apiUrl, boolean authenticated, Helper.RequestType requestType, RequestBody body, ResponseListener responseListener) {
         final OkHttpClient client = new OkHttpClient();
         Request.Builder requestBuilder;
