@@ -298,29 +298,6 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
-    private String convertVideoToDASH(String inputVideoPath) {
-        String outputFilePath = getOutputFilePathForDASH(); // Generate unique output path
-
-        // FFmpeg command building (example, customize based on your needs)
-        String[] command = new String[]{
-                "-i", inputVideoPath, // Input file (from Uri)
-                "-c:v", "libx264",        // Video codec (remains the same)
-                "-preset", "fast",      // Encoding preset (changed for better balance)
-                "-crf", "23",// Constant Rate Factor (adjusted for quality)
-                "-b:a", "128k",            // Audio bitrate (added for control)
-                "-vf", "scale=1280:720",   // Resize filter (exact 1280x720 resolution)
-                "-movflags", "+faststart", // Optimization flag (improves seeking)
-                outputFilePath
-        };
-        int rc = FFmpeg.execute(command);
-
-        if (rc == Config.RETURN_CODE_SUCCESS) {
-            return outputFilePath; // Conversion successful, return output path
-        } else {
-            Log.e("FFmpeg", "FFmpeg command failed with return code: " + rc);
-            return null; // Conversion failed, return null
-        }
-    }
     private String getOutputFilePathForDASH() {
         // Get internal storage directory
         File storageDir = getFilesDir();
@@ -355,9 +332,9 @@ public class PostShortActivity extends AppCompatActivity implements View.OnClick
                         "-i", inputVideoPath, // Input file
                         "-c:v", "libx264", // Specify video codec (H.264)
                         "-preset", "veryfast", // Use ultrafast preset for faster encoding
-                        "-crf", "18", // Constant rate factor for quality (lower values mean better quality but larger file size)
+                        "-crf", "23", // Constant rate factor for quality (lower values mean better quality but larger file size)
                         "-c:a", "aac", // Audio codec
-                        "-b:v", "3M",  // Set video bitrate (adjust based on your needs)
+                        "-b:v", "1M",  // Set video bitrate (adjust based on your needs)
                         "-movflags", "+faststart",
                         outputFilePath // Output DASH file path
                 };

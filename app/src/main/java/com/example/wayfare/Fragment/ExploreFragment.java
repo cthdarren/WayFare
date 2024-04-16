@@ -336,7 +336,6 @@ public class ExploreFragment extends Fragment {
             shortsAdapter.stopAllVideo();
         }
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

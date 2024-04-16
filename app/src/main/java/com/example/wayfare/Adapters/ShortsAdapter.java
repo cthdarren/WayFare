@@ -301,8 +301,6 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 if (exoPlayer.getPlaybackState() == Player.STATE_READY || exoPlayer.getPlaybackState() == Player.STATE_IDLE){
                     exoPlayer.setPlayWhenReady(true);
                 }
-                if(exoPlayer.getPlaybackState() == Player.STATE_IDLE) {
-                }
             }
 //            else{
 //                Log.d("ViewHolderPosition", "exo is null"+getCurrentPosition());
@@ -376,8 +374,8 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         void setShortsData(ShortsObject shortsData){
             if(shortsData.getPosterPictureUrl()!=null){
                 Glide.with(context)
-                        .load(getBaseUrl(shortsData.getPosterPictureUrl()))// Load the first URL from the array
-                        .override(30, 30) // Set the dimensions to 30dp by 30dp
+                        .load(getBaseUrl(shortsData.getPosterPictureUrl()))
+                        .override(100, 100)
                         .into(imvShortsAvatar);
             }
             String datePosted = shortsData.getDatePosted();
@@ -440,14 +438,13 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 }
                 @Override
                 public void onPlaybackStateChanged(int playbackState) {
-                    if (playbackState == ExoPlayer.STATE_BUFFERING || playbackState==ExoPlayer.STATE_IDLE){
+                    Log.d("ViewHolderPosition", String.format("Curr:%s Layout:%s playback:%s",getCurrentPosition(),getBindingAdapterPosition(),playbackState));
+                    if (playbackState == ExoPlayer.STATE_BUFFERING){
                         videoProgressBar.setVisibility(View.VISIBLE);
                     }
                     if (playbackState == ExoPlayer.STATE_READY){
                         videoProgressBar.setVisibility(View.GONE);
-                        Log.d("ViewHolderPosition", String.format("Curr:%s Layout:%s",getCurrentPosition(),getBindingAdapterPosition()));
-                        if (!isFragmentAttached() && exoPlayer != null) {
-                            // Loading is complete, release resources
+                        if (!isFragmentAttached() && exoPlayer!=null) {
                             exoPlayer.stop();
                             exoPlayer.release();
                             exoPlayer = null;
