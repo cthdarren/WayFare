@@ -180,21 +180,19 @@
                             android:backgroundTint="@color/transparent"
                             android:clickable="true"
                             android:drawableStart="@drawable/travel_icon_small"
+                            android:drawablePadding="10dp"
                             android:drawableTint="@color/md_theme_inversePrimary_mediumContrast"
                             android:ellipsize="end"
-                            android:fontFamily="@font/montserrat"
-                            android:gravity="center"
-                            android:maxWidth="200dp"
-                            android:maxLines="2"
-                            android:paddingStart="5dp"
-                            android:paddingTop="5dp"
-                            android:paddingEnd="5dp"
-                            android:paddingBottom="5dp"
+                            android:fontFamily="@font/poppins"
+                            android:gravity=""
+                            android:maxWidth="250dp"
+                            android:maxLines="1"
+                            android:padding="5dp"
                             android:shadowDx="0"
                             android:shadowDy="0"
                             android:text="@string/app_name"
                             android:textColor="@color/white"
-                            android:textSize="15sp" />
+                            android:textSize="14sp" />
 
                     </ScrollView>
                 </LinearLayout>
@@ -218,7 +216,7 @@
                     android:shadowRadius="15"
                     android:text="@string/app_name"
                     android:textColor="@color/white"
-                    android:textSize="20dp"
+                    android:textSize="@dimen/font_md"
                     android:textStyle="bold" />
 
                 <TextView
@@ -251,7 +249,7 @@
                     android:shadowRadius="15"
                     android:text="@string/app_name"
                     android:textColor="#fff"
-                    android:textSize="14dp" />
+                    android:textSize="@dimen/font_sm" />
             </ScrollView>
 
         </LinearLayout>
