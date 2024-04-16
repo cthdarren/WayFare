@@ -114,7 +114,9 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
         // Inflate the layout for this fragment
         userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
         userData = userViewModel.getUserProfileData();
-
+        if(userData!=null) {
+            userName = userData.getUsername();
+        }
         View view = inflater.inflate(R.layout.item_explore, container, false);
         makeLayoutFullscreen(view);
         return view;
