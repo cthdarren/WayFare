@@ -1,5 +1,7 @@
 # WayFare
 
+
+
 WayFare is the definitive tour hosting and discovery app, designed with the intention to demonopolize the tour industry and provide a platform with a low barrier for entry for new guides. 
 
 WayFare is furnished with WayFare Journeys – the app’s robust short form video player that greets users on start up. Journeys empowers new tour guides by directly linking the videos to their listings, offering instant exposure, and easily engaging users in one cohesive system. 
@@ -62,4 +64,12 @@ https://github.com/cthdarren/wayfare-backend
 
 ## API documentation for backend server
 <https://documenter.getpostman.com/view/4694871/2sA35D64HZ>
+
+## Brought to you by Team 11
+- 1007201 Darren Chan Tze Hao
+- 1007181 Gangesh Kumar
+- 1007148 Haresh Jayant Mahalingam
+- 1006563 Lim Cai Ying
+- 1006854 Foo Chuan Tian
+- 1006624 Gabryel Soh Cher Chin
 
