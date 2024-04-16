@@ -520,13 +520,17 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
 //                }
         }
         if(view.getId() == imvMore.getId()){
-              if(Objects.equals(userData.getUsername(),singleJourney.getUserName())) {
+            if(userData!=null) {
+                if (Objects.equals(userData.getUsername(), singleJourney.getUserName())) {
 //            Animation slideUpAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
-                  to_delete_short_bar.setVisibility(View.VISIBLE);
-              }else{
-                  makeToast("Function not available");
-              }
+                    to_delete_short_bar.setVisibility(View.VISIBLE);
+                } else {
+                    makeToast("Function not available");
+                }
 //            to_delete_short_bar.startAnimation(slideUpAnimation);
+            }else{
+                makeToast("Please Sign in");
+            }
         }
 
         if(view.getId()==closeDeleteJourneyButton.getId()){
