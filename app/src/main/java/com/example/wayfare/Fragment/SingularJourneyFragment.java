@@ -30,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
@@ -109,12 +111,16 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        String journeyId = getArguments().getString("journeyId");
         userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
         userData = userViewModel.getUserProfileData();
 
         View view = inflater.inflate(R.layout.item_explore, container, false);
         makeLayoutFullscreen(view);
+        return view;
+    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+        String journeyId = getArguments().getString("journeyId");
         comment_text = view.findViewById(R.id.comment_text);
         if (userData==null) {
             // Disable the EditText
@@ -190,7 +196,6 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
             }
         });
 
-        return view;
     }
     @Override
     public void onPause() {

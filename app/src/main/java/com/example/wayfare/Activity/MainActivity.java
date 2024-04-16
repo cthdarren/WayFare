@@ -3,7 +3,7 @@ package com.example.wayfare.Activity;
 import static com.example.wayfare.Utils.AuthHelper.JSON_DATA_KEY;
 import static com.example.wayfare.Utils.Helper.goToLogin;
 import static com.google.maps.android.Context.getApplicationContext;
-
+import androidx.fragment.app.FragmentManager;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 
 import android.content.res.Configuration;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -35,9 +36,11 @@ import com.example.wayfare.Fragment.AddShortsFragment;
 import com.example.wayfare.Fragment.CreateListing.CreateListingFragment;
 import com.example.wayfare.Fragment.CreateListing.CreateListingFragment2;
 import com.example.wayfare.Fragment.MapFragment;
+import com.example.wayfare.Fragment.ProfileFragment;
 import com.example.wayfare.Fragment.Public.PublicSettingsFragment;
 import com.example.wayfare.Fragment.Public.PublicUpcomingFragment;
 import com.example.wayfare.Fragment.SettingsFragment;
+import com.example.wayfare.Fragment.SingularJourneyFragment;
 import com.example.wayfare.Fragment.TodayFragment;
 import com.example.wayfare.Fragment.UpcomingFragment;
 import com.example.wayfare.Fragment.ExploreFragment;
@@ -106,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         View view = (View) binding.getRoot();
 
         setContentView(view);
-
         // Makes it such that when a user reclicks the navbar it doesn't refresh
         navbar = findViewById(R.id.bottomNavigationView);
         navbar.setOnItemReselectedListener(new NavigationBarView.OnItemReselectedListener() {
@@ -173,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             if (!backing) {
             if (item.getItemId() == R.id.explore) {
-                replaceFragment(new ExploreFragment());
+                replaceFragment(exploreFragment);
             } else if (item.getItemId() == R.id.upcoming) {
                 if (loggedIn) {
                     replaceFragment(new UpcomingFragment());
@@ -205,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             backing = false;
             return true;
         });
-//    }
+
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
@@ -249,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+        handleDeepLink(getIntent());
 
 
 
@@ -258,8 +261,31 @@ public class MainActivity extends AppCompatActivity {
 //                updateViewForFragment();
 //            }
 //        });
-//
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // Handle deep link when activity is already running
+        handleDeepLink(intent);
+    }
+    private void handleDeepLink(Intent intent) {
+        if (intent != null && intent.getAction() != null && intent.getAction().equals(Intent.ACTION_VIEW)) {
+            Uri uri = intent.getData();
+            if (uri != null && uri.getHost() != null && uri.getHost().equals("openmainactivity")) {
+                String journeyIdFromQuery = uri.getQueryParameter("journeyId");
+                if (journeyIdFromQuery!=null) {
+                    replaceFragment(new ToursFragment());
+                    navbar.setSelectedItemId(R.id.tours);
+                    Bundle data = new Bundle();
+                    data.putString("journeyId",journeyIdFromQuery);
+                    Helper.goToFragmentSlideInRightArgs(data, getSupportFragmentManager(), R.id.container, new SingularJourneyFragment());
+                }else{
+                    Toast.makeText(this, "Username or Journey not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 //    private void updateViewForFragment() {
 //        List<Fragment> fragments = getSupportFragmentManager().getFragments();

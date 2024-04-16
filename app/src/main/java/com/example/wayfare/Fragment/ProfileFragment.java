@@ -61,6 +61,7 @@ import java.util.concurrent.CountDownLatch;
 public class ProfileFragment extends Fragment implements RecyclerViewInterface, AlternateRecyclerViewInterface, TertiaryRecyclerViewInterface {
 
     String profileUsername;
+    String journeyIdFromQuery;
     UserViewModel userViewModel;
     ImageView backButton;
     ProgressBar progBar;
@@ -123,6 +124,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         profileUsername = getArguments().getString("username");
+//        journeyIdFromQuery = getArguments().getString("journeyId");
         journeyThumbnailUrls = new ArrayList<>();
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         backButton = view.findViewById(R.id.profile_back);
@@ -149,7 +151,6 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
         confirmed_info_header = view.findViewById(R.id.confirmed_info_header);
         verification_truege = view.findViewById(R.id.verification_truege);
         edit_profile_button = view.findViewById(R.id.edit_profile_btn);
-
 
         journeyRecycler.setAdapter(new ProfileJourneysAdapter(getContext(), journeyThumbnailUrls, this));
 

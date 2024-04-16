@@ -344,6 +344,11 @@ public class ExploreFragment extends Fragment {
             shortsAdapter.stopAllVideo();
         }
     }
+    public void stopAllvideo(){
+        if(shortsAdapter!=null) {
+            shortsAdapter.stopAllVideo();
+        }
+    }
 
     public void pauseVideo() {
         //save pos

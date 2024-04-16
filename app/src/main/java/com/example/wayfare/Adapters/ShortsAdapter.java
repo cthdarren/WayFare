@@ -4,13 +4,17 @@ import static com.example.wayfare.Utils.Helper.convertStringToShortDate;
 import static com.example.wayfare.Utils.Helper.goToLogin;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,6 +35,7 @@ import android.widget.ImageView;
 import androidx.annotation.OptIn;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -253,6 +258,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             videoProgressBar = itemView.findViewById(R.id.progressBar);
             imvVolume = itemView.findViewById(R.id.imvVolume);
             imvAppear = itemView.findViewById(R.id.imv_appear);
+            imvShare = itemView.findViewById(R.id.imvShare);
             imvShortsAvatar = itemView.findViewById(R.id.imvShortsAvatar);
             imvShortsAvatarCard = itemView.findViewById(R.id.imvShortsAvatarCard);
             imvCloseComment = itemView.findViewById(R.id.exit_comment_section_btn);
@@ -270,6 +276,7 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 //            comment_text.setOnClickListener(this);
             imvShortsAvatar.setOnClickListener(this);
             imvShortsAvatarCard.setOnClickListener(this);
+            imvShare.setOnClickListener(this);
             animRotate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.rotate);
         }
         public void playVideo() {
@@ -546,6 +553,35 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
                 else{
                     setFillLiked(true);
                 }
+            }
+            if (view.getId() == imvShare.getId()){
+                String urlToCopy = "wayfare://openmainactivity?journeyId=" + shortsDataList.get(getCurrentPosition()).getId();
+                String htmlText = "<a href=\"" + urlToCopy + "\">" + urlToCopy + "</a>";
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT,urlToCopy);
+                Intent chooserIntent = Intent.createChooser(sharingIntent, "Share journey via...");
+                if (sharingIntent.resolveActivity(itemView.getContext().getPackageManager()) != null) {
+                    // Start the chooser activity
+                    itemView.getContext().startActivity(chooserIntent);
+                } else {
+                    // No apps available to handle the sharing intent
+                    Toast.makeText(itemView.getContext(), "No apps available to share", Toast.LENGTH_SHORT).show();
+                }
+
+//                // Get the clipboard manager
+//                ClipboardManager clipboardManager = (ClipboardManager) exploreFragment.requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+//                if (clipboardManager != null) {
+//                    // Create a ClipData object to store the URL
+//                    ClipData clipData = ClipData.newPlainText("URL", Html.fromHtml(htmlText));
+//                    // Set the ClipData on the clipboard
+//                    clipboardManager.setPrimaryClip(clipData);
+//                    // Notify the user that the URL has been copied
+//                    Toast.makeText(itemView.getContext(), "URL copied to clipboard", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    // Clipboard manager not available
+//                    Toast.makeText(itemView.getContext(), "Clipboard not available", Toast.LENGTH_SHORT).show();
+//                }
             }
             if(view.getId() == reload_comment_btn.getId()){
                 reload_comment_btn.startAnimation(animRotate);

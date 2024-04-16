@@ -324,6 +324,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="18dp"
                 android:padding="6dp"
+                android:clickable="true"
                 android:src="@drawable/ic_share"
                 app:tint="@color/white" />
 

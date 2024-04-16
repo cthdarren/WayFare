@@ -77,7 +77,18 @@
             android:name=".Activity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Define your deep link -->
+                <data android:scheme="wayfare" android:host="openmainactivity" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".Activity.WayfarerActivity"
             android:exported="true"
