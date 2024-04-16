@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -38,6 +39,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.common.Player;
@@ -56,6 +58,7 @@ import com.example.wayfare.Activity.PostShortActivity;
 import com.example.wayfare.BuildConfig;
 import com.example.wayfare.Fragment.ExploreFragment;
 import com.example.wayfare.Fragment.ProfileFragment;
+import com.example.wayfare.Fragment.SingularJourneyFragment;
 import com.example.wayfare.Fragment.TourListingFull;
 import com.example.wayfare.Models.Comment;
 import com.example.wayfare.Models.ResponseModel;
@@ -78,6 +81,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -207,13 +211,14 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
         private PlayerView videoView;
         private ExoPlayer exoPlayer;
         private TextView shortsDescription, shortsTitle, listingTitle,tvComment, tvFavorites,total_comments,shorts_date_posted;
-        private CardView listingCard,imvShortsAvatarCard;
-        private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare;
+        private CardView listingCard,imvShortsAvatarCard, to_delete_short_bar;
+        private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvShare,closeDeleteJourneyButton;
         private ProgressBar videoProgressBar;
         private MediaItem mediaItem;
         private ImageButton imvCloseComment,reload_comment_btn;
         private ImageButton send_comment_btn;
         private EditText comment_text;
+        private Button delete_journey;
         boolean isPaused = false;
         CommentsAdapter commentsAdapter;
         RecyclerView recycleViewComments;
@@ -265,6 +270,10 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             reload_comment_btn = itemView.findViewById(R.id.reload_comment_btn);
             listingTitle = itemView.findViewById(R.id.listingTitle);
             listingCard = itemView.findViewById(R.id.listingCard);
+            imvMore = itemView.findViewById(R.id.imvMore);
+            to_delete_short_bar = itemView.findViewById(R.id.to_delete_short_bar);
+            delete_journey = to_delete_short_bar.findViewById(R.id.delete_journey);
+            closeDeleteJourneyButton = to_delete_short_bar.findViewById(R.id.closeDeleteJourneyButton);
             reload_comment_btn.setOnClickListener(this);
             videoView.setOnClickListener(this);
             imvVolume.setOnClickListener(this);
@@ -277,7 +286,10 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
             imvShortsAvatar.setOnClickListener(this);
             imvShortsAvatarCard.setOnClickListener(this);
             imvShare.setOnClickListener(this);
+            delete_journey.setOnClickListener(this);
+            closeDeleteJourneyButton.setOnClickListener(this);
             animRotate = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.rotate);
+            imvMore.setOnClickListener(this);
         }
         public void playVideo() {
             disappearImage();
@@ -582,6 +594,56 @@ public class ShortsAdapter extends RecyclerView.Adapter<ShortsAdapter.ShortsView
 //                    // Clipboard manager not available
 //                    Toast.makeText(itemView.getContext(), "Clipboard not available", Toast.LENGTH_SHORT).show();
 //                }
+            }
+            if(view.getId() == imvMore.getId()){
+                if(userData!=null) {
+                    if (Objects.equals(userData.getUsername(), shortsDataList.get(getCurrentPosition()).getUserName())) {
+//            Animation slideUpAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
+                        to_delete_short_bar.setVisibility(View.VISIBLE);
+                    } else {
+                        Toast.makeText(itemView.getContext(), "Function not available", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(itemView.getContext(), "Please sign in", Toast.LENGTH_SHORT).show();
+                }
+//            to_delete_short_bar.startAnimation(slideUpAnimation);
+            }
+
+            if(view.getId()==closeDeleteJourneyButton.getId()){
+//            Animation slideDownAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_bottom);
+                to_delete_short_bar.setVisibility(View.GONE);
+//            to_delete_short_bar.startAnimation(slideDownAnimation);
+            }
+            if(view.getId()==delete_journey.getId()){
+                String apiUrl = "/short/delete/" + shortsDataList.get(getCurrentPosition()).getId();
+                RequestBody body = RequestBody.create("", MediaType.parse("application/json"));
+                new AuthService(exploreFragment.requireActivity()).getResponse(apiUrl, true, Helper.RequestType.REQ_POST, body, new AuthService.ResponseListener() {
+                    @Override
+                    public void onError(String message) {
+                        exploreFragment.requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(itemView.getContext(), "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(ResponseModel json) {
+                        if (json.success) {
+                            exploreFragment.requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(itemView.getContext(), "Journey Deleted", Toast.LENGTH_SHORT).show();
+                                    to_delete_short_bar.setVisibility(View.GONE);
+                                    notifyDataSetChanged();
+                                }
+                            });
+
+                        }
+                    }
+                });
             }
             if(view.getId() == reload_comment_btn.getId()){
                 reload_comment_btn.startAnimation(animRotate);

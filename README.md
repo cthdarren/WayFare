@@ -1,5 +1,7 @@
 # WayFare
 
+
+
 WayFare is the definitive tour hosting and discovery app, designed with the intention to demonopolize the tour industry and provide a platform with a low barrier for entry for new guides. 
 
 WayFare is furnished with WayFare Journeys – the app’s robust short form video player that greets users on start up. Journeys empowers new tour guides by directly linking the videos to their listings, offering instant exposure, and easily engaging users in one cohesive system. 
@@ -9,23 +11,30 @@ As a user, you can book and view upcoming bookings, search and browse for listin
 A robust authentication system allows for easy and registration and login, with seamless switching between a user and WayFarer view, and a verification system to prove the reliability of registered WayFarers.
 
 ## Features
-- Authentication using JWT Tokens and SpringBoot
-- Validation of all fields for a smooth UX
-- Searching of listings based on filters, including sorting of filters by Hot, Trending and New
-- View Journeys created by other users that may link to a listing
-- Creation of Journeys using your phones camera
-- Make a booking for a tour that you wish to participate in
-- View booking details and cancel the booking if you want to
-- Sign up to be a WayFarer and start creating your own listings
-- View bookings made by other people for your listing
-- Review past bookings, both on the user side and the WayFarer side
-- Bookmark your favorite listings, and view them later
-- Customise your public profile to allow other people to know you better
-- Verification of a user's email address by sending an email with a randomly generated OTP (from the backend)  to their specified email address.
-- Creation of our own API in the backend
-- Changing a currency to a user's desired currency, offering accurate real time updates on current exchange rates.
-- Dark mode for visual accessibility especially in low light areas to reduce glare
-- Beautiful UI using Material Design 3 elements and practices
+- Authentication
+   - Uses JWT Tokens and Spring Boot Security
+   - Verification of a user's email address by sending an email with a randomly generated OTP (from the backend) to their specified email address.
+   - Sign up to be a WayFarer and start creating your own listings
+- Listings
+   - Searching of listings based on filters, including sorting of filters by Hot, Trending and New
+   - Make a booking for a tour that you wish to participate in
+   - View booking details and cancel the booking if you want to
+   - Bookmark your favorite listings, and view them later
+   - Review past bookings, both on the user side and the WayFarer side
+   - (If signed up as a WayFarer) View bookings made by other people for your listing
+- Journeys
+   - View Journeys created by other users that may link to a listing
+   - Creation of Journey using your devices camera
+
+- Personalisation
+   - Customise your public profile to allow other people to know you better
+   - Changing a currency to a user's desired currency, offering accurate real time updates on current exchange rates.
+- UI/UX
+   - Dark mode for visual accessibility especially in low light areas to reduce glare
+   -  Beautiful UI using Material Design 3 elements and practices
+   -  Validation of all fields for a smooth UX
+- Creation of our own API in the backend using a remote DigitalOcean Droplet
+
 
 ## Tech Stack
 - Frontend
@@ -62,4 +71,12 @@ https://github.com/cthdarren/wayfare-backend
 
 ## API documentation for backend server
 <https://documenter.getpostman.com/view/4694871/2sA35D64HZ>
+
+## Brought to you by Team 11
+- 1007201 Darren Chan Tze Hao
+- 1007181 Gangesh Kumar
+- 1007148 Haresh Jayant Mahalingam
+- 1006563 Lim Cai Ying
+- 1006854 Foo Chuan Tian
+- 1006624 Gabryel Soh Cher Chin
 

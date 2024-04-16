@@ -5,6 +5,7 @@ import static com.example.wayfare.Utils.Helper.convertStringToShortDate;
 import static com.example.wayfare.Utils.Helper.goToLogin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,7 +93,7 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
     private ExoPlayer exoPlayer;
     private TextView shortsDescription, shortsTitle, listingTitle,tvComment, tvFavorites,total_comments,shorts_date_posted;
     private CardView listingCard,imvShortsAvatarCard;
-    private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvBackSingle,closeDeleteJourneyButton;
+    private ImageView imvShortsAvatar, imvPause, imvMore, imvAppear, imvVolume, imvBackSingle,closeDeleteJourneyButton,imvShare;
     private ProgressBar videoProgressBar;
     private MediaItem mediaItem;
     private ImageButton imvCloseComment;
@@ -113,7 +114,9 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
         // Inflate the layout for this fragment
         userViewModel = new ViewModelProvider(getActivity()).get(UserViewModel.class);
         userData = userViewModel.getUserProfileData();
-
+        if(userData!=null) {
+            userName = userData.getUsername();
+        }
         View view = inflater.inflate(R.layout.item_explore, container, false);
         makeLayoutFullscreen(view);
         return view;
@@ -144,6 +147,7 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
         imvVolume = view.findViewById(R.id.imvVolume);
         imvAppear = view.findViewById(R.id.imv_appear);
         imvMore = view.findViewById(R.id.imvMore);
+        imvShare = view.findViewById(R.id.imvShare);
         imvShortsAvatar = view.findViewById(R.id.imvShortsAvatar);
         imvShortsAvatarCard = view.findViewById(R.id.imvShortsAvatarCard);
         imvCloseComment = view.findViewById(R.id.exit_comment_section_btn);
@@ -168,6 +172,7 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
         imvMore.setOnClickListener(this);
         delete_journey.setOnClickListener(this);
         closeDeleteJourneyButton.setOnClickListener(this);
+        imvShare.setOnClickListener(this);
 
 
         new AuthService(getContext()).getResponse("/api/v1/short/" + journeyId, false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
@@ -487,15 +492,49 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
             pf.setArguments(username);
             Helper.goToFragmentSlideInRight(getParentFragmentManager(), R.id.container, pf);
         }
-        if(view.getId() == imvMore.getId()){
-              if(Objects.equals(userData.getUsername(),singleJourney.getUserName())) {
-//            Animation slideUpAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
-                  to_delete_short_bar.setVisibility(View.VISIBLE);
-              }else{
-                  makeToast("Function not available");
-              }
-//            to_delete_short_bar.startAnimation(slideUpAnimation);
+        if (view.getId() == imvShare.getId()){
+            String urlToCopy = "wayfare://openmainactivity?journeyId=" + singleJourney.getId();
+            String htmlText = "<a href=\"" + urlToCopy + "\">" + urlToCopy + "</a>";
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(Intent.EXTRA_TEXT,urlToCopy);
+            Intent chooserIntent = Intent.createChooser(sharingIntent, "Share journey via...");
+            if (sharingIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                // Start the chooser activity
+                requireActivity().startActivity(chooserIntent);
+            } else {
+                // No apps available to handle the sharing intent
+                Toast.makeText(requireActivity(), "No apps available to share", Toast.LENGTH_SHORT).show();
+            }
+
+//                // Get the clipboard manager
+//                ClipboardManager clipboardManager = (ClipboardManager) exploreFragment.requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+//                if (clipboardManager != null) {
+//                    // Create a ClipData object to store the URL
+//                    ClipData clipData = ClipData.newPlainText("URL", Html.fromHtml(htmlText));
+//                    // Set the ClipData on the clipboard
+//                    clipboardManager.setPrimaryClip(clipData);
+//                    // Notify the user that the URL has been copied
+//                    Toast.makeText(itemView.getContext(), "URL copied to clipboard", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    // Clipboard manager not available
+//                    Toast.makeText(itemView.getContext(), "Clipboard not available", Toast.LENGTH_SHORT).show();
+//                }
         }
+        if(view.getId() == imvMore.getId()){
+            if(userData!=null) {
+                if (Objects.equals(userData.getUsername(), singleJourney.getUserName())) {
+//            Animation slideUpAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_bottom);
+                    to_delete_short_bar.setVisibility(View.VISIBLE);
+                } else {
+                    makeToast("Function not available");
+                }
+//            to_delete_short_bar.startAnimation(slideUpAnimation);
+            }else{
+                makeToast("Please Sign in");
+            }
+        }
+
         if(view.getId()==closeDeleteJourneyButton.getId()){
 //            Animation slideDownAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_out_bottom);
             to_delete_short_bar.setVisibility(View.GONE);
