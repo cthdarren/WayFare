@@ -274,12 +274,12 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         Calendar calendar = Calendar.getInstance();
         long today = MaterialDatePicker.todayInUtcMilliseconds();
         calendar.setTimeInMillis(today);
-//        long startOfDay = calendar.getTimeInMillis();
+        long startOfDay = calendar.getTimeInMillis();
 
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
-//                .setStart(startOfDay)
-//                .setOpenAt(startOfDay)
-//                .setValidator(DateValidatorPointForward.now())
+                .setStart(startOfDay)
+                .setOpenAt(startOfDay)
+                .setValidator(DateValidatorPointForward.now())
                 .build();
 
         new AuthService(getContext()).getResponse("/isbookmarked/" + listingId, true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
@@ -328,7 +328,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                 MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                         .setTitleText("Select date")
                         .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-//                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                         .setCalendarConstraints(constraintsBuilder)
                         .build();
                 datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {

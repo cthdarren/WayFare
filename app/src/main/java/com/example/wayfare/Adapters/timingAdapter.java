@@ -62,7 +62,7 @@ public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHold
             if (Instant.now().isBefore(dateChosen.plus(timeInHours - 8, ChronoUnit.HOURS)))
                 holder.bind(true);
             else
-                holder.bind(true);
+                holder.bind(false);
         }
     }
 
