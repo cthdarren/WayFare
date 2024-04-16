@@ -158,6 +158,7 @@ public class ToursFragment extends Fragment implements tourListing_RecyclerViewI
                     }
 
                 }
+                tourListModels.sort(new TourListHotComparator());
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

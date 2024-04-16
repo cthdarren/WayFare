@@ -79,6 +79,11 @@ public class TourListModel {
         return dateCreated;
     }
 
+    public double getWeightedScore(){
+        int minNumRatings = 20;
+        return ((getRating() * getReviewCount()) + (minNumRatings * getRating()));
+    }
+
     private String title;
     private String id;
     private String description;
