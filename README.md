@@ -12,8 +12,8 @@ A robust authentication system allows for easy and registration and login, with 
 
 ## Features
 - Authentication
-   - Uses JWT Tokens and SpringBoot
-   - Verification of a user's email address by sending an email with a randomly generated OTP (from the backend)  to their specified email address.
+   - Uses JWT Tokens and Spring Boot Security
+   - Verification of a user's email address by sending an email with a randomly generated OTP (from the backend) to their specified email address.
    - Sign up to be a WayFarer and start creating your own listings
 - Listings
    - Searching of listings based on filters, including sorting of filters by Hot, Trending and New
