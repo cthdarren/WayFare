@@ -41,8 +41,12 @@ import com.example.wayfare.Adapters.ReviewAdapter;
 import com.example.wayfare.Adapters.ViewBookingAdapter;
 import com.example.wayfare.Adapters.timingAdapter;
 import com.example.wayfare.Adapters.tourListing_RecyclerViewAdapter;
+import com.example.wayfare.AlternateRecyclerViewInterface;
+import com.example.wayfare.Models.BookingModel;
 import com.example.wayfare.Models.ProfileModel;
 import com.example.wayfare.Models.ResponseModel;
+import com.example.wayfare.Models.ReviewItemModel;
+import com.example.wayfare.Models.ReviewModel;
 import com.example.wayfare.Models.TourListModel;
 import com.example.wayfare.R;
 import com.example.wayfare.RecyclerViewInterface;
@@ -64,7 +68,9 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -82,7 +88,7 @@ import java.util.TimeZone;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
-public class TourListingFull extends Fragment implements tourListing_RecyclerViewInterface{
+public class TourListingFull extends Fragment implements tourListing_RecyclerViewInterface, AlternateRecyclerViewInterface {
     private RecyclerView recyclerView;
     public TourListingFull(){};
     ProfileModel profileInfo;
@@ -103,16 +109,25 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
     LinearLayout guideInfo;
     RecyclerView listing_image_carousel;
     MaterialTextView tvPrice;
+    RecyclerView review_carousel;
+    List<ReviewItemModel> reviewItemModels = new ArrayList<>();
     Double localPrice;
     List<String> urlList = new ArrayList<>();
     ImageView categoryicon;
-    TextView categoryname;
+    TextView categoryname, review_title;
     Button report;
     public void setupThumbnails(List<String> thumbnailUrls){
         for (String url: thumbnailUrls){
             urlList.add(url);
         }
         listing_image_carousel.getAdapter().notifyDataSetChanged();
+    }
+
+    public void setupReviewModels(List<ReviewModel> reviewList) {
+        for (ReviewModel review : reviewList) {
+            ReviewItemModel toAdd = new ReviewItemModel(review.getTitle(),review.getUser().getUsername(), review.getUser().getPictureUrl(), review.getUser().getFirstName(), review.getReviewContent(), review.getDateCreated(), review.getDateModified());
+            reviewItemModels.add(toAdd);
+        }
     }
 
     @Override
@@ -138,6 +153,8 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         years_on_wayfare = view.findViewById(R.id.years_on_wayfare);
         categoryicon = view.findViewById(R.id.categoryicon);
         categoryname = view.findViewById(R.id.categoryname);
+        review_carousel = view.findViewById(R.id.review_carousel);
+        review_title = view.findViewById(R.id.review_title);
 
         username = view.findViewById(R.id.user_greeting);
         progBar = view.findViewById(R.id.settingsProgBar);
@@ -146,6 +163,10 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         guideInfo = view.findViewById(R.id.userCard);
         report = view.findViewById(R.id.report);
 
+        review_carousel.setAdapter(new ReviewAdapter(getContext(), reviewItemModels, TourListingFull.this));
+
+        SnapHelper reviewsnapHelper = new LinearSnapHelper();
+        reviewsnapHelper.attachToRecyclerView(review_carousel);
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,6 +346,38 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             }
         });
 
+        new AuthService(getContext()).getResponse("/api/v1/listing/" + listingId + "/reviews", false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onResponse(ResponseModel json) {
+                Type listType = new TypeToken<List<ReviewModel>>() {}.getType();
+                List<ReviewModel> reviewModels = new Gson().fromJson(json.data, listType);
+                if (reviewModels.size() > 0) {
+                    setupReviewModels(reviewModels);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            review_title.setText(String.format("Listing Reviews (%d)", reviewModels.size()));
+                            review_carousel.getAdapter().notifyItemRangeInserted(0, reviewModels.size());
+                        }
+                    });
+                }
+                else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            review_carousel.setVisibility(GONE);
+                            review_title.setVisibility(GONE);
+                        }
+                    });
+                }
+            }
+        });
+
         guideInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -437,4 +490,9 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                     }
                 });
             }
+
+    @Override
+    public void onAlternateItemClick(int position) {
+
+    }
 }

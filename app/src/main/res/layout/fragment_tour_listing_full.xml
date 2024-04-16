@@ -336,6 +336,39 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <LinearLayout
+                android:id="@+id/review_segment"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:paddingHorizontal="@dimen/outer_padding"
+                app:layout_constraintTop_toBottomOf="@id/guideCard"
+                app:layout_constraintBottom_toTopOf="@id/report"
+                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/review_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingTop="30dp"
+                android:text="Listing Reviews"
+                android:textSize="@dimen/font_md"
+                android:textStyle="bold"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/review_carousel"
+                android:layout_width="match_parent"
+                android:layout_marginStart="-30dp"
+                android:clipToPadding = "false"
+                android:paddingStart="30dp"
+                android:layout_marginEnd="-30dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/preview_review_item" />
+            </LinearLayout>
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/descriptionHeader"
                 android:layout_width="0dp"
@@ -382,7 +415,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:text="Report this listing"
-                app:layout_constraintTop_toBottomOf="@id/guideCard"
+                app:layout_constraintTop_toBottomOf="@id/review_segment"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginVertical="70dp"
