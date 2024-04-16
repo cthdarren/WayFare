@@ -215,7 +215,7 @@ public class ConfirmBooking extends AppCompatActivity {
                 ConfirmBooking.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Helper.goToLogin(getSupportFragmentManager());
+//                        Helper.goToLogin(getSupportFragmentManager());
                     }
                 });
             }

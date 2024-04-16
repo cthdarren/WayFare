@@ -253,12 +253,12 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
         Calendar calendar = Calendar.getInstance();
         long today = MaterialDatePicker.todayInUtcMilliseconds();
         calendar.setTimeInMillis(today);
-        long startOfDay = calendar.getTimeInMillis();
+//        long startOfDay = calendar.getTimeInMillis();
 
         CalendarConstraints constraintsBuilder = new CalendarConstraints.Builder()
-                .setStart(startOfDay)
-                .setOpenAt(startOfDay)
-                .setValidator(DateValidatorPointForward.now())
+//                .setStart(startOfDay)
+//                .setOpenAt(startOfDay)
+//                .setValidator(DateValidatorPointForward.now())
                 .build();
 
         new AuthService(getContext()).getResponse("/isbookmarked/" + listingId, true, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
@@ -316,7 +316,6 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                         date = new Date(selection);
                         dateChosen = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault()).format(new Date(selection));
                         buttonDatePicker.setText(dateChosen);
-                        newTimingAdapter.isButtonEnabled = true;
 
                         newTimingAdapter.dateChosen = Instant.ofEpochMilli(selection);
                         newTimingAdapter.notifyDataSetChanged();

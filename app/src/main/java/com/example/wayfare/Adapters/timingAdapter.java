@@ -60,7 +60,9 @@ public class timingAdapter extends RecyclerView.Adapter<timingAdapter.MyViewHold
         timeInHours = Integer.parseInt(startTimeDetails[0])+toAdd;
         if (dateChosen != null) {
             if (Instant.now().isBefore(dateChosen.plus(timeInHours - 8, ChronoUnit.HOURS)))
-                holder.bind(isButtonEnabled);
+                holder.bind(true);
+            else
+                holder.bind(true);
         }
     }
 
