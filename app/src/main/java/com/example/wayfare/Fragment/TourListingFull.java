@@ -362,7 +362,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
                         @Override
                         public void run() {
                             review_title.setText(String.format("Listing Reviews (%d)", reviewModels.size()));
-                            review_carousel.getAdapter().notifyItemRangeInserted(0, reviewModels.size());
+                            review_carousel.getAdapter().notifyDataSetChanged();
                         }
                     });
                 }
