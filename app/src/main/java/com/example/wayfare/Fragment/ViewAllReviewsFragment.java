@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class ViewAllReviewsFragment extends Fragment implements AlternateRecycle
     TextView allreviews_subtext;
     String username;
     List<ReviewItemModel> reviewItemModels = new ArrayList<>();
+    ImageView back_btn;
     public ViewAllReviewsFragment(){}
 
     public void setupReviewModels(List<ReviewModel> reviewList) {
@@ -58,6 +60,8 @@ public class ViewAllReviewsFragment extends Fragment implements AlternateRecycle
             username = args.getString("username");
         }
         View view = inflater.inflate(R.layout.fragment_all_reviews, container, false);
+        back_btn = view.findViewById(R.id.back_btn);
+
         allreviews_list = view.findViewById(R.id.allreviews_list);
         allreviews_list.setAdapter(new AllReviewsAdapter(getContext(), reviewItemModels, this));
         allreviews_list.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -65,7 +69,14 @@ public class ViewAllReviewsFragment extends Fragment implements AlternateRecycle
         allreviews_subtext = view.findViewById(R.id.allreviews_subtext);
         allreviews_subtext.setText("Viewing all reviews for user " + username);
 
-               return view;
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
+           return view;
     }
 
     @Override

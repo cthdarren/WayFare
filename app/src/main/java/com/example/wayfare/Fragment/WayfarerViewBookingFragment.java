@@ -256,7 +256,7 @@ public class WayfarerViewBookingFragment extends Fragment implements OnMapReadyC
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {
-                Uri gmapsuri = Uri.parse(String.format("https://www.google.com/maps/search/?api=1&query=%f,%f", latLng.latitude, latLng.longitude));
+                Uri gmapsuri = Uri.parse(String.format("https://www.google.com/maps/search/?api=1&query=%f,%f", meeting.latitude, meeting.longitude));
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmapsuri);
 
                 // Set the package to Google Maps
