@@ -50,7 +50,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.arthenica.mobileffmpeg.Config;
 import com.bumptech.glide.Glide;
 import com.example.wayfare.Adapters.CommentsAdapter;
 import com.example.wayfare.Adapters.ShortsAdapter;

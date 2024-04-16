@@ -346,7 +346,7 @@ public class TourListingFull extends Fragment implements tourListing_RecyclerVie
             }
         });
 
-        new AuthService(getContext()).getResponse("/api/v1/listing/" + listingId + "/reviews", false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
+        new AuthService(getContext()).getResponse("/api/v1/listing/" + listingId + "/allreviews", false, Helper.RequestType.REQ_GET, null, new AuthService.ResponseListener() {
             @Override
             public void onError(String message) {
 

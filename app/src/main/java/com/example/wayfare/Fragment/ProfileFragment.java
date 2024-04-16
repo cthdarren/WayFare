@@ -171,6 +171,15 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
             }
         });
 
+        show_all_reviews_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putString("username", profileInfo.getUsername());
+                Helper.goToFragmentSlideInRightArgs(args, getParentFragmentManager(), R.id.container, new ViewAllReviewsFragment());
+            }
+        });
+
         return view;
     }
 
@@ -259,7 +268,7 @@ public class ProfileFragment extends Fragment implements RecyclerViewInterface, 
                                 setupReviewModels(profileInfo.getReviews());
                                 setUpListingModels(profileInfo.getTours());
 
-                                show_all_reviews_button.setText(String.format("Show all %d reviews", reviewItemModels.size()));
+                                show_all_reviews_button.setText(String.format("Show all %d reviews", profileInfo.getReviewCount()));
 
                                 if (reviewItemModels.isEmpty()){
                                     review_segment.setVisibility(GONE);
