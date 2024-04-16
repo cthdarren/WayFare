@@ -89,8 +89,10 @@ public class AfterSearchToursFragment extends Fragment implements tourListing_Re
 
             if (region == null)
                 region = "Anywhere";
-            else
-                region = region.substring(0,27) + "...";
+            else {
+                if (region.length() >= 30)
+                    region = region.substring(0, 27) + "...";
+            }
 
             if (startDateLong != -1 & endDateLong != -1){
                 if (startDateLong.equals(endDateLong)){
