@@ -313,7 +313,7 @@ public class SingularJourneyFragment extends Fragment implements View.OnClickLis
             if(shortsData.getPosterPictureUrl()!=null){
                 Glide.with(getActivity())
                         .load(getBaseUrl(shortsData.getPosterPictureUrl()))// Load the first URL from the array
-                        .override(30, 30) // Set the dimensions to 30dp by 30dp
+                        .override(100, 100) // Set the dimensions to 30dp by 30dp
                         .into(imvShortsAvatar);
             }
             String datePosted = shortsData.getDatePosted();
